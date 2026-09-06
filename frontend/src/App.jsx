@@ -1,13 +1,67 @@
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import DurumMesaji from './bilesenler/DurumMesaji';
 import SayfaIskeleti from './bilesenler/SayfaIskeleti';
 import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
 import KategoriSayfasi from './sayfalar/KategoriSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
-import { ornekVeriler } from './veri/ornekVeriler';
+import { siteVerileriniGetir } from './servisler/api';
+import { temaUygula } from './tema/temaUygula';
+import { metinler } from './metinler/tr';
 
-export default function App({ veri = ornekVeriler }) {
+export default function App({ veriKaynagi = siteVerileriniGetir }) {
+  const [durum, setDurum] = useState({ yukleniyor: true, veri: null, hata: null });
+  const [yenileme, setYenileme] = useState(0);
+
+  useEffect(() => {
+    let etkin = true;
+
+    setDurum({ yukleniyor: true, veri: null, hata: null });
+    // Veri kaynağını prop olarak alabilmek, üretimde gerçek API'yi; testte dış ağa çıkmayan sabit veriyi kullanmamızı sağlar.
+    veriKaynagi()
+      .then((veri) => {
+        if (!etkin) return;
+        temaUygula(veri.tema);
+        setDurum({ yukleniyor: false, veri, hata: null });
+      })
+      .catch((hata) => {
+        if (etkin) setDurum({ yukleniyor: false, veri: null, hata });
+      });
+
+    // Yavaş istek sayfa değiştikten sonra tamamlanırsa eski bileşenin state'ini güncellemesini önleriz.
+    return () => {
+      etkin = false;
+    };
+  }, [veriKaynagi, yenileme]);
+
+  if (durum.yukleniyor) {
+    return (
+      <SayfaIskeleti menu={[]}>
+        <DurumMesaji baslik={metinler.yukleniyor} />
+      </SayfaIskeleti>
+    );
+  }
+
+  if (durum.hata) {
+    return (
+      <SayfaIskeleti menu={[]}>
+        <DurumMesaji
+          baslik={metinler.yuklemeHatasi}
+          aciklama="Bağlantınızı kontrol edip yeniden deneyin."
+          eylem={(
+            <button className="birincil-dugme" type="button" onClick={() => setYenileme((deger) => deger + 1)}>
+              {metinler.tekrarDene}
+            </button>
+          )}
+        />
+      </SayfaIskeleti>
+    );
+  }
+
+  const veri = durum.veri;
+
   // Router tek bir iskelet içinde çalışır; böylece navbar sayfa geçişlerinde yeniden kurulmaz.
   return (
     <SayfaIskeleti menu={veri.menu}>
@@ -15,7 +69,7 @@ export default function App({ veri = ornekVeriler }) {
         <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} />} />
         <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
         <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
-        <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler} />} />
+        <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
         <Route path="/hakkimizda" element={<IcerikSayfasi tur="hakkimizda" />} />
         <Route path="/uretim" element={<IcerikSayfasi tur="uretim" />} />
         <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />

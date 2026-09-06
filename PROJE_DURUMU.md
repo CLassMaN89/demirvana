@@ -36,10 +36,19 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Yedi kategori ve bir `Tüm Ürünler` kartından oluşan responsive grid eklendi.
 - Ana sayfa, katalog, kategori, ürün ve kurumsal sayfa rotaları eklendi.
 - Kritik üretim kodlarına neyin neden kullanıldığını açıklayan Türkçe yorumlar eklendi; kural `AGENTS.md` içinde kalıcılaştırıldı.
+- PHP 8.4.24 kuruldu ve `pdo_mysql` uzantısı etkinleştirildi.
+- Parametreli PDO sorguları kullanan salt okunur PHP REST API oluşturuldu.
+- Yedi Türkçe tabloyu, ilişkileri ve tekrarlanabilir başlangıç verilerini içeren MySQL/MariaDB şeması oluşturuldu.
+- MariaDB 12.3.3 kuruldu; şema iki kez canlı içe aktarılıp başlangıç kayıtlarının çoğalmadığı doğrulandı.
+- React veri yükleme, hata, yeniden deneme ve dinamik tema akışı gerçek API sözleşmesine bağlandı.
+- Roboto fontu harici servise bağımlı kalmaması için frontend paketine yalnız gereken Latin Extended ağırlıklarıyla yerel eklendi.
+- README kurulum ve çalışma belgesi oluşturuldu.
+- Playwright ile 360px, 375px, 768px, 844×390px yatay telefon, 1440px ve 1920px responsive tarayıcı doğrulaması yapıldı.
+- Yatay telefonda carousel oklarının metne yaklaşması giderildi; kontroller sağ üst güvenli alana taşındı.
 
 ## Mevcut durum
 
-Uygulama planının ilk beş görevi tamamlandı. Frontend iskeleti çalışır durumda ve yerel Git deposunda ayrı görev commitleri bulunuyor. PHP API, MySQL şeması ve son tarayıcı doğrulaması henüz tamamlanmadı.
+Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -48,23 +57,34 @@ Uygulama planının ilk beş görevi tamamlandı. Frontend iskeleti çalışır 
 - `docs/superpowers/specs/2026-09-06-demirvana-site-tasarimi.md`
 - `docs/superpowers/plans/2026-09-06-demirvana-site-uygulama-plani.md`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
+- `backend/` altındaki PHP API dosyaları
+- `veritabani/demirvana.sql`
+- `veritabani/sema_dogrulama.ps1`
+- `README.md`
 
 ## Doğrulamalar
 
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 8 test, 0 hata.
+- Frontend testleri: 9 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
+- PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
+- MySQL şeması yapısal testi: başarılı.
+- Canlı veritabanı sayımları: 6 tema, 5 menü, 6 slider ve 7 kategori.
+- Canlı API sonuçları: tema, menü, slider, kategori, kategori detayı ve boş ürün listesi başarılı JSON döndürdü.
+- Gerçek Vite → PHP → MariaDB zinciriyle responsive tarayıcı testi: telefon, yatay telefon, tablet ve masaüstü başarılı; konsol hatası ve yatay taşma yok.
+- Görsel tasarım denetimi: 0 engelleyici, 0 açık kalite sorunu; ürün fotoğrafları yönetim panelinden ekleneceği için şimdilik bilinçli placeholder kullanılıyor.
 
 ## Bilinen durumlar
 
 - Yönetim paneli bu ilk teslimin kapsamında değildir; veri yapısı yönetim paneline hazır olacaktır.
-- PHP/MySQL üretim bağlantısı için ileride ortam bilgileri gerekecektir.
 - Yerel Git deposu oluşturuldu ve tamamlanan frontend görevleri ayrı commitlerle kaydedildi.
-- `php` komutu PATH üzerinde ve yaygın XAMPP/Laragon yollarında bulunamadı; PHP TDD ve sözdizimi doğrulaması bu nedenle bekliyor.
+- PHP 8.4 ve MariaDB 12.3 yerel geliştirme için kuruldu. Yeni terminal açıldığında `php` PATH üzerinden kullanılabilir.
+- Yerel MariaDB root hesabı parola olmadan yalnızca geliştirme doğrulaması için kullanıldı; üretim ortamında güçlü parola ve ayrı uygulama kullanıcısı tanımlanmalıdır.
+- Kullanıcının sağladığı kök `Carousel/` klasörü değiştirilmeden korunur; frontend kendi `public/assets/carousel/` kopyalarını kullanır.
 
 ## Sıradaki adım
 
-PHP 8.1+ yorumlayıcısı sağlandıktan sonra Görev 6'daki başarısız API testi çalıştırılacak; ardından PHP API, MySQL şeması ve son entegrasyon/görsel doğrulama tamamlanacak.
+Kullanıcının belirteceği alanda sınırlı düzenleme yap. Muhtemel sonraki aşama; ürün/kategori görselleri ile içeriklerin eklenmesi veya ayrı bir yönetim paneli tasarımıdır.

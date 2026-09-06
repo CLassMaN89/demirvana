@@ -25,6 +25,7 @@
 }
 
 .kategori-bolumu__grid {
+  /* Hücrelerin ortak çizgileri vana kataloglarındaki teknik tablo düzenini taklit eder. */
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--renk-cizgi);
@@ -143,4 +144,3 @@
   .kategori-bolumu__grid { grid-template-columns: 1fr; }
   .kategori-karti { min-height: 320px; }
 }
-
