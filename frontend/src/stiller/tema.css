@@ -1,0 +1,15 @@
+:root {
+  --renk-ana: #28469d;
+  --renk-koyu: #17306f;
+  --renk-acik: #eaf1ff;
+  --renk-beyaz: #ffffff;
+  --renk-metin: #172033;
+  --renk-ikincil: #62708a;
+  --renk-cizgi: color-mix(in srgb, var(--renk-ana) 17%, transparent);
+  --renk-yuzey: var(--renk-beyaz);
+  --renk-odak: var(--renk-ana);
+  --golge-yumusak: 0 18px 50px color-mix(in srgb, var(--renk-koyu) 10%, transparent);
+  --icerik-genisligi: 1440px;
+  --navbar-yuksekligi: 120px;
+}
+
