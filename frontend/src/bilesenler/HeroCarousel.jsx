@@ -81,7 +81,12 @@ export default function HeroCarousel({ sliderlar, otomatikGecisMs = 6500 }) {
           style={{ objectPosition: `${aktifSlider.odak_x}% ${aktifSlider.odak_y}%` }}
           fetchPriority={aktifIndeks === 0 ? 'high' : 'auto'}
         />
-        <InkReveal key={aktifSlider.id} />
+        <InkReveal
+          key={aktifSlider.id}
+          gorselYolu={aktifSlider.gorsel_yolu}
+          odakX={aktifSlider.odak_x}
+          odakY={aktifSlider.odak_y}
+        />
         <div className="hero-carousel__golge" aria-hidden="true" />
         <div className="hero-carousel__icerik icerik-kapsayici" aria-live="polite">
           <div className="hero-carousel__metin">

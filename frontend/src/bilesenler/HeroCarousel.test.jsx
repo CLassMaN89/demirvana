@@ -40,6 +40,10 @@ describe('HeroCarousel', () => {
     );
 
     expect(screen.getByTestId('murekkep-maskesi')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('murekkep-maskesi')).toHaveAttribute(
+      'data-gorsel-yolu',
+      '/assets/carousel/1.png'
+    );
   });
 
   it('oklar ve klavye ile slaytlar arasında geçiş yapar', async () => {

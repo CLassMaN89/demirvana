@@ -52,7 +52,7 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Kategori paneli hero üzerine bindirilmeden sliderın altındaki normal içerik akışına taşındı.
 - Kategori kartlarındaki vana adlarının yazı ağırlığı 800'den 400'e indirildi.
 - Hero görseline fare hareketiyle mürekkep biçiminde açılan dinamik canvas maskesi eklendi.
-- Mürekkep maskesi rengini veritabanı temasından uygulanan `--renk-acik` CSS değişkeninden okur.
+- Mürekkep canvası hero görselinin siyah-beyaz kopyasını çizer; fare izi bu katmanı silerek alttaki renkli görseli açar.
 - Efekt dokunmatik cihazlarda ve azaltılmış hareket tercihinde kapatılarak hero görseli doğrudan gösterilir.
 
 ## Mevcut durum

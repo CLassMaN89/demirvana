@@ -1,26 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-const VARSAYILAN_MASKE = [234, 241, 255];
-
-function cssRenginiRgbYap(renk) {
-  const temiz = renk.trim();
-
-  // Tema değişkeni hex olarak geldiğinde canvas API'sinin beklediği RGB dizisine dönüştürürüz.
-  if (/^#[0-9a-f]{6}$/i.test(temiz)) {
-    return [
-      Number.parseInt(temiz.slice(1, 3), 16),
-      Number.parseInt(temiz.slice(3, 5), 16),
-      Number.parseInt(temiz.slice(5, 7), 16)
-    ];
-  }
-
-  const rgbEslesmesi = temiz.match(/rgba?\(\s*(\d+)\D+(\d+)\D+(\d+)/i);
-  return rgbEslesmesi
-    ? rgbEslesmesi.slice(1, 4).map(Number)
-    : VARSAYILAN_MASKE;
-}
-
 export default function InkReveal({
+  gorselYolu,
+  odakX = 50,
+  odakY = 50,
   fircaBoyutu = 128,
   yasamSuresi = 650,
   baslangicYaricapi = 10,
@@ -31,20 +14,35 @@ export default function InkReveal({
   className = ''
 }) {
   const canvasRef = useRef(null);
+  const griGorselRef = useRef(null);
   const damgalarRef = useRef([]);
   const calisiyorRef = useRef(false);
   const sonKonumRef = useRef(null);
   const boyutRef = useRef({ genislik: 0, yukseklik: 0 });
   const animasyonRef = useRef(null);
-  const maskeRengiRef = useRef(VARSAYILAN_MASKE);
 
-  const canvasDoldur = useCallback((baglam) => {
-    const [kirmizi, yesil, mavi] = maskeRengiRef.current;
+  const griGorseliCiz = useCallback((baglam) => {
     const { genislik, yukseklik } = boyutRef.current;
+    const gorsel = griGorselRef.current;
     baglam.globalCompositeOperation = 'source-over';
-    baglam.fillStyle = `rgb(${kirmizi}, ${yesil}, ${mavi})`;
-    baglam.fillRect(0, 0, genislik, yukseklik);
-  }, []);
+    baglam.clearRect(0, 0, genislik, yukseklik);
+    if (!gorsel?.naturalWidth || !gorsel?.naturalHeight) return;
+
+    // DOM görselindeki object-fit: cover davranışını tekrar ederek renkli ve gri katmanları çakıştırırız.
+    const olcek = Math.max(
+      genislik / gorsel.naturalWidth,
+      yukseklik / gorsel.naturalHeight
+    );
+    const cizimGenisligi = gorsel.naturalWidth * olcek;
+    const cizimYuksekligi = gorsel.naturalHeight * olcek;
+    const x = (genislik - cizimGenisligi) * (odakX / 100);
+    const y = (yukseklik - cizimYuksekligi) * (odakY / 100);
+
+    baglam.save();
+    baglam.filter = 'grayscale(1) contrast(1.05)';
+    baglam.drawImage(gorsel, x, y, cizimGenisligi, cizimYuksekligi);
+    baglam.restore();
+  }, [odakX, odakY]);
 
   const yenidenBoyutlandir = useCallback(() => {
     const canvas = canvasRef.current;
@@ -62,8 +60,8 @@ export default function InkReveal({
     canvas.style.width = `${dikdortgen.width}px`;
     canvas.style.height = `${dikdortgen.height}px`;
     baglam.setTransform(oran, 0, 0, oran, 0, 0);
-    canvasDoldur(baglam);
-  }, [canvasDoldur]);
+    griGorseliCiz(baglam);
+  }, [griGorseliCiz]);
 
   const murekkepAc = useCallback((baglam, damga, yaricap, saydamlik) => {
     const gradyan = baglam.createRadialGradient(
@@ -107,7 +105,7 @@ export default function InkReveal({
 
     const simdi = performance.now();
     const damgalar = damgalarRef.current;
-    canvasDoldur(baglam);
+    griGorseliCiz(baglam);
     baglam.globalCompositeOperation = 'destination-out';
 
     for (let sira = damgalar.length - 1; sira >= 0; sira -= 1) {
@@ -125,7 +123,7 @@ export default function InkReveal({
 
     if (damgalar.length > 0) animasyonRef.current = requestAnimationFrame(animasyon);
     else calisiyorRef.current = false;
-  }, [baslangicYaricapi, canvasDoldur, murekkepAc, yasamSuresi]);
+  }, [baslangicYaricapi, griGorseliCiz, murekkepAc, yasamSuresi]);
 
   const damgaEkle = useCallback((x, y) => {
     const damgalar = damgalarRef.current;
@@ -162,17 +160,24 @@ export default function InkReveal({
   }, [animasyon]);
 
   useEffect(() => {
-    const temaRengi = getComputedStyle(document.documentElement)
-      .getPropertyValue('--renk-acik');
-    maskeRengiRef.current = cssRenginiRgbYap(temaRengi);
     yenidenBoyutlandir();
     window.addEventListener('resize', yenidenBoyutlandir);
 
+    // Üst canvas aynı hero görselini gri çizer; silinen bölgelerde alttaki renkli img görünür.
+    const gorsel = new Image();
+    gorsel.decoding = 'async';
+    gorsel.onload = () => {
+      griGorselRef.current = gorsel;
+      yenidenBoyutlandir();
+    };
+    gorsel.src = gorselYolu;
+
     return () => {
+      gorsel.onload = null;
       window.removeEventListener('resize', yenidenBoyutlandir);
       if (animasyonRef.current) cancelAnimationFrame(animasyonRef.current);
     };
-  }, [yenidenBoyutlandir]);
+  }, [gorselYolu, yenidenBoyutlandir]);
 
   const goreliKonum = (olay) => {
     const dikdortgen = olay.currentTarget.getBoundingClientRect();
@@ -184,6 +189,7 @@ export default function InkReveal({
       ref={canvasRef}
       className={`hero-carousel__murekkep ${className}`.trim()}
       data-testid="murekkep-maskesi"
+      data-gorsel-yolu={gorselYolu}
       aria-hidden="true"
       onPointerEnter={(olay) => {
         if (olay.pointerType && olay.pointerType !== 'mouse') return;

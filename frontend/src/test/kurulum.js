@@ -6,6 +6,10 @@ import { afterEach } from 'vitest';
 HTMLCanvasElement.prototype.getContext = () => ({
   setTransform: () => {},
   fillRect: () => {},
+  clearRect: () => {},
+  save: () => {},
+  restore: () => {},
+  drawImage: () => {},
   beginPath: () => {},
   moveTo: () => {},
   lineTo: () => {},
