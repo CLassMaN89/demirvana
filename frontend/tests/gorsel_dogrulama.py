@@ -84,13 +84,23 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
     assert page.locator('[data-testid="kategori-karti"]').count() == 8
     assert page.locator(".vite-error-overlay").count() == 0
 
-    # Masaüstünde kullanıcı tarafından onaylanan 30px; dokunmatik menüde güvenli 56px yükseklik korunur.
+    # Kullanıcının son kararıyla navbar tüm ekranlarda 60px yüksekliğinde kalır.
     navbar_yuksekligi = page.locator(".site-header").evaluate(
         "element => element.getBoundingClientRect().height"
     )
-    beklenen_navbar = 56 if genislik <= 900 else 30
-    assert navbar_yuksekligi == beklenen_navbar, (
-        f"Navbar {genislik}px görünümde {navbar_yuksekligi}px; beklenen {beklenen_navbar}px"
+    assert navbar_yuksekligi == 60, (
+        f"Navbar {genislik}px görünümde {navbar_yuksekligi}px; beklenen 60px"
+    )
+
+    # Kategori paneli sliderın üzerine binmemeli; normal akışta hero bittikten sonra başlamalıdır.
+    hero_alt = page.locator(".hero-carousel").evaluate(
+        "element => element.getBoundingClientRect().bottom"
+    )
+    kategori_ust = page.locator(".kategori-bolumu > .icerik-kapsayici").evaluate(
+        "element => element.getBoundingClientRect().top"
+    )
+    assert kategori_ust >= hero_alt, (
+        f"Kategori paneli hero üzerine {hero_alt - kategori_ust}px taşıyor"
     )
 
     # Bir piksel yuvarlama payı dışında yatay taşma, responsive grid'in kırıldığını gösterir.
