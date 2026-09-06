@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
+import InkReveal from './InkReveal';
 import '../stiller/carousel.css';
 
 // Ekran okuyucunun gösterge numaralarını doğal Türkçe eklerle seslendirmesi için sayı eklerini merkezi tutarız.
@@ -80,6 +81,7 @@ export default function HeroCarousel({ sliderlar, otomatikGecisMs = 6500 }) {
           style={{ objectPosition: `${aktifSlider.odak_x}% ${aktifSlider.odak_y}%` }}
           fetchPriority={aktifIndeks === 0 ? 'high' : 'auto'}
         />
+        <InkReveal key={aktifSlider.id} />
         <div className="hero-carousel__golge" aria-hidden="true" />
         <div className="hero-carousel__icerik icerik-kapsayici" aria-live="polite">
           <div className="hero-carousel__metin">

@@ -32,6 +32,16 @@ const ikiSlider = [
 ];
 
 describe('HeroCarousel', () => {
+  it('hero görselinin üzerinde etkileşimli mürekkep maskesi oluşturur', () => {
+    render(
+      <MemoryRouter>
+        <HeroCarousel sliderlar={ikiSlider} otomatikGecisMs={0} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId('murekkep-maskesi')).toHaveAttribute('aria-hidden', 'true');
+  });
+
   it('oklar ve klavye ile slaytlar arasında geçiş yapar', async () => {
     const kullanici = userEvent.setup();
     render(

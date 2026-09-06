@@ -18,19 +18,36 @@
 
 .hero-carousel__gorsel { width: 100%; height: 100%; object-fit: cover; }
 
+.hero-carousel__murekkep {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  cursor: none;
+  opacity: 0.88;
+}
+
 .hero-carousel__golge {
+  z-index: 2;
+  pointer-events: none;
   background:
     linear-gradient(90deg, transparent 42%, color-mix(in srgb, var(--renk-koyu) 18%, transparent) 66%, color-mix(in srgb, var(--renk-koyu) 68%, transparent) 100%),
     linear-gradient(0deg, color-mix(in srgb, var(--renk-koyu) 42%, transparent), transparent 38%);
 }
 
-.hero-carousel__icerik { display: flex; align-items: center; justify-content: flex-end; }
+.hero-carousel__icerik {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+}
 
 .hero-carousel__metin {
   width: min(360px, 30vw);
   margin-right: clamp(18px, 3vw, 42px);
   padding-bottom: 52px;
   text-align: right;
+  pointer-events: auto;
 }
 
 .hero-carousel__metin h1 {
@@ -135,6 +152,7 @@
 
 @media (max-width: 700px) {
   .hero-carousel { min-height: clamp(500px, 76svh, 650px); aspect-ratio: auto; }
+  .hero-carousel__murekkep { display: none; }
   .hero-carousel__golge { background: linear-gradient(0deg, color-mix(in srgb, var(--renk-koyu) 88%, transparent) 0%, color-mix(in srgb, var(--renk-koyu) 22%, transparent) 72%, transparent 100%); }
   .hero-carousel__icerik { align-items: flex-end; justify-content: flex-start; }
   .hero-carousel__metin { width: 100%; margin: 0; padding-bottom: 102px; text-align: left; }
@@ -142,6 +160,11 @@
   .hero-carousel__ok { top: 18px; transform: none; }
   .hero-carousel__ok--onceki { left: auto; right: 68px; }
   .hero-carousel__ok--sonraki { right: 18px; }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  /* Dokunmatik ve hareket hassasiyeti olan kullanıcılar hero görselini maskesiz görür. */
+  .hero-carousel__murekkep { display: none; }
 }
 
 @media (max-width: 900px) and (max-height: 500px) {
