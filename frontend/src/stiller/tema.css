@@ -10,6 +10,11 @@
   --renk-odak: var(--renk-ana);
   --golge-yumusak: 0 18px 50px color-mix(in srgb, var(--renk-koyu) 10%, transparent);
   --icerik-genisligi: 1440px;
-  --navbar-yuksekligi: 120px;
+  /* Kullanıcının onayladığı ince masaüstü navbarı tam 30px tutulur. */
+  --navbar-yuksekligi: 30px;
 }
 
+@media (max-width: 900px) {
+  /* Mobil açılır menü düğmesinin güvenli dokunma alanı için header yüksekliği ayrı tutulur. */
+  :root { --navbar-yuksekligi: 56px; }
+}

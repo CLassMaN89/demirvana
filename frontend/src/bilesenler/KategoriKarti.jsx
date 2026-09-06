@@ -20,11 +20,14 @@ export default function KategoriKarti({ kategori, tumUrunler = false }) {
         </div>
       )}
 
+      {tumUrunler && (
+        <span className="kategori-karti__noktalar" aria-hidden="true">•••</span>
+      )}
+
       <div className="kategori-karti__alt">
         <span>{tumUrunler ? 'Tüm Ürünler' : kategori.ad}</span>
-        <span className="kategori-karti__ok" aria-hidden="true">↗</span>
+        <span className="kategori-karti__ok" aria-hidden="true">→</span>
       </div>
     </Link>
   );
 }
-

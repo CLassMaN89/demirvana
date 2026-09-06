@@ -19,6 +19,7 @@ describe('Header', () => {
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /ürünler/i })).toHaveAttribute('href', '/urunler');
+    expect(screen.getByRole('link', { name: 'Teklif Al' })).toHaveAttribute('href', '/iletisim');
 
     const dugme = screen.getByRole('button', { name: /menüyü aç/i });
     expect(dugme).toHaveAttribute('aria-expanded', 'false');

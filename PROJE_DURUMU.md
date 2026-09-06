@@ -13,7 +13,7 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Arayüz React, CSS ve JavaScript ile hazırlanacak.
 - Ürün, kategori ve carousel metin/görselleri kaynak koda gömülmeyecek; PHP/MySQL veri katmanından yönetilebilecek.
 - Tema renkleri veritabanından gelen CSS özel değişkenleriyle yönetilebilecek.
-- Navbar masaüstünde tam 120px yüksekliğinde olacak.
+- Son gönderilen görsel referans doğrultusunda navbar masaüstünde tam 30px, mobilde güvenli dokunma alanı için 56px olacak.
 - Ana sayfada yedi kategori kartı ve bir `Tüm Ürünler` kartı bulunacak.
 - Carousel başlangıçta `Carousel/` dizinindeki altı görseli kullanacak.
 - Carousel görselleri yaklaşık 1994×789px ve 2.53:1 oranında; hero masaüstünde bu oranı koruyacak.
@@ -45,6 +45,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - README kurulum ve çalışma belgesi oluşturuldu.
 - Playwright ile 360px, 375px, 768px, 844×390px yatay telefon, 1440px ve 1920px responsive tarayıcı doğrulaması yapıldı.
 - Yatay telefonda carousel oklarının metne yaklaşması giderildi; kontroller sağ üst güvenli alana taşındı.
+- Header, hero ve kategori vitrini gönderilen kompakt kurumsal referansa göre yeniden tasarlandı.
+- Masaüstü menüsü sayfanın tam merkezine alındı; logo sol, teklif bağlantısı sağ kolonda bağımsız tutuldu.
+- Hero metni sağa taşındı ve altı slider görseli küçük görsel navigasyonuna dönüştürüldü.
+- Sekiz kategori, masaüstünde tek sıra kompakt panel; mobil ve tablette yatay kaydırılabilir panel olarak düzenlendi.
 
 ## Mevcut durum
 

@@ -65,5 +65,8 @@ describe('HeroCarousel', () => {
     expect(screen.getByRole('img', { name: 'İkinci vana' })).toHaveStyle({
       objectPosition: '60% 50%'
     });
+    expect(
+      screen.getByRole('button', { name: "Slayt 1'e git" }).querySelector('img')
+    ).toHaveAttribute('src', '/assets/carousel/1.png');
   });
 });

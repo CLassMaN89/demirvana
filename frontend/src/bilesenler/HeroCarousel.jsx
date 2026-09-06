@@ -111,9 +111,6 @@ export default function HeroCarousel({ sliderlar, otomatikGecisMs = 6500 }) {
             <span aria-hidden="true">›</span>
           </button>
           <div className="hero-carousel__alt">
-            <span className="hero-carousel__sayac" aria-hidden="true">
-              {String(aktifIndeks + 1).padStart(2, '0')} / {String(toplam).padStart(2, '0')}
-            </span>
             <div className="hero-carousel__gostergeler" aria-label="Slayt seçimi">
               {sliderlar.map((slider, indeks) => (
                 <button
@@ -123,7 +120,16 @@ export default function HeroCarousel({ sliderlar, otomatikGecisMs = 6500 }) {
                   aria-label={slaytEtiketi(indeks + 1)}
                   aria-current={indeks === aktifIndeks ? 'true' : undefined}
                   onClick={() => git(indeks)}
-                />
+                >
+                  <img
+                    src={slider.gorsel_yolu}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <span className="ekran-okuyucu">
+                    {String(indeks + 1).padStart(2, '0')} / {String(toplam).padStart(2, '0')}
+                  </span>
+                </button>
               ))}
             </div>
           </div>

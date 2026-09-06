@@ -1,4 +1,5 @@
 import KategoriKarti from './KategoriKarti';
+import { Link } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
 import '../stiller/kategoriler.css';
 
@@ -11,7 +12,9 @@ export default function KategoriBolumu({ kategoriler }) {
       <div className="icerik-kapsayici">
         <div className="kategori-bolumu__baslik-satiri">
           <h2 id="kategori-basligi">{metinler.kategoriBasligi}</h2>
-          <span aria-hidden="true" className="kategori-bolumu__teknik-cizgi" />
+          <Link className="kategori-bolumu__tum-baglanti" to="/urunler">
+            Tüm ürünleri gör <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
         <div className="kategori-bolumu__grid">
@@ -24,4 +27,3 @@ export default function KategoriBolumu({ kategoriler }) {
     </section>
   );
 }
-

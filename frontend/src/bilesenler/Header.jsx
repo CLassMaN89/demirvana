@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
 import '../stiller/header.css';
 
@@ -48,6 +48,11 @@ export default function Header({ menu, logoYolu }) {
             </NavLink>
           ))}
         </nav>
+
+        <Link className="site-header__teklif" to="/iletisim">
+          Teklif Al
+          <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </header>
   );

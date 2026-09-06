@@ -84,6 +84,15 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
     assert page.locator('[data-testid="kategori-karti"]').count() == 8
     assert page.locator(".vite-error-overlay").count() == 0
 
+    # Masaüstünde kullanıcı tarafından onaylanan 30px; dokunmatik menüde güvenli 56px yükseklik korunur.
+    navbar_yuksekligi = page.locator(".site-header").evaluate(
+        "element => element.getBoundingClientRect().height"
+    )
+    beklenen_navbar = 56 if genislik <= 900 else 30
+    assert navbar_yuksekligi == beklenen_navbar, (
+        f"Navbar {genislik}px görünümde {navbar_yuksekligi}px; beklenen {beklenen_navbar}px"
+    )
+
     # Bir piksel yuvarlama payı dışında yatay taşma, responsive grid'in kırıldığını gösterir.
     yatay_tasma = page.evaluate(
         "document.documentElement.scrollWidth - document.documentElement.clientWidth"
@@ -134,7 +143,8 @@ with sync_playwright() as playwright:
     if not GERCEK_API:
         sayfa.route("**/api/**", api_yanitla)
     sayfa.goto(TEST_ADRESI, wait_until="networkidle")
-    sayfa.get_by_role("link", name="Tüm Ürünler").click()
+    # Üstteki "Tüm ürünleri gör" bağlantısından ayrıştırmak için kart adını tam eşleştiririz.
+    sayfa.get_by_role("link", name="Tüm Ürünler", exact=True).click()
     sayfa.wait_for_url("**/urunler")
     sayfa.get_by_role("heading", name="Ürün kataloğu").wait_for(state="visible")
     sayfa.close()

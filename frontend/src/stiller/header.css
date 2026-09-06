@@ -3,26 +3,29 @@
   z-index: 50;
   top: 0;
   height: var(--navbar-yuksekligi);
+  border-top: 2px solid var(--renk-koyu);
   border-bottom: 1px solid var(--renk-cizgi);
-  background: color-mix(in srgb, var(--renk-beyaz) 96%, transparent);
-  backdrop-filter: blur(18px);
+  background: var(--renk-beyaz);
 }
 
 .site-header__ic {
-  display: flex;
+  /* Üç kolon, menüyü logo ve teklif genişliğinden bağımsız olarak sayfanın tam ortasında tutar. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  width: min(calc(100% - 32px), 1180px);
   height: 100%;
-  gap: clamp(32px, 5vw, 84px);
+  gap: clamp(16px, 2.2vw, 34px);
 }
 
 .site-header__logo {
   display: grid;
   flex: 0 0 auto;
-  width: clamp(190px, 18vw, 278px);
-  height: 76px;
+  width: 106px;
+  height: 25px;
   overflow: hidden;
   place-items: center;
+  justify-self: start;
 }
 
 .site-header__logo img {
@@ -35,7 +38,8 @@
   display: flex;
   align-items: stretch;
   align-self: stretch;
-  gap: clamp(22px, 2.5vw, 48px);
+  gap: clamp(14px, 1.8vw, 28px);
+  justify-self: center;
 }
 
 .site-header__baglanti {
@@ -43,57 +47,71 @@
   display: flex;
   align-items: center;
   color: var(--renk-metin);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
   text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .site-header__baglanti::after {
   position: absolute;
   right: 0;
-  bottom: 30px;
+  bottom: 0;
   left: 0;
   height: 2px;
   background: var(--renk-ana);
   content: '';
   opacity: 0;
-  transform: scaleX(0.3);
+  transform: scaleX(0.35);
   transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .site-header__baglanti:hover,
-.site-header__baglanti--aktif {
-  color: var(--renk-ana);
-}
+.site-header__baglanti--aktif { color: var(--renk-ana); }
 
 .site-header__baglanti:hover::after,
-.site-header__baglanti--aktif::after {
-  opacity: 1;
-  transform: scaleX(1);
+.site-header__baglanti--aktif::after { opacity: 1; transform: scaleX(1); }
+
+.site-header__teklif {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  height: 24px;
+  gap: 9px;
+  border-radius: 4px;
+  background: var(--renk-ana);
+  box-shadow: 0 5px 12px color-mix(in srgb, var(--renk-ana) 24%, transparent);
+  color: var(--renk-beyaz);
+  font-size: 0.61rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  justify-self: end;
 }
 
 .site-header__menu-dugmesi {
   display: block;
-  width: 48px;
-  height: 48px;
-  padding: 0 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0 11px;
   border: 1px solid var(--renk-cizgi);
   background: var(--renk-beyaz);
   cursor: pointer;
 }
 
 @media (min-width: 901px) {
-  .site-header__menu-dugmesi {
-    display: none;
-  }
+  .site-header__menu-dugmesi { display: none; }
 }
 
 .site-header__menu-dugmesi span {
   display: block;
   height: 2px;
-  margin: 7px 0;
+  margin: 6px 0;
   background: var(--renk-koyu);
-  transition: transform 180ms ease;
 }
 
 .durum-mesaji {
@@ -103,14 +121,10 @@
 }
 
 @media (max-width: 900px) {
-  :root {
-    --navbar-yuksekligi: 82px;
-  }
-
-  .site-header__logo {
-    width: 190px;
-    height: 54px;
-  }
+  .site-header__ic { grid-template-columns: 1fr auto; }
+  .site-header__logo { width: 148px; height: 42px; }
+  .site-header__menu-dugmesi { display: block; justify-self: end; }
+  .site-header__teklif { display: none; }
 
   .site-header__nav {
     position: absolute;
@@ -119,6 +133,7 @@
     left: 0;
     display: grid;
     max-height: 0;
+    margin: 0;
     overflow: hidden;
     border-bottom: 1px solid transparent;
     background: var(--renk-beyaz);
@@ -136,12 +151,11 @@
   }
 
   .site-header__baglanti {
-    min-height: 58px;
+    min-height: 52px;
     padding-inline: max(20px, calc((100% - var(--icerik-genisligi)) / 2));
     border-top: 1px solid var(--renk-cizgi);
+    font-size: 0.82rem;
   }
 
-  .site-header__baglanti::after {
-    display: none;
-  }
+  .site-header__baglanti::after { display: none; }
 }

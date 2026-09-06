@@ -33,7 +33,11 @@ describe('KategoriBolumu', () => {
       'href',
       '/kategoriler/kuresel-vanalar'
     );
-    expect(screen.getByRole('link', { name: /tüm ürünler/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Tüm Ürünler' })).toHaveAttribute(
+      'href',
+      '/urunler'
+    );
+    expect(screen.getByRole('link', { name: 'Tüm ürünleri gör' })).toHaveAttribute(
       'href',
       '/urunler'
     );
