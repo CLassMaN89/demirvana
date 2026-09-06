@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="baslik aciklama">
+  <title id="baslik">Vana ürün görseli alanı</title>
+  <desc id="aciklama">Yönetim panelinden ürün görseli yüklenene kadar kullanılan teknik yer tutucu.</desc>
+  <g fill="none" stroke="#28469D" stroke-width="7">
+    <path d="M70 182h76l39-38h50l39 38h76v54h-76l-39-38h-50l-39 38H70z"/>
+    <circle cx="210" cy="171" r="45" fill="#EAF1FF"/>
+    <path d="M210 126V74M158 74h104M210 74V42M178 42h64"/>
+  </g>
+</svg>
+

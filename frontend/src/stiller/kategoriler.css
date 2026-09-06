@@ -1,0 +1,146 @@
+.kategori-bolumu {
+  padding-block: clamp(72px, 8vw, 132px);
+  background: var(--renk-beyaz);
+}
+
+.kategori-bolumu__baslik-satiri {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 72px);
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+
+.kategori-bolumu__baslik-satiri h2 {
+  margin: 0;
+  color: var(--renk-koyu);
+  font-size: clamp(1.75rem, 3vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.kategori-bolumu__teknik-cizgi {
+  height: 1px;
+  background: var(--renk-cizgi);
+}
+
+.kategori-bolumu__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--renk-cizgi);
+  border-left: 1px solid var(--renk-cizgi);
+}
+
+.kategori-karti {
+  position: relative;
+  display: grid;
+  min-height: clamp(270px, 25vw, 390px);
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  border-right: 1px solid var(--renk-cizgi);
+  border-bottom: 1px solid var(--renk-cizgi);
+  background: var(--renk-yuzey);
+  color: var(--renk-metin);
+  text-decoration: none;
+}
+
+.kategori-karti__gorsel-alani {
+  display: grid;
+  min-height: 210px;
+  padding: clamp(24px, 3vw, 44px);
+  background: linear-gradient(150deg, var(--renk-beyaz), var(--renk-acik));
+  place-items: center;
+}
+
+.kategori-karti__gorsel-alani img {
+  width: min(82%, 230px);
+  max-height: 190px;
+  object-fit: contain;
+  transition: transform 260ms ease;
+}
+
+.kategori-karti__alt {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 82px;
+  gap: 20px;
+  padding: 22px clamp(20px, 2vw, 30px);
+  border-top: 1px solid var(--renk-cizgi);
+  font-size: clamp(1rem, 1.1vw, 1.15rem);
+  font-weight: 700;
+}
+
+.kategori-karti__ok {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--renk-cizgi);
+  color: var(--renk-ana);
+  place-items: center;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.kategori-karti:hover .kategori-karti__gorsel-alani img { transform: scale(1.045); }
+.kategori-karti:hover .kategori-karti__ok { background: var(--renk-ana); color: var(--renk-beyaz); }
+
+.kategori-karti--tum {
+  grid-template-rows: 1fr;
+  background: var(--renk-koyu);
+  color: var(--renk-beyaz);
+  isolation: isolate;
+}
+
+.kategori-karti--tum::before,
+.kategori-karti--tum::after {
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--renk-beyaz) 16%, transparent);
+  border-radius: 50%;
+  content: '';
+}
+
+.kategori-karti--tum::before { width: 240px; height: 240px; top: -100px; right: -76px; }
+.kategori-karti--tum::after { width: 120px; height: 120px; top: -40px; right: -18px; }
+.kategori-karti--tum .kategori-karti__alt { align-self: end; border-color: color-mix(in srgb, var(--renk-beyaz) 18%, transparent); }
+.kategori-karti--tum .kategori-karti__ok { border-color: color-mix(in srgb, var(--renk-beyaz) 34%, transparent); color: var(--renk-beyaz); }
+.kategori-karti--tum:hover .kategori-karti__ok { background: var(--renk-beyaz); color: var(--renk-koyu); }
+
+.alt-sayfa {
+  min-height: calc(100svh - var(--navbar-yuksekligi));
+  padding-block: clamp(64px, 9vw, 136px);
+}
+
+.alt-sayfa__baslik {
+  max-width: 760px;
+  margin-bottom: clamp(42px, 6vw, 80px);
+}
+
+.alt-sayfa__baslik h1 {
+  margin: 0;
+  color: var(--renk-koyu);
+  font-size: clamp(2.5rem, 5vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.alt-sayfa__baslik p {
+  margin: 26px 0 0;
+  color: var(--renk-ikincil);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.7;
+}
+
+@media (max-width: 1099px) {
+  .kategori-bolumu__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 639px) {
+  .kategori-bolumu__baslik-satiri { grid-template-columns: 1fr; }
+  .kategori-bolumu__teknik-cizgi { display: none; }
+  .kategori-bolumu__grid { grid-template-columns: 1fr; }
+  .kategori-karti { min-height: 320px; }
+}
+

@@ -8,6 +8,7 @@ export default function Header({ menu, logoYolu }) {
   const konum = useLocation();
 
   useEffect(() => {
+    // Yeni sayfaya geçildiğinde mobil paneli kapatarak açık menünün içeriği örtmesini önleriz.
     setMenuAcik(false);
   }, [konum.pathname]);
 
@@ -51,4 +52,3 @@ export default function Header({ menu, logoYolu }) {
     </header>
   );
 }
-
