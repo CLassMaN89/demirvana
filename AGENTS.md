@@ -29,6 +29,7 @@ Bu dosyadaki kurallar, bu dizin ve tüm alt dizinlerindeki çalışmalar için g
 5. Görsel içerikleri kaynak kod içine gömme. Görsel yollarını veri katmanından alınabilecek biçimde tasarla.
 6. Tema renklerini merkezi CSS özel değişkenleri üzerinden yönet ve veritabanı/API ile değiştirilebilir yapıyı koru.
 7. Tüm ekran değişikliklerinde telefon, tablet, dizüstü ve geniş ekran uyumluluğunu koru.
+8. Projeyi geliştirmek ve doğrulamak için gereken standart yazılım bağımlılıklarını ayrıca izin istemeden kurabilirsin; kapsam dışı, riskli veya veri kaybına yol açabilecek sistem işlemleri bu yetkiye dahil değildir.
 
 ## Oturum sonu
 
