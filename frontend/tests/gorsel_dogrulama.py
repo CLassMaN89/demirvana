@@ -110,19 +110,27 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
     assert yatay_tasma <= 1, f"{genislik}px görünümde {yatay_tasma}px yatay taşma var"
 
     if genislik == 1440:
-        # Fare hero üzerinde ilerlediğinde canvasın ilgili pikseli gerçekten saydamlaşmalıdır.
+        # Canvas başlangıçta şeffaftır; fare ilerlediğinde ilgili pikselde teknik çizim katmanı oluşmalıdır.
         canvas = page.locator('[data-testid="murekkep-maskesi"]')
         kutu = canvas.bounding_box()
-        page.mouse.move(kutu["x"] + kutu["width"] * 0.32, kutu["y"] + kutu["height"] * 0.45)
-        page.wait_for_timeout(120)
-        merkez_alfa = canvas.evaluate(
+        ilk_alfa = canvas.evaluate(
             """element => {
-              const x = Math.floor(element.width * 0.32);
-              const y = Math.floor(element.height * 0.45);
+              const x = Math.floor(element.width * 0.66);
+              const y = Math.floor(element.height * 0.48);
               return element.getContext('2d').getImageData(x, y, 1, 1).data[3];
             }"""
         )
-        assert merkez_alfa < 250, "Mürekkep maskesi fare konumunda görseli açığa çıkarmadı"
+        page.mouse.move(kutu["x"] + kutu["width"] * 0.66, kutu["y"] + kutu["height"] * 0.48)
+        page.wait_for_timeout(120)
+        merkez_alfa = canvas.evaluate(
+            """element => {
+              const x = Math.floor(element.width * 0.66);
+              const y = Math.floor(element.height * 0.48);
+              return element.getContext('2d').getImageData(x, y, 1, 1).data[3];
+            }"""
+        )
+        assert ilk_alfa == 0, "Teknik çizim canvası fare etkileşiminden önce şeffaf değil"
+        assert merkez_alfa > 5, "Fare konumunda teknik çizim katmanı oluşmadı"
 
     page.screenshot(
         path=str(CIKTI / f"ana-sayfa-{genislik}.png"),

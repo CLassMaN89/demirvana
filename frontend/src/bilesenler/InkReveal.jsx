@@ -14,35 +14,84 @@ export default function InkReveal({
   className = ''
 }) {
   const canvasRef = useRef(null);
-  const griGorselRef = useRef(null);
+  const teknikCizimRef = useRef(null);
   const damgalarRef = useRef([]);
   const calisiyorRef = useRef(false);
   const sonKonumRef = useRef(null);
   const boyutRef = useRef({ genislik: 0, yukseklik: 0 });
   const animasyonRef = useRef(null);
 
-  const griGorseliCiz = useCallback((baglam) => {
+  const teknikCizimiCiz = useCallback((baglam) => {
     const { genislik, yukseklik } = boyutRef.current;
-    const gorsel = griGorselRef.current;
-    baglam.globalCompositeOperation = 'source-over';
-    baglam.clearRect(0, 0, genislik, yukseklik);
-    if (!gorsel?.naturalWidth || !gorsel?.naturalHeight) return;
+    const teknikCizim = teknikCizimRef.current;
+    if (!teknikCizim?.width || !teknikCizim?.height) return;
 
-    // DOM görselindeki object-fit: cover davranışını tekrar ederek renkli ve gri katmanları çakıştırırız.
+    // DOM görselindeki object-fit: cover hesabını tekrar ederek teknik çizgileri fotoğrafla tam çakıştırırız.
     const olcek = Math.max(
-      genislik / gorsel.naturalWidth,
-      yukseklik / gorsel.naturalHeight
+      genislik / teknikCizim.width,
+      yukseklik / teknikCizim.height
     );
-    const cizimGenisligi = gorsel.naturalWidth * olcek;
-    const cizimYuksekligi = gorsel.naturalHeight * olcek;
+    const cizimGenisligi = teknikCizim.width * olcek;
+    const cizimYuksekligi = teknikCizim.height * olcek;
     const x = (genislik - cizimGenisligi) * (odakX / 100);
     const y = (yukseklik - cizimYuksekligi) * (odakY / 100);
 
-    baglam.save();
-    baglam.filter = 'grayscale(1) contrast(1.05)';
-    baglam.drawImage(gorsel, x, y, cizimGenisligi, cizimYuksekligi);
-    baglam.restore();
+    baglam.drawImage(teknikCizim, x, y, cizimGenisligi, cizimYuksekligi);
   }, [odakX, odakY]);
+
+  const teknikCizimOlustur = useCallback((gorsel) => {
+    const cizim = document.createElement('canvas');
+    // Hesaplama yükünü sınırlarken geniş hero görselindeki vana detaylarını koruyacak çözünürlük kullanılır.
+    const azamiGenislik = 1400;
+    const olcek = Math.min(1, azamiGenislik / gorsel.naturalWidth);
+    cizim.width = Math.max(1, Math.round(gorsel.naturalWidth * olcek));
+    cizim.height = Math.max(1, Math.round(gorsel.naturalHeight * olcek));
+
+    const baglam = cizim.getContext('2d', { willReadFrequently: true });
+    if (!baglam) return null;
+    baglam.drawImage(gorsel, 0, 0, cizim.width, cizim.height);
+
+    const goruntuVerisi = baglam.getImageData(0, 0, cizim.width, cizim.height);
+    const pikseller = goruntuVerisi.data;
+    const parlaklik = new Float32Array(cizim.width * cizim.height);
+
+    for (let piksel = 0; piksel < parlaklik.length; piksel += 1) {
+      const kanal = piksel * 4;
+      parlaklik[piksel] = pikseller[kanal] * 0.299
+        + pikseller[kanal + 1] * 0.587
+        + pikseller[kanal + 2] * 0.114;
+    }
+
+    // Sobel kenar algılama gölgelendirmeyi değil, vana ve teknik parçaların gerçek sınırlarını çıkarır.
+    for (let y = 0; y < cizim.height; y += 1) {
+      for (let x = 0; x < cizim.width; x += 1) {
+        const piksel = y * cizim.width + x;
+        const kanal = piksel * 4;
+        let kenarGucu = 0;
+
+        if (x > 0 && x < cizim.width - 1 && y > 0 && y < cizim.height - 1) {
+          const ust = piksel - cizim.width;
+          const alt = piksel + cizim.width;
+          const yatay = -parlaklik[ust - 1] + parlaklik[ust + 1]
+            - 2 * parlaklik[piksel - 1] + 2 * parlaklik[piksel + 1]
+            - parlaklik[alt - 1] + parlaklik[alt + 1];
+          const dikey = -parlaklik[ust - 1] - 2 * parlaklik[ust] - parlaklik[ust + 1]
+            + parlaklik[alt - 1] + 2 * parlaklik[alt] + parlaklik[alt + 1];
+          kenarGucu = Math.hypot(yatay, dikey);
+        }
+
+        // Zayıf doku ve fotoğraf grenini eleyip güçlü hatları koyu mavi-gri teknik çizgiye dönüştürürüz.
+        const cizgiOrani = Math.min(1, Math.max(0, (kenarGucu - 42) / 150));
+        pikseller[kanal] = Math.round(248 - cizgiOrani * 210);
+        pikseller[kanal + 1] = Math.round(249 - cizgiOrani * 202);
+        pikseller[kanal + 2] = Math.round(250 - cizgiOrani * 190);
+        pikseller[kanal + 3] = 255;
+      }
+    }
+
+    baglam.putImageData(goruntuVerisi, 0, 0);
+    return cizim;
+  }, []);
 
   const yenidenBoyutlandir = useCallback(() => {
     const canvas = canvasRef.current;
@@ -60,8 +109,9 @@ export default function InkReveal({
     canvas.style.width = `${dikdortgen.width}px`;
     canvas.style.height = `${dikdortgen.height}px`;
     baglam.setTransform(oran, 0, 0, oran, 0, 0);
-    griGorseliCiz(baglam);
-  }, [griGorseliCiz]);
+    // Başlangıçta canvas şeffaftır; böylece alttaki hero kendi renkleriyle görünür.
+    baglam.clearRect(0, 0, dikdortgen.width, dikdortgen.height);
+  }, []);
 
   const murekkepAc = useCallback((baglam, damga, yaricap, saydamlik) => {
     const gradyan = baglam.createRadialGradient(
@@ -105,8 +155,9 @@ export default function InkReveal({
 
     const simdi = performance.now();
     const damgalar = damgalarRef.current;
-    griGorseliCiz(baglam);
-    baglam.globalCompositeOperation = 'destination-out';
+    const { genislik, yukseklik } = boyutRef.current;
+    baglam.globalCompositeOperation = 'source-over';
+    baglam.clearRect(0, 0, genislik, yukseklik);
 
     for (let sira = damgalar.length - 1; sira >= 0; sira -= 1) {
       const ilerleme = (simdi - damgalar[sira].dogum) / yasamSuresi;
@@ -121,9 +172,13 @@ export default function InkReveal({
       murekkepAc(baglam, damgalar[sira], yaricap, 1 - ilerleme ** 2);
     }
 
-    if (damgalar.length > 0) animasyonRef.current = requestAnimationFrame(animasyon);
-    else calisiyorRef.current = false;
-  }, [baslangicYaricapi, griGorseliCiz, murekkepAc, yasamSuresi]);
+    if (damgalar.length > 0) {
+      // Teknik çizim yalnız imlecin açtığı alfa alanında kalır; geri kalan canvas şeffaftır.
+      baglam.globalCompositeOperation = 'source-in';
+      teknikCizimiCiz(baglam);
+      animasyonRef.current = requestAnimationFrame(animasyon);
+    } else calisiyorRef.current = false;
+  }, [baslangicYaricapi, murekkepAc, teknikCizimiCiz, yasamSuresi]);
 
   const damgaEkle = useCallback((x, y) => {
     const damgalar = damgalarRef.current;
@@ -163,11 +218,11 @@ export default function InkReveal({
     yenidenBoyutlandir();
     window.addEventListener('resize', yenidenBoyutlandir);
 
-    // Üst canvas aynı hero görselini gri çizer; silinen bölgelerde alttaki renkli img görünür.
+    // Aynı hero görselinden bir kez teknik çizim üretilir; çizim yalnız fare damgalarında görünür.
     const gorsel = new Image();
     gorsel.decoding = 'async';
     gorsel.onload = () => {
-      griGorselRef.current = gorsel;
+      teknikCizimRef.current = teknikCizimOlustur(gorsel);
       yenidenBoyutlandir();
     };
     gorsel.src = gorselYolu;
@@ -177,7 +232,7 @@ export default function InkReveal({
       window.removeEventListener('resize', yenidenBoyutlandir);
       if (animasyonRef.current) cancelAnimationFrame(animasyonRef.current);
     };
-  }, [gorselYolu, yenidenBoyutlandir]);
+  }, [gorselYolu, yenidenBoyutlandir, teknikCizimOlustur]);
 
   const goreliKonum = (olay) => {
     const dikdortgen = olay.currentTarget.getBoundingClientRect();
@@ -190,6 +245,7 @@ export default function InkReveal({
       className={`hero-carousel__murekkep ${className}`.trim()}
       data-testid="murekkep-maskesi"
       data-gorsel-yolu={gorselYolu}
+      data-efekt="teknik-cizim"
       aria-hidden="true"
       onPointerEnter={(olay) => {
         if (olay.pointerType && olay.pointerType !== 'mouse') return;

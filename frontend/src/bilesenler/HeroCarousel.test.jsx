@@ -44,6 +44,10 @@ describe('HeroCarousel', () => {
       'data-gorsel-yolu',
       '/assets/carousel/1.png'
     );
+    expect(screen.getByTestId('murekkep-maskesi')).toHaveAttribute(
+      'data-efekt',
+      'teknik-cizim'
+    );
   });
 
   it('oklar ve klavye ile slaytlar arasında geçiş yapar', async () => {
