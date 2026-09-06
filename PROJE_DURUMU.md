@@ -28,10 +28,18 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Tasarım belgesi oluşturuldu: `docs/superpowers/specs/2026-09-06-demirvana-site-tasarimi.md`.
 - Kalıcı proje çalışma kuralları `AGENTS.md` dosyasına yazıldı.
 - Oturumlar arası devam kaydı için bu dosya oluşturuldu.
+- Vite, React Router, Vitest ve Testing Library tabanlı frontend temeli kuruldu.
+- API tema anahtarlarını güvenli CSS değişkenlerine aktaran dinamik tema katmanı eklendi.
+- Geliştirme ortamında örnek veriye dönebilen merkezi API istemcisi eklendi.
+- Masaüstünde 120px, mobilde açılır menülü responsive navbar oluşturuldu.
+- Altı mevcut görseli kullanan erişilebilir ve dokunmatik hero carousel oluşturuldu.
+- Yedi kategori ve bir `Tüm Ürünler` kartından oluşan responsive grid eklendi.
+- Ana sayfa, katalog, kategori, ürün ve kurumsal sayfa rotaları eklendi.
+- Kritik üretim kodlarına neyin neden kullanıldığını açıklayan Türkçe yorumlar eklendi; kural `AGENTS.md` içinde kalıcılaştırıldı.
 
 ## Mevcut durum
 
-Tasarım belgesi kullanıcı tarafından onaylandı. Tek ajanla yürütülecek ayrıntılı uygulama planı hazırlandı. Uygulama kodu henüz oluşturulmadı. Çalışma alanı şu anda bir Git deposu değildir.
+Uygulama planının ilk beş görevi tamamlandı. Frontend iskeleti çalışır durumda ve yerel Git deposunda ayrı görev commitleri bulunuyor. PHP API, MySQL şeması ve son tarayıcı doğrulaması henüz tamamlanmadı.
 
 ## Değiştirilen dosyalar
 
@@ -39,19 +47,24 @@ Tasarım belgesi kullanıcı tarafından onaylandı. Tek ajanla yürütülecek a
 - `PROJE_DURUMU.md`
 - `docs/superpowers/specs/2026-09-06-demirvana-site-tasarimi.md`
 - `docs/superpowers/plans/2026-09-06-demirvana-site-uygulama-plani.md`
+- `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 
 ## Doğrulamalar
 
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
+- Frontend testleri: 8 test, 0 hata.
+- Vite üretim derlemesi: başarılı.
+- Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 
 ## Bilinen durumlar
 
 - Yönetim paneli bu ilk teslimin kapsamında değildir; veri yapısı yönetim paneline hazır olacaktır.
 - PHP/MySQL üretim bağlantısı için ileride ortam bilgileri gerekecektir.
-- Git deposu olmadığı için henüz commit oluşturulmadı.
+- Yerel Git deposu oluşturuldu ve tamamlanan frontend görevleri ayrı commitlerle kaydedildi.
+- `php` komutu PATH üzerinde ve yaygın XAMPP/Laragon yollarında bulunamadı; PHP TDD ve sözdizimi doğrulaması bu nedenle bekliyor.
 
 ## Sıradaki adım
 
-Kullanıcı devam et dediğinde `superpowers:executing-plans` yönergesiyle plan tek ajan tarafından test odaklı biçimde uygulanacak. İlk görev frontend temeli ve güvenli dinamik tema katmanıdır.
+PHP 8.1+ yorumlayıcısı sağlandıktan sonra Görev 6'daki başarısız API testi çalıştırılacak; ardından PHP API, MySQL şeması ve son entegrasyon/görsel doğrulama tamamlanacak.
