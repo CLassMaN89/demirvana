@@ -1,4 +1,5 @@
-export default function App() {
-  return <main aria-label="Demirvana web sitesi" />;
-}
+import SayfaIskeleti from './bilesenler/SayfaIskeleti';
 
+export default function App() {
+  return <SayfaIskeleti menu={[]} />;
+}

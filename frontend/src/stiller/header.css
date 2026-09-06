@@ -1,0 +1,147 @@
+.site-header {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  height: var(--navbar-yuksekligi);
+  border-bottom: 1px solid var(--renk-cizgi);
+  background: color-mix(in srgb, var(--renk-beyaz) 96%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.site-header__ic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: clamp(32px, 5vw, 84px);
+}
+
+.site-header__logo {
+  display: grid;
+  flex: 0 0 auto;
+  width: clamp(190px, 18vw, 278px);
+  height: 76px;
+  overflow: hidden;
+  place-items: center;
+}
+
+.site-header__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: stretch;
+  align-self: stretch;
+  gap: clamp(22px, 2.5vw, 48px);
+}
+
+.site-header__baglanti {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--renk-metin);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-header__baglanti::after {
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  left: 0;
+  height: 2px;
+  background: var(--renk-ana);
+  content: '';
+  opacity: 0;
+  transform: scaleX(0.3);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.site-header__baglanti:hover,
+.site-header__baglanti--aktif {
+  color: var(--renk-ana);
+}
+
+.site-header__baglanti:hover::after,
+.site-header__baglanti--aktif::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.site-header__menu-dugmesi {
+  display: block;
+  width: 48px;
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--renk-cizgi);
+  background: var(--renk-beyaz);
+  cursor: pointer;
+}
+
+@media (min-width: 901px) {
+  .site-header__menu-dugmesi {
+    display: none;
+  }
+}
+
+.site-header__menu-dugmesi span {
+  display: block;
+  height: 2px;
+  margin: 7px 0;
+  background: var(--renk-koyu);
+  transition: transform 180ms ease;
+}
+
+.durum-mesaji {
+  width: min(calc(100% - 32px), 720px);
+  margin: 80px auto;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --navbar-yuksekligi: 82px;
+  }
+
+  .site-header__logo {
+    width: 190px;
+    height: 54px;
+  }
+
+  .site-header__nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: grid;
+    max-height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid transparent;
+    background: var(--renk-beyaz);
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 220ms ease, opacity 180ms ease;
+  }
+
+  .site-header__nav--acik {
+    max-height: 460px;
+    border-bottom-color: var(--renk-cizgi);
+    box-shadow: var(--golge-yumusak);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .site-header__baglanti {
+    min-height: 58px;
+    padding-inline: max(20px, calc((100% - var(--icerik-genisligi)) / 2));
+    border-top: 1px solid var(--renk-cizgi);
+  }
+
+  .site-header__baglanti::after {
+    display: none;
+  }
+}
