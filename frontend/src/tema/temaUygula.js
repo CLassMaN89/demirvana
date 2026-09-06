@@ -1,3 +1,4 @@
+// API'den gelen anahtarları sınırlı bir CSS değişken listesine bağlayarak yönetim paneli verisinin rastgele stil yazmasını engelleriz.
 const TEMA_ESLEMESI = Object.freeze({
   ana_mavi: '--renk-ana',
   koyu_mavi: '--renk-koyu',
@@ -8,6 +9,7 @@ const TEMA_ESLEMESI = Object.freeze({
 });
 
 export function temaUygula(tema, hedef = document.documentElement) {
+  // `hedef` parametresi gerçek sayfada :root'u, testlerde ise izole bir DOM öğesini günceller.
   Object.entries(TEMA_ESLEMESI).forEach(([anahtar, cssDegiskeni]) => {
     const deger = tema?.[anahtar];
 
@@ -16,4 +18,3 @@ export function temaUygula(tema, hedef = document.documentElement) {
     }
   });
 }
-

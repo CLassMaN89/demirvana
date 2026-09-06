@@ -2,6 +2,7 @@ import { ornekVeriler } from '../veri/ornekVeriler';
 
 const API_TABANI = import.meta.env.VITE_API_URL ?? '/api';
 
+// Bütün GET isteklerini aynı yanıt sözleşmesinde toplar; bileşenlerin HTTP ayrıntılarını bilmesi gerekmez.
 export async function veriGetir(
   yol,
   {
@@ -27,6 +28,7 @@ export async function veriGetir(
 
     return govde.veri;
   } catch (hata) {
+    // Yerel veri yalnızca geliştirmede kullanılır; üretimde eski veya örnek içerik sessizce gösterilmez.
     if (gelistirme && yedekVeri !== undefined) {
       return yedekVeri;
     }
@@ -36,6 +38,7 @@ export async function veriGetir(
 }
 
 export async function siteVerileriniGetir(secenekler = {}) {
+  // Ana sayfanın bağımsız veri kümelerini paralel almak ilk görünümün bekleme süresini azaltır.
   const istekler = [
     ['tema', ornekVeriler.tema],
     ['menu', ornekVeriler.menu],
@@ -51,4 +54,3 @@ export async function siteVerileriniGetir(secenekler = {}) {
 
   return Object.fromEntries(istekler.map(([anahtar], indeks) => [anahtar, sonuclar[indeks]]));
 }
-

@@ -1,0 +1,182 @@
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1994 / 789;
+  overflow: hidden;
+  background: var(--renk-koyu);
+  color: var(--renk-beyaz);
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.hero-carousel__slayt,
+.hero-carousel__gorsel,
+.hero-carousel__golge,
+.hero-carousel__icerik {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-carousel__gorsel {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-carousel__golge {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--renk-koyu) 84%, transparent) 0%, color-mix(in srgb, var(--renk-koyu) 45%, transparent) 43%, transparent 72%);
+}
+
+.hero-carousel__icerik {
+  display: flex;
+  align-items: center;
+}
+
+.hero-carousel__metin {
+  width: min(630px, 48vw);
+  padding-block: 52px 86px;
+}
+
+.hero-carousel__metin h1 {
+  max-width: 16ch;
+  margin: 0;
+  font-size: clamp(2.25rem, 4vw, 5.25rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.hero-carousel__metin p {
+  max-width: 52ch;
+  margin: clamp(20px, 2.2vw, 34px) 0 0;
+  color: color-mix(in srgb, var(--renk-beyaz) 83%, transparent);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.hero-carousel__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  margin-top: clamp(24px, 2.6vw, 40px);
+  padding: 0 28px;
+  border: 1px solid var(--renk-beyaz);
+  background: var(--renk-beyaz);
+  color: var(--renk-koyu);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.hero-carousel__cta:hover {
+  background: transparent;
+  color: var(--renk-beyaz);
+}
+
+.hero-carousel__ok {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  display: grid;
+  width: clamp(46px, 4vw, 64px);
+  height: clamp(46px, 4vw, 64px);
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--renk-beyaz) 55%, transparent);
+  background: color-mix(in srgb, var(--renk-koyu) 48%, transparent);
+  color: var(--renk-beyaz);
+  font-size: clamp(2rem, 3vw, 3rem);
+  cursor: pointer;
+  place-items: center;
+  transform: translateY(-50%);
+}
+
+.hero-carousel__ok--onceki { left: clamp(12px, 2vw, 38px); }
+.hero-carousel__ok--sonraki { right: clamp(12px, 2vw, 38px); }
+
+.hero-carousel__alt {
+  position: absolute;
+  z-index: 3;
+  right: clamp(20px, 5vw, 86px);
+  bottom: clamp(18px, 3vw, 48px);
+  left: clamp(20px, 5vw, 86px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+}
+
+.hero-carousel__sayac {
+  min-width: 54px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.hero-carousel__gostergeler {
+  display: flex;
+  gap: 8px;
+}
+
+.hero-carousel__gosterge {
+  width: 36px;
+  height: 4px;
+  padding: 10px 0;
+  border: 0;
+  background: linear-gradient(var(--renk-beyaz), var(--renk-beyaz)) center / 100% 2px no-repeat;
+  cursor: pointer;
+  opacity: 0.48;
+}
+
+.hero-carousel__gosterge--aktif { opacity: 1; }
+
+.hero-carousel__slayt--kaydir .hero-carousel__gorsel { animation: hero-kaydir 700ms cubic-bezier(.2,.7,.2,1); }
+.hero-carousel__slayt--yaklas .hero-carousel__gorsel { animation: hero-yaklas 900ms ease-out; }
+.hero-carousel__slayt--metin-maske .hero-carousel__metin { animation: hero-metin 650ms cubic-bezier(.2,.7,.2,1); }
+
+@keyframes hero-kaydir {
+  from { transform: translateX(3%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes hero-yaklas {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+
+@keyframes hero-metin {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateY(24px); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+  .hero-carousel {
+    min-height: clamp(430px, 72svh, 650px);
+    aspect-ratio: auto;
+  }
+
+  .hero-carousel__golge {
+    background: linear-gradient(0deg, color-mix(in srgb, var(--renk-koyu) 92%, transparent) 0%, color-mix(in srgb, var(--renk-koyu) 40%, transparent) 68%, transparent 100%);
+  }
+
+  .hero-carousel__icerik {
+    align-items: flex-end;
+  }
+
+  .hero-carousel__metin {
+    width: 100%;
+    padding-bottom: 96px;
+  }
+
+  .hero-carousel__metin h1 { max-width: 13ch; }
+  .hero-carousel__metin p { max-width: 34ch; }
+
+  .hero-carousel__ok {
+    top: 22px;
+    width: 46px;
+    height: 46px;
+    transform: none;
+  }
+
+  .hero-carousel__ok--onceki { left: auto; right: 72px; }
+  .hero-carousel__ok--sonraki { right: 18px; }
+  .hero-carousel__alt { justify-content: space-between; }
+}

@@ -22,6 +22,8 @@ Bu dosyadaki kurallar, bu dizin ve tüm alt dizinlerindeki çalışmalar için g
 
 1. Alt ajan veya paralel ajan kullanma; bütün çalışmayı tek ajan olarak yürüt.
 2. Kaynak kod yorumlarını ve açıklamalarını Türkçe yaz.
+   - Üretim kodundaki önemli bölüm ve kararların yanında neyin, nerede ve neden kullanıldığını açıklayan kısa Türkçe yorumlar bulundur.
+   - Açıkça anlaşılır her satırı yorumlamak yerine veri akışı, güvenlik, responsive davranış ve etkileşim mantığını açıklamaya öncelik ver.
 3. Veritabanı tablo ve sütun adlarını açık, anlaşılır Türkçe adlarla oluştur.
 4. React, CSS ve JavaScript arayüz yapısını; PHP REST API ve MySQL veri katmanını onaylanan tasarım belgesine uygun tut.
 5. Görsel içerikleri kaynak kod içine gömme. Görsel yollarını veri katmanından alınabilecek biçimde tasarla.
@@ -39,4 +41,3 @@ Bu dosyadaki kurallar, bu dizin ve tüm alt dizinlerindeki çalışmalar için g
 
 - Tasarım: `docs/superpowers/specs/2026-09-06-demirvana-site-tasarimi.md`
 - Güncel ilerleme: `PROJE_DURUMU.md`
-
