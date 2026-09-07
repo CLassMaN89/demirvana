@@ -89,10 +89,16 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Tüm sayfalara tema uyumlu, logolu ve responsive footer eklendi; masaüstünde dört, tablette iki, telefonda tek sütun kullanır.
 - Footer hızlı bağlantıları mevcut menüden, ürün grupları mevcut kategorilerden gelir; telefon, e-posta, adres, buton ve telif metni `/api/site-ayarlari` üzerinden yüklenir.
 - Footer'ın tamamı ile marka, bağlantı, ürün ve destek sütunlarının görünürlük/sıra değerleri ayrı site ayarlarından yönetilir; bütün renkler merkezi tema değişkenlerini kullanır.
+- Global ve sayfa bazlı SEO alanları `site_ayarlari` ile yeni `seo_sayfalari` tablosuna taşındı; dil, canonical, sosyal paylaşım, robots ve sitemap değerleri gelecekteki admin panelinden yönetilebilir.
+- React rota değişimlerinde title, description, canonical, robots, Open Graph, Twitter Card ve JSON-LD etiketlerini tekilleştirerek güncelleyen `SeoYoneticisi` eklendi.
+- Ana sayfada gerçek şirket verilerinden `Organization` ve `WebSite`, iç sayfalarda `BreadcrumbList`, ürün detaylarında mevcut ürün alanlarıyla sınırlı `Product` yapılandırılmış verisi üretilir.
+- PHP üretim giriş noktası React başlamadan önce rotaya özel SEO etiketlerini HTML'e yazar; bilinmeyen doğrudan rotalar HTTP 404 ve `noindex, nofollow` döndürür.
+- `/robots.txt` ve `/sitemap.xml` etkin SEO sayfaları, kategoriler ve ürünlerden dinamik üretilir; sitemap dışı veya noindex kayıtlar listeye alınmaz.
+- Responsive, tema uyumlu gerçek bulunamadı sayfası eklendi; bilinmeyen React rotaları artık ana sayfaya yönlendirilmez.
 
 ## Mevcut durum
 
-Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi ve dinamik footer tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi, dinamik footer ve admin yönetimine hazır teknik SEO altyapısı tamamlandı. React frontend, PHP HTML/API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -106,6 +112,8 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `docs/superpowers/plans/2026-09-07-referanslar-sektor-filtreli-uygulama-plani.md`
 - `docs/superpowers/specs/2026-09-07-site-arama-ve-sayfa-gecisi.md`
 - `docs/superpowers/plans/2026-09-07-site-arama-ve-sayfa-gecisi-plani.md`
+- `docs/superpowers/specs/2026-09-07-admin-yonetimli-seo-tasarimi.md`
+- `docs/superpowers/plans/2026-09-07-admin-yonetimli-seo-uygulama-plani.md`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 - `backend/` altındaki PHP API dosyaları
 - `veritabani/demirvana.sql`
@@ -117,7 +125,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 36 test, 0 hata.
+- Frontend testleri: 14 test dosyasında 41 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -140,6 +148,10 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - Arama panelinin animasyon sonrası normal çizim katmanına dönmesi ve 14px/500 sonuç başlıkları canlı tarayıcıda doğrulandı.
 - Footer masaüstü görünümü, logo, dinamik menü/kategori bağlantıları ve destek bilgileri localhost üzerinde doğrulandı.
 - `/api/site-ayarlari` canlı MariaDB verisinden 21 etkin ayar döndürdü; footer görünürlük değeri `1` olarak doğrulandı.
+- SEO doğrulamaları: `/api/seo` 7 etkin sayfa kaydı, `/sitemap.xml` 14 mutlak URL ve `/robots.txt` doğru sitemap satırı döndürdü.
+- PHP üretim HTML'i `/teknik` rotasında doğru canonical etiketi üretti; bilinmeyen doğrudan rota HTTP 404 döndürdü.
+- Canlı React doğrulamasında `/teknik` rotası `Teknik Bilgiler | Demirvana`, doğru canonical ve JSON-LD üretti; bilinmeyen rota `Sayfa bulunamadı | Demirvana` ile `noindex, nofollow` kullandı.
+- SEO canlı tarayıcı doğrulamasında konsol hatası veya uyarı görülmedi; Vite üretim derlemesi, 10 PHP dosyasının sözdizimi, PHP API testi ve şema yapısal testi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -149,7 +161,8 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - Yerel MariaDB root hesabı parola olmadan yalnızca geliştirme doğrulaması için kullanıldı; üretim ortamında güçlü parola ve ayrı uygulama kullanıcısı tanımlanmalıdır.
 - Kullanıcının sağladığı kök `Carousel/` klasörü değiştirilmeden korunur; frontend kendi `public/assets/carousel/` kopyalarını kullanır.
 - Referans galerisindeki başlangıç fotoğrafları kullanıcının ekran görüntüsünden kadrajlanır; yönetim panelinde özgün yüksek çözünürlüklü dosyalarla değiştirilebilir.
+- Google Search Console doğrulama kodu veri alanı hazırdır; üretim alan adı yayına alındığında doğrulama ve sitemap gönderimi admin/dağıtım aşamasında yapılmalıdır.
 
 ## Sıradaki adım
 
-Kullanıcının belirteceği alanda sınırlı düzenleme yap. Sonraki olası adım, seçilecek yeni sayfanın tasarlanması veya özgün yüksek çözünürlüklü referans fotoğraflarının eklenmesidir.
+Kullanıcının verdiği `C:/Users/Sinan/Documents/Projeler/vana2/assets/Carousel/index.html` dosyasındaki Referanslar görünümü ve geçişlerini görsel referans olarak incele; yalnız mevcut Referanslar sayfasını bu doğrultuda düzenle. Navbar, footer ve diğer sayfaları koru.
