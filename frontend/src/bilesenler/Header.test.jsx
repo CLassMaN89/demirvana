@@ -80,15 +80,23 @@ describe('Header', () => {
     expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
   });
 
-  it('arama ve sonuç yazılarını dengeli okunabilir ölçülerde gösterir', () => {
+  it('arama sonuçlarını animasyon sonrası net ve okunabilir ölçülerde gösterir', () => {
     render(
       <MemoryRouter>
         <Header
           menu={[]}
           logoYolu="/assets/logo.png"
           aramaKaynaklari={{
-            kategoriler: [{ id: 8, ad: 'Küresel Vanalar', slug: 'kuresel-vanalar' }],
-            urunler: [], referanslar: { kayitlar: [] }
+            kategoriler: [],
+            urunler: [],
+            referanslar: {
+              kayitlar: [{
+                id: 1,
+                baslik: 'Antalya Gazipaşa Atıksu Arıtma Tesisi Vanaları',
+                konum: 'Antalya / Gazipaşa',
+                kurum: 'İller Bankası'
+              }]
+            }
           }}
         />
       </MemoryRouter>
@@ -96,15 +104,24 @@ describe('Header', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
     const arama = screen.getByRole('searchbox', { name: 'Sitede ara' });
-    fireEvent.change(arama, { target: { value: 'küresel' } });
-    const sonucBasligi = screen.getByRole('link', { name: /Küresel Vanalar/i }).querySelector('strong');
+    fireEvent.change(arama, { target: { value: 'gazipaşa' } });
+    const sonucBaglantisi = screen.getByRole('link', { name: /Antalya Gazipaşa/i });
+    const sonucBasligi = sonucBaglantisi.querySelector('strong');
+    const sonucTuru = sonucBaglantisi.querySelector('em');
+    const sonucAciklamasi = sonucBaglantisi.querySelector('small');
+    const aramaPaneli = arama.closest('.site-header__arama-acilir');
 
-    expect(getComputedStyle(arama).fontSize).toBe('13px');
+    expect(getComputedStyle(arama).fontSize).toBe('14px');
     expect(getComputedStyle(arama).fontWeight).toBe('400');
-    expect(getComputedStyle(sonucBasligi).fontSize).toBe('13px');
+    expect(getComputedStyle(sonucBasligi).fontSize).toBe('14px');
     expect(getComputedStyle(sonucBasligi).fontWeight).toBe('500');
     expect(getComputedStyle(sonucBasligi).lineHeight).toBe('1.45');
-    expect(getComputedStyle(sonucBasligi.closest('a')).display).toBe('grid');
+    expect(getComputedStyle(sonucTuru).fontSize).toBe('11px');
+    expect(getComputedStyle(sonucAciklamasi).fontSize).toBe('12px');
+    expect(getComputedStyle(sonucBaglantisi).display).toBe('grid');
+    // Kalıcı compositing katmanı Chrome'da küçük metni bulanıklaştırdığı için animasyon sonrası korunmamalıdır.
+    expect(getComputedStyle(aramaPaneli).willChange).toBe('auto');
+    expect(getComputedStyle(aramaPaneli).animationFillMode).toBe('none');
   });
 
   it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
