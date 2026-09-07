@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import DurumMesaji from './bilesenler/DurumMesaji';
 import SayfaGecisi from './bilesenler/SayfaGecisi';
 import SayfaIskeleti from './bilesenler/SayfaIskeleti';
+import SeoYoneticisi from './bilesenler/SeoYoneticisi';
 import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
 import KategoriSayfasi from './sayfalar/KategoriSayfasi';
@@ -72,6 +73,10 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
       siteAyarlari={veri.site_ayarlari}
       aramaKaynaklari={{ kategoriler: veri.kategoriler, urunler: veri.urunler, referanslar: veri.referanslar }}
     >
+      <SeoYoneticisi
+        seo={veri.seo}
+        icerik={veri}
+      />
       <SayfaGecisi>
         <Routes>
           <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} />} />

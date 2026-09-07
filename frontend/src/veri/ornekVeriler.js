@@ -76,6 +76,26 @@ const referansKayitlari = [
 }));
 
 export const ornekVeriler = Object.freeze({
+  seo: {
+    genel: {
+      site_adi: 'Demirvana',
+      site_ana_adresi: 'https://www.demirvana.com',
+      site_varsayilan_dil: 'tr',
+      logo_yolu: '/assets/logo.png',
+      seo_varsayilan_baslik: 'Demirvana | Endüstriyel Vana Çözümleri',
+      seo_baslik_sablonu: '%s | Demirvana',
+      seo_varsayilan_aciklama: 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.',
+      seo_varsayilan_gorsel: '/assets/logo.png',
+      seo_varsayilan_robotlar: 'index, follow, max-image-preview:large',
+      seo_organizasyon_turu: 'Organization'
+    },
+    sayfalar: {
+      tr: {
+        '/': { seo_basligi: 'Demirvana | Endüstriyel Vana Çözümleri', meta_aciklama: 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', canonical_yolu: '/', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'WebSite' },
+        '/urunler': { seo_basligi: 'Endüstriyel Vana Ürünleri | Demirvana', meta_aciklama: 'Küresel, kelebek, sürgülü, kontrol vanaları ve diğer endüstriyel vana gruplarını inceleyin.', canonical_yolu: '/urunler', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'CollectionPage' }
+      }
+    }
+  },
   site_ayarlari: {
     site_adi: 'Demirvana',
     logo_yolu: '/assets/logo.png',

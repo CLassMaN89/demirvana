@@ -41,6 +41,7 @@ export async function siteVerileriniGetir(secenekler = {}) {
   // Ana sayfanın bağımsız veri kümelerini paralel almak ilk görünümün bekleme süresini azaltır.
   const istekler = [
     ['site-ayarlari', ornekVeriler.site_ayarlari],
+    ['seo', ornekVeriler.seo],
     ['tema', ornekVeriler.tema],
     ['menu', ornekVeriler.menu],
     ['sliderlar', ornekVeriler.sliderlar],

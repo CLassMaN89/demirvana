@@ -61,6 +61,7 @@ describe('siteVerileriniGetir', () => {
     expect(istenenYollar).toContain('/api/referanslar');
     expect(istenenYollar).toContain('/api/urunler');
     expect(istenenYollar).toContain('/api/site-ayarlari');
+    expect(istenenYollar).toContain('/api/seo');
     expect(veri.referanslar.kayitlar[0].baslik).toBe('Test projesi');
   });
 });
