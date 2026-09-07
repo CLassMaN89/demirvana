@@ -21,6 +21,18 @@ try {
     $denetleyici = new SiteDenetleyicisi(new SiteDeposu(Veritabani::baglanti()));
     $seoDenetleyicisi = new SeoDenetleyicisi(new SeoDeposu(Veritabani::baglanti()));
 
+    if ($yol === '/robots.txt') {
+        header('Content-Type: text/plain; charset=utf-8');
+        echo $seoDenetleyicisi->robots();
+        exit;
+    }
+
+    if ($yol === '/sitemap.xml') {
+        header('Content-Type: application/xml; charset=utf-8');
+        echo $seoDenetleyicisi->siteHaritasi();
+        exit;
+    }
+
     $sabitRotalar = [
         '/api/site-ayarlari' => fn() => $denetleyici->siteAyarlari(),
         '/api/seo' => fn() => $seoDenetleyicisi->seo(),

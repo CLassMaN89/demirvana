@@ -6,7 +6,9 @@ export default defineConfig({
   // Geliştirme sunucusunda /api isteklerini PHP sunucusuna geçirerek tarayıcı CORS ayarına ihtiyaç bırakmaz.
   server: {
     proxy: {
-      '/api': 'http://127.0.0.1:8080'
+      '/api': 'http://127.0.0.1:8080',
+      '/robots.txt': 'http://127.0.0.1:8080',
+      '/sitemap.xml': 'http://127.0.0.1:8080'
     }
   },
   test: {

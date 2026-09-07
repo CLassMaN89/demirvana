@@ -6,6 +6,7 @@ require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
+require_once __DIR__ . '/../src/Denetleyiciler/SeoDenetleyicisi.php';
 
 // Bu küçük çalıştırılabilir test harici test çatısına ihtiyaç duymadan API'nin temel sözleşmesini korur.
 $yanit = JsonYanit::olustur(true, ['id' => 1]);
@@ -57,6 +58,19 @@ $seoSayfalari = SeoDeposu::seoKayitlariniNesneyeDonustur([
 
 if (($seoSayfalari['tr']['/']['seo_basligi'] ?? null) !== 'Demirvana') {
     throw new RuntimeException('SEO kayıtları dil ve rota anahtarlarıyla dönüştürülemedi.');
+}
+
+$robots = SeoDenetleyicisi::robotsMetniOlustur('https://www.demirvana.com');
+if (!str_contains($robots, 'Sitemap: https://www.demirvana.com/sitemap.xml')) {
+    throw new RuntimeException('Robots çıktısı sitemap adresini içermiyor.');
+}
+
+$siteHaritasi = SeoDenetleyicisi::siteHaritasiXmlOlustur('https://www.demirvana.com', [[
+    'yol' => '/urunler', 'guncellenme_tarihi' => '2026-09-07 10:00:00',
+    'degisim_sikligi' => 'weekly', 'oncelik' => '0.9',
+]]);
+if (!str_contains($siteHaritasi, '<loc>https://www.demirvana.com/urunler</loc>')) {
+    throw new RuntimeException('Sitemap mutlak ürün adresini üretmedi.');
 }
 
 echo "PHP API doğrulamaları başarılı.\n";

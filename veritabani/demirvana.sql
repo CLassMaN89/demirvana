@@ -264,6 +264,7 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('seo_varsayilan_aciklama', 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', 'metin', 'Varsayılan meta açıklama'),
     ('seo_varsayilan_gorsel', '/assets/logo.png', 'gorsel', 'Varsayılan sosyal paylaşım görseli'),
     ('seo_varsayilan_robotlar', 'index, follow, max-image-preview:large', 'metin', 'Varsayılan arama motoru robot yönergesi'),
+    ('seo_robots_kurallari', 'User-agent: *\nAllow: /\nDisallow: /api/', 'metin', 'robots.txt içinde sitemap satırından önce yayınlanacak kurallar'),
     ('seo_organizasyon_turu', 'Organization', 'metin', 'Schema.org organizasyon türü'),
     ('google_site_dogrulama', '', 'metin', 'Google Search Console doğrulama kodu')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
