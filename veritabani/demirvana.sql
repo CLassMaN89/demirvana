@@ -50,6 +50,26 @@ CREATE TABLE IF NOT EXISTS `menu_ogeleri` (
     KEY `menu_siralama` (`aktif_mi`, `siralama`)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Alt menüler ayrı tabloda tutulur; böylece mevcut üst menü yapısı bozulmadan çok seviyeli menü yönetilebilir.
+CREATE TABLE IF NOT EXISTS `menu_alt_ogeleri` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `menu_ogesi_id` BIGINT UNSIGNED NOT NULL,
+    `ust_alt_oge_id` BIGINT UNSIGNED NULL,
+    `baslik` VARCHAR(120) NOT NULL,
+    `baglanti` VARCHAR(255) NOT NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_alt_menu_baglantisi` (`baglanti`),
+    KEY `alt_menu_siralama` (`menu_ogesi_id`, `ust_alt_oge_id`, `aktif_mi`, `siralama`),
+    CONSTRAINT `alt_menunun_ust_menusu` FOREIGN KEY (`menu_ogesi_id`) REFERENCES `menu_ogeleri` (`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `alt_menunun_ust_alt_ogesi` FOREIGN KEY (`ust_alt_oge_id`) REFERENCES `menu_alt_ogeleri` (`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 -- Görsel dosyanın kendisi burada tutulmaz; admin panelinin yöneteceği göreli dosya yolu saklanır.
 CREATE TABLE IF NOT EXISTS `sliderlar` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -139,13 +159,49 @@ INSERT INTO `tema_ayarlari` (`anahtar`, `deger`, `aciklama`, `siralama`) VALUES
     ('ikincil_metin', '#62708A', 'İkincil açıklama rengi', 6)
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `aciklama` = VALUES(`aciklama`), `siralama` = VALUES(`siralama`);
 
+-- Önceki ilk sürüm adresleri korunarak yeni menü adlarına taşınır; tekrar içe aktarmada çoğalma oluşmaz.
+UPDATE `menu_ogeleri` SET `baslik` = 'Kurumsal', `baglanti` = '/kurumsal', `siralama` = 2
+WHERE `baglanti` = '/hakkimizda';
+UPDATE `menu_ogeleri` SET `baslik` = 'Teknik', `baglanti` = '/teknik', `siralama` = 4
+WHERE `baglanti` = '/uretim';
+
 INSERT INTO `menu_ogeleri` (`baslik`, `baglanti`, `siralama`) VALUES
     ('Anasayfa', '/', 1),
-    ('Hakkımızda', '/hakkimizda', 2),
+    ('Kurumsal', '/kurumsal', 2),
     ('Ürünler', '/urunler', 3),
-    ('Üretim', '/uretim', 4),
-    ('İletişim', '/iletisim', 5)
+    ('Teknik', '/teknik', 4),
+    ('Referanslar', '/referanslar', 5),
+    ('Sertifikalar', '/sertifikalar', 6),
+    ('İletişim', '/iletisim', 7)
 ON DUPLICATE KEY UPDATE `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`);
+
+INSERT INTO `menu_alt_ogeleri`
+    (`menu_ogesi_id`, `ust_alt_oge_id`, `baslik`, `baglanti`, `siralama`)
+VALUES
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Vana', '/urunler/vana', 1),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Aktüatör', '/urunler/aktuator', 2),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Otomasyon', '/urunler/otomasyon', 3),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Temsilcilikler', '/urunler/temsilcilikler', 4)
+ON DUPLICATE KEY UPDATE
+    `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `menu_alt_ogeleri`
+    (`menu_ogesi_id`, `ust_alt_oge_id`, `baslik`, `baglanti`, `siralama`)
+VALUES
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Yangın Vanaları', '/urunler/yangin-vanalari', 1),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Su Grubu Vanaları', '/urunler/su-grubu-vanalari', 2),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Buhar Grubu Vanaları', '/urunler/buhar-grubu-vanalari', 3),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Kontrol Vanaları', '/urunler/kontrol-vanalari', 4),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Hidrolik Vanalar', '/urunler/hidrolik-vanalar', 5),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Basınç Düşürücü Vanalar', '/urunler/basinc-dusurucu-vanalar', 6),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Paslanmaz Vanalar', '/urunler/paslanmaz-vanalar', 7),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Gemi Vanaları', '/urunler/gemi-vanalari', 8),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Balans Vanaları', '/urunler/balans-vanalari', 9),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Solenoid Patlaç Pistonlu', '/urunler/solenoid-patlac-pistonlu', 10),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Kompansatörler', '/urunler/kompansatorler', 11),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/vana'), 'Bağlantı Parçaları', '/urunler/baglanti-parcalari', 12)
+ON DUPLICATE KEY UPDATE
+    `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
 INSERT INTO `sliderlar`
     (`baslik`, `aciklama`, `gorsel_yolu`, `alternatif_metin`, `buton_metni`, `buton_baglantisi`, `animasyon_turu`, `odak_x`, `odak_y`, `siralama`)

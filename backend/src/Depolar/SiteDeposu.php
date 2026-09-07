@@ -25,9 +25,46 @@ final class SiteDeposu
 
     public function menu(): array
     {
-        return $this->baglanti->query(
+        $ustMenu = $this->baglanti->query(
             'SELECT id, baslik, baglanti, siralama FROM menu_ogeleri WHERE aktif_mi = 1 ORDER BY siralama, id'
         )->fetchAll();
+
+        $altMenu = $this->baglanti->query(
+            'SELECT mao.id, mao.menu_ogesi_id, mao.ust_alt_oge_id, mao.baslik, mao.baglanti, mao.siralama
+             FROM menu_alt_ogeleri mao
+             INNER JOIN menu_ogeleri mo ON mo.id = mao.menu_ogesi_id
+             WHERE mao.aktif_mi = 1 AND mo.aktif_mi = 1
+             ORDER BY mao.siralama, mao.id'
+        )->fetchAll();
+
+        return self::menuAgaciOlustur($ustMenu, $altMenu);
+    }
+
+    public static function menuAgaciOlustur(array $ustMenu, array $altMenu): array
+    {
+        $kokOgeler = [];
+        $cocukOgeler = [];
+
+        foreach ($altMenu as $oge) {
+            if ($oge['ust_alt_oge_id'] === null) {
+                $kokOgeler[(string) $oge['menu_ogesi_id']][] = $oge;
+            } else {
+                $cocukOgeler[(string) $oge['ust_alt_oge_id']][] = $oge;
+            }
+        }
+
+        // Özyinelemeli kurulum üçüncü seviyeyi destekler ve gelecekte admin panelinin yeni derinlikler eklemesini engellemez.
+        $cocuklariEkle = function (array $ogeler) use (&$cocuklariEkle, $cocukOgeler): array {
+            return array_map(function (array $oge) use (&$cocuklariEkle, $cocukOgeler): array {
+                $oge['alt_ogeler'] = $cocuklariEkle($cocukOgeler[(string) $oge['id']] ?? []);
+                return $oge;
+            }, $ogeler);
+        };
+
+        return array_map(function (array $oge) use ($kokOgeler, $cocuklariEkle): array {
+            $oge['alt_ogeler'] = $cocuklariEkle($kokOgeler[(string) $oge['id']] ?? []);
+            return $oge;
+        }, $ustMenu);
     }
 
     public function sliderlar(): array
@@ -117,4 +154,3 @@ final class SiteDeposu
         return $urun;
     }
 }
-

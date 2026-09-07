@@ -31,14 +31,14 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Vite, React Router, Vitest ve Testing Library tabanlı frontend temeli kuruldu.
 - API tema anahtarlarını güvenli CSS değişkenlerine aktaran dinamik tema katmanı eklendi.
 - Geliştirme ortamında örnek veriye dönebilen merkezi API istemcisi eklendi.
-- Masaüstünde 120px, mobilde açılır menülü responsive navbar oluşturuldu.
+- Tüm ekranlarda 60px yüksekliğinde, mobilde açılır menülü responsive navbar oluşturuldu.
 - Altı mevcut görseli kullanan erişilebilir ve dokunmatik hero carousel oluşturuldu.
 - Yedi kategori ve bir `Tüm Ürünler` kartından oluşan responsive grid eklendi.
 - Ana sayfa, katalog, kategori, ürün ve kurumsal sayfa rotaları eklendi.
 - Kritik üretim kodlarına neyin neden kullanıldığını açıklayan Türkçe yorumlar eklendi; kural `AGENTS.md` içinde kalıcılaştırıldı.
 - PHP 8.4.24 kuruldu ve `pdo_mysql` uzantısı etkinleştirildi.
 - Parametreli PDO sorguları kullanan salt okunur PHP REST API oluşturuldu.
-- Yedi Türkçe tabloyu, ilişkileri ve tekrarlanabilir başlangıç verilerini içeren MySQL/MariaDB şeması oluşturuldu.
+- Sekiz Türkçe tabloyu, ilişkileri ve tekrarlanabilir başlangıç verilerini içeren MySQL/MariaDB şeması oluşturuldu.
 - MariaDB 12.3.3 kuruldu; şema iki kez canlı içe aktarılıp başlangıç kayıtlarının çoğalmadığı doğrulandı.
 - React veri yükleme, hata, yeniden deneme ve dinamik tema akışı gerçek API sözleşmesine bağlandı.
 - Roboto fontu harici servise bağımlı kalmaması için frontend paketine yalnız gereken Latin Extended ağırlıklarıyla yerel eklendi.
@@ -54,6 +54,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Hero görseline fare hareketiyle açılan dinamik canvas maskesi eklendi; hero başlangıçta kendi renkleriyle görünür.
 - Fare izinde basit gri/karakalem filtre yerine Sobel kenar algılama ile üretilen açık zeminli teknik çizim görünür.
 - Efekt dokunmatik cihazlarda ve azaltılmış hareket tercihinde kapatılarak hero görseli doğrudan gösterilir.
+- Üst menü `Anasayfa, Kurumsal, Ürünler, Teknik, Referanslar, Sertifikalar, İletişim` sırasıyla güncellendi.
+- Ürünler menüsüne hareketli ortak vurgu ve responsive mega menü eklendi; Vana, Aktüatör, Otomasyon ve Temsilcilikler veritabanından gelir.
+- Vana grubunun altında kullanıcı görselindeki 12 kategori üçüncü seviye olarak tanımlandı; masaüstünde iki kolon, mobilde iç içe liste kullanılır.
+- Alt menülerin gelecekte yönetim panelinden düzenlenebilmesi için `menu_alt_ogeleri` tablosu ve özyinelemeli PHP menü ağacı eklendi.
 
 ## Mevcut durum
 
@@ -76,13 +80,13 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 9 test, 0 hata.
+- Frontend testleri: 12 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
 - MySQL şeması yapısal testi: başarılı.
-- Canlı veritabanı sayımları: 6 tema, 5 menü, 6 slider ve 7 kategori.
-- Canlı API sonuçları: tema, menü, slider, kategori, kategori detayı ve boş ürün listesi başarılı JSON döndürdü.
+- Canlı veritabanı sayımları: 6 tema, 7 üst menü, 16 alt menü, 6 slider ve 7 kategori.
+- Canlı API sonuçları: tema, üç seviyeli menü, slider, kategori, kategori detayı ve boş ürün listesi başarılı JSON döndürdü.
 - Gerçek Vite → PHP → MariaDB zinciriyle responsive tarayıcı testi: telefon, yatay telefon, tablet ve masaüstü başarılı; konsol hatası ve yatay taşma yok.
 - Görsel tasarım denetimi: 0 engelleyici, 0 açık kalite sorunu; ürün fotoğrafları yönetim panelinden ekleneceği için şimdilik bilinçli placeholder kullanılıyor.
 
@@ -90,7 +94,7 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 
 - Yönetim paneli bu ilk teslimin kapsamında değildir; veri yapısı yönetim paneline hazır olacaktır.
 - Yerel Git deposu oluşturuldu ve tamamlanan frontend görevleri ayrı commitlerle kaydedildi.
-- PHP 8.4 ve MariaDB 12.3 yerel geliştirme için kuruldu. Yeni terminal açıldığında `php` PATH üzerinden kullanılabilir.
+- PHP 8.4 ve MariaDB 12.3 yerel geliştirme için kuruldu. Bu oturumda PHP çalıştırıcısına WinGet kurulum yolu üzerinden erişildi.
 - Yerel MariaDB root hesabı parola olmadan yalnızca geliştirme doğrulaması için kullanıldı; üretim ortamında güçlü parola ve ayrı uygulama kullanıcısı tanımlanmalıdır.
 - Kullanıcının sağladığı kök `Carousel/` klasörü değiştirilmeden korunur; frontend kendi `public/assets/carousel/` kopyalarını kullanır.
 

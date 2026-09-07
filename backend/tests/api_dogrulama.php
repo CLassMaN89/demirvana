@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
+require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 
 // Bu küçük çalıştırılabilir test harici test çatısına ihtiyaç duymadan API'nin temel sözleşmesini korur.
 $yanit = JsonYanit::olustur(true, ['id' => 1]);
@@ -18,6 +19,18 @@ if (!SiteDenetleyicisi::gecerliSlug('kuresel-vanalar')) {
 
 if (SiteDenetleyicisi::gecerliSlug('../gizli')) {
     throw new RuntimeException('Güvensiz slug kabul edildi.');
+}
+
+$menuAgaci = SiteDeposu::menuAgaciOlustur(
+    [['id' => 3, 'baslik' => 'Ürünler', 'baglanti' => '/urunler', 'siralama' => 3]],
+    [
+        ['id' => 31, 'menu_ogesi_id' => 3, 'ust_alt_oge_id' => null, 'baslik' => 'Vana', 'baglanti' => '/urunler/vana', 'siralama' => 1],
+        ['id' => 32, 'menu_ogesi_id' => 3, 'ust_alt_oge_id' => 31, 'baslik' => 'Yangın Vanaları', 'baglanti' => '/urunler/yangin-vanalari', 'siralama' => 1],
+    ]
+);
+
+if (($menuAgaci[0]['alt_ogeler'][0]['alt_ogeler'][0]['baslik'] ?? null) !== 'Yangın Vanaları') {
+    throw new RuntimeException('Menü alt öğeleri doğru hiyerarşide oluşturulmadı.');
 }
 
 echo "PHP API doğrulamaları başarılı.\n";

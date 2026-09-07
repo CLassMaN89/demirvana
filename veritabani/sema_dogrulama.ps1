@@ -10,6 +10,7 @@ $tablolar = @(
     'site_ayarlari',
     'tema_ayarlari',
     'menu_ogeleri',
+    'menu_alt_ogeleri',
     'sliderlar',
     'kategoriler',
     'urunler',

@@ -35,17 +35,29 @@
 }
 
 .site-header__nav {
+  position: relative;
   display: flex;
   align-items: stretch;
   align-self: stretch;
-  gap: clamp(14px, 1.8vw, 28px);
+  gap: clamp(2px, 0.5vw, 8px);
   justify-self: center;
+}
+
+.site-header__oge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
 }
 
 .site-header__baglanti {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 7px;
+  padding-inline: clamp(8px, 0.85vw, 13px);
+  border: 0;
+  background: transparent;
   color: var(--renk-metin);
   font-size: 0.62rem;
   font-weight: 700;
@@ -53,6 +65,8 @@
   text-decoration: none;
   text-transform: uppercase;
   white-space: nowrap;
+  cursor: pointer;
+  transition: color 180ms ease;
 }
 
 .site-header__baglanti::after {
@@ -69,10 +83,147 @@
 }
 
 .site-header__baglanti:hover,
-.site-header__baglanti--aktif { color: var(--renk-ana); }
+.site-header__baglanti--aktif,
+.site-header__baglanti--acik { color: var(--renk-ana); }
 
-.site-header__baglanti:hover::after,
 .site-header__baglanti--aktif::after { opacity: 1; transform: scaleX(1); }
+
+.site-header__vurgu {
+  position: absolute;
+  z-index: 0;
+  top: 10px;
+  left: 0;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--renk-ana) 10%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--renk-acik) 72%, var(--renk-beyaz));
+  opacity: 0;
+  pointer-events: none;
+  transition: width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 140ms ease;
+}
+
+.site-header__vurgu--gorunur { opacity: 1; }
+
+.site-header__asagi-ok {
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 220ms ease;
+}
+
+.site-header__baglanti--acik .site-header__asagi-ok {
+  transform: translateY(1px) rotate(225deg);
+}
+
+.site-header__mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: min(760px, calc(100vw - 32px));
+  padding-top: 8px;
+  animation: mega-menu-acilis 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 50% 0;
+  translate: -50% 0;
+}
+
+.site-header__mega-ic {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  min-height: 248px;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--renk-ana) 13%, var(--renk-cizgi));
+  border-radius: 13px;
+  background: var(--renk-beyaz);
+  box-shadow: 0 20px 50px color-mix(in srgb, var(--renk-koyu) 17%, transparent);
+}
+
+.site-header__ana-alt-menu {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 5px 10px 5px 5px;
+  border-right: 1px solid var(--renk-cizgi);
+}
+
+.site-header__alt-baglanti,
+.site-header__vana-baglanti {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  color: var(--renk-metin);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.site-header__alt-baglanti {
+  min-height: 48px;
+  padding: 0 13px;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background-color 170ms ease, color 170ms ease;
+}
+
+.site-header__alt-baglanti:hover,
+.site-header__alt-baglanti:focus-visible,
+.site-header__alt-baglanti--aktif {
+  background: color-mix(in srgb, var(--renk-acik) 78%, var(--renk-beyaz));
+  color: var(--renk-ana);
+}
+
+.site-header__vana-menusu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 4px 8px;
+  padding: 5px 5px 5px 12px;
+  animation: vana-menu-gecisi 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-header__vana-baglanti {
+  min-height: 35px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 0.73rem;
+  line-height: 1.25;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.site-header__vana-baglanti span:last-child {
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.site-header__vana-baglanti:hover,
+.site-header__vana-baglanti:focus-visible {
+  background: color-mix(in srgb, var(--renk-acik) 58%, var(--renk-beyaz));
+  color: var(--renk-ana);
+}
+
+.site-header__vana-baglanti:hover span:last-child,
+.site-header__vana-baglanti:focus-visible span:last-child {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+@keyframes mega-menu-acilis {
+  from { opacity: 0; transform: translateY(-7px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes vana-menu-gecisi {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
 
 .site-header__teklif {
   display: inline-flex;
@@ -143,19 +294,73 @@
   }
 
   .site-header__nav--acik {
-    max-height: 460px;
+    max-height: calc(100vh - var(--navbar-yuksekligi));
     border-bottom-color: var(--renk-cizgi);
     box-shadow: var(--golge-yumusak);
     opacity: 1;
     pointer-events: auto;
+    overflow-y: auto;
   }
+
+  .site-header__vurgu { display: none; }
+
+  .site-header__oge { display: grid; }
 
   .site-header__baglanti {
     min-height: 52px;
     padding-inline: max(20px, calc((100% - var(--icerik-genisligi)) / 2));
     border-top: 1px solid var(--renk-cizgi);
     font-size: 0.82rem;
+    justify-content: space-between;
   }
 
   .site-header__baglanti::after { display: none; }
+
+  .site-header__mega-menu {
+    position: static;
+    width: 100%;
+    padding: 0;
+    animation-duration: 180ms;
+    translate: none;
+  }
+
+  .site-header__mega-ic {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--renk-acik) 35%, var(--renk-beyaz));
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .site-header__ana-alt-menu {
+    padding: 8px 20px;
+    border-right: 0;
+    border-top: 1px solid var(--renk-cizgi);
+  }
+
+  .site-header__alt-baglanti { min-height: 44px; }
+
+  .site-header__vana-menusu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 6px 20px 14px 32px;
+  }
+
+  .site-header__vana-baglanti {
+    min-height: 40px;
+    background: var(--renk-beyaz);
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header__vana-menusu { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header__vurgu,
+  .site-header__asagi-ok,
+  .site-header__mega-menu,
+  .site-header__vana-menusu { animation: none; transition: none; }
 }

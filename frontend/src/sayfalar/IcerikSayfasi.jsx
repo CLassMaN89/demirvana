@@ -1,11 +1,19 @@
 const ICERIKLER = {
-  hakkimizda: {
-    baslik: 'Hakkımızda',
+  kurumsal: {
+    baslik: 'Kurumsal',
     aciklama: 'Demirvana’nın üretim yaklaşımı ve kurumsal bilgileri bu alandan yönetilecek.'
   },
-  uretim: {
-    baslik: 'Üretim',
-    aciklama: 'Üretim kabiliyetleri, kalite süreçleri ve tesis bilgileri bu alanda yayınlanacak.'
+  teknik: {
+    baslik: 'Teknik',
+    aciklama: 'Teknik dokümanlar, mühendislik bilgileri ve ürün destek içerikleri bu alanda yayınlanacak.'
+  },
+  referanslar: {
+    baslik: 'Referanslar',
+    aciklama: 'Tamamlanan projeler ve çözüm ortaklıkları bu alandan yönetilecek.'
+  },
+  sertifikalar: {
+    baslik: 'Sertifikalar',
+    aciklama: 'Kalite belgeleri ve ürün sertifikaları bu alandan yönetilecek.'
   },
   iletisim: {
     baslik: 'İletişim',
@@ -25,4 +33,3 @@ export default function IcerikSayfasi({ tur }) {
     </section>
   );
 }
-

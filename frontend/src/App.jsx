@@ -70,8 +70,10 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
         <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
         <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
         <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
-        <Route path="/hakkimizda" element={<IcerikSayfasi tur="hakkimizda" />} />
-        <Route path="/uretim" element={<IcerikSayfasi tur="uretim" />} />
+        <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
+        <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
+        <Route path="/referanslar" element={<IcerikSayfasi tur="referanslar" />} />
+        <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
         <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

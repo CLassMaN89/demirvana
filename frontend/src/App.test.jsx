@@ -49,4 +49,14 @@ describe('App veri entegrasyonu', () => {
     expect(screen.getByRole('heading', { name: 'ÜRÜN KATEGORİLERİMİZ' })).toBeInTheDocument();
     expect(screen.getAllByTestId('kategori-karti')).toHaveLength(8);
   });
+
+  it('yeni üst menü rotasını kendi içerik sayfasında açar', async () => {
+    render(
+      <MemoryRouter initialEntries={['/teknik']}>
+        <App veriKaynagi={async () => sabitTestVerisi} />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole('heading', { name: 'Teknik' })).toBeInTheDocument();
+  });
 });

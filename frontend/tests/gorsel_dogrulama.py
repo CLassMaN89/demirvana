@@ -13,17 +13,47 @@ TEST_ADRESI = os.environ.get("DEMIRVANA_TEST_ADRESI", "http://127.0.0.1:5176")
 GERCEK_API = os.environ.get("DEMIRVANA_GERCEK_API") == "1"
 sys.stdout.reconfigure(encoding="utf-8")
 
+VANA_MENU_KATEGORILERI = [
+    {"id": 310 + sira, "baslik": baslik, "baglanti": f"/urunler/{slug}", "alt_ogeler": []}
+    for sira, (baslik, slug) in enumerate(
+        (
+            ("Yangın Vanaları", "yangin-vanalari"),
+            ("Su Grubu Vanaları", "su-grubu-vanalari"),
+            ("Buhar Grubu Vanaları", "buhar-grubu-vanalari"),
+            ("Kontrol Vanaları", "kontrol-vanalari"),
+            ("Hidrolik Vanalar", "hidrolik-vanalar"),
+            ("Basınç Düşürücü Vanalar", "basinc-dusurucu-vanalar"),
+            ("Paslanmaz Vanalar", "paslanmaz-vanalar"),
+            ("Gemi Vanaları", "gemi-vanalari"),
+            ("Balans Vanaları", "balans-vanalari"),
+            ("Solenoid Patlaç Pistonlu", "solenoid-patlac-pistonlu"),
+            ("Kompansatörler", "kompansatorler"),
+            ("Bağlantı Parçaları", "baglanti-parcalari"),
+        )
+    )
+]
+
 API_VERILERI = {
     "/api/tema": {
         "ana_mavi": "#28469D", "koyu_mavi": "#17306F", "acik_mavi": "#EAF1FF",
         "beyaz": "#FFFFFF", "metin": "#172033", "ikincil_metin": "#62708A",
     },
     "/api/menu": [
-        {"id": 1, "baslik": "Anasayfa", "baglanti": "/", "siralama": 1},
-        {"id": 2, "baslik": "Hakkımızda", "baglanti": "/hakkimizda", "siralama": 2},
-        {"id": 3, "baslik": "Ürünler", "baglanti": "/urunler", "siralama": 3},
-        {"id": 4, "baslik": "Üretim", "baglanti": "/uretim", "siralama": 4},
-        {"id": 5, "baslik": "İletişim", "baglanti": "/iletisim", "siralama": 5},
+        {"id": 1, "baslik": "Anasayfa", "baglanti": "/", "siralama": 1, "alt_ogeler": []},
+        {"id": 2, "baslik": "Kurumsal", "baglanti": "/kurumsal", "siralama": 2, "alt_ogeler": []},
+        {
+            "id": 3, "baslik": "Ürünler", "baglanti": "/urunler", "siralama": 3,
+            "alt_ogeler": [
+                {"id": 31, "baslik": "Vana", "baglanti": "/urunler/vana", "alt_ogeler": VANA_MENU_KATEGORILERI},
+                {"id": 32, "baslik": "Aktüatör", "baglanti": "/urunler/aktuator", "alt_ogeler": []},
+                {"id": 33, "baslik": "Otomasyon", "baglanti": "/urunler/otomasyon", "alt_ogeler": []},
+                {"id": 34, "baslik": "Temsilcilikler", "baglanti": "/urunler/temsilcilikler", "alt_ogeler": []},
+            ],
+        },
+        {"id": 4, "baslik": "Teknik", "baglanti": "/teknik", "siralama": 4, "alt_ogeler": []},
+        {"id": 5, "baslik": "Referanslar", "baglanti": "/referanslar", "siralama": 5, "alt_ogeler": []},
+        {"id": 6, "baslik": "Sertifikalar", "baglanti": "/sertifikalar", "siralama": 6, "alt_ogeler": []},
+        {"id": 7, "baslik": "İletişim", "baglanti": "/iletisim", "siralama": 7, "alt_ogeler": []},
     ],
     "/api/sliderlar": [
         {
@@ -110,6 +140,14 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
     assert yatay_tasma <= 1, f"{genislik}px görünümde {yatay_tasma}px yatay taşma var"
 
     if genislik == 1440:
+        urunler_dugmesi = page.get_by_role("button", name="Ürünler alt menüsünü aç")
+        urunler_dugmesi.hover()
+        page.get_by_role("link", name="Yangın Vanaları").wait_for(state="visible")
+        assert page.get_by_role("link", name="Bağlantı Parçaları").is_visible()
+        page.wait_for_timeout(320)
+        page.screenshot(path=str(CIKTI / "ust-menu-1440.png"), full_page=False)
+        page.keyboard.press("Escape")
+
         # Canvas başlangıçta şeffaftır; fare ilerlediğinde ilgili pikselde teknik çizim katmanı oluşmalıdır.
         canvas = page.locator('[data-testid="murekkep-maskesi"]')
         kutu = canvas.bounding_box()
@@ -141,6 +179,8 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
         menu_dugmesi = page.get_by_role("button", name="Menüyü aç")
         menu_dugmesi.click()
         assert page.get_by_role("button", name="Menüyü kapat").get_attribute("aria-expanded") == "true"
+        page.get_by_role("button", name="Ürünler alt menüsünü aç").click()
+        page.get_by_role("link", name="Yangın Vanaları").wait_for(state="visible")
 
     if genislik == 1440:
         ilk_baslik = page.locator(".hero-carousel h1").inner_text()

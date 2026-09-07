@@ -8,6 +8,27 @@ const sliderMetinleri = [
   ['Kaliteyi akışın merkezine koyuyoruz', 'Üretim deneyimini sürdürülebilir performansla buluşturuyoruz.']
 ];
 
+const vanaMenuKategorileri = [
+  ['Yangın Vanaları', 'yangin-vanalari'],
+  ['Su Grubu Vanaları', 'su-grubu-vanalari'],
+  ['Buhar Grubu Vanaları', 'buhar-grubu-vanalari'],
+  ['Kontrol Vanaları', 'kontrol-vanalari'],
+  ['Hidrolik Vanalar', 'hidrolik-vanalar'],
+  ['Basınç Düşürücü Vanalar', 'basinc-dusurucu-vanalar'],
+  ['Paslanmaz Vanalar', 'paslanmaz-vanalar'],
+  ['Gemi Vanaları', 'gemi-vanalari'],
+  ['Balans Vanaları', 'balans-vanalari'],
+  ['Solenoid Patlaç Pistonlu', 'solenoid-patlac-pistonlu'],
+  ['Kompansatörler', 'kompansatorler'],
+  ['Bağlantı Parçaları', 'baglanti-parcalari']
+].map(([baslik, slug], indeks) => ({
+  id: 310 + indeks,
+  baslik,
+  baglanti: `/urunler/${slug}`,
+  siralama: indeks + 1,
+  alt_ogeler: []
+}));
+
 export const ornekVeriler = Object.freeze({
   tema: {
     ana_mavi: '#28469D',
@@ -18,11 +39,24 @@ export const ornekVeriler = Object.freeze({
     ikincil_metin: '#62708A'
   },
   menu: [
-    { id: 1, baslik: 'Anasayfa', baglanti: '/', siralama: 1 },
-    { id: 2, baslik: 'Hakkımızda', baglanti: '/hakkimizda', siralama: 2 },
-    { id: 3, baslik: 'Ürünler', baglanti: '/urunler', siralama: 3 },
-    { id: 4, baslik: 'Üretim', baglanti: '/uretim', siralama: 4 },
-    { id: 5, baslik: 'İletişim', baglanti: '/iletisim', siralama: 5 }
+    { id: 1, baslik: 'Anasayfa', baglanti: '/', siralama: 1, alt_ogeler: [] },
+    { id: 2, baslik: 'Kurumsal', baglanti: '/kurumsal', siralama: 2, alt_ogeler: [] },
+    {
+      id: 3,
+      baslik: 'Ürünler',
+      baglanti: '/urunler',
+      siralama: 3,
+      alt_ogeler: [
+        { id: 31, baslik: 'Vana', baglanti: '/urunler/vana', siralama: 1, alt_ogeler: vanaMenuKategorileri },
+        { id: 32, baslik: 'Aktüatör', baglanti: '/urunler/aktuator', siralama: 2, alt_ogeler: [] },
+        { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: [] },
+        { id: 34, baslik: 'Temsilcilikler', baglanti: '/urunler/temsilcilikler', siralama: 4, alt_ogeler: [] }
+      ]
+    },
+    { id: 4, baslik: 'Teknik', baglanti: '/teknik', siralama: 4, alt_ogeler: [] },
+    { id: 5, baslik: 'Referanslar', baglanti: '/referanslar', siralama: 5, alt_ogeler: [] },
+    { id: 6, baslik: 'Sertifikalar', baglanti: '/sertifikalar', siralama: 6, alt_ogeler: [] },
+    { id: 7, baslik: 'İletişim', baglanti: '/iletisim', siralama: 7, alt_ogeler: [] }
   ],
   sliderlar: sliderMetinleri.map(([baslik, aciklama], indeks) => ({
     id: indeks + 1,
