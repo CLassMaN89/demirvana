@@ -28,20 +28,22 @@
 .teknik-kategori h2 { margin: 0; color: var(--renk-koyu); font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em; }
 .teknik-kategori__ust p { margin: 4px 0 0; color: var(--renk-ikincil); font-size: .76rem; line-height: 1.4; }
 .teknik-kategori__sayac { color: var(--renk-ikincil); font-size: .7rem; white-space: nowrap; }
-.teknik-dokumanlar { margin: 0; padding: 8px 12px 12px; list-style: none; }
+.teknik-dokumanlar { margin: 0; padding: 6px 10px 10px; list-style: none; }
 .teknik-dokumanlar li + li { border-top: 1px solid var(--renk-cizgi); }
-.teknik-dokuman { display: grid; width: 100%; min-width: 0; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 8px; border: 0; border-radius: 10px; background: transparent; color: var(--renk-metin); text-align: left; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, transform 180ms ease; }
+.teknik-dokuman { position: relative; display: grid; overflow: hidden; width: 100%; min-width: 0; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 8px 9px 8px 12px; border: 0; border-radius: 8px; background: transparent; color: var(--renk-metin); text-align: left; cursor: pointer; animation: teknik-dokuman-girisi 420ms both; animation-delay: var(--teknik-gecikme); transition: background-color 200ms ease, color 200ms ease, transform 200ms ease, box-shadow 200ms ease; }
+.teknik-dokuman::before { content: ''; position: absolute; z-index: 1; inset: 0 auto 0 0; width: 3px; background: var(--renk-ana); transform: scaleY(0); transform-origin: top; transition: transform 320ms cubic-bezier(.22, 1, .36, 1); }
+.teknik-dokuman > * { position: relative; z-index: 2; }
 .teknik-dokuman:hover, .teknik-dokuman--secili { background: color-mix(in srgb, var(--renk-acik) 68%, var(--renk-beyaz)); }
-.teknik-dokuman:hover { transform: translateX(2px); }
-.teknik-dokuman__pdf { display: grid; width: 34px; height: 34px; border-radius: 9px; background: color-mix(in srgb, var(--renk-ana) 9%, var(--renk-beyaz)); color: var(--renk-ana); place-items: center; }
-.teknik-dokuman__pdf svg { width: 18px; height: 18px; }
+.teknik-dokuman:hover { box-shadow: 0 6px 18px color-mix(in srgb, var(--renk-koyu) 7%, transparent); transform: translateX(2px); }
+.teknik-dokuman:hover::before, .teknik-dokuman--secili::before { transform: scaleY(1); }
+.teknik-dokuman__pdf { display: grid; width: 27px; height: 27px; place-items: center; }
+.teknik-dokuman__pdf img { width: 25px; height: 25px; object-fit: contain; }
 .teknik-dokuman__metin { min-width: 0; }
-.teknik-dokuman__metin strong, .teknik-dokuman__metin small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.teknik-dokuman__metin strong { font-size: .82rem; font-weight: 600; }
-.teknik-dokuman__metin small { margin-top: 3px; color: var(--renk-ikincil); font-size: .68rem; }
+.teknik-dokuman__metin strong { display: block; overflow: hidden; font-size: .79rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .teknik-dokuman__eylem { display: flex; align-items: center; gap: 7px; color: var(--renk-ana); font-size: .72rem; font-weight: 650; white-space: nowrap; }
 .teknik-dokuman__eylem svg { width: 15px; height: 15px; transition: transform 180ms ease; }
 .teknik-dokuman:hover .teknik-dokuman__eylem svg { transform: translateX(3px); }
+@keyframes teknik-dokuman-girisi { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .teknik-kategori__bos { margin: 12px; padding: 28px 18px; border: 1px dashed var(--renk-cizgi); border-radius: 12px; color: var(--renk-ikincil); font-size: .78rem; text-align: center; }
 .teknik-goruntuleyici-konumu { scroll-margin-top: calc(var(--navbar-yuksekligi) + 18px); }
 
@@ -97,6 +99,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .teknik-dokuman, .teknik-dokuman__eylem svg { transition: none; }
+  .teknik-dokuman { animation: none; }
+  .teknik-dokuman, .teknik-dokuman::before, .teknik-dokuman__eylem svg { transition: none; }
   .teknik-dokuman:hover, .teknik-dokuman:hover .teknik-dokuman__eylem svg { transform: none; }
 }

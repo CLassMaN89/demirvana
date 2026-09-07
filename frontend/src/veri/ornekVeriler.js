@@ -129,7 +129,8 @@ export const ornekVeriler = Object.freeze({
     teknik_pdf_hata_aciklamasi: 'Doküman şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.',
     teknik_pdf_indir_metni: 'İndir',
     teknik_pdf_yeni_sekme_metni: 'Yeni sekmede aç',
-    teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat'
+    teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat',
+    teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png'
   },
   tema: {
     ana_mavi: '#28469D',
@@ -198,38 +199,32 @@ export const ornekVeriler = Object.freeze({
   },
   teknik_dokumanlar: [
     {
-      id: 1,
-      dil_kodu: 'tr',
-      ad: 'Teknik Tablolar',
-      slug: 'teknik-tablolar',
-      aciklama: 'Ürünlere ait teknik tablo ve değerleri inceleyin.',
-      ikon_adi: 'dosya-hesaplama',
-      siralama: 1,
+      id: 1, dil_kodu: 'tr', ad: 'TEKNİK TABLOLAR', slug: 'teknik-tablolar',
+      aciklama: 'Ürünlere ait teknik tablo ve değerleri inceleyin.', ikon_adi: 'dosya-hesaplama', siralama: 1,
       dokumanlar: [
-        {
-          id: 1,
-          baslik: 'Çeviri Tablosu',
-          slug: 'ceviri-tablosu',
-          dosya_adresi: '/dokumanlar/ceviri-tablosu',
-          orijinal_dosya_adi: 'ceviri_tablosu.pdf',
-          alternatif_aciklama: 'Teknik ölçü ve birim çeviri tablosu',
-          dosya_boyutu: 297187,
-          sayfa_sayisi: 1,
-          indirmeye_izin_var_mi: 1,
-          yeni_sekmede_acmaya_izin_var_mi: 1,
-          siralama: 1
-        }
-      ]
+        ['Basınç Sıcaklık Tablosu', 'basinc-sicaklik-tablosu'],
+        ['Çeviri Tablosu', 'ceviri-tablosu'],
+        ['DIN Standartı Flanş Çapları Tablosu', 'din-standarti-flans-caplari-tablosu'],
+        ['Flanş Yüzeyi Tablosu', 'flans-yuzeyi-tablosu'],
+        ['Inch-mm Çeviri Tablosu', 'inch-mm-ceviri-tablosu'],
+        ['Malzemelerin Karşılaştırılması Tablosu', 'malzemelerin-karsilastirilmasi-tablosu'],
+        ['Malzeme Özellikleri Tablosu', 'malzeme-ozellikleri-tablosu'],
+        ['Sıcaklık Değer Tablosu', 'sicaklik-deger-tablosu']
+      ].map(([baslik, slug], indeks) => ({ id: indeks + 1, baslik, slug, dosya_adresi: `/dokumanlar/${slug}`, orijinal_dosya_adi: 'ceviri_tablosu.pdf', alternatif_aciklama: `${baslik} teknik dokümanı`, dosya_boyutu: 297187, sayfa_sayisi: 1, indirmeye_izin_var_mi: 1, yeni_sekmede_acmaya_izin_var_mi: 1, siralama: indeks + 1 }))
     },
     {
-      id: 2,
-      dil_kodu: 'tr',
-      ad: 'Kullanma Talimatları',
-      slug: 'kullanma-talimatlari',
-      aciklama: 'Vana ve ekipmanların kullanım talimatlarını inceleyin.',
-      ikon_adi: 'kitap-acik',
-      siralama: 2,
-      dokumanlar: []
+      id: 2, dil_kodu: 'tr', ad: 'KULLANMA TALİMATLARI', slug: 'kullanma-talimatlari',
+      aciklama: 'Vana ve ekipmanların kullanım talimatlarını inceleyin.', ikon_adi: 'kitap-acik', siralama: 2,
+      dokumanlar: [
+        ['Sürgülü Vana Kullanımı', 'surgulu-vana-kullanimi'],
+        ['Çekvalf kullanımı', 'cekvalf-kullanimi'],
+        ['Kelebek vana kullanımı', 'kelebek-vana-kullanimi'],
+        ['Glob Vana kullanımı', 'glob-vana-kullanimi'],
+        ['Küresel Gaz Vanası kullanımı', 'kuresel-gaz-vanasi-kullanimi'],
+        ['Küresel Vana kullanımı', 'kuresel-vana-kullanimi'],
+        ['Yangın Hidrantı kullanımı', 'yangin-hidranti-kullanimi'],
+        ['Buhar Basınç Düşürücü kullanımı', 'buhar-basinc-dusurucu-kullanimi']
+      ].map(([baslik, slug], indeks) => ({ id: indeks + 9, baslik, slug, dosya_adresi: `/dokumanlar/${slug}`, orijinal_dosya_adi: 'ceviri_tablosu.pdf', alternatif_aciklama: `${baslik} kılavuzu`, dosya_boyutu: 297187, sayfa_sayisi: 1, indirmeye_izin_var_mi: 1, yeni_sekmede_acmaya_izin_var_mi: 1, siralama: indeks + 1 }))
     }
   ]
 });

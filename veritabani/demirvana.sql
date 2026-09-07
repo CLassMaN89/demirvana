@@ -336,7 +336,8 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('teknik_pdf_hata_aciklamasi', 'Doküman şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.', 'metin', 'PDF yükleme hatası açıklaması'),
     ('teknik_pdf_indir_metni', 'İndir', 'metin', 'PDF indirme bağlantısı metni'),
     ('teknik_pdf_yeni_sekme_metni', 'Yeni sekmede aç', 'metin', 'PDF yeni sekme bağlantısı metni'),
-    ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi')
+    ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi'),
+    ('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png', 'gorsel', 'Teknik doküman listelerinde kullanılan şeffaf PDF ikonu')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
@@ -521,8 +522,8 @@ ON DUPLICATE KEY UPDATE `sektor_id` = VALUES(`sektor_id`);
 INSERT INTO `teknik_dokuman_kategorileri`
     (`id`, `dil_kodu`, `ad`, `slug`, `aciklama`, `ikon_adi`, `siralama`)
 VALUES
-    (1, 'tr', 'Teknik Tablolar', 'teknik-tablolar', 'Ürünlere ait teknik tablo ve değerleri inceleyin.', 'dosya-hesaplama', 1),
-    (2, 'tr', 'Kullanma Talimatları', 'kullanma-talimatlari', 'Vana ve ekipmanların kullanım talimatlarını inceleyin.', 'kitap-acik', 2)
+    (1, 'tr', 'TEKNİK TABLOLAR', 'teknik-tablolar', 'Ürünlere ait teknik tablo ve değerleri inceleyin.', 'dosya-hesaplama', 1),
+    (2, 'tr', 'KULLANMA TALİMATLARI', 'kullanma-talimatlari', 'Vana ve ekipmanların kullanım talimatlarını inceleyin.', 'kitap-acik', 2)
 ON DUPLICATE KEY UPDATE
     `ad` = VALUES(`ad`), `aciklama` = VALUES(`aciklama`), `ikon_adi` = VALUES(`ikon_adi`),
     `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
@@ -530,7 +531,22 @@ ON DUPLICATE KEY UPDATE
 INSERT INTO `teknik_dokumanlar`
     (`id`, `kategori_id`, `dil_kodu`, `baslik`, `slug`, `dosya_yolu`, `orijinal_dosya_adi`, `alternatif_aciklama`, `mime_turu`, `dosya_boyutu`, `sayfa_sayisi`, `siralama`)
 VALUES
-    (1, 1, 'tr', 'Çeviri Tablosu', 'ceviri-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Teknik ölçü ve birim çeviri tablosu', 'application/pdf', 297187, 1, 1)
+    (1, 1, 'tr', 'Çeviri Tablosu', 'ceviri-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Teknik ölçü ve birim çeviri tablosu', 'application/pdf', 297187, 1, 2),
+    (2, 1, 'tr', 'Basınç Sıcaklık Tablosu', 'basinc-sicaklik-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Basınç ve sıcaklık değerleri tablosu', 'application/pdf', 297187, 1, 1),
+    (3, 1, 'tr', 'DIN Standartı Flanş Çapları Tablosu', 'din-standarti-flans-caplari-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'DIN standardı flanş ölçüleri tablosu', 'application/pdf', 297187, 1, 3),
+    (4, 1, 'tr', 'Flanş Yüzeyi Tablosu', 'flans-yuzeyi-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Flanş yüzeyi teknik değerleri', 'application/pdf', 297187, 1, 4),
+    (5, 1, 'tr', 'Inch-mm Çeviri Tablosu', 'inch-mm-ceviri-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'İnç ve milimetre ölçü çevirileri', 'application/pdf', 297187, 1, 5),
+    (6, 1, 'tr', 'Malzemelerin Karşılaştırılması Tablosu', 'malzemelerin-karsilastirilmasi-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Teknik malzemelerin karşılaştırma değerleri', 'application/pdf', 297187, 1, 6),
+    (7, 1, 'tr', 'Malzeme Özellikleri Tablosu', 'malzeme-ozellikleri-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Malzeme özellikleri ve sınıfları', 'application/pdf', 297187, 1, 7),
+    (8, 1, 'tr', 'Sıcaklık Değer Tablosu', 'sicaklik-deger-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Çalışma sıcaklığı teknik değerleri', 'application/pdf', 297187, 1, 8),
+    (9, 2, 'tr', 'Sürgülü Vana Kullanımı', 'surgulu-vana-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Sürgülü vana kullanım kılavuzu', 'application/pdf', 297187, 1, 1),
+    (10, 2, 'tr', 'Çekvalf kullanımı', 'cekvalf-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Çekvalf kullanım kılavuzu', 'application/pdf', 297187, 1, 2),
+    (11, 2, 'tr', 'Kelebek vana kullanımı', 'kelebek-vana-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Kelebek vana kullanım kılavuzu', 'application/pdf', 297187, 1, 3),
+    (12, 2, 'tr', 'Glob Vana kullanımı', 'glob-vana-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Glob vana kullanım kılavuzu', 'application/pdf', 297187, 1, 4),
+    (13, 2, 'tr', 'Küresel Gaz Vanası kullanımı', 'kuresel-gaz-vanasi-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Küresel gaz vanası kullanım kılavuzu', 'application/pdf', 297187, 1, 5),
+    (14, 2, 'tr', 'Küresel Vana kullanımı', 'kuresel-vana-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Küresel vana kullanım kılavuzu', 'application/pdf', 297187, 1, 6),
+    (15, 2, 'tr', 'Yangın Hidrantı kullanımı', 'yangin-hidranti-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Yangın hidrantı kullanım kılavuzu', 'application/pdf', 297187, 1, 7),
+    (16, 2, 'tr', 'Buhar Basınç Düşürücü kullanımı', 'buhar-basinc-dusurucu-kullanimi', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Buhar basınç düşürücü kullanım kılavuzu', 'application/pdf', 297187, 1, 8)
 ON DUPLICATE KEY UPDATE
     `kategori_id` = VALUES(`kategori_id`), `baslik` = VALUES(`baslik`), `dosya_yolu` = VALUES(`dosya_yolu`),
     `orijinal_dosya_adi` = VALUES(`orijinal_dosya_adi`), `alternatif_aciklama` = VALUES(`alternatif_aciklama`),

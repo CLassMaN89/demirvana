@@ -10,14 +10,17 @@ vi.mock('../bilesenler/PdfGoruntuleyici', () => ({
 const kategoriler = [
   {
     id: 1,
-    ad: 'Teknik Tablolar',
+    ad: 'TEKNİK TABLOLAR',
     aciklama: 'Teknik değerleri inceleyin.',
     ikon_adi: 'dosya-hesaplama',
-    dokumanlar: [{ id: 1, baslik: 'Çeviri Tablosu', alternatif_aciklama: 'Birim çevirileri' }]
+    dokumanlar: [
+      { id: 1, baslik: 'Çeviri Tablosu', alternatif_aciklama: 'Birim çevirileri' },
+      { id: 2, baslik: 'Basınç Sıcaklık Tablosu', alternatif_aciklama: 'Basınç değerleri' }
+    ]
   },
   {
     id: 2,
-    ad: 'Kullanma Talimatları',
+    ad: 'KULLANMA TALİMATLARI',
     aciklama: 'Kullanım belgeleri.',
     ikon_adi: 'kitap-acik',
     dokumanlar: []
@@ -30,9 +33,10 @@ describe('TeknikSayfasi', () => {
     render(<TeknikSayfasi kategoriler={kategoriler} siteAyarlari={{ teknik_hero_basligi: 'Teknik' }} />);
 
     expect(screen.getByRole('heading', { name: 'Teknik', level: 1 })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Teknik Tablolar' })).toBeInTheDocument();
-    expect(screen.getByText('1 doküman')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'TEKNİK TABLOLAR' })).toBeInTheDocument();
+    expect(screen.getByText('2 doküman')).toBeInTheDocument();
     expect(screen.getByText('0 doküman')).toBeInTheDocument();
+    expect(screen.getAllByRole('img', { name: 'PDF' })).toHaveLength(2);
     await kullanici.click(screen.getByRole('button', { name: /Çeviri Tablosu/ }));
     expect(await screen.findByTestId('pdf-goruntuleyici')).toBeInTheDocument();
   });

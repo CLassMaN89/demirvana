@@ -36,7 +36,7 @@ const sabitTestVerisi = {
   },
   teknik_dokumanlar: [{
     id: 1,
-    ad: 'Teknik Tablolar',
+    ad: 'TEKNİK TABLOLAR',
     slug: 'teknik-tablolar',
     ikon_adi: 'dosya-hesaplama',
     dokumanlar: [{ id: 1, baslik: 'Çeviri Tablosu', slug: 'ceviri-tablosu' }]
@@ -70,7 +70,7 @@ describe('App veri entegrasyonu', () => {
     );
 
     expect(await screen.findByRole('heading', { name: 'Teknik' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Teknik Tablolar' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'TEKNİK TABLOLAR' })).toBeInTheDocument();
   });
 
   it('referanslar rotasını API verisiyle bağımsız sayfada açar', async () => {

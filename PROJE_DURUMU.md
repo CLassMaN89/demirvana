@@ -109,6 +109,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Yerel worker kullanan PDF.js görüntüleyicisine sayfa küçük görselleri, önceki/sonraki sayfa, %50–200 yakınlaştırma, izin kontrollü indirme/yeni sekme ve Escape ile kapatma eklendi.
 - PDF.js ana paketi yalnız belge açıldığında yüklenir; üretim ana JavaScript paketi 724,54 kB'dan 289,16 kB'a düşürüldü.
 - Teknik sayfa masaüstünde iki, tablet/telefonda tek kategori sütunu kullanır; telefonda PDF küçük görselleri yatay şeride dönüşür ve araç çubuğu satır kırar.
+- Teknik Doküman Merkezi kullanıcı onayıyla 8 `TEKNİK TABLOLAR` ve 8 `KULLANMA TALİMATLARI` kaydına genişletildi; iki kategori adı ve sayaçları API verisiyle gösterilir.
+- Yeni kayıtların ayrı PDF dosyaları yüklenene kadar tamamı mevcut `ceviri_tablosu.pdf` örneğine bağlandı; dosya yolu, başlık, sıralama ve izinler veritabanından değiştirilebilir.
+- Teknik doküman satırlarına şeffaf arka planlı kırmızı PDF ikonu eklendi; ikon yolu `teknik_pdf_ikon_yolu` site ayarıyla yönetilebilir.
+- Doküman satırlarına kademeli giriş, hover arka planı ve sol mavi çizginin yukarıdan aşağıya açıldığı animasyon eklendi; azaltılmış hareket tercihinde hareket kapatılır.
 
 ## Mevcut durum
 
@@ -144,7 +148,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 18 test dosyasında 53 test, 0 hata.
+- Frontend testleri: 18 test dosyasında 54 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -179,6 +183,9 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - Bilinmeyen ve dizin geçişine benzeyen doküman adresleri canlı sunucuda `404`; birim doğrulamasında kök dışı PDF yolu reddedildi.
 - Gerçek PDF 375×812, 768×1024, 1440×1000 ve 1920×1080 görünümlerinde açıldı; canvas 596×842 piksel çizildi, `1 / 1`, indirme ve kapatma kontrolleri görüldü, sayfa düzeyinde yatay taşma oluşmadı.
 - Üretim derlemesinde PDF.js ayrı, gerektiğinde yüklenen 435,21 kB pakete ayrıldı; ana JavaScript 289,16 kB ve gzip 91,51 kB olarak üretildi.
+- Teknik liste canlı verisinde kategori başına 8 kayıt doğrulandı; şema iki kez içe aktarıldığında toplam 16 doküman çoğalmadı.
+- Şeffaf PDF ikonunun 16 satırda yüklendiği ve dosya köşe alfa değerinin `0` olduğu doğrulandı.
+- Hover çizgisi 375, 768, 1440 ve 1920px genişliklerde `scaleY(0)` değerinden `scaleY(1)` değerine geçti; yatay taşma ve Teknik sayfaya ait konsol hatası oluşmadı.
 
 ## Bilinen durumlar
 

@@ -38,4 +38,30 @@ if (($sql | Select-String -Pattern "'yurtici'|'yurtdisi'" -AllMatches).Matches.C
     throw 'Referans başlangıç verilerinin tamamı şemada bulunamadı.'
 }
 
+# Teknik merkez başlangıç listesi, kullanıcı tarafından onaylanan 8 tablo ve 8 kullanım belgesini içermelidir.
+$teknikBasliklar = @(
+    'Basınç Sıcaklık Tablosu',
+    'Çeviri Tablosu',
+    'DIN Standartı Flanş Çapları Tablosu',
+    'Flanş Yüzeyi Tablosu',
+    'Inch-mm Çeviri Tablosu',
+    'Malzemelerin Karşılaştırılması Tablosu',
+    'Malzeme Özellikleri Tablosu',
+    'Sıcaklık Değer Tablosu',
+    'Sürgülü Vana Kullanımı',
+    'Çekvalf kullanımı',
+    'Kelebek vana kullanımı',
+    'Glob Vana kullanımı',
+    'Küresel Gaz Vanası kullanımı',
+    'Küresel Vana kullanımı',
+    'Yangın Hidrantı kullanımı',
+    'Buhar Basınç Düşürücü kullanımı'
+)
+
+foreach ($baslik in $teknikBasliklar) {
+    if (-not $sql.Contains("'$baslik'")) {
+        throw "Eksik teknik doküman başlangıç kaydı: $baslik"
+    }
+}
+
 Write-Output 'Şema yapısal doğrulaması başarılı.'

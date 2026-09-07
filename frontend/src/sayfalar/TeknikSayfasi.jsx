@@ -1,4 +1,4 @@
-import { BookOpen, FileSpreadsheet, FileText, ArrowRight, FileType2 } from 'lucide-react';
+import { BookOpen, FileSpreadsheet, FileText, ArrowRight } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import '../stiller/teknik.css';
 
@@ -57,18 +57,20 @@ export default function TeknikSayfasi({ kategoriler = [], siteAyarlari = {} }) {
 
                   {dokumanlar.length > 0 ? (
                     <ul className="teknik-dokumanlar">
-                      {dokumanlar.map((dokuman) => (
+                      {dokumanlar.map((dokuman, indeks) => (
                         <li key={dokuman.id ?? dokuman.slug}>
                           <button
                             type="button"
                             className={seciliDokuman?.slug === dokuman.slug ? 'teknik-dokuman teknik-dokuman--secili' : 'teknik-dokuman'}
                             aria-pressed={seciliDokuman?.slug === dokuman.slug}
                             onClick={() => setSeciliDokuman(dokuman)}
+                            style={{ '--teknik-gecikme': `${Math.min(indeks, 7) * 45}ms` }}
                           >
-                            <span className="teknik-dokuman__pdf"><FileType2 aria-hidden="true" /></span>
+                            <span className="teknik-dokuman__pdf">
+                              <img src={ayar('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png')} alt="PDF" />
+                            </span>
                             <span className="teknik-dokuman__metin">
                               <strong>{dokuman.baslik}</strong>
-                              {dokuman.alternatif_aciklama && <small>{dokuman.alternatif_aciklama}</small>}
                             </span>
                             <span className="teknik-dokuman__eylem">
                               {ayar('teknik_pdf_goruntule_metni', 'PDF Görüntüle')} <ArrowRight aria-hidden="true" />
