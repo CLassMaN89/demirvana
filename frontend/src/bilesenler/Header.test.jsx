@@ -34,6 +34,35 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /Kelebek Vanalar/i }).closest('.site-header__arama-acilir')).not.toBeNull();
   });
 
+  it('arama açıkken Teklif Al düğmesini görünür tutar', () => {
+    render(
+      <MemoryRouter>
+        <Header menu={[]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    expect(screen.getByRole('link', { name: 'Teklif Al' })).toBeVisible();
+  });
+
+  it('fare arama alanından ayrılınca kısa gecikmeyle alanı kapatır', () => {
+    vi.useFakeTimers();
+    render(
+      <MemoryRouter>
+        <Header menu={[]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    const aramaKapsayici = screen.getByRole('searchbox', { name: 'Sitede ara' }).closest('.site-header__arama-kapsayici');
+    fireEvent.pointerLeave(aramaKapsayici);
+
+    act(() => vi.advanceTimersByTime(249));
+    expect(screen.getByRole('searchbox', { name: 'Sitede ara' })).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
+  });
+
   it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
     vi.useFakeTimers();
     render(
