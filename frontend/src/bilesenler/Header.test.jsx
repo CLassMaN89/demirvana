@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import { ornekVeriler } from '../veri/ornekVeriler';
 import Header from './Header';
 
 describe('Header', () => {
@@ -83,5 +84,23 @@ describe('Header', () => {
 
     await kullanici.keyboard('{Escape}');
     expect(urunlerDugmesi).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('Aktüatör grubuna geçince dört alt kategoriyi gösterir', async () => {
+    const kullanici = userEvent.setup();
+
+    render(
+      <MemoryRouter>
+        <Header menu={ornekVeriler.menu} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    await kullanici.click(screen.getByRole('button', { name: /ürünler alt menüsünü aç/i }));
+    fireEvent.click(screen.getByRole('button', { name: /aktüatör alt menüsünü aç/i }));
+
+    expect(screen.getByRole('link', { name: 'Elektrik Aktüatörler' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Pnömatik Aktüatör' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Aktüatörlü Vanalar' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Aksesuarlar' })).toBeInTheDocument();
   });
 });

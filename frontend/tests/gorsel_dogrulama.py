@@ -33,6 +33,18 @@ VANA_MENU_KATEGORILERI = [
     )
 ]
 
+AKTUATOR_MENU_KATEGORILERI = [
+    {"id": 330 + sira, "baslik": baslik, "baglanti": f"/urunler/{slug}", "alt_ogeler": []}
+    for sira, (baslik, slug) in enumerate(
+        (
+            ("Elektrik Aktüatörler", "elektrik-aktuatorler"),
+            ("Pnömatik Aktüatör", "pnomatik-aktuator"),
+            ("Aktüatörlü Vanalar", "aktuatorlu-vanalar"),
+            ("Aksesuarlar", "aktuator-aksesuarlari"),
+        )
+    )
+]
+
 API_VERILERI = {
     "/api/tema": {
         "ana_mavi": "#28469D", "koyu_mavi": "#17306F", "acik_mavi": "#EAF1FF",
@@ -45,7 +57,7 @@ API_VERILERI = {
             "id": 3, "baslik": "Ürünler", "baglanti": "/urunler", "siralama": 3,
             "alt_ogeler": [
                 {"id": 31, "baslik": "Vana", "baglanti": "/urunler/vana", "alt_ogeler": VANA_MENU_KATEGORILERI},
-                {"id": 32, "baslik": "Aktüatör", "baglanti": "/urunler/aktuator", "alt_ogeler": []},
+                {"id": 32, "baslik": "Aktüatör", "baglanti": "/urunler/aktuator", "alt_ogeler": AKTUATOR_MENU_KATEGORILERI},
                 {"id": 33, "baslik": "Otomasyon", "baglanti": "/urunler/otomasyon", "alt_ogeler": []},
                 {"id": 34, "baslik": "Temsilcilikler", "baglanti": "/urunler/temsilcilikler", "alt_ogeler": []},
             ],
@@ -111,6 +123,9 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
     page.goto(TEST_ADRESI, wait_until="networkidle")
     page.get_by_role("heading", name="ÜRÜN KATEGORİLERİMİZ").wait_for()
 
+    yazi_tipi = page.evaluate("getComputedStyle(document.body).fontFamily")
+    assert "Inter" in yazi_tipi, f"Beklenen Inter yerine {yazi_tipi} kullanılıyor"
+
     assert page.locator('[data-testid="kategori-karti"]').count() == 8
     assert page.locator(".vite-error-overlay").count() == 0
 
@@ -146,6 +161,11 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
         assert page.get_by_role("link", name="Bağlantı Parçaları").is_visible()
         page.wait_for_timeout(320)
         page.screenshot(path=str(CIKTI / "ust-menu-1440.png"), full_page=False)
+        page.get_by_role("button", name="Aktüatör alt menüsünü aç").hover()
+        page.get_by_role("link", name="Elektrik Aktüatörler").wait_for(state="visible")
+        assert page.get_by_role("link", name="Aksesuarlar").is_visible()
+        page.wait_for_timeout(240)
+        page.screenshot(path=str(CIKTI / "aktuator-menu-1440.png"), full_page=False)
         page.keyboard.press("Escape")
 
         # Canvas başlangıçta şeffaftır; fare ilerlediğinde ilgili pikselde teknik çizim katmanı oluşmalıdır.
@@ -181,6 +201,8 @@ def sayfayi_dogrula(page, genislik: int, yukseklik: int) -> None:
         assert page.get_by_role("button", name="Menüyü kapat").get_attribute("aria-expanded") == "true"
         page.get_by_role("button", name="Ürünler alt menüsünü aç").click()
         page.get_by_role("link", name="Yangın Vanaları").wait_for(state="visible")
+        page.get_by_role("button", name="Aktüatör alt menüsünü aç").click()
+        page.get_by_role("link", name="Elektrik Aktüatörler").wait_for(state="visible")
 
     if genislik == 1440:
         ilk_baslik = page.locator(".hero-carousel h1").inner_text()

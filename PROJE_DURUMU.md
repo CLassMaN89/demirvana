@@ -1,6 +1,6 @@
 # Demirvana Proje Durumu
 
-Son güncelleme: 6 Eylül 2026
+Son güncelleme: 7 Eylül 2026
 
 ## Projenin amacı
 
@@ -11,6 +11,7 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - İlk sürüm Türkçe olacak; yapı ileride çok dilliliğe genişleyebilecek.
 - Çalışma tek ajan tarafından yürütülecek; alt ajan kullanılmayacak.
 - Arayüz React, CSS ve JavaScript ile hazırlanacak.
+- Okunabilirlik için tüm arayüzde yerel Inter yazı ailesi kullanılacak; gövde 400, menü 500–600, başlıklar 600–700 ağırlığında tutulacak.
 - Ürün, kategori ve carousel metin/görselleri kaynak koda gömülmeyecek; PHP/MySQL veri katmanından yönetilebilecek.
 - Tema renkleri veritabanından gelen CSS özel değişkenleriyle yönetilebilecek.
 - Son kullanıcı kararına göre navbar masaüstü ve mobilde tam 60px olacak.
@@ -41,7 +42,7 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Sekiz Türkçe tabloyu, ilişkileri ve tekrarlanabilir başlangıç verilerini içeren MySQL/MariaDB şeması oluşturuldu.
 - MariaDB 12.3.3 kuruldu; şema iki kez canlı içe aktarılıp başlangıç kayıtlarının çoğalmadığı doğrulandı.
 - React veri yükleme, hata, yeniden deneme ve dinamik tema akışı gerçek API sözleşmesine bağlandı.
-- Roboto fontu harici servise bağımlı kalmaması için frontend paketine yalnız gereken Latin Extended ağırlıklarıyla yerel eklendi.
+- Inter fontu harici servise bağımlı kalmaması için frontend paketine yalnız gereken Latin Extended 400–700 ağırlıklarıyla yerel eklendi.
 - README kurulum ve çalışma belgesi oluşturuldu.
 - Playwright ile 360px, 375px, 768px, 844×390px yatay telefon, 1440px ve 1920px responsive tarayıcı doğrulaması yapıldı.
 - Yatay telefonda carousel oklarının metne yaklaşması giderildi; kontroller sağ üst güvenli alana taşındı.
@@ -57,6 +58,7 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Üst menü `Anasayfa, Kurumsal, Ürünler, Teknik, Referanslar, Sertifikalar, İletişim` sırasıyla güncellendi.
 - Ürünler menüsüne hareketli ortak vurgu ve responsive mega menü eklendi; Vana, Aktüatör, Otomasyon ve Temsilcilikler veritabanından gelir.
 - Vana grubunun altında kullanıcı görselindeki 12 kategori üçüncü seviye olarak tanımlandı; masaüstünde iki kolon, mobilde iç içe liste kullanılır.
+- Aktüatör grubuna Elektrik Aktüatörler, Pnömatik Aktüatör, Aktüatörlü Vanalar ve Aksesuarlar üçüncü seviye olarak eklendi.
 - Alt menülerin gelecekte yönetim panelinden düzenlenebilmesi için `menu_alt_ogeleri` tablosu ve özyinelemeli PHP menü ağacı eklendi.
 
 ## Mevcut durum
@@ -80,12 +82,12 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 12 test, 0 hata.
+- Frontend testleri: 14 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
 - MySQL şeması yapısal testi: başarılı.
-- Canlı veritabanı sayımları: 6 tema, 7 üst menü, 16 alt menü, 6 slider ve 7 kategori.
+- Canlı veritabanı sayımları: 6 tema, 7 üst menü, 20 alt menü, 6 slider ve 7 kategori.
 - Canlı API sonuçları: tema, üç seviyeli menü, slider, kategori, kategori detayı ve boş ürün listesi başarılı JSON döndürdü.
 - Gerçek Vite → PHP → MariaDB zinciriyle responsive tarayıcı testi: telefon, yatay telefon, tablet ve masaüstü başarılı; konsol hatası ve yatay taşma yok.
 - Görsel tasarım denetimi: 0 engelleyici, 0 açık kalite sorunu; ürün fotoğrafları yönetim panelinden ekleneceği için şimdilik bilinçli placeholder kullanılıyor.

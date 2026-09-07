@@ -15,7 +15,9 @@ body {
   min-height: 100vh;
   color: var(--renk-metin);
   background: var(--renk-beyaz);
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: var(--yazi-tipi);
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 

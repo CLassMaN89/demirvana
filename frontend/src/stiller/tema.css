@@ -9,6 +9,8 @@
   --renk-yuzey: var(--renk-beyaz);
   --renk-odak: var(--renk-ana);
   --golge-yumusak: 0 18px 50px color-mix(in srgb, var(--renk-koyu) 10%, transparent);
+  /* Tipografi tek değişkenden yönetilir; bütün bileşenler aynı okunabilir yazı ailesini miras alır. */
+  --yazi-tipi: 'Inter', Arial, sans-serif;
   --icerik-genisligi: 1440px;
   /* Kullanıcının son kararına göre navbar tüm cihazlarda tam 60px tutulur. */
   --navbar-yuksekligi: 60px;

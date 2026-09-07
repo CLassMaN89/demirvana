@@ -29,6 +29,19 @@ const vanaMenuKategorileri = [
   alt_ogeler: []
 }));
 
+const aktuatorMenuKategorileri = [
+  ['Elektrik Aktüatörler', 'elektrik-aktuatorler'],
+  ['Pnömatik Aktüatör', 'pnomatik-aktuator'],
+  ['Aktüatörlü Vanalar', 'aktuatorlu-vanalar'],
+  ['Aksesuarlar', 'aktuator-aksesuarlari']
+].map(([baslik, slug], indeks) => ({
+  id: 330 + indeks,
+  baslik,
+  baglanti: `/urunler/${slug}`,
+  siralama: indeks + 1,
+  alt_ogeler: []
+}));
+
 export const ornekVeriler = Object.freeze({
   tema: {
     ana_mavi: '#28469D',
@@ -48,7 +61,7 @@ export const ornekVeriler = Object.freeze({
       siralama: 3,
       alt_ogeler: [
         { id: 31, baslik: 'Vana', baglanti: '/urunler/vana', siralama: 1, alt_ogeler: vanaMenuKategorileri },
-        { id: 32, baslik: 'Aktüatör', baglanti: '/urunler/aktuator', siralama: 2, alt_ogeler: [] },
+        { id: 32, baslik: 'Aktüatör', baglanti: '/urunler/aktuator', siralama: 2, alt_ogeler: aktuatorMenuKategorileri },
         { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: [] },
         { id: 34, baslik: 'Temsilcilikler', baglanti: '/urunler/temsilcilikler', siralama: 4, alt_ogeler: [] }
       ]

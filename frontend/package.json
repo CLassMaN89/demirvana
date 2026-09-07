@@ -10,7 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@fontsource/roboto": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
     "@vitejs/plugin-react": "latest",
     "react": "latest",
     "react-dom": "latest",

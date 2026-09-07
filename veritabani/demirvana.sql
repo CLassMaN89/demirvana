@@ -185,6 +185,17 @@ VALUES
 ON DUPLICATE KEY UPDATE
     `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
+-- Aktüatör ürün ailesi, Vana grubu gibi aynı yönetilebilir üçüncü seviye menü yapısını kullanır.
+INSERT INTO `menu_alt_ogeleri`
+    (`menu_ogesi_id`, `ust_alt_oge_id`, `baslik`, `baglanti`, `siralama`)
+VALUES
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/aktuator'), 'Elektrik Aktüatörler', '/urunler/elektrik-aktuatorler', 1),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/aktuator'), 'Pnömatik Aktüatör', '/urunler/pnomatik-aktuator', 2),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/aktuator'), 'Aktüatörlü Vanalar', '/urunler/aktuatorlu-vanalar', 3),
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), (SELECT `id` FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/aktuator'), 'Aksesuarlar', '/urunler/aktuator-aksesuarlari', 4)
+ON DUPLICATE KEY UPDATE
+    `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
 INSERT INTO `menu_alt_ogeleri`
     (`menu_ogesi_id`, `ust_alt_oge_id`, `baslik`, `baglanti`, `siralama`)
 VALUES

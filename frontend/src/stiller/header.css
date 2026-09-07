@@ -59,8 +59,10 @@
   border: 0;
   background: transparent;
   color: var(--renk-metin);
-  font-size: 0.62rem;
-  font-weight: 700;
+  /* Inter'in daha açık harf yapısını orta ağırlıkta kullanmak küçük navbar metninin okunmasını kolaylaştırır. */
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;

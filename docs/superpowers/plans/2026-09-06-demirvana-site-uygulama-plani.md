@@ -138,7 +138,7 @@ export function temaUygula(tema, hedef = document.documentElement) {
 }
 ```
 
-`tema.css` içinde aynı altı değişken için tasarım belgesindeki varsayılan değerleri tanımla. `genel.css` içinde Roboto, sıfırlama, odak görünümü, akışkan içerik genişliği ve `prefers-reduced-motion` kuralını ekle.
+`tema.css` içinde aynı altı değişken için tasarım belgesindeki varsayılan değerleri tanımla. `genel.css` içinde Inter, sıfırlama, odak görünümü, akışkan içerik genişliği ve `prefers-reduced-motion` kuralını ekle.
 
 - [ ] **Adım 4: Tema testi ve boş uygulama derlemesini doğrula**
 

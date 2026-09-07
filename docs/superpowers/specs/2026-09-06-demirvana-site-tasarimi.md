@@ -20,7 +20,7 @@ Geliştirme sırasında API kullanılamazsa frontend yerel Türkçe örnek veriy
 
 ## Görsel tasarım sistemi
 
-Tasarım dili, logodaki koyu mavi ve beyaz tonları temel alan endüstriyel hassasiyet yaklaşımıdır. Tipografi tüm arayüzde Roboto ailesini kullanır. Teknik çizgiler, kontrollü köşe geometrileri ve vana/boru mühendisliğini hatırlatan dairesel detaylar marka karakterini destekler.
+Tasarım dili, logodaki koyu mavi ve beyaz tonları temel alan endüstriyel hassasiyet yaklaşımıdır. Tipografi, küçük ekranlarda ve teknik içeriklerde okunabilirliği artırmak için tüm arayüzde Inter ailesini kullanır. Teknik çizgiler, kontrollü köşe geometrileri ve vana/boru mühendisliğini hatırlatan dairesel detaylar marka karakterini destekler.
 
 Başlangıç tema değerleri:
 
