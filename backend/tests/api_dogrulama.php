@@ -8,6 +8,7 @@ require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SeoDenetleyicisi.php';
 require_once __DIR__ . '/../src/Cekirdek/SeoHtmlOlusturucu.php';
+require_once __DIR__ . '/../src/Cekirdek/PdfDosyaSunucusu.php';
 
 // Bu küçük çalıştırılabilir test harici test çatısına ihtiyaç duymadan API'nin temel sözleşmesini korur.
 $yanit = JsonYanit::olustur(true, ['id' => 1]);
@@ -60,6 +61,14 @@ $dokumanAgaci = SiteDeposu::teknikDokumanAgaciOlustur(
 
 if (($dokumanAgaci[0]['dokumanlar'][0]['baslik'] ?? null) !== 'Çeviri Tablosu') {
     throw new RuntimeException('Teknik doküman kategori ağacı doğru kurulmadı.');
+}
+
+$pdfKoku = realpath(__DIR__ . '/../../pdf');
+if (PdfDosyaSunucusu::guvenliYol((string) $pdfKoku, '../gizli.pdf') !== null) {
+    throw new RuntimeException('PDF dizin geçişi engellenmedi.');
+}
+if (!str_ends_with((string) PdfDosyaSunucusu::guvenliYol((string) $pdfKoku, 'ceviri_tablosu.pdf'), 'ceviri_tablosu.pdf')) {
+    throw new RuntimeException('Kök içindeki PDF reddedildi.');
 }
 
 $seoSayfalari = SeoDeposu::seoKayitlariniNesneyeDonustur([

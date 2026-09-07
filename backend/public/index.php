@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Cekirdek/Veritabani.php';
 require_once __DIR__ . '/../src/Cekirdek/SeoHtmlOlusturucu.php';
+require_once __DIR__ . '/../src/Cekirdek/PdfDosyaSunucusu.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
@@ -34,6 +35,19 @@ try {
         exit;
     }
 
+    if (preg_match('#^/dokumanlar/([^/]+)$#', $yol, $eslesme) === 1) {
+        $slug = $eslesme[1];
+        if (!SiteDenetleyicisi::gecerliSlug($slug)) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, 'Geçersiz doküman adresi.'), 400);
+        }
+
+        $dokuman = $denetleyici->teknikDokuman($slug);
+        if ($dokuman === null) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, 'Doküman bulunamadı.'), 404);
+        }
+        PdfDosyaSunucusu::gonder($dokuman, dirname(__DIR__, 2) . '/pdf');
+    }
+
     if (!str_starts_with($yol, '/api')) {
         $htmlDosyasi = dirname(__DIR__, 2) . '/frontend/dist/index.html';
         if (!is_file($htmlDosyasi)) {
@@ -57,7 +71,24 @@ try {
         '/api/sliderlar' => fn() => $denetleyici->sliderlar(),
         '/api/kategoriler' => fn() => $denetleyici->kategoriler(),
         '/api/referanslar' => fn() => $denetleyici->referanslar(),
-        '/api/teknik-dokumanlar' => fn() => $denetleyici->teknikDokumanlar(),
+        '/api/teknik-dokumanlar' => function () use ($denetleyici): array {
+            $kategoriler = $denetleyici->teknikDokumanlar();
+            $pdfKoku = dirname(__DIR__, 2) . '/pdf';
+
+            // Veritabanında kaydı olsa bile fiziksel dosyası bulunmayan belge ziyaretçiye gösterilmez.
+            foreach ($kategoriler as &$kategori) {
+                $kategori['dokumanlar'] = array_values(array_filter(
+                    $kategori['dokumanlar'],
+                    function (array $ozet) use ($denetleyici, $pdfKoku): bool {
+                        $dokuman = $denetleyici->teknikDokuman((string) $ozet['slug']);
+                        return $dokuman !== null
+                            && PdfDosyaSunucusu::guvenliYol($pdfKoku, (string) $dokuman['dosya_yolu']) !== null;
+                    }
+                ));
+            }
+            unset($kategori);
+            return $kategoriler;
+        },
         '/api/urunler' => fn() => $denetleyici->urunler(
             isset($_GET['kategori']) ? (string) $_GET['kategori'] : null,
             isset($_GET['arama']) ? (string) $_GET['arama'] : null
