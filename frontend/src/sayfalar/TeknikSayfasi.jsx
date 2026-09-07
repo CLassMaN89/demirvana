@@ -1,7 +1,9 @@
 import { BookOpen, FileSpreadsheet, FileText, ArrowRight, FileType2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import PdfGoruntuleyici from '../bilesenler/PdfGoruntuleyici';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import '../stiller/teknik.css';
+
+// Ağır PDF.js paketi yalnız ziyaretçi bir belge açtığında indirilerek ilk sayfa yükü hafif tutulur.
+const PdfGoruntuleyici = lazy(() => import('../bilesenler/PdfGoruntuleyici'));
 
 const KATEGORI_IKONLARI = {
   'dosya-hesaplama': FileSpreadsheet,
@@ -85,11 +87,13 @@ export default function TeknikSayfasi({ kategoriler = [], siteAyarlari = {} }) {
 
           {seciliDokuman && (
             <div className="teknik-goruntuleyici-konumu" ref={goruntuleyiciRef}>
-              <PdfGoruntuleyici
-                dokuman={seciliDokuman}
-                siteAyarlari={siteAyarlari}
-                onKapat={() => setSeciliDokuman(null)}
-              />
+              <Suspense fallback={<p className="pdf-goruntuleyici__durum" aria-live="polite">{ayar('teknik_pdf_yukleniyor_metni', 'PDF yükleniyor…')}</p>}>
+                <PdfGoruntuleyici
+                  dokuman={seciliDokuman}
+                  siteAyarlari={siteAyarlari}
+                  onKapat={() => setSeciliDokuman(null)}
+                />
+              </Suspense>
             </div>
           )}
         </div>

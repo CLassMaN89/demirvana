@@ -34,6 +34,6 @@ describe('TeknikSayfasi', () => {
     expect(screen.getByText('1 doküman')).toBeInTheDocument();
     expect(screen.getByText('0 doküman')).toBeInTheDocument();
     await kullanici.click(screen.getByRole('button', { name: /Çeviri Tablosu/ }));
-    expect(screen.getByTestId('pdf-goruntuleyici')).toBeInTheDocument();
+    expect(await screen.findByTestId('pdf-goruntuleyici')).toBeInTheDocument();
   });
 });
