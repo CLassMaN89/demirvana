@@ -79,7 +79,8 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Arama sonuçları yalnızca sorgu iki karaktere ulaştığında girişin altında tek sütunlu Google benzeri öneri kutusunda görünür; arama açıkken Teklif Al alanı geçici olarak gizlenir.
 - Navbar araması 288px güvenli genişliğe ayarlandı; `Teklif Al` arama açıkken de görünür ve tıklanabilir durumda tutuldu.
 - Arama açılışına yay eğrili ölçek, kısa blur ve odak parlaması eklendi; sonuçlar ayrı fade/kayma hareketi kullanır.
-- Fare arama veya sonuç kapsayıcısından ayrıldığında 250ms sonra, başka yere tıklamada ya da Escape kullanımında hemen kapanır ve sorgu temizlenir.
+- Fare arama veya sonuç kapsayıcısından ayrılsa bile alan açık kalır; yalnız başka yere tıklamada ya da Escape kullanımında kapanır ve sorgu temizlenir.
+- Arama giriş metni 13px/400, sonuç başlığı 13px/500, sonuç türü 10px/600 yapılarak okunabilir hiyerarşi sadeleştirildi.
 
 ## Mevcut durum
 
@@ -108,7 +109,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 30 test, 0 hata.
+- Frontend testleri: 31 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -125,6 +126,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - Yeni arama alanı canlı tarayıcıda doğrulandı: yükleme göstergesi, Kelebek Vanalar sonucu ve desteklenen Chrome ortamında mikrofon düğmesi görünür; yatay taşma yok.
 - Navbar içi arama canlı görünümde doğrulandı: ayrı sayfa paneli oluşmuyor, alan sağa genişliyor ve sonuç tek satırlık öneri kutusunda yalnızca girişin altında açılıyor.
 - Teklif düğmesinin arama yanında görünür kaldığı ve hero kontrolüne tıklanınca aramanın kapandığı canlı tarayıcıda doğrulandı.
+- Fare ayrıldıktan sonra aramanın açık kaldığı otomatik testte; dış alana tıklanınca kapandığı canlı tarayıcıda yeniden doğrulandı.
 
 ## Bilinen durumlar
 

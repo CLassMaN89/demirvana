@@ -16,7 +16,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   const navRef = useRef(null);
   const aramaAlaniRef = useRef(null);
   const aramaDugmesiRef = useRef(null);
-  const aramaKapatmaRef = useRef(null);
   const konum = useLocation();
   const aramaSonuclari = useMemo(
     () => aramaSonuclariOlustur(menu, aramaKaynaklari, aramaMetni),
@@ -30,7 +29,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
     setAcikAltMenuId(null);
     setAramaAcik(false);
     setAramaMetni('');
-    window.clearTimeout(aramaKapatmaRef.current);
   }, [konum.pathname]);
 
   useEffect(() => {
@@ -40,7 +38,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   useEffect(() => {
     const disTiklamayiKapat = (olay) => {
       if (headerRef.current && !headerRef.current.contains(olay.target)) {
-        window.clearTimeout(aramaKapatmaRef.current);
         setAcikMenuId(null);
         setAcikAltMenuId(null);
         setAramaAcik(false);
@@ -51,18 +48,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
     document.addEventListener('pointerdown', disTiklamayiKapat);
     return () => document.removeEventListener('pointerdown', disTiklamayiKapat);
   }, []);
-
-  useEffect(() => () => window.clearTimeout(aramaKapatmaRef.current), []);
-
-  const aramaKapatmayiIptalEt = () => window.clearTimeout(aramaKapatmaRef.current);
-  const aramaKapatmayiPlanla = () => {
-    window.clearTimeout(aramaKapatmaRef.current);
-    // Küçük gecikme, imleç girişten sonuçlara geçerken panelin yanlışlıkla kapanmasını önler.
-    aramaKapatmaRef.current = window.setTimeout(() => {
-      setAramaAcik(false);
-      setAramaMetni('');
-    }, 250);
-  };
 
   const vurguyuTasi = (hedef) => {
     const nav = navRef.current;
@@ -225,11 +210,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
             );
           })}
 
-          <div
-            className="site-header__arama-kapsayici"
-            onPointerEnter={aramaKapatmayiIptalEt}
-            onPointerLeave={aramaKapatmayiPlanla}
-          >
+          <div className="site-header__arama-kapsayici">
             <button
               ref={aramaDugmesiRef}
               className={`site-header__arama-dugmesi${aramaAcik ? ' site-header__arama-dugmesi--acik' : ''}`}
@@ -238,7 +219,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
               aria-controls="site-arama-paneli"
               aria-label={aramaAcik ? 'Site aramasını kapat' : 'Site aramasını aç'}
               onClick={() => {
-                aramaKapatmayiIptalEt();
                 setAramaAcik((acik) => {
                   if (acik) setAramaMetni('');
                   return !acik;
@@ -260,7 +240,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                 onKeyDown={(olay) => {
                   // Sonuçlara geçilmiş olsa da Escape alanı kapatıp odağı başlangıç düğmesine döndürür.
                   if (olay.key === 'Escape') {
-                    aramaKapatmayiIptalEt();
                     setAramaAcik(false);
                     setAramaMetni('');
                     aramaDugmesiRef.current?.focus();

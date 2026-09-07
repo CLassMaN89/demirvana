@@ -45,7 +45,7 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Teklif Al' })).toBeVisible();
   });
 
-  it('fare arama alanından ayrılınca kısa gecikmeyle alanı kapatır', () => {
+  it('fare arama alanından ayrılsa bile tıklama yapılana kadar açık kalır', () => {
     vi.useFakeTimers();
     render(
       <MemoryRouter>
@@ -57,10 +57,33 @@ describe('Header', () => {
     const aramaKapsayici = screen.getByRole('searchbox', { name: 'Sitede ara' }).closest('.site-header__arama-kapsayici');
     fireEvent.pointerLeave(aramaKapsayici);
 
-    act(() => vi.advanceTimersByTime(249));
+    act(() => vi.advanceTimersByTime(1000));
     expect(screen.getByRole('searchbox', { name: 'Sitede ara' })).toBeInTheDocument();
-    act(() => vi.advanceTimersByTime(1));
-    expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
+  });
+
+  it('arama ve sonuç yazılarını dengeli okunabilir ölçülerde gösterir', () => {
+    render(
+      <MemoryRouter>
+        <Header
+          menu={[]}
+          logoYolu="/assets/logo.png"
+          aramaKaynaklari={{
+            kategoriler: [{ id: 8, ad: 'Küresel Vanalar', slug: 'kuresel-vanalar' }],
+            urunler: [], referanslar: { kayitlar: [] }
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    const arama = screen.getByRole('searchbox', { name: 'Sitede ara' });
+    fireEvent.change(arama, { target: { value: 'küresel' } });
+    const sonucBasligi = screen.getByRole('link', { name: /Küresel Vanalar/i }).querySelector('strong');
+
+    expect(getComputedStyle(arama).fontSize).toBe('13px');
+    expect(getComputedStyle(arama).fontWeight).toBe('400');
+    expect(getComputedStyle(sonucBasligi).fontSize).toBe('13px');
+    expect(getComputedStyle(sonucBasligi).fontWeight).toBe('500');
   });
 
   it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
