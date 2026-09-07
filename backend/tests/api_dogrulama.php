@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
+require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 
 // Bu küçük çalıştırılabilir test harici test çatısına ihtiyaç duymadan API'nin temel sözleşmesini korur.
 $yanit = JsonYanit::olustur(true, ['id' => 1]);
@@ -48,6 +49,14 @@ $siteAyarlari = SiteDeposu::ayarNesnesiOlustur([
 
 if (($siteAyarlari['destek_eposta'] ?? null) !== 'dv@demirvana.com') {
     throw new RuntimeException('Site ayarları anahtar/değer nesnesine dönüştürülemedi.');
+}
+
+$seoSayfalari = SeoDeposu::seoKayitlariniNesneyeDonustur([
+    ['rota' => '/', 'dil_kodu' => 'tr', 'seo_basligi' => 'Demirvana'],
+]);
+
+if (($seoSayfalari['tr']['/']['seo_basligi'] ?? null) !== 'Demirvana') {
+    throw new RuntimeException('SEO kayıtları dil ve rota anahtarlarıyla dönüştürülemedi.');
 }
 
 echo "PHP API doğrulamaları başarılı.\n";

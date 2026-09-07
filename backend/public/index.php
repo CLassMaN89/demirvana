@@ -5,7 +5,9 @@ declare(strict_types=1);
 require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Cekirdek/Veritabani.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
+require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
+require_once __DIR__ . '/../src/Denetleyiciler/SeoDenetleyicisi.php';
 
 // API salt okunur başlar; gelecekteki admin yazma uçları kimlik doğrulama katmanıyla ayrı eklenecektir.
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
@@ -17,9 +19,11 @@ $yol = '/' . trim($yol, '/');
 
 try {
     $denetleyici = new SiteDenetleyicisi(new SiteDeposu(Veritabani::baglanti()));
+    $seoDenetleyicisi = new SeoDenetleyicisi(new SeoDeposu(Veritabani::baglanti()));
 
     $sabitRotalar = [
         '/api/site-ayarlari' => fn() => $denetleyici->siteAyarlari(),
+        '/api/seo' => fn() => $seoDenetleyicisi->seo(),
         '/api/tema' => fn() => $denetleyici->tema(),
         '/api/menu' => fn() => $denetleyici->menu(),
         '/api/sliderlar' => fn() => $denetleyici->sliderlar(),

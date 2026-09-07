@@ -21,6 +21,32 @@ CREATE TABLE IF NOT EXISTS `site_ayarlari` (
     UNIQUE KEY `benzersiz_site_ayari` (`anahtar`)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Her rota için ayrı SEO kaydı tutulur; admin aynı rota için gelecekte farklı dil kayıtları açabilir.
+CREATE TABLE IF NOT EXISTS `seo_sayfalari` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `rota` VARCHAR(255) NOT NULL,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `seo_basligi` VARCHAR(70) NOT NULL,
+    `meta_aciklama` VARCHAR(180) NOT NULL,
+    `anahtar_kelimeler` VARCHAR(500) NULL,
+    `canonical_yolu` VARCHAR(255) NULL,
+    `sosyal_baslik` VARCHAR(95) NULL,
+    `sosyal_aciklama` VARCHAR(220) NULL,
+    `sosyal_gorsel_yolu` VARCHAR(500) NULL,
+    `robotlar` VARCHAR(100) NOT NULL DEFAULT 'index, follow, max-image-preview:large',
+    `yapilandirilmis_veri_turu` VARCHAR(50) NOT NULL DEFAULT 'WebPage',
+    `site_haritasina_ekle` TINYINT(1) NOT NULL DEFAULT 1,
+    `degisim_sikligi` ENUM('always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never') NOT NULL DEFAULT 'monthly',
+    `oncelik` DECIMAL(2,1) NOT NULL DEFAULT 0.5,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_seo_rotasi_dili` (`rota`, `dil_kodu`),
+    KEY `seo_site_haritasi` (`site_haritasina_ekle`, `aktif_mi`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 -- CSS özel değişkenlerine aktarılacak renkler ayrı tutulur; admin paneli kod değiştirmeden temayı yönetebilir.
 CREATE TABLE IF NOT EXISTS `tema_ayarlari` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -229,6 +255,38 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('footer_iletisim_buton_baglantisi', '/iletisim', 'baglanti', 'Footer iletişim düğmesi bağlantısı'),
     ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
+
+INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
+    ('site_ana_adresi', 'https://www.demirvana.com', 'baglanti', 'Canonical ve sitemap için ana site adresi'),
+    ('site_varsayilan_dil', 'tr', 'metin', 'HTML ve SEO varsayılan dil kodu'),
+    ('seo_varsayilan_baslik', 'Demirvana | Endüstriyel Vana Çözümleri', 'metin', 'Sayfa kaydı yoksa kullanılacak SEO başlığı'),
+    ('seo_baslik_sablonu', '%s | Demirvana', 'metin', 'Dinamik sayfa başlık şablonu'),
+    ('seo_varsayilan_aciklama', 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', 'metin', 'Varsayılan meta açıklama'),
+    ('seo_varsayilan_gorsel', '/assets/logo.png', 'gorsel', 'Varsayılan sosyal paylaşım görseli'),
+    ('seo_varsayilan_robotlar', 'index, follow, max-image-preview:large', 'metin', 'Varsayılan arama motoru robot yönergesi'),
+    ('seo_organizasyon_turu', 'Organization', 'metin', 'Schema.org organizasyon türü'),
+    ('google_site_dogrulama', '', 'metin', 'Google Search Console doğrulama kodu')
+ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
+
+INSERT INTO `seo_sayfalari`
+    (`rota`, `dil_kodu`, `seo_basligi`, `meta_aciklama`, `anahtar_kelimeler`, `canonical_yolu`, `sosyal_baslik`, `sosyal_aciklama`, `yapilandirilmis_veri_turu`, `degisim_sikligi`, `oncelik`, `siralama`)
+VALUES
+    ('/', 'tr', 'Demirvana | Endüstriyel Vana Çözümleri', 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', 'endüstriyel vana, vana üreticisi, vana çözümleri', '/', 'Demirvana Endüstriyel Vana Çözümleri', 'Üretimden sahaya güvenilir vana ve akış kontrol çözümleri.', 'WebSite', 'weekly', 1.0, 1),
+    ('/kurumsal', 'tr', 'Kurumsal | Demirvana', 'Demirvana üretim yaklaşımı, mühendislik deneyimi ve kurumsal değerleri hakkında bilgi alın.', 'Demirvana kurumsal, vana üreticisi', '/kurumsal', NULL, NULL, 'AboutPage', 'yearly', 0.7, 2),
+    ('/urunler', 'tr', 'Endüstriyel Vana Ürünleri | Demirvana', 'Küresel, kelebek, sürgülü, kontrol vanaları ve diğer endüstriyel vana gruplarını inceleyin.', 'vana çeşitleri, endüstriyel vanalar, kontrol vanaları', '/urunler', NULL, NULL, 'CollectionPage', 'weekly', 0.9, 3),
+    ('/teknik', 'tr', 'Teknik Bilgiler | Demirvana', 'Endüstriyel vana seçimi ve uygulamaları için Demirvana teknik kaynaklarını inceleyin.', 'vana teknik bilgi, vana seçimi', '/teknik', NULL, NULL, 'WebPage', 'monthly', 0.6, 4),
+    ('/referanslar', 'tr', 'Proje Referansları | Demirvana', 'Su, atıksu, enerji, madencilik ve sanayi projelerindeki Demirvana referanslarını inceleyin.', 'vana projeleri, endüstriyel referanslar', '/referanslar', NULL, NULL, 'CollectionPage', 'monthly', 0.7, 5),
+    ('/sertifikalar', 'tr', 'Sertifikalar | Demirvana', 'Demirvana kalite ve üretim standartlarını belgeleyen sertifikaları inceleyin.', 'vana sertifikaları, kalite belgeleri', '/sertifikalar', NULL, NULL, 'WebPage', 'yearly', 0.5, 6),
+    ('/iletisim', 'tr', 'İletişim ve Destek | Demirvana', 'Ürün seçimi, teknik destek ve teklif talepleriniz için Demirvana ile iletişime geçin.', 'Demirvana iletişim, vana teklifi, teknik destek', '/iletisim', NULL, NULL, 'ContactPage', 'yearly', 0.8, 7)
+ON DUPLICATE KEY UPDATE
+    `seo_basligi` = VALUES(`seo_basligi`),
+    `meta_aciklama` = VALUES(`meta_aciklama`),
+    `anahtar_kelimeler` = VALUES(`anahtar_kelimeler`),
+    `canonical_yolu` = VALUES(`canonical_yolu`),
+    `yapilandirilmis_veri_turu` = VALUES(`yapilandirilmis_veri_turu`),
+    `degisim_sikligi` = VALUES(`degisim_sikligi`),
+    `oncelik` = VALUES(`oncelik`),
+    `siralama` = VALUES(`siralama`);
 
 INSERT INTO `tema_ayarlari` (`anahtar`, `deger`, `aciklama`, `siralama`) VALUES
     ('ana_mavi', '#28469D', 'Ana marka ve etkileşim rengi', 1),
