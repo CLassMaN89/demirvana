@@ -1,11 +1,53 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ornekVeriler } from '../veri/ornekVeriler';
 import Header from './Header';
 
 describe('Header', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    delete window.webkitSpeechRecognition;
+  });
+
+  it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
+    vi.useFakeTimers();
+    render(
+      <MemoryRouter>
+        <Header menu={[]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Sitede ara' }), { target: { value: 'vana' } });
+    expect(screen.getByRole('status', { name: 'Arama yapılıyor' })).toBeInTheDocument();
+
+    act(() => vi.advanceTimersByTime(500));
+    expect(screen.queryByRole('status', { name: 'Arama yapılıyor' })).not.toBeInTheDocument();
+  });
+
+  it('tarayıcı destekliyorsa mikrofon sonucunu gerçek arama metnine aktarır', () => {
+    class SahteSesTanima {
+      start() {
+        this.onresult?.({ results: [[{ transcript: 'kelebek vana' }]] });
+        this.onend?.();
+      }
+    }
+    window.webkitSpeechRecognition = SahteSesTanima;
+
+    render(
+      <MemoryRouter>
+        <Header menu={[]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sesli aramayı başlat' }));
+    expect(screen.getByRole('searchbox', { name: 'Sitede ara' })).toHaveValue('kelebek vana');
+
+  });
+
   it('arama panelini açar ve gerçek kategori sonucuna bağlantı verir', async () => {
     const kullanici = userEvent.setup();
     render(

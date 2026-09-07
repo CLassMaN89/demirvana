@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
 import '../stiller/header.css';
+import AramaAlani from './AramaAlani';
 import { aramaSonuclariOlustur } from './arama';
 
 export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
@@ -247,21 +248,12 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
           }}
         >
           <div className="site-header__arama-ic icerik-kapsayici">
-            <label className="site-header__arama-alani">
-              <span className="ekran-okuyucu">Sitede ara</span>
-              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" aria-hidden="true">
-                <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" strokeWidth="1.7" />
-                <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-              </svg>
-              <input
-                ref={aramaAlaniRef}
-                type="search"
-                aria-label="Sitede ara"
-                placeholder="Ürün, kategori, proje veya sayfa ara"
-                value={aramaMetni}
-                onChange={(olay) => setAramaMetni(olay.target.value)}
-              />
-            </label>
+            <AramaAlani
+              inputRef={aramaAlaniRef}
+              deger={aramaMetni}
+              degerDegisti={setAramaMetni}
+              placeholder="Ürün, kategori, proje veya sayfa ara"
+            />
 
             <div className="site-header__arama-sonuclari" aria-live="polite">
               {aramaMetni.trim().length < 2 ? (

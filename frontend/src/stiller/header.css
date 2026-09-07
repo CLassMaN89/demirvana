@@ -285,16 +285,28 @@
 
 .site-header__arama-ic { padding-block: 20px 24px; }
 
+.site-header__arama-bileseni {
+  display: grid;
+  gap: 8px;
+}
+
+.site-header__arama-etiketi {
+  color: var(--renk-metin);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 .site-header__arama-alani {
+  position: relative;
   display: flex;
   align-items: center;
-  min-height: 54px;
-  gap: 13px;
-  padding-inline: 18px;
+  height: 36px;
   border: 1px solid color-mix(in srgb, var(--renk-ana) 20%, var(--renk-cizgi));
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--renk-beyaz);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--renk-koyu) 5%, transparent);
   color: var(--renk-ana);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .site-header__arama-alani:focus-within {
@@ -304,12 +316,63 @@
 
 .site-header__arama-alani input {
   width: 100%;
-  padding: 0;
+  height: 100%;
+  padding: 0 40px;
   border: 0;
   outline: 0;
   background: transparent;
   color: var(--renk-metin);
-  font-size: 0.95rem;
+  font-size: 0.8rem;
+}
+
+.site-header__arama-alani input::placeholder {
+  color: color-mix(in srgb, var(--renk-ikincil-metin) 76%, transparent);
+}
+
+.site-header__arama-alani input::-webkit-search-cancel-button,
+.site-header__arama-alani input::-webkit-search-decoration,
+.site-header__arama-alani input::-webkit-search-results-button,
+.site-header__arama-alani input::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+.site-header__arama-sol-simge,
+.site-header__sesli-arama {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  display: grid;
+  width: 36px;
+  height: 100%;
+  color: var(--renk-ikincil-metin);
+  place-items: center;
+}
+
+.site-header__arama-sol-simge { left: 0; pointer-events: none; }
+
+.site-header__sesli-arama {
+  right: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.site-header__sesli-arama:hover,
+.site-header__sesli-arama:focus-visible,
+.site-header__sesli-arama--dinliyor {
+  background: color-mix(in srgb, var(--renk-acik) 72%, var(--renk-beyaz));
+  color: var(--renk-ana);
+}
+
+.site-header__arama-yukleniyor {
+  animation: arama-yukleniyor-donus 700ms linear infinite;
+}
+
+@keyframes arama-yukleniyor-donus {
+  to { transform: rotate(360deg); }
 }
 
 .site-header__arama-sonuclari p {
@@ -491,5 +554,7 @@
   .site-header__vana-menusu,
   .site-header__arama-paneli,
   .site-header__arama-dugmesi,
+  .site-header__arama-yukleniyor,
+  .site-header__sesli-arama,
   .site-header__arama-sonuclari a { animation: none; transition: none; }
 }
