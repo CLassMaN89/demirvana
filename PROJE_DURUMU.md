@@ -100,10 +100,19 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Hero istatistikleri toplam proje, benzersiz konum, sektör ve yıl aralığını canlı kayıtlardan hesaplar; mevcut saha galerisi ve erişilebilir büyütme modalı korunur.
 - Referans hero, istatistik, liste, arama, sonuç, kart detayı, boş durum, daha fazla, yurtdışı ve galeri metinleri için 23 `site_ayarlari` anahtarı eklendi; bütün renkler merkezi tema değişkenlerinden türetilir.
 - Referans kartı açma, hover ve giriş hareketleri azaltılmış hareket tercihinde kapatılır; masaüstünde iki, tablet ve telefonda tek sütun kullanılır.
+- `/teknik` rotası, iki sütunlu doküman kategorileri ve sayfa içinde açılan PDF görüntüleyicisi bulunan bağımsız `TeknikSayfasi` bileşenine taşındı.
+- `teknik_dokuman_kategorileri` ve `teknik_dokumanlar` tabloları eklendi; kategori, açıklama, ikon, PDF yolu, boyut, sayfa sayısı, sıralama ve kullanıcı izinleri admin paneli için ayrı alanlarda tutulur.
+- Teknik hero ve PDF arayüzündeki 12 metin `site_ayarlari` üzerinden yönetilebilir hâle getirildi; bütün sayfa renkleri mevcut merkezi tema değişkenlerinden türetilir.
+- `/api/teknik-dokumanlar` kategorileri doküman ağacıyla döndürür; fiziksel dosyası bulunmayan kayıt ziyaretçiye ilan edilmez.
+- `/dokumanlar/{slug}` ucu yalnız aktif ve kayıtlı PDF dosyalarını güvenli kök denetimiyle sunar; dizin geçişi engellenir ve PDF.js için tekli HTTP byte-range (`206`/`416`) desteklenir.
+- Kullanıcının `pdf/ceviri_tablosu.pdf` dosyası değiştirilmeden örnek Teknik Tablo olarak bağlandı.
+- Yerel worker kullanan PDF.js görüntüleyicisine sayfa küçük görselleri, önceki/sonraki sayfa, %50–200 yakınlaştırma, izin kontrollü indirme/yeni sekme ve Escape ile kapatma eklendi.
+- PDF.js ana paketi yalnız belge açıldığında yüklenir; üretim ana JavaScript paketi 724,54 kB'dan 289,16 kB'a düşürüldü.
+- Teknik sayfa masaüstünde iki, tablet/telefonda tek kategori sütunu kullanır; telefonda PDF küçük görselleri yatay şeride dönüşür ve araç çubuğu satır kırar.
 
 ## Mevcut durum
 
-Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi, dinamik footer ve admin yönetimine hazır teknik SEO altyapısı tamamlandı. React frontend, PHP HTML/API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi, dinamik footer, admin yönetimine hazır SEO altyapısı ve PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. React frontend, PHP HTML/API, güvenli PDF sunumu ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -121,6 +130,9 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `docs/superpowers/plans/2026-09-07-admin-yonetimli-seo-uygulama-plani.md`
 - `docs/superpowers/specs/2026-09-07-referanslar-gecisli-tasarim.md`
 - `docs/superpowers/plans/2026-09-07-referanslar-gecisli-uygulama-plani.md`
+- `docs/superpowers/specs/2026-09-07-teknik-dokuman-merkezi-tasarimi.md`
+- `docs/superpowers/plans/2026-09-07-teknik-dokuman-merkezi-uygulama-plani.md`
+- `pdf/ceviri_tablosu.pdf`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 - `backend/` altındaki PHP API dosyaları
 - `veritabani/demirvana.sql`
@@ -132,7 +144,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 14 test dosyasında 45 test, 0 hata.
+- Frontend testleri: 18 test dosyasında 53 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -161,6 +173,12 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - SEO canlı tarayıcı doğrulamasında konsol hatası veya uyarı görülmedi; Vite üretim derlemesi, 10 PHP dosyasının sözdizimi, PHP API testi ve şema yapısal testi başarılıdır.
 - Yeni Referanslar görünümü 375px, 768px, 1440px ve 1920px genişliklerde doğrulandı; yatay taşma ve konsol hatası yok, kart akordeonu bütün hedeflerde çalışıyor.
 - Canlı MariaDB içe aktarımında 23 Referanslar sayfası ayarı oluştu; `/api/site-ayarlari` üzerinden hero başlığı okunarak React görünümünde doğrulandı.
+- Teknik doküman şeması iki kez içe aktarıldı; 2 etkin kategori, 1 etkin doküman ve 12 etkin Teknik sayfa ayarı oluştu, örnek doküman çoğalmadı.
+- `/api/teknik-dokumanlar` canlı olarak 2 kategori ve 1 kayıtlı doküman döndürdü.
+- `/dokumanlar/ceviri-tablosu` tam istekte `200`, 297187 bayt ve `application/pdf`; `bytes=0-99` isteğinde `206` ve `bytes 0-99/297187` döndürdü.
+- Bilinmeyen ve dizin geçişine benzeyen doküman adresleri canlı sunucuda `404`; birim doğrulamasında kök dışı PDF yolu reddedildi.
+- Gerçek PDF 375×812, 768×1024, 1440×1000 ve 1920×1080 görünümlerinde açıldı; canvas 596×842 piksel çizildi, `1 / 1`, indirme ve kapatma kontrolleri görüldü, sayfa düzeyinde yatay taşma oluşmadı.
+- Üretim derlemesinde PDF.js ayrı, gerektiğinde yüklenen 435,21 kB pakete ayrıldı; ana JavaScript 289,16 kB ve gzip 91,51 kB olarak üretildi.
 
 ## Bilinen durumlar
 
@@ -171,7 +189,8 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - Kullanıcının sağladığı kök `Carousel/` klasörü değiştirilmeden korunur; frontend kendi `public/assets/carousel/` kopyalarını kullanır.
 - Referans galerisindeki başlangıç fotoğrafları kullanıcının ekran görüntüsünden kadrajlanır; yönetim panelinde özgün yüksek çözünürlüklü dosyalarla değiştirilebilir.
 - Google Search Console doğrulama kodu veri alanı hazırdır; üretim alan adı yayına alındığında doğrulama ve sitemap gönderimi admin/dağıtım aşamasında yapılmalıdır.
+- Yeni ve önbelleksiz tarayıcı oturumunda mevcut `/favicon.ico` dosyası olmadığı için tek bir 404 konsol kaydı oluşur; Teknik sayfa/PDF isteklerinden kaynaklanmaz ve yalnız istenen alanı değiştirme kuralı nedeniyle global `frontend/index.html` bu görevde değiştirilmedi.
 
 ## Sıradaki adım
 
-Geçişli Referanslar sayfası tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer ve diğer tamamlanmış sayfaları koru.
+PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar ve diğer tamamlanmış sayfaları koru.

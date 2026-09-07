@@ -40,7 +40,7 @@
 - JSON category shape: `{ id, dil_kodu, ad, slug, aciklama, ikon_adi, siralama, dokumanlar: TeknikDokuman[] }`.
 - JSON document shape: `{ id, baslik, slug, dosya_adresi, orijinal_dosya_adi, alternatif_aciklama, dosya_boyutu, sayfa_sayisi, indirmeye_izin_var_mi, yeni_sekmede_acmaya_izin_var_mi, siralama }`.
 
-- [ ] **Step 1: Write the failing schema and PHP contract tests**
+- [x] **Step 1: Write the failing schema and PHP contract tests**
 
 Add both table names to `veritabani/sema_dogrulama.ps1`. Add this contract test to `backend/tests/api_dogrulama.php`:
 
@@ -54,7 +54,7 @@ if (($dokumanAgaci[0]['dokumanlar'][0]['baslik'] ?? null) !== 'Çeviri Tablosu')
 }
 ```
 
-- [ ] **Step 2: Run tests and verify failure**
+- [x] **Step 2: Run tests and verify failure**
 
 Run:
 
@@ -65,7 +65,7 @@ powershell -ExecutionPolicy Bypass -File veritabani/sema_dogrulama.ps1
 
 Expected: schema test reports missing technical tables and PHP reports undefined `teknikDokumanAgaciOlustur`.
 
-- [ ] **Step 3: Add Turkish tables and repeatable seed data**
+- [x] **Step 3: Add Turkish tables and repeatable seed data**
 
 Add `teknik_dokuman_kategorileri` and `teknik_dokumanlar` exactly as specified in the design. Enforce unique `(dil_kodu, slug)`, an indexed active ordering, a category foreign key with `ON UPDATE CASCADE ON DELETE RESTRICT`, PDF-only MIME default, non-negative file size/page count, and boolean defaults.
 
@@ -86,7 +86,7 @@ VALUES
 ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `baslik` = VALUES(`baslik`), `dosya_yolu` = VALUES(`dosya_yolu`), `dosya_boyutu` = VALUES(`dosya_boyutu`), `sayfa_sayisi` = VALUES(`sayfa_sayisi`), `siralama` = VALUES(`siralama`);
 ```
 
-- [ ] **Step 4: Implement repository tree and endpoint**
+- [x] **Step 4: Implement repository tree and endpoint**
 
 Implement a flat category query plus a document query and group with:
 
@@ -111,11 +111,11 @@ public static function teknikDokumanAgaciOlustur(array $kategoriler, array $doku
 
 Add controller passthrough and `/api/teknik-dokumanlar` to `$sabitRotalar`. `teknikDokuman(string $slug)` must return the active record with category active check for Task 2.
 
-- [ ] **Step 5: Add admin-managed Technical page text seeds**
+- [x] **Step 5: Add admin-managed Technical page text seeds**
 
 Add `site_ayarlari` keys for `teknik_hero_basligi`, `teknik_hero_aciklamasi`, `teknik_slogan_satir_1`, `teknik_slogan_satir_2`, `teknik_pdf_goruntule_metni`, `teknik_bos_kategori_metni`, `teknik_pdf_yukleniyor_metni`, `teknik_pdf_hata_basligi`, `teknik_pdf_hata_aciklamasi`, `teknik_pdf_indir_metni`, `teknik_pdf_yeni_sekme_metni`, `teknik_pdf_kapat_etiketi`.
 
-- [ ] **Step 6: Run tests and import schema twice**
+- [x] **Step 6: Run tests and import schema twice**
 
 Run the schema and PHP commands from Step 2, then:
 
@@ -127,7 +127,7 @@ Run the schema and PHP commands from Step 2, then:
 
 Expected: all tests pass and count is exactly `1`.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```powershell
 git add veritabani backend
@@ -146,7 +146,7 @@ git commit -m "feat: teknik dokuman veri sozlesmesini ekle"
 - Consumes: `SiteDeposu::teknikDokuman(string $slug): ?array`.
 - Produces: `PdfDosyaSunucusu::guvenliYol(string $pdfKoku, string $goreliYol): ?string`, `PdfDosyaSunucusu::gonder(array $dokuman, string $pdfKoku): never`, `GET /dokumanlar/{slug}`.
 
-- [ ] **Step 1: Write failing path-security tests**
+- [x] **Step 1: Write failing path-security tests**
 
 ```php
 $pdfKoku = realpath(__DIR__ . '/../../pdf');
@@ -160,11 +160,11 @@ if (!str_ends_with((string) PdfDosyaSunucusu::guvenliYol($pdfKoku, 'ceviri_tablo
 
 Use the authorized project asset `pdf/ceviri_tablosu.pdf` as the valid-path fixture; the test must only read it.
 
-- [ ] **Step 2: Run PHP test and verify failure**
+- [x] **Step 2: Run PHP test and verify failure**
 
 Expected: FAIL because `PdfDosyaSunucusu` does not exist.
 
-- [ ] **Step 3: Implement safe resolution and streaming**
+- [x] **Step 3: Implement safe resolution and streaming**
 
 `guvenliYol` must decode no URL fragments, reject absolute paths and non-`.pdf` extensions, resolve with `realpath`, and require the result to start with the resolved PDF root plus `DIRECTORY_SEPARATOR`.
 
@@ -179,7 +179,7 @@ header('Content-Disposition: inline; filename="' . $guvenliDosyaAdi . '"');
 
 Parse only a single `bytes=baslangic-bitis` range. Return `206` with `Content-Range` for valid ranges, `416` for invalid ranges, otherwise `200`. Stream in 64 KiB chunks with `fseek`; never load the complete PDF into PHP memory.
 
-- [ ] **Step 4: Route registered documents before the HTML fallback**
+- [x] **Step 4: Route registered documents before the HTML fallback**
 
 In `backend/public/index.php`, match `#^/dokumanlar/([^/]+)$#`, validate slug, fetch the active record, return 404 when absent, and call:
 
@@ -191,7 +191,7 @@ Add `/dokumanlar` to the Vite development proxy with the same PHP target used by
 
 Filter the JSON category tree through `PdfDosyaSunucusu::guvenliYol` before responding so a database record whose physical file is missing is not advertised to visitors.
 
-- [ ] **Step 5: Verify real headers and commit**
+- [x] **Step 5: Verify real headers and commit**
 
 After importing Task 1 schema, verify:
 
@@ -223,7 +223,7 @@ git commit -m "feat: pdf dosyalarini guvenli sun"
 **Interfaces:**
 - Produces: `veri.teknik_dokumanlar`, `pdfBelgesiYukle(adres): Promise<PDFDocumentProxy>`, `pdfSayfasiCiz(pdf, sayfaNo, canvas, olcek): Promise<void>`.
 
-- [ ] **Step 1: Write failing API request test**
+- [x] **Step 1: Write failing API request test**
 
 Extend the current `siteVerileriniGetir` test:
 
@@ -232,13 +232,13 @@ expect(istenenYollar).toContain('/api/teknik-dokumanlar');
 expect(veri.teknik_dokumanlar[0].dokumanlar[0].baslik).toBe('Çeviri Tablosu');
 ```
 
-- [ ] **Step 2: Run the focused test and verify failure**
+- [x] **Step 2: Run the focused test and verify failure**
 
 Run: `npm test -- --run src/servisler/api.test.js`
 
 Expected: FAIL because no technical-document request is made.
 
-- [ ] **Step 3: Install and wire PDF.js**
+- [x] **Step 3: Install and wire PDF.js**
 
 Run:
 
@@ -270,11 +270,11 @@ export async function pdfSayfasiCiz(pdf, sayfaNo, canvas, olcek) {
 }
 ```
 
-- [ ] **Step 4: Test adapter delegation**
+- [x] **Step 4: Test adapter delegation**
 
 Mock `pdfjs-dist` and verify `pdfBelgesiYukle('/dokumanlar/ceviri-tablosu')` calls `getDocument` with that URL. Mock a page/render task and verify canvas width/height are set from the viewport.
 
-- [ ] **Step 5: Run focused tests and commit**
+- [x] **Step 5: Run focused tests and commit**
 
 ```powershell
 npm test -- --run src/servisler/api.test.js src/servisler/pdfBelgesi.test.js
@@ -292,7 +292,7 @@ git commit -m "feat: pdfjs veri akisini ekle"
 - Consumes: `dokuman`, `siteAyarlari`, injectable `belgeYukleyici`, injectable `sayfaCizici`, `onKapat`.
 - Produces: selected-document viewer with page, zoom, thumbnail, download, new-tab and close controls.
 
-- [ ] **Step 1: Write failing interaction tests**
+- [x] **Step 1: Write failing interaction tests**
 
 Use a fake PDF `{ numPages: 2, destroy: vi.fn(), getPage: vi.fn() }` and injected async renderer. Assert:
 
@@ -308,23 +308,23 @@ expect(screen.getByRole('link', { name: 'İndir' })).toHaveAttribute('download',
 
 Add separate tests for `indirmeye_izin_var_mi = 0`, loader rejection, Escape close, and focus return.
 
-- [ ] **Step 2: Run test and verify failure**
+- [x] **Step 2: Run test and verify failure**
 
 Run: `npm test -- --run src/bilesenler/PdfGoruntuleyici.test.jsx`
 
 Expected: FAIL because component does not exist.
 
-- [ ] **Step 3: Implement document lifecycle**
+- [x] **Step 3: Implement document lifecycle**
 
 On `dokuman.dosya_adresi` change, set loading state, load the PDF, set page `1`, render the main canvas and page thumbnails, and call `pdf.destroy()` during cleanup. Guard each awaited result with an `etkin` boolean so stale documents cannot update state.
 
 Clamp zoom to `0.5`–`2.0` in `0.1` steps. Disable previous on page 1 and next on the last page. Use `Intl.NumberFormat('tr-TR')` to present file size in MB/KB.
 
-- [ ] **Step 4: Implement toolbar and accessibility**
+- [x] **Step 4: Implement toolbar and accessibility**
 
 Use lucide-react icons with visible Turkish labels for download/new-tab and `aria-label` for icon-only page/zoom/close controls. Add `aria-live="polite"` to load/error state and `aria-current="page"` to the active thumbnail. Escape calls `onKapat`.
 
-- [ ] **Step 5: Run viewer tests and commit**
+- [x] **Step 5: Run viewer tests and commit**
 
 ```powershell
 npm test -- --run src/bilesenler/PdfGoruntuleyici.test.jsx
@@ -346,7 +346,7 @@ git commit -m "feat: pdf goruntuleyici bilesenini ekle"
 - Consumes: `veri.teknik_dokumanlar`, `veri.site_ayarlari`, `PdfGoruntuleyici`.
 - Produces: independent `/teknik` page; `IcerikSayfasi` continues serving only Kurumsal, Sertifikalar and İletişim.
 
-- [ ] **Step 1: Write failing page tests**
+- [x] **Step 1: Write failing page tests**
 
 Render two categories with one PDF and assert:
 
@@ -361,13 +361,13 @@ expect(screen.getByTestId('pdf-goruntuleyici')).toBeInTheDocument();
 
 Mock `PdfGoruntuleyici` in the page test so PDF rendering remains the component test’s responsibility.
 
-- [ ] **Step 2: Run focused page tests and verify failure**
+- [x] **Step 2: Run focused page tests and verify failure**
 
 Run: `npm test -- --run src/sayfalar/TeknikSayfasi.test.jsx src/App.test.jsx`
 
 Expected: FAIL because `/teknik` still renders `IcerikSayfasi`.
 
-- [ ] **Step 3: Implement the page structure**
+- [x] **Step 3: Implement the page structure**
 
 Create a theme-driven hero, two-column category grid and document buttons. Maintain `seciliDokuman` and the opening button ref. After selection, render `PdfGoruntuleyici` below the category grid and call `scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })` only after the viewer mounts.
 
@@ -382,7 +382,7 @@ const KATEGORI_IKONLARI = {
 
 Unknown names use `FileText`; do not construct component names from database text.
 
-- [ ] **Step 4: Replace only the Technical route**
+- [x] **Step 4: Replace only the Technical route**
 
 In `App.jsx`:
 
@@ -395,11 +395,11 @@ In `App.jsx`:
 
 Keep every other route byte-for-byte unchanged.
 
-- [ ] **Step 5: Implement responsive styles**
+- [x] **Step 5: Implement responsive styles**
 
 Use existing `--renk-*` variables only. Desktop category grid is two columns; below 1024px it is one. Viewer layout uses `minmax(0, 1fr)` to prevent overflow; at 639px thumbnails become a horizontal strip and toolbar wraps. Add visible `:focus-visible` states and a reduced-motion media query.
 
-- [ ] **Step 6: Run page/style tests and commit**
+- [x] **Step 6: Run page/style tests and commit**
 
 ```powershell
 npm test -- --run src/sayfalar/TeknikSayfasi.test.jsx src/stiller/teknik.test.js src/App.test.jsx
@@ -417,7 +417,7 @@ git commit -m "feat: teknik dokuman merkezini ekle"
 - Consumes: Tasks 1–5.
 - Produces: verified continuation point for the next session.
 
-- [ ] **Step 1: Run the complete automated suite**
+- [x] **Step 1: Run the complete automated suite**
 
 ```powershell
 cd frontend
@@ -430,11 +430,11 @@ powershell -ExecutionPolicy Bypass -File veritabani/sema_dogrulama.ps1
 
 Expected: all tests and production build pass.
 
-- [ ] **Step 2: Verify live API and PDF headers**
+- [x] **Step 2: Verify live API and PDF headers**
 
 Verify `/api/teknik-dokumanlar` returns two categories and one document, `/dokumanlar/ceviri-tablosu` returns 200, byte range returns 206, traversal-like and unknown slugs return 400/404, and MIME is `application/pdf`.
 
-- [ ] **Step 3: Verify the real PDF in browsers**
+- [x] **Step 3: Verify the real PDF in browsers**
 
 At 375×812, 768×1024, 1440×1000 and 1920×1080:
 
@@ -445,11 +445,11 @@ At 375×812, 768×1024, 1440×1000 and 1920×1080:
 - verify console has no errors;
 - capture one desktop and one mobile screenshot for visual review, then move temporary screenshots outside the workspace.
 
-- [ ] **Step 4: Update project status**
+- [x] **Step 4: Update project status**
 
 Record exact test counts, tables, endpoints, live PDF result, responsive widths, changed files, known browser limitations and the next requested task in `PROJE_DURUMU.md`. Mark completed plan checkboxes only for verified steps.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```powershell
 git add PROJE_DURUMU.md docs/superpowers/plans/2026-09-07-teknik-dokuman-merkezi-uygulama-plani.md
