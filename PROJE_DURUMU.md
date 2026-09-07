@@ -119,6 +119,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - `/api/kurumsal` ucu 5 değer, 13 ürün grubu ve 2 ekip kaydını dil/sıralama alanlarıyla döndürür; örnek geliştirme verisi aynı sözleşmeyi korur.
 - İlk yüklemede kullanılan 10 ayrı HTTP isteği `/api/baslangic` altında tek yanıtta birleştirildi; bağımsız API uçları admin ve bölüm bazlı kullanım için korunur.
 - Sayfa geçişinde eski kaydırma konumunun taşınması giderildi; rota değiştiğinde içerik, global yumuşak kaydırma davranışından etkilenmeden anında sayfanın üstünden başlar.
+- Teknik hero başlığına 21st.dev Text Loop referansına uyarlanmış harf harf girişli metin döngüsü eklendi; `TEKNİK` sabit kalırken `TABLOLAR` ve `KULLANMA TALİMATLARI` dönüşümlü görünür.
+- Dönen başlık metinleri mevcut teknik kategori kayıtlarından, renkleri merkezi `--renk-ana` ve `--renk-koyu` tema değişkenlerinden alınır; ek animasyon paketi yüklenmez.
+- Başlık geçiş süresi `teknik_baslik_gecis_suresi` site ayarıyla milisaniye cinsinden yönetilebilir; en uzun yönetilebilir metin görünmez ölçü olarak ayrıldığı için geçişte yerleşim sıçraması oluşmaz.
+- Teknik başlık animasyonu azaltılmış hareket tercihinde ilk metinde sabitlenir ve yanıp sönen imleç kaldırılır.
 
 ## Mevcut durum
 
@@ -154,7 +158,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 20 test dosyasında 59 test, 0 hata.
+- Frontend testleri: 21 test dosyasında 62 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -196,6 +200,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kurumsal şeması iki kez içe aktarıldı; 5 değer, 13 ürün grubu ve 2 ekip kaydı çoğalmadan korundu. `/api/kurumsal` aynı sayımları canlı döndürdü.
 - İlk Kurumsal görünüm süresi yerel geliştirme ortamında üç ölçümde yaklaşık 1,88–1,90 saniyeden 0,66–0,69 saniyeye düştü; 20 yinelenen bölüm isteği yerine iki React Strict Mode `/api/baslangic` isteği 26–76 ms içinde tamamlandı.
 - Referanslar sayfasında `scrollY=2237` konumundan Teknik sayfasına geçiş canlı Chrome testinde `scrollY=0` ile sonuçlandı.
+- Teknik Text Loop başlığı 375, 768, 1440 ve 1920px genişliklerde doğrulandı; `TABLOLAR` metni 2600ms sonra `KULLANMA TALİMATLARI` metnine geçti, tema renkli geçiş çalıştı ve yatay taşma oluşmadı.
+- `teknik_baslik_gecis_suresi=2600` ayarı canlı MariaDB ve `/api/baslangic` verisinde doğrulandı; şema iki kez içe aktarıldığında ayar çoğalmadı.
 
 ## Bilinen durumlar
 
@@ -210,4 +216,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Kurumsal sayfa ile yenileme/geçiş performansı tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Teknik ve diğer tamamlanmış sayfaları koru.
+Teknik hero Text Loop animasyonu tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Kurumsal ve Teknik sayfanın diğer alanlarını koru.

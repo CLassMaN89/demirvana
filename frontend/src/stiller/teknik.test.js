@@ -12,4 +12,10 @@ describe('Teknik sayfası responsive stilleri', () => {
     expect(teknikStilleri).toMatch(/\.teknik-dokuman::before[^}]*transform: scaleY\(0\)[^}]*transform-origin: top/);
     expect(teknikStilleri).toMatch(/\.teknik-dokuman:hover::before[^}]*transform: scaleY\(1\)/);
   });
+
+  it('dönen başlığı merkezi tema renkleriyle ve harf geçişiyle gösterir', () => {
+    expect(teknikStilleri).toMatch(/\.metin-dongusu__karakter[^}]*color: var\(--renk-ana\)/);
+    expect(teknikStilleri).toMatch(/@keyframes metin-dongusu-karakter/);
+    expect(teknikStilleri).toMatch(/prefers-reduced-motion: reduce[\s\S]*?\.metin-dongusu__karakter/);
+  });
 });

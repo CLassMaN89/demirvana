@@ -74,7 +74,7 @@ describe('App veri entegrasyonu', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('heading', { name: 'Teknik' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Teknik tablolar' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'TEKNİK TABLOLAR' })).toBeInTheDocument();
   });
 

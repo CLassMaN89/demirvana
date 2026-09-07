@@ -385,7 +385,8 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('teknik_pdf_indir_metni', 'İndir', 'metin', 'PDF indirme bağlantısı metni'),
     ('teknik_pdf_yeni_sekme_metni', 'Yeni sekmede aç', 'metin', 'PDF yeni sekme bağlantısı metni'),
     ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi'),
-    ('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png', 'gorsel', 'Teknik doküman listelerinde kullanılan şeffaf PDF ikonu')
+    ('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png', 'gorsel', 'Teknik doküman listelerinde kullanılan şeffaf PDF ikonu'),
+    ('teknik_baslik_gecis_suresi', '2600', 'sayi', 'Teknik hero dönen başlığının milisaniye cinsinden bekleme süresi')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES

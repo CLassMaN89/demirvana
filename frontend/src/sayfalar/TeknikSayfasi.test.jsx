@@ -32,7 +32,7 @@ describe('TeknikSayfasi', () => {
     const kullanici = userEvent.setup();
     render(<TeknikSayfasi kategoriler={kategoriler} siteAyarlari={{ teknik_hero_basligi: 'Teknik' }} />);
 
-    expect(screen.getByRole('heading', { name: 'Teknik', level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Teknik tablolar ve kullanma talimatları', level: 1 })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'TEKNİK TABLOLAR' })).toBeInTheDocument();
     expect(screen.getByText('2 doküman')).toBeInTheDocument();
     expect(screen.getByText('0 doküman')).toBeInTheDocument();

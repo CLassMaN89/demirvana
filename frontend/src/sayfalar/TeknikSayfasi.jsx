@@ -1,5 +1,6 @@
 import { BookOpen, FileSpreadsheet, FileText, ArrowRight } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import MetinDongusu from '../bilesenler/MetinDongusu';
 import '../stiller/teknik.css';
 
 // Ağır PDF.js paketi yalnız ziyaretçi bir belge açtığında indirilerek ilk sayfa yükü hafif tutulur.
@@ -14,6 +15,11 @@ export default function TeknikSayfasi({ kategoriler = [], siteAyarlari = {} }) {
   const [seciliDokuman, setSeciliDokuman] = useState(null);
   const goruntuleyiciRef = useRef(null);
   const ayar = (anahtar, yedek) => siteAyarlari?.[anahtar] || yedek;
+  const heroBasligi = ayar('teknik_hero_basligi', 'Teknik');
+  const donenBasliklar = kategoriler.map((kategori) =>
+    kategori.ad.replace(/^TEKNİK\s+/i, '')
+  );
+  const erisilebilirBaslik = `${heroBasligi} ${donenBasliklar.join(' ve ').toLocaleLowerCase('tr-TR')}`;
 
   useEffect(() => {
     if (!seciliDokuman || !goruntuleyiciRef.current) return;
@@ -28,7 +34,13 @@ export default function TeknikSayfasi({ kategoriler = [], siteAyarlari = {} }) {
         <div className="icerik-kapsayici teknik-hero__icerik">
           <div className="teknik-hero__metin">
             <span className="teknik-hero__etiket">Teknik Doküman Merkezi</span>
-            <h1>{ayar('teknik_hero_basligi', 'Teknik')}</h1>
+            <h1 aria-label={erisilebilirBaslik}>
+              <span className="teknik-hero__sabit-baslik">{heroBasligi}</span>
+              <MetinDongusu
+                metinler={donenBasliklar}
+                gecisSuresi={ayar('teknik_baslik_gecis_suresi', '2600')}
+              />
+            </h1>
             <p>{ayar('teknik_hero_aciklamasi', 'Ürünlerimize ait teknik tabloları ve kullanım talimatlarını buradan inceleyebilirsiniz.')}</p>
           </div>
           <div className="teknik-hero__gorsel" aria-hidden="true">

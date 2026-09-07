@@ -5,7 +5,19 @@
 .teknik-hero__metin { padding-block: 35px; }
 .teknik-hero__etiket { display: inline-flex; align-items: center; gap: 8px; color: var(--renk-ana); font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .teknik-hero__etiket::before { content: ''; width: 24px; height: 2px; background: var(--renk-ana); }
-.teknik-hero h1 { margin: 7px 0 8px; color: var(--renk-koyu); font-size: clamp(2.25rem, 4vw, 3.6rem); font-weight: 700; line-height: 1; letter-spacing: -.045em; text-transform: uppercase; }
+.teknik-hero h1 { display: flex; min-width: 0; align-items: baseline; gap: .24em; margin: 7px 0 8px; color: var(--renk-koyu); font-size: clamp(2.25rem, 4vw, 3.6rem); font-weight: 700; line-height: 1; letter-spacing: -.045em; text-transform: uppercase; }
+.teknik-hero__sabit-baslik { flex: 0 0 auto; }
+.metin-dongusu { position: relative; display: inline-grid; min-width: 0; max-width: 100%; grid-template-areas: 'metin'; align-items: baseline; font-size: .68em; letter-spacing: -.02em; }
+.metin-dongusu__olcu, .metin-dongusu__metin { grid-area: metin; white-space: nowrap; }
+.metin-dongusu__olcu { visibility: hidden; pointer-events: none; }
+.metin-dongusu__metin { display: inline-flex; align-items: baseline; }
+.metin-dongusu__metin::after { content: ''; width: .07em; height: .82em; margin-left: .11em; background: var(--renk-ana); animation: metin-dongusu-imlec 760ms steps(1, end) infinite; }
+.metin-dongusu__karakter { display: inline-block; color: var(--renk-ana); animation: metin-dongusu-karakter 520ms cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--karakter-sirasi) * 28ms); }
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .metin-dongusu__karakter { color: transparent; background: linear-gradient(105deg, var(--renk-ana), var(--renk-koyu)); background-clip: text; -webkit-background-clip: text; }
+}
+@keyframes metin-dongusu-karakter { from { opacity: 0; filter: blur(5px); transform: translateY(.45em) rotateX(-65deg); } to { opacity: 1; filter: none; transform: translateY(0) rotateX(0); } }
+@keyframes metin-dongusu-imlec { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
 .teknik-hero__metin p { max-width: 690px; margin: 0; color: var(--renk-ikincil); font-size: .92rem; line-height: 1.65; }
 .teknik-hero__gorsel { position: relative; align-self: stretch; display: flex; align-items: center; justify-content: flex-end; gap: 32px; color: var(--renk-ana); }
 .teknik-hero__gorsel > p { position: relative; z-index: 2; margin: 0; padding-left: 18px; border-left: 2px solid var(--renk-ana); color: var(--renk-koyu); font-size: .79rem; line-height: 1.5; }
@@ -82,7 +94,8 @@
   .teknik-hero__icerik { min-height: 170px; grid-template-columns: 1fr; }
   .teknik-hero__metin { padding-block: 28px; }
   .teknik-hero__gorsel { display: none; }
-  .teknik-hero h1 { font-size: clamp(2rem, 10vw, 2.7rem); }
+  .teknik-hero h1 { align-items: flex-start; flex-direction: column; gap: 5px; font-size: clamp(2rem, 10vw, 2.7rem); }
+  .metin-dongusu { width: 100%; font-size: .56em; }
   .teknik-kategori__ust { grid-template-columns: auto minmax(0, 1fr); padding: 16px; }
   .teknik-kategori__sayac { grid-column: 2; }
   .teknik-dokuman { grid-template-columns: auto minmax(0, 1fr); }
@@ -99,6 +112,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .metin-dongusu__karakter, .metin-dongusu__metin::after { animation: none; }
+  .metin-dongusu__metin::after { display: none; }
   .teknik-dokuman { animation: none; }
   .teknik-dokuman, .teknik-dokuman::before, .teknik-dokuman__eylem svg { transition: none; }
   .teknik-dokuman:hover, .teknik-dokuman:hover .teknik-dokuman__eylem svg { transform: none; }

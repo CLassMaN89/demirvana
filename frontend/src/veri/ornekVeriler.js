@@ -131,6 +131,7 @@ export const ornekVeriler = Object.freeze({
     teknik_pdf_yeni_sekme_metni: 'Yeni sekmede aç',
     teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat',
     teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png',
+    teknik_baslik_gecis_suresi: '2600',
     kurumsal_etiket: 'Kurumsal',
     kurumsal_baslik_satir_1: 'Güvenilir çözümler.',
     kurumsal_baslik_satir_2: 'Sürdürülebilir iş ortaklıkları.',
