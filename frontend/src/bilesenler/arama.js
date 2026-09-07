@@ -2,6 +2,25 @@ function aramaIcinNormallestir(metin) {
   return String(metin ?? '').toLocaleLowerCase('tr-TR').trim();
 }
 
+function kelimelereAyir(metin) {
+  return aramaIcinNormallestir(metin).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+}
+
+function eslesmePuani(sonuc, aranan) {
+  const baslik = aramaIcinNormallestir(sonuc.baslik);
+  const altMetin = aramaIcinNormallestir(sonuc.altMetin);
+
+  if (baslik === aranan) return 0;
+  if (baslik.startsWith(aranan)) return 1;
+  if (kelimelereAyir(baslik).some((kelime) => kelime.startsWith(aranan))) return 2;
+  if (kelimelereAyir(altMetin).some((kelime) => kelime.startsWith(aranan))) return 3;
+
+  // İki harfte metin ortası eşleşmesi çok gürültülü olduğundan yalnız daha uzun sorgularda kullanılır.
+  if (aranan.length >= 3 && baslik.includes(aranan)) return 4;
+  if (aranan.length >= 3 && altMetin.includes(aranan)) return 5;
+  return null;
+}
+
 export function aramaSonuclariOlustur(menu, kaynaklar, sorgu) {
   const aranan = aramaIcinNormallestir(sorgu);
   if (aranan.length < 2) return [];
@@ -13,6 +32,11 @@ export function aramaSonuclariOlustur(menu, kaynaklar, sorgu) {
     ...(kaynaklar.referanslar?.kayitlar ?? []).map((oge) => ({ id: `referans-${oge.id}`, baslik: oge.baslik, altMetin: `${oge.konum} ${oge.kurum}`, tur: 'Referans', baglanti: `/referanslar#referans-${oge.id}` }))
   ];
 
-  // Aynı başlık farklı veri kümelerinde yer alsa bile bağlantısı farklıysa gerçek bir ayrı sonuç olarak korunur.
-  return sonuclar.filter((sonuc) => aramaIcinNormallestir(`${sonuc.baslik} ${sonuc.altMetin ?? ''}`).includes(aranan)).slice(0, 8);
+  // En anlamlı eşleşmeler önce gösterilir; kısa liste dar navbar alanında okunabilirliği korur.
+  return sonuclar
+    .map((sonuc) => ({ sonuc, puan: eslesmePuani(sonuc, aranan) }))
+    .filter(({ puan }) => puan !== null)
+    .sort((a, b) => a.puan - b.puan || a.sonuc.baslik.localeCompare(b.sonuc.baslik, 'tr-TR'))
+    .slice(0, 5)
+    .map(({ sonuc }) => sonuc);
 }

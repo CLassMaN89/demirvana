@@ -80,7 +80,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Navbar araması 288px güvenli genişliğe ayarlandı; `Teklif Al` arama açıkken de görünür ve tıklanabilir durumda tutuldu.
 - Arama açılışına yay eğrili ölçek, kısa blur ve odak parlaması eklendi; sonuçlar ayrı fade/kayma hareketi kullanır.
 - Fare arama veya sonuç kapsayıcısından ayrılsa bile alan açık kalır; yalnız başka yere tıklamada ya da Escape kullanımında kapanır ve sorgu temizlenir.
-- Arama giriş metni 13px/400, sonuç başlığı 13px/500, sonuç türü 10px/600 yapılarak okunabilir hiyerarşi sadeleştirildi.
+- Arama giriş metni 13px/400 ve sonuç türü 10px/600 yapılarak okunabilir hiyerarşi sadeleştirildi.
+- Arama sonuçları tür, 14px/600 başlık ve 11px açıklama şeklinde dikey hiyerarşiye geçirildi; başlık iki satır, açıklama tek satırla sınırlandı.
+- Arama eşleşmeleri tam başlık, başlık başlangıcı, kelime başlangıcı ve uzun sorgu içerme sırasıyla puanlanır; iki harfli sorgularda gürültülü metin ortası eşleşmesi yapılmaz.
+- Navbar sonuç listesi en anlamlı beş kayıtla sınırlandı.
 
 ## Mevcut durum
 
@@ -109,7 +112,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 31 test, 0 hata.
+- Frontend testleri: 33 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -127,6 +130,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - Navbar içi arama canlı görünümde doğrulandı: ayrı sayfa paneli oluşmuyor, alan sağa genişliyor ve sonuç tek satırlık öneri kutusunda yalnızca girişin altında açılıyor.
 - Teklif düğmesinin arama yanında görünür kaldığı ve hero kontrolüne tıklanınca aramanın kapandığı canlı tarayıcıda doğrulandı.
 - Fare ayrıldıktan sonra aramanın açık kaldığı otomatik testte; dış alana tıklanınca kapandığı canlı tarayıcıda yeniden doğrulandı.
+- `su` sorgusunda beş okunabilir sonuç ve `as` sorgusunda sıfır ilgisiz eşleşme canlı tarayıcıda doğrulandı.
 
 ## Bilinen durumlar
 

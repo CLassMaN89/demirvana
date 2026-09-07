@@ -266,8 +266,9 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                                 setAramaMetni('');
                               }}
                             >
-                              <span><strong>{sonuc.baslik}</strong>{sonuc.altMetin ? <small>{sonuc.altMetin}</small> : null}</span>
                               <em>{sonuc.tur}</em>
+                              <strong>{sonuc.baslik}</strong>
+                              {sonuc.altMetin ? <small>{sonuc.altMetin}</small> : null}
                             </Link>
                           </li>
                         ))}

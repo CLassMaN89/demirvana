@@ -82,8 +82,9 @@ describe('Header', () => {
 
     expect(getComputedStyle(arama).fontSize).toBe('13px');
     expect(getComputedStyle(arama).fontWeight).toBe('400');
-    expect(getComputedStyle(sonucBasligi).fontSize).toBe('13px');
-    expect(getComputedStyle(sonucBasligi).fontWeight).toBe('500');
+    expect(getComputedStyle(sonucBasligi).fontSize).toBe('14px');
+    expect(getComputedStyle(sonucBasligi).fontWeight).toBe('600');
+    expect(getComputedStyle(sonucBasligi.closest('a')).display).toBe('grid');
   });
 
   it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
