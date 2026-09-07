@@ -68,6 +68,8 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   return (
     <SayfaIskeleti
       menu={veri.menu}
+      kategoriler={veri.kategoriler}
+      siteAyarlari={veri.site_ayarlari}
       aramaKaynaklari={{ kategoriler: veri.kategoriler, urunler: veri.urunler, referanslar: veri.referanslar }}
     >
       <SayfaGecisi>

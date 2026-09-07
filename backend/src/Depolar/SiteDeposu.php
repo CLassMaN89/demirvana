@@ -23,6 +23,25 @@ final class SiteDeposu
         return $tema;
     }
 
+    public function siteAyarlari(): array
+    {
+        $satirlar = $this->baglanti->query(
+            'SELECT anahtar, deger FROM site_ayarlari WHERE aktif_mi = 1 ORDER BY id'
+        )->fetchAll();
+
+        return self::ayarNesnesiOlustur($satirlar);
+    }
+
+    public static function ayarNesnesiOlustur(array $satirlar): array
+    {
+        $ayarlar = [];
+        foreach ($satirlar as $satir) {
+            $ayarlar[$satir['anahtar']] = $satir['deger'];
+        }
+
+        return $ayarlar;
+    }
+
     public function menu(): array
     {
         $ustMenu = $this->baglanti->query(

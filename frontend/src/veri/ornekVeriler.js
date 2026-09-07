@@ -76,6 +76,29 @@ const referansKayitlari = [
 }));
 
 export const ornekVeriler = Object.freeze({
+  site_ayarlari: {
+    site_adi: 'Demirvana',
+    logo_yolu: '/assets/logo.png',
+    footer_aktif_mi: '1',
+    footer_marka_aktif_mi: '1',
+    footer_marka_sirasi: '1',
+    footer_sirket_aciklamasi: 'Endüstriyel vana üretimi, mühendislik ve satış desteğini güvenilir çözümlerle buluşturuyoruz.',
+    footer_hizli_baglantilar_basligi: 'Hızlı Bağlantılar',
+    footer_hizli_baglantilar_aktif_mi: '1',
+    footer_hizli_baglantilar_sirasi: '2',
+    footer_urunler_basligi: 'Ürün Grupları',
+    footer_urunler_aktif_mi: '1',
+    footer_urunler_sirasi: '3',
+    footer_destek_basligi: 'Destek & İletişim',
+    footer_destek_aktif_mi: '1',
+    footer_destek_sirasi: '4',
+    destek_telefonu: '+90 (212) 297 57 30',
+    destek_eposta: 'dv@demirvana.com',
+    firma_adresi: 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye',
+    footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
+    footer_iletisim_buton_baglantisi: '/iletisim',
+    footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.'
+  },
   tema: {
     ana_mavi: '#28469D',
     koyu_mavi: '#17306F',

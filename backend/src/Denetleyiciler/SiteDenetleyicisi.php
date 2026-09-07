@@ -21,6 +21,7 @@ final class SiteDenetleyicisi
     }
 
     public function tema(): array { return $this->depo->tema(); }
+    public function siteAyarlari(): array { return $this->depo->siteAyarlari(); }
     public function menu(): array { return $this->depo->menu(); }
     public function sliderlar(): array { return $this->depo->sliderlar(); }
     public function kategoriler(): array { return $this->depo->kategoriler(); }

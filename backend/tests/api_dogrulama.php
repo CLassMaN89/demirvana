@@ -41,4 +41,13 @@ if (($menuAgaci[0]['alt_ogeler'][0]['alt_ogeler'][0]['baslik'] ?? null) !== 'Yan
     throw new RuntimeException('Menü alt öğeleri doğru hiyerarşide oluşturulmadı.');
 }
 
+$siteAyarlari = SiteDeposu::ayarNesnesiOlustur([
+    ['anahtar' => 'site_adi', 'deger' => 'Demirvana'],
+    ['anahtar' => 'destek_eposta', 'deger' => 'dv@demirvana.com'],
+]);
+
+if (($siteAyarlari['destek_eposta'] ?? null) !== 'dv@demirvana.com') {
+    throw new RuntimeException('Site ayarları anahtar/değer nesnesine dönüştürülemedi.');
+}
+
 echo "PHP API doğrulamaları başarılı.\n";

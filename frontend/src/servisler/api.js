@@ -40,6 +40,7 @@ export async function veriGetir(
 export async function siteVerileriniGetir(secenekler = {}) {
   // Ana sayfanın bağımsız veri kümelerini paralel almak ilk görünümün bekleme süresini azaltır.
   const istekler = [
+    ['site-ayarlari', ornekVeriler.site_ayarlari],
     ['tema', ornekVeriler.tema],
     ['menu', ornekVeriler.menu],
     ['sliderlar', ornekVeriler.sliderlar],
@@ -55,5 +56,5 @@ export async function siteVerileriniGetir(secenekler = {}) {
     )
   );
 
-  return Object.fromEntries(istekler.map(([anahtar], indeks) => [anahtar, sonuclar[indeks]]));
+  return Object.fromEntries(istekler.map(([anahtar], indeks) => [anahtar.replace('-', '_'), sonuclar[indeks]]));
 }

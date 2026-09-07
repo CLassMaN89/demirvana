@@ -208,7 +208,26 @@ CREATE TABLE IF NOT EXISTS `referans_sektor_eslesmeleri` (
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
     ('site_adi', 'Demirvana', 'metin', 'Tarayıcı ve marka adı'),
-    ('logo_yolu', '/assets/logo.png', 'gorsel', 'Navbar logo dosyası')
+    ('logo_yolu', '/assets/logo.png', 'gorsel', 'Navbar ve footer logo dosyası'),
+    ('footer_aktif_mi', '1', 'sayi', 'Footer genel görünürlük durumu'),
+    ('footer_marka_aktif_mi', '1', 'sayi', 'Footer marka sütunu görünürlük durumu'),
+    ('footer_marka_sirasi', '1', 'sayi', 'Footer marka sütunu sırası'),
+    ('footer_sirket_aciklamasi', 'Endüstriyel vana üretimi, mühendislik ve satış desteğini güvenilir çözümlerle buluşturuyoruz.', 'metin', 'Footer firma tanıtım metni'),
+    ('footer_hizli_baglantilar_basligi', 'Hızlı Bağlantılar', 'metin', 'Footer menü sütunu başlığı'),
+    ('footer_hizli_baglantilar_aktif_mi', '1', 'sayi', 'Footer menü sütunu görünürlük durumu'),
+    ('footer_hizli_baglantilar_sirasi', '2', 'sayi', 'Footer menü sütunu sırası'),
+    ('footer_urunler_basligi', 'Ürün Grupları', 'metin', 'Footer ürün sütunu başlığı'),
+    ('footer_urunler_aktif_mi', '1', 'sayi', 'Footer ürün sütunu görünürlük durumu'),
+    ('footer_urunler_sirasi', '3', 'sayi', 'Footer ürün sütunu sırası'),
+    ('footer_destek_basligi', 'Destek & İletişim', 'metin', 'Footer iletişim sütunu başlığı'),
+    ('footer_destek_aktif_mi', '1', 'sayi', 'Footer iletişim sütunu görünürlük durumu'),
+    ('footer_destek_sirasi', '4', 'sayi', 'Footer iletişim sütunu sırası'),
+    ('destek_telefonu', '+90 (212) 297 57 30', 'telefon', 'Destek telefon numarası'),
+    ('destek_eposta', 'dv@demirvana.com', 'eposta', 'Destek e-posta adresi'),
+    ('firma_adresi', 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye', 'metin', 'Firma açık adresi'),
+    ('footer_iletisim_buton_metni', 'Bizimle iletişime geçin', 'metin', 'Footer iletişim düğmesi metni'),
+    ('footer_iletisim_buton_baglantisi', '/iletisim', 'baglanti', 'Footer iletişim düğmesi bağlantısı'),
+    ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
 
 INSERT INTO `tema_ayarlari` (`anahtar`, `deger`, `aciklama`, `siralama`) VALUES

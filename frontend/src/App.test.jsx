@@ -47,7 +47,8 @@ describe('App veri entegrasyonu', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Test Ürünleri' })).toBeInTheDocument();
+    // Aynı dinamik menü kaydı hem header hem footer içinde erişilebilir olmalıdır.
+    expect(await screen.findAllByRole('link', { name: 'Test Ürünleri' })).toHaveLength(2);
     expect(screen.getByRole('heading', { name: 'API içeriği hazır' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: /öne çıkan içerikler/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'ÜRÜN KATEGORİLERİMİZ' })).toBeInTheDocument();

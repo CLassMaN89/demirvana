@@ -80,15 +80,19 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Navbar araması 288px güvenli genişliğe ayarlandı; `Teklif Al` arama açıkken de görünür ve tıklanabilir durumda tutuldu.
 - Arama açılışına yay eğrili ölçek, kısa blur ve odak parlaması eklendi; sonuçlar ayrı fade/kayma hareketi kullanır.
 - Fare arama veya sonuç kapsayıcısından ayrılsa bile alan açık kalır; yalnız başka yere tıklamada ya da Escape kullanımında kapanır ve sorgu temizlenir.
-- Arama giriş metni 13px/400 ve sonuç türü 10px/600 yapılarak okunabilir hiyerarşi sadeleştirildi.
-- Arama sonuçları tür, 13px/500 başlık ve 11px açıklama şeklinde daha ferah dikey hiyerarşiye geçirildi; başlık iki satır, açıklama tek satırla sınırlandı.
+- Arama giriş metni 14px/400 ve sonuç türü 11px/600 yapılarak okunabilir hiyerarşi güçlendirildi.
+- Arama sonuçları tür, 14px/500 başlık ve 12px açıklama şeklinde daha ferah dikey hiyerarşiye geçirildi; başlık iki satır, açıklama tek satırla sınırlandı.
 - Arama eşleşmeleri tam başlık, başlık başlangıcı, kelime başlangıcı ve uzun sorgu içerme sırasıyla puanlanır; iki harfli sorgularda gürültülü metin ortası eşleşmesi yapılmaz.
 - Navbar sonuç listesi en anlamlı beş kayıtla sınırlandı.
 - Arama panelinin kapanma sınırı tüm header yerine kendi kapsayıcısı olarak düzeltildi; panel fare ayrılınca açık kalır, kendi dışındaki sol tıklamada kapanır.
+- Arama açılış animasyonunun kalıcı `transform`, `filter` ve `will-change` katmanı kaldırıldı; Chrome metni animasyon sonrasında normal katmanda net çizer.
+- Tüm sayfalara tema uyumlu, logolu ve responsive footer eklendi; masaüstünde dört, tablette iki, telefonda tek sütun kullanır.
+- Footer hızlı bağlantıları mevcut menüden, ürün grupları mevcut kategorilerden gelir; telefon, e-posta, adres, buton ve telif metni `/api/site-ayarlari` üzerinden yüklenir.
+- Footer'ın tamamı ile marka, bağlantı, ürün ve destek sütunlarının görünürlük/sıra değerleri ayrı site ayarlarından yönetilir; bütün renkler merkezi tema değişkenlerini kullanır.
 
 ## Mevcut durum
 
-Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yumuşak rota geçişi tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi ve dinamik footer tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -113,7 +117,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 34 test, 0 hata.
+- Frontend testleri: 36 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -132,7 +136,10 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - Teklif düğmesinin arama yanında görünür kaldığı ve hero kontrolüne tıklanınca aramanın kapandığı canlı tarayıcıda doğrulandı.
 - Fare ayrıldıktan sonra aramanın açık kaldığı otomatik testte; dış alana tıklanınca kapandığı canlı tarayıcıda yeniden doğrulandı.
 - `su` sorgusunda beş okunabilir sonuç ve `as` sorgusunda sıfır ilgisiz eşleşme canlı tarayıcıda doğrulandı.
-- `antalya` sorgusunun yeni 13px/500 sonuç tipografisi ve hero alanına sol tıklayınca panelin kapanması canlı tarayıcıda doğrulandı.
+- `antalya` sorgusu ve hero alanına sol tıklayınca panelin kapanması canlı tarayıcıda doğrulandı.
+- Arama panelinin animasyon sonrası normal çizim katmanına dönmesi ve 14px/500 sonuç başlıkları canlı tarayıcıda doğrulandı.
+- Footer masaüstü görünümü, logo, dinamik menü/kategori bağlantıları ve destek bilgileri localhost üzerinde doğrulandı.
+- `/api/site-ayarlari` canlı MariaDB verisinden 21 etkin ayar döndürdü; footer görünürlük değeri `1` olarak doğrulandı.
 
 ## Bilinen durumlar
 

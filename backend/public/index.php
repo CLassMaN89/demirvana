@@ -19,6 +19,7 @@ try {
     $denetleyici = new SiteDenetleyicisi(new SiteDeposu(Veritabani::baglanti()));
 
     $sabitRotalar = [
+        '/api/site-ayarlari' => fn() => $denetleyici->siteAyarlari(),
         '/api/tema' => fn() => $denetleyici->tema(),
         '/api/menu' => fn() => $denetleyici->menu(),
         '/api/sliderlar' => fn() => $denetleyici->sliderlar(),
