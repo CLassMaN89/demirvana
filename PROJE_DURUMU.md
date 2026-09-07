@@ -75,6 +75,8 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Navbar arama alanı Origin UI referansındaki kompakt görünüme uyarlandı; sol arama/yükleme simgesi ve sağ sesli arama düğmesi eklendi.
 - Arama yazılırken 500ms işlem göstergesi çalışır; Web Speech API destekleyen tarayıcılarda Türkçe ses tanıma sonucu gerçek sorguya aktarılır, desteklemeyenlerde mikrofon gizlenir.
 - İkonlar erişilebilir etiketlerle `lucide-react` paketinden alınır; mevcut kategori, ürün, sayfa ve referans sonuç akışı korunur.
+- Site araması tam genişlikte ayrı panel yerine navbar içindeki büyüteçten sağa doğru açılan 420px kompakt alana dönüştürüldü.
+- Arama sonuçları yalnızca sorgu iki karaktere ulaştığında girişin altında tek sütunlu Google benzeri öneri kutusunda görünür; arama açıkken Teklif Al alanı geçici olarak gizlenir.
 
 ## Mevcut durum
 
@@ -103,7 +105,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 27 test, 0 hata.
+- Frontend testleri: 28 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -118,6 +120,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yum
 - Site araması canlı tarayıcı doğrulaması: arama paneli odaklandı, `gazipaşa` sorgusu doğru referansı buldu ve `#referans-1` bağlantısına yönlendirdi.
 - Masaüstü canlı görünümde yatay taşma bulunmadı; `sayfa-giris` animasyonu ve İletişim sonrası arama düğmesi hesaplanan DOM/CSS değerleriyle doğrulandı.
 - Yeni arama alanı canlı tarayıcıda doğrulandı: yükleme göstergesi, Kelebek Vanalar sonucu ve desteklenen Chrome ortamında mikrofon düğmesi görünür; yatay taşma yok.
+- Navbar içi arama canlı görünümde doğrulandı: ayrı sayfa paneli oluşmuyor, alan sağa genişliyor ve sonuç tek satırlık öneri kutusunda yalnızca girişin altında açılıyor.
 
 ## Bilinen durumlar
 

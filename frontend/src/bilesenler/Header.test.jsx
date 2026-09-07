@@ -11,6 +11,29 @@ describe('Header', () => {
     delete window.webkitSpeechRecognition;
   });
 
+  it('aramayı navbar içinde genişletir ve sonuçları yalnız kutunun altında gösterir', () => {
+    render(
+      <MemoryRouter>
+        <Header
+          menu={[{ id: 1, baslik: 'İletişim', baglanti: '/iletisim', alt_ogeler: [] }]}
+          logoYolu="/assets/logo.png"
+          aramaKaynaklari={{
+            kategoriler: [{ id: 8, ad: 'Kelebek Vanalar', slug: 'kelebek-vanalar' }],
+            urunler: [], referanslar: { kayitlar: [] }
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    const arama = screen.getByRole('searchbox', { name: 'Sitede ara' });
+    expect(screen.getByRole('banner')).toHaveClass('site-header--arama-acik');
+    expect(arama.closest('nav')).toBe(screen.getByRole('navigation', { name: 'Ana menü' }));
+
+    fireEvent.change(arama, { target: { value: 'kelebek' } });
+    expect(screen.getByRole('link', { name: /Kelebek Vanalar/i }).closest('.site-header__arama-acilir')).not.toBeNull();
+  });
+
   it('arama yazılırken kısa süreli yükleme göstergesi sunar', () => {
     vi.useFakeTimers();
     render(

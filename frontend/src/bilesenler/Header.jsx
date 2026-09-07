@@ -68,7 +68,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   };
 
   return (
-    <header className="site-header" ref={headerRef}>
+    <header className={`site-header${aramaAcik ? ' site-header--arama-acik' : ''}`} ref={headerRef}>
       <div className="site-header__ic icerik-kapsayici">
         <NavLink className="site-header__logo" to="/" aria-label={`${metinler.siteAdi} ana sayfa`}>
           <img src={logoYolu} alt={metinler.siteAdi} />
@@ -209,24 +209,72 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
             );
           })}
 
-          <button
-            ref={aramaDugmesiRef}
-            className={`site-header__arama-dugmesi${aramaAcik ? ' site-header__arama-dugmesi--acik' : ''}`}
-            type="button"
-            aria-expanded={aramaAcik}
-            aria-controls="site-arama-paneli"
-            aria-label={aramaAcik ? 'Site aramasını kapat' : 'Site aramasını aç'}
-            onClick={() => {
-              setAramaAcik((acik) => !acik);
-              setMenuAcik(false);
-              menuleriKapat();
-            }}
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-              <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" strokeWidth="1.7" />
-              <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            </svg>
-          </button>
+          <div className="site-header__arama-kapsayici">
+            <button
+              ref={aramaDugmesiRef}
+              className={`site-header__arama-dugmesi${aramaAcik ? ' site-header__arama-dugmesi--acik' : ''}`}
+              type="button"
+              aria-expanded={aramaAcik}
+              aria-controls="site-arama-paneli"
+              aria-label={aramaAcik ? 'Site aramasını kapat' : 'Site aramasını aç'}
+              onClick={() => {
+                setAramaAcik((acik) => !acik);
+                setMenuAcik(false);
+                menuleriKapat();
+              }}
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" strokeWidth="1.7" />
+                <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </button>
+
+            {aramaAcik ? (
+              <div
+                className="site-header__arama-acilir"
+                id="site-arama-paneli"
+                onKeyDown={(olay) => {
+                  // Sonuçlara geçilmiş olsa da Escape alanı kapatıp odağı başlangıç düğmesine döndürür.
+                  if (olay.key === 'Escape') {
+                    setAramaAcik(false);
+                    aramaDugmesiRef.current?.focus();
+                  }
+                }}
+              >
+                <AramaAlani
+                  inputRef={aramaAlaniRef}
+                  deger={aramaMetni}
+                  degerDegisti={setAramaMetni}
+                  placeholder="Ürün, kategori, proje veya sayfa ara"
+                />
+
+                {aramaMetni.trim().length >= 2 ? (
+                  <div className="site-header__arama-sonuclari" aria-live="polite">
+                    {aramaSonuclari.length > 0 ? (
+                      <ul>
+                        {aramaSonuclari.map((sonuc) => (
+                          <li key={sonuc.id}>
+                            <Link
+                              to={sonuc.baglanti}
+                              onClick={() => {
+                                setAramaAcik(false);
+                                setAramaMetni('');
+                              }}
+                            >
+                              <span><strong>{sonuc.baslik}</strong>{sonuc.altMetin ? <small>{sonuc.altMetin}</small> : null}</span>
+                              <em>{sonuc.tur}</em>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>Aramanızla eşleşen içerik bulunamadı.</p>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </nav>
 
         <Link className="site-header__teklif" to="/iletisim">
@@ -235,53 +283,6 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
         </Link>
       </div>
 
-      {aramaAcik && (
-        <div
-          className="site-header__arama-paneli"
-          id="site-arama-paneli"
-          onKeyDown={(olay) => {
-            // Sonuç bağlantısına geçilmiş olsa da Escape tüm arama panelini kapatıp odağı düğmeye döndürür.
-            if (olay.key === 'Escape') {
-              setAramaAcik(false);
-              aramaDugmesiRef.current?.focus();
-            }
-          }}
-        >
-          <div className="site-header__arama-ic icerik-kapsayici">
-            <AramaAlani
-              inputRef={aramaAlaniRef}
-              deger={aramaMetni}
-              degerDegisti={setAramaMetni}
-              placeholder="Ürün, kategori, proje veya sayfa ara"
-            />
-
-            <div className="site-header__arama-sonuclari" aria-live="polite">
-              {aramaMetni.trim().length < 2 ? (
-                <p>Aramak için en az iki karakter yazın.</p>
-              ) : aramaSonuclari.length > 0 ? (
-                <ul>
-                  {aramaSonuclari.map((sonuc) => (
-                    <li key={sonuc.id}>
-                      <Link
-                        to={sonuc.baglanti}
-                        onClick={() => {
-                          setAramaAcik(false);
-                          setAramaMetni('');
-                        }}
-                      >
-                        <span><strong>{sonuc.baslik}</strong>{sonuc.altMetin ? <small>{sonuc.altMetin}</small> : null}</span>
-                        <em>{sonuc.tur}</em>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Aramanızla eşleşen içerik bulunamadı.</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
