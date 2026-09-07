@@ -61,6 +61,25 @@ describe('Header', () => {
     expect(screen.getByRole('searchbox', { name: 'Sitede ara' })).toBeInTheDocument();
   });
 
+  it('arama dışındaki bir alana sol tıklanınca aramayı kapatır', () => {
+    render(
+      <MemoryRouter>
+        <Header menu={[]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    const arama = screen.getByRole('searchbox', { name: 'Sitede ara' });
+
+    // Arama alanının içindeki sol tıklama yazmaya devam edilebilmesi için paneli kapatmamalıdır.
+    fireEvent.pointerDown(arama, { button: 0 });
+    expect(arama).toBeInTheDocument();
+
+    // Aynı header içindeki Teklif Al bağlantısı da arama alanının dışıdır ve paneli kapatmalıdır.
+    fireEvent.pointerDown(screen.getByRole('link', { name: 'Teklif Al' }), { button: 0 });
+    expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
+  });
+
   it('arama ve sonuç yazılarını dengeli okunabilir ölçülerde gösterir', () => {
     render(
       <MemoryRouter>
@@ -82,8 +101,9 @@ describe('Header', () => {
 
     expect(getComputedStyle(arama).fontSize).toBe('13px');
     expect(getComputedStyle(arama).fontWeight).toBe('400');
-    expect(getComputedStyle(sonucBasligi).fontSize).toBe('14px');
-    expect(getComputedStyle(sonucBasligi).fontWeight).toBe('600');
+    expect(getComputedStyle(sonucBasligi).fontSize).toBe('13px');
+    expect(getComputedStyle(sonucBasligi).fontWeight).toBe('500');
+    expect(getComputedStyle(sonucBasligi).lineHeight).toBe('1.45');
     expect(getComputedStyle(sonucBasligi.closest('a')).display).toBe('grid');
   });
 

@@ -14,6 +14,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   const [aramaMetni, setAramaMetni] = useState('');
   const headerRef = useRef(null);
   const navRef = useRef(null);
+  const aramaKapsayiciRef = useRef(null);
   const aramaAlaniRef = useRef(null);
   const aramaDugmesiRef = useRef(null);
   const konum = useLocation();
@@ -40,6 +41,14 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
       if (headerRef.current && !headerRef.current.contains(olay.target)) {
         setAcikMenuId(null);
         setAcikAltMenuId(null);
+      }
+
+      // Arama yalnızca kendi alanı dışındaki sol tıklamada kapanır; fare hareketi ve sağ tık yazmayı bölmez.
+      if (
+        olay.button === 0
+        && aramaKapsayiciRef.current
+        && !aramaKapsayiciRef.current.contains(olay.target)
+      ) {
         setAramaAcik(false);
         setAramaMetni('');
       }
@@ -210,7 +219,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
             );
           })}
 
-          <div className="site-header__arama-kapsayici">
+          <div className="site-header__arama-kapsayici" ref={aramaKapsayiciRef}>
             <button
               ref={aramaDugmesiRef}
               className={`site-header__arama-dugmesi${aramaAcik ? ' site-header__arama-dugmesi--acik' : ''}`}
