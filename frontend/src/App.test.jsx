@@ -75,4 +75,16 @@ describe('App veri entegrasyonu', () => {
     expect(await screen.findByRole('heading', { name: 'Referanslarımız' })).toBeInTheDocument();
     expect(screen.getByText('Test referansı')).toBeInTheDocument();
   });
+
+  it('bilinmeyen rotada gerçek bulunamadı içeriği ve noindex etiketi gösterir', async () => {
+    render(
+      <MemoryRouter initialEntries={['/olmayan-sayfa']}>
+        <App veriKaynagi={async () => sabitTestVerisi} />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole('heading', { name: 'Sayfa bulunamadı' })).toBeInTheDocument();
+    expect(document.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+    expect(screen.getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/');
+  });
 });

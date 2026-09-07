@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import DurumMesaji from './bilesenler/DurumMesaji';
 import SayfaGecisi from './bilesenler/SayfaGecisi';
 import SayfaIskeleti from './bilesenler/SayfaIskeleti';
@@ -8,13 +8,28 @@ import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
 import KategoriSayfasi from './sayfalar/KategoriSayfasi';
 import ReferanslarSayfasi from './sayfalar/ReferanslarSayfasi';
+import BulunamadiSayfasi from './sayfalar/BulunamadiSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
 import { siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
 
+const SABIT_YOLLAR = new Set(['/', '/urunler', '/kurumsal', '/teknik', '/referanslar', '/sertifikalar', '/iletisim']);
+
+function menuBaglantisiVar(menu, yol) {
+  return (menu ?? []).some((oge) => oge.baglanti === yol || menuBaglantisiVar(oge.alt_ogeler, yol));
+}
+
+function yolMevcutMu(yol, veri) {
+  if (SABIT_YOLLAR.has(yol) || menuBaglantisiVar(veri.menu, yol)) return true;
+  if (yol.startsWith('/kategoriler/')) return veri.kategoriler.some((oge) => `/kategoriler/${oge.slug}` === yol);
+  if (yol.startsWith('/urunler/')) return (veri.urunler ?? []).some((oge) => `/urunler/${oge.slug}` === yol);
+  return false;
+}
+
 export default function App({ veriKaynagi = siteVerileriniGetir }) {
+  const konum = useLocation();
   const [durum, setDurum] = useState({ yukleniyor: true, veri: null, hata: null });
   const [yenileme, setYenileme] = useState(0);
 
@@ -64,6 +79,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   }
 
   const veri = durum.veri;
+  const sayfaBulunamadi = !yolMevcutMu(konum.pathname, veri);
 
   // Router tek bir iskelet içinde çalışır; böylece navbar sayfa geçişlerinde yeniden kurulmaz.
   return (
@@ -76,6 +92,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
       <SeoYoneticisi
         seo={veri.seo}
         icerik={veri}
+        bulunamadi={sayfaBulunamadi}
       />
       <SayfaGecisi>
         <Routes>
@@ -88,7 +105,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} />} />
           <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
           <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<BulunamadiSayfasi />} />
         </Routes>
       </SayfaGecisi>
     </SayfaIskeleti>

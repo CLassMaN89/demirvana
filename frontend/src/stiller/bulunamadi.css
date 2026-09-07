@@ -1,0 +1,61 @@
+.bulunamadi {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(280px, 1fr);
+  min-height: min(620px, calc(100vh - var(--navbar-yuksekligi)));
+  align-items: center;
+  gap: clamp(30px, 7vw, 110px);
+  padding-block: clamp(70px, 10vw, 140px);
+}
+
+.bulunamadi__kod {
+  margin: 0;
+  color: color-mix(in srgb, var(--renk-ana) 14%, var(--renk-beyaz));
+  font-size: clamp(8rem, 20vw, 18rem);
+  font-weight: 700;
+  letter-spacing: -0.09em;
+  line-height: 0.72;
+}
+
+.bulunamadi__icerik { max-width: 620px; }
+
+.bulunamadi__icerik > span {
+  color: var(--renk-ana);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bulunamadi h1 {
+  margin: 12px 0 16px;
+  color: var(--renk-koyu);
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.bulunamadi__icerik > p {
+  margin: 0 0 30px;
+  color: var(--renk-ikincil-metin);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.bulunamadi a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  padding-inline: 18px;
+  border-radius: 7px;
+  background: var(--renk-ana);
+  color: var(--renk-beyaz);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 700px) {
+  .bulunamadi { grid-template-columns: 1fr; min-height: auto; gap: 36px; }
+  .bulunamadi__kod { font-size: clamp(7rem, 38vw, 11rem); }
+}
