@@ -43,7 +43,8 @@ export async function siteVerileriniGetir(secenekler = {}) {
     ['tema', ornekVeriler.tema],
     ['menu', ornekVeriler.menu],
     ['sliderlar', ornekVeriler.sliderlar],
-    ['kategoriler', ornekVeriler.kategoriler]
+    ['kategoriler', ornekVeriler.kategoriler],
+    ['referanslar', ornekVeriler.referanslar]
   ];
 
   const sonuclar = await Promise.all(

@@ -21,8 +21,9 @@
 .site-header__logo {
   display: grid;
   flex: 0 0 auto;
-  width: 106px;
-  height: 25px;
+  /* Logo, 60px navbarın güvenli boşluğunu koruyarak masaüstünde daha kolay fark edilir. */
+  width: 118px;
+  height: 28px;
   overflow: hidden;
   place-items: center;
   justify-self: start;
@@ -59,8 +60,8 @@
   border: 0;
   background: transparent;
   color: var(--renk-metin);
-  /* Inter'in daha açık harf yapısını orta ağırlıkta kullanmak küçük navbar metninin okunmasını kolaylaştırır. */
-  font-size: 0.66rem;
+  /* Kullanıcının istediği sabit değer, tüm ana menü öğelerinde aynı okunabilir ölçüyü korur. */
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1;
@@ -312,7 +313,7 @@
     min-height: 52px;
     padding-inline: max(20px, calc((100% - var(--icerik-genisligi)) / 2));
     border-top: 1px solid var(--renk-cizgi);
-    font-size: 0.82rem;
+    font-size: 12px;
     justify-content: space-between;
   }
 

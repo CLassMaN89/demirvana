@@ -21,6 +21,14 @@ if (SiteDenetleyicisi::gecerliSlug('../gizli')) {
     throw new RuntimeException('Güvensiz slug kabul edildi.');
 }
 
+if (!SiteDenetleyicisi::gecerliReferansBolgesi('yurtdisi')) {
+    throw new RuntimeException('Geçerli referans bölgesi reddedildi.');
+}
+
+if (SiteDenetleyicisi::gecerliReferansBolgesi('tum-dunya')) {
+    throw new RuntimeException('Tanımsız referans bölgesi kabul edildi.');
+}
+
 $menuAgaci = SiteDeposu::menuAgaciOlustur(
     [['id' => 3, 'baslik' => 'Ürünler', 'baglanti' => '/urunler', 'siralama' => 3]],
     [

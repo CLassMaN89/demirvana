@@ -60,10 +60,16 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Vana grubunun altında kullanıcı görselindeki 12 kategori üçüncü seviye olarak tanımlandı; masaüstünde iki kolon, mobilde iç içe liste kullanılır.
 - Aktüatör grubuna Elektrik Aktüatörler, Pnömatik Aktüatör, Aktüatörlü Vanalar ve Aksesuarlar üçüncü seviye olarak eklendi.
 - Alt menülerin gelecekte yönetim panelinden düzenlenebilmesi için `menu_alt_ogeleri` tablosu ve özyinelemeli PHP menü ağacı eklendi.
+- Referanslar rotası, tek paragraf içerik yerine bağımsız ve responsive `ReferanslarSayfasi` bileşenine taşındı.
+- Referans sayfasına veriden hesaplanan toplam/yurtiçi/yurtdışı özeti, erişilebilir bölge filtreleri ve iki sütunlu proje dizini eklendi.
+- Kullanıcının sağladığı üç saha fotoğrafı yönetilebilir görsel yolu ve kadraj değerleriyle galeriye bağlandı; büyütülmüş görünüm ve Escape ile kapatma desteklendi.
+- `referanslar` ve `referans_gorselleri` tabloları ile `/api/referanslar` ucu eklendi; 18 yurtiçi ve 4 yurtdışı kayıt canlı veritabanına aktarıldı.
+- Üst menü yazı boyutu kullanıcı isteğiyle 12px yapıldı ve masaüstü logo genişliği 118px'e çıkarıldı.
+- Referanslar sayfası için onaylanan tasarım ve uygulama belgeleri oluşturuldu.
 
 ## Mevcut durum
 
-Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API ve MySQL/MariaDB referans veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -71,6 +77,8 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - `PROJE_DURUMU.md`
 - `docs/superpowers/specs/2026-09-06-demirvana-site-tasarimi.md`
 - `docs/superpowers/plans/2026-09-06-demirvana-site-uygulama-plani.md`
+- `docs/superpowers/specs/2026-09-07-referanslar-sayfasi-tasarimi.md`
+- `docs/superpowers/plans/2026-09-07-referanslar-sayfasi-uygulama-plani.md`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 - `backend/` altındaki PHP API dosyaları
 - `veritabani/demirvana.sql`
@@ -82,7 +90,7 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 14 test, 0 hata.
+- Frontend testleri: 21 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -91,6 +99,8 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - Canlı API sonuçları: tema, üç seviyeli menü, slider, kategori, kategori detayı ve boş ürün listesi başarılı JSON döndürdü.
 - Gerçek Vite → PHP → MariaDB zinciriyle responsive tarayıcı testi: telefon, yatay telefon, tablet ve masaüstü başarılı; konsol hatası ve yatay taşma yok.
 - Görsel tasarım denetimi: 0 engelleyici, 0 açık kalite sorunu; ürün fotoğrafları yönetim panelinden ekleneceği için şimdilik bilinçli placeholder kullanılıyor.
+- Referanslar canlı API sayımları: toplam 22 kayıt; 18 yurtiçi, 4 yurtdışı ve 3 galeri görseli.
+- Referanslar tarayıcı doğrulaması: 375, 768, 1024 ve 1440px hedeflerinde yatay taşma yok; filtre ve galeri modalı çalışıyor; tarayıcı konsolunda hata/uyarı yok.
 
 ## Bilinen durumlar
 
@@ -99,7 +109,8 @@ Uygulama planındaki sekiz görev tamamlandı. React frontend, PHP API ve MySQL/
 - PHP 8.4 ve MariaDB 12.3 yerel geliştirme için kuruldu. Bu oturumda PHP çalıştırıcısına WinGet kurulum yolu üzerinden erişildi.
 - Yerel MariaDB root hesabı parola olmadan yalnızca geliştirme doğrulaması için kullanıldı; üretim ortamında güçlü parola ve ayrı uygulama kullanıcısı tanımlanmalıdır.
 - Kullanıcının sağladığı kök `Carousel/` klasörü değiştirilmeden korunur; frontend kendi `public/assets/carousel/` kopyalarını kullanır.
+- Referans galerisindeki başlangıç fotoğrafları kullanıcının ekran görüntüsünden kadrajlanır; yönetim panelinde özgün yüksek çözünürlüklü dosyalarla değiştirilebilir.
 
 ## Sıradaki adım
 
-Kullanıcının belirteceği alanda sınırlı düzenleme yap. Muhtemel sonraki aşama; ürün/kategori görselleri ile içeriklerin eklenmesi veya ayrı bir yönetim paneli tasarımıdır.
+Kullanıcının belirteceği alanda sınırlı düzenleme yap. Referanslar sayfasında sonraki olası adım, özgün yüksek çözünürlüklü saha fotoğraflarının eklenmesidir.

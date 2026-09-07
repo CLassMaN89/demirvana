@@ -84,6 +84,22 @@ final class SiteDeposu
         )->fetchAll();
     }
 
+    public function referanslar(): array
+    {
+        $kayitlar = $this->baglanti->query(
+            'SELECT id, baslik, konum, kurum, yil, bolge, siralama
+             FROM referanslar WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        $gorseller = $this->baglanti->query(
+            'SELECT id, gorsel_yolu, alternatif_metin, odak_x, odak_y, gorsel_olcegi, siralama
+             FROM referans_gorselleri WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        // İki dizi tek uçta dönerek sayfa açılışında ikinci bir ağ isteği ve olası içerik sıçramasını önler.
+        return ['kayitlar' => $kayitlar, 'gorseller' => $gorseller];
+    }
+
     public function kategori(string $slug): ?array
     {
         $sorgu = $this->baglanti->prepare(

@@ -30,6 +30,10 @@ const sabitTestVerisi = {
     odak_y: 50
   }],
   kategoriler,
+  referanslar: {
+    kayitlar: [{ id: 1, baslik: 'Test referansı', konum: 'Ankara', kurum: 'Test Kurumu', yil: '2026', bolge: 'yurtici', siralama: 1 }],
+    gorseller: []
+  },
   urunler: []
 };
 
@@ -58,5 +62,16 @@ describe('App veri entegrasyonu', () => {
     );
 
     expect(await screen.findByRole('heading', { name: 'Teknik' })).toBeInTheDocument();
+  });
+
+  it('referanslar rotasını API verisiyle bağımsız sayfada açar', async () => {
+    render(
+      <MemoryRouter initialEntries={['/referanslar']}>
+        <App veriKaynagi={async () => sabitTestVerisi} />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole('heading', { name: 'Referanslarımız' })).toBeInTheDocument();
+    expect(screen.getByText('Test referansı')).toBeInTheDocument();
   });
 });

@@ -5,6 +5,7 @@ import SayfaIskeleti from './bilesenler/SayfaIskeleti';
 import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
 import KategoriSayfasi from './sayfalar/KategoriSayfasi';
+import ReferanslarSayfasi from './sayfalar/ReferanslarSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
 import { siteVerileriniGetir } from './servisler/api';
@@ -72,7 +73,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
         <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
         <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
         <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
-        <Route path="/referanslar" element={<IcerikSayfasi tur="referanslar" />} />
+        <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} />} />
         <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
         <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
         <Route path="*" element={<Navigate to="/" replace />} />

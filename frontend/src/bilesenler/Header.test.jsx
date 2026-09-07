@@ -6,6 +6,17 @@ import { ornekVeriler } from '../veri/ornekVeriler';
 import Header from './Header';
 
 describe('Header', () => {
+  it('üst menü metnini 12px ve masaüstü logoyu daha görünür ölçüde tutar', () => {
+    render(
+      <MemoryRouter>
+        <Header menu={[{ id: 1, baslik: 'Anasayfa', baglanti: '/', alt_ogeler: [] }]} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    expect(getComputedStyle(screen.getByRole('link', { name: 'Anasayfa' })).fontSize).toBe('12px');
+    expect(getComputedStyle(screen.getByRole('link', { name: /Demirvana ana sayfa/i })).width).toBe('118px');
+  });
+
   it('menüyü gösterir ve mobil menü düğmesinin durumunu değiştirir', async () => {
     const kullanici = userEvent.setup();
 

@@ -14,7 +14,9 @@ $tablolar = @(
     'sliderlar',
     'kategoriler',
     'urunler',
-    'urun_gorselleri'
+    'urun_gorselleri',
+    'referanslar',
+    'referans_gorselleri'
 )
 
 # Bu kontrol, backend deposunun beklediği temel tabloların şemadan yanlışlıkla çıkarılmasını yakalar.
@@ -26,6 +28,10 @@ foreach ($tablo in $tablolar) {
 
 if ($sql -notmatch 'CHARACTER SET utf8mb4') {
     throw 'Türkçe içerik için gerekli utf8mb4 tanımı eksik.'
+}
+
+if (($sql | Select-String -Pattern "'yurtici'|'yurtdisi'" -AllMatches).Matches.Count -lt 22) {
+    throw 'Referans başlangıç verilerinin tamamı şemada bulunamadı.'
 }
 
 Write-Output 'Şema yapısal doğrulaması başarılı.'
