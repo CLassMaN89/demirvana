@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Cekirdek/Veritabani.php';
+require_once __DIR__ . '/../src/Cekirdek/SeoHtmlOlusturucu.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
@@ -30,6 +31,21 @@ try {
     if ($yol === '/sitemap.xml') {
         header('Content-Type: application/xml; charset=utf-8');
         echo $seoDenetleyicisi->siteHaritasi();
+        exit;
+    }
+
+    if (!str_starts_with($yol, '/api')) {
+        $htmlDosyasi = dirname(__DIR__, 2) . '/frontend/dist/index.html';
+        if (!is_file($htmlDosyasi)) {
+            throw new RuntimeException('Frontend üretim derlemesi bulunamadı.');
+        }
+
+        $meta = $seoDenetleyicisi->htmlMeta($yol);
+        if ($meta['bulunamadi']) {
+            http_response_code(404);
+        }
+        header('Content-Type: text/html; charset=utf-8');
+        echo SeoHtmlOlusturucu::uygula((string) file_get_contents($htmlDosyasi), $meta);
         exit;
     }
 

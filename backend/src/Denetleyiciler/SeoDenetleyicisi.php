@@ -31,6 +31,11 @@ final class SeoDenetleyicisi
         );
     }
 
+    public function htmlMeta(string $yol): array
+    {
+        return $this->depo->sayfaMetaVerisi($yol);
+    }
+
     public static function robotsMetniOlustur(string $anaAdres, ?string $kurallar = null): string
     {
         $anaAdres = rtrim($anaAdres, '/');

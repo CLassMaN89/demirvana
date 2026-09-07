@@ -7,6 +7,7 @@ require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SeoDenetleyicisi.php';
+require_once __DIR__ . '/../src/Cekirdek/SeoHtmlOlusturucu.php';
 
 // Bu küçük çalıştırılabilir test harici test çatısına ihtiyaç duymadan API'nin temel sözleşmesini korur.
 $yanit = JsonYanit::olustur(true, ['id' => 1]);
@@ -71,6 +72,20 @@ $siteHaritasi = SeoDenetleyicisi::siteHaritasiXmlOlustur('https://www.demirvana.
 ]]);
 if (!str_contains($siteHaritasi, '<loc>https://www.demirvana.com/urunler</loc>')) {
     throw new RuntimeException('Sitemap mutlak ürün adresini üretmedi.');
+}
+
+$seoHtml = SeoHtmlOlusturucu::uygula(
+    '<html><head><title>Eski</title><meta data-demirvana-seo="true" name="description" content="Eski"></head></html>',
+    [
+        'baslik' => 'Teknik | Demirvana', 'aciklama' => 'Teknik açıklama',
+        'canonical' => 'https://www.demirvana.com/teknik', 'robotlar' => 'index, follow',
+        'sosyal_baslik' => 'Teknik | Demirvana', 'sosyal_aciklama' => 'Teknik açıklama',
+        'sosyal_gorsel' => 'https://www.demirvana.com/assets/logo.png',
+        'yapilandirilmis_veri' => ['@context' => 'https://schema.org', '@type' => 'WebPage'],
+    ]
+);
+if (!str_contains($seoHtml, '<title>Teknik | Demirvana</title>') || !str_contains($seoHtml, 'rel="canonical"')) {
+    throw new RuntimeException('PHP ilk HTML yanıtına SEO etiketlerini yerleştiremedi.');
 }
 
 echo "PHP API doğrulamaları başarılı.\n";
