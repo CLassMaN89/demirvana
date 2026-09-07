@@ -1,6 +1,6 @@
 # Demirvana Proje Durumu
 
-Son güncelleme: 7 Eylül 2026
+Son güncelleme: 8 Eylül 2026
 
 ## Projenin amacı
 
@@ -113,10 +113,16 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Yeni kayıtların ayrı PDF dosyaları yüklenene kadar tamamı mevcut `ceviri_tablosu.pdf` örneğine bağlandı; dosya yolu, başlık, sıralama ve izinler veritabanından değiştirilebilir.
 - Teknik doküman satırlarına şeffaf arka planlı kırmızı PDF ikonu eklendi; ikon yolu `teknik_pdf_ikon_yolu` site ayarıyla yönetilebilir.
 - Doküman satırlarına kademeli giriş, hover arka planı ve sol mavi çizginin yukarıdan aşağıya açıldığı animasyon eklendi; azaltılmış hareket tercihinde hareket kapatılır.
+- `/kurumsal` rotası, iki renkli ana başlık, giriş metni, beş kurumsal değer, üç sütunlu ürün grupları, projeye özel çözüm çağrısı ve ekip şeridi bulunan bağımsız `KurumsalSayfasi` bileşenine taşındı.
+- Kurumsal sayfa masaüstünde beş değer/üç ürün sütunu, tablette iki sütun ve telefonda tek sütun kullanır; giriş ve hover hareketleri azaltılmış hareket tercihinde kapatılır.
+- Kurumsal genel metinleri 11 `site_ayarlari` anahtarıyla; değerler, ürün grupları ve ekip kayıtları `kurumsal_degerler`, `kurumsal_urun_gruplari` ve `kurumsal_ekip` tablolarıyla admin yönetimine hazırlandı.
+- `/api/kurumsal` ucu 5 değer, 13 ürün grubu ve 2 ekip kaydını dil/sıralama alanlarıyla döndürür; örnek geliştirme verisi aynı sözleşmeyi korur.
+- İlk yüklemede kullanılan 10 ayrı HTTP isteği `/api/baslangic` altında tek yanıtta birleştirildi; bağımsız API uçları admin ve bölüm bazlı kullanım için korunur.
+- Sayfa geçişinde eski kaydırma konumunun taşınması giderildi; rota değiştiğinde içerik, global yumuşak kaydırma davranışından etkilenmeden anında sayfanın üstünden başlar.
 
 ## Mevcut durum
 
-Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumuşak rota geçişi, dinamik footer, admin yönetimine hazır SEO altyapısı ve PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. React frontend, PHP HTML/API, güvenli PDF sunumu ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, gerçek site araması, hızlı başlangıç verisi, üstten başlayan yumuşak rota geçişi, dinamik footer, admin yönetimine hazır SEO altyapısı ve PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. React frontend, PHP HTML/API, güvenli PDF sunumu ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -148,7 +154,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 18 test dosyasında 54 test, 0 hata.
+- Frontend testleri: 20 test dosyasında 59 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -186,6 +192,10 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - Teknik liste canlı verisinde kategori başına 8 kayıt doğrulandı; şema iki kez içe aktarıldığında toplam 16 doküman çoğalmadı.
 - Şeffaf PDF ikonunun 16 satırda yüklendiği ve dosya köşe alfa değerinin `0` olduğu doğrulandı.
 - Hover çizgisi 375, 768, 1440 ve 1920px genişliklerde `scaleY(0)` değerinden `scaleY(1)` değerine geçti; yatay taşma ve Teknik sayfaya ait konsol hatası oluşmadı.
+- Kurumsal sayfa 375, 768, 1440 ve 1920px genişliklerde canlı MariaDB verisiyle doğrulandı; 5 değer, 13 ürün grubu ve 2 ekip kaydı göründü, yatay taşma oluşmadı.
+- Kurumsal şeması iki kez içe aktarıldı; 5 değer, 13 ürün grubu ve 2 ekip kaydı çoğalmadan korundu. `/api/kurumsal` aynı sayımları canlı döndürdü.
+- İlk Kurumsal görünüm süresi yerel geliştirme ortamında üç ölçümde yaklaşık 1,88–1,90 saniyeden 0,66–0,69 saniyeye düştü; 20 yinelenen bölüm isteği yerine iki React Strict Mode `/api/baslangic` isteği 26–76 ms içinde tamamlandı.
+- Referanslar sayfasında `scrollY=2237` konumundan Teknik sayfasına geçiş canlı Chrome testinde `scrollY=0` ile sonuçlandı.
 
 ## Bilinen durumlar
 
@@ -200,4 +210,4 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 
 ## Sıradaki adım
 
-PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar ve diğer tamamlanmış sayfaları koru.
+Kurumsal sayfa ile yenileme/geçiş performansı tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Teknik ve diğer tamamlanmış sayfaları koru.

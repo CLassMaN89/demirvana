@@ -38,25 +38,9 @@ export async function veriGetir(
 }
 
 export async function siteVerileriniGetir(secenekler = {}) {
-  // Ana sayfanın bağımsız veri kümelerini paralel almak ilk görünümün bekleme süresini azaltır.
-  const istekler = [
-    ['site-ayarlari', ornekVeriler.site_ayarlari],
-    ['seo', ornekVeriler.seo],
-    ['tema', ornekVeriler.tema],
-    ['menu', ornekVeriler.menu],
-    ['sliderlar', ornekVeriler.sliderlar],
-    ['kategoriler', ornekVeriler.kategoriler],
-    // Ürünler ilk yüklemede alınır; böylece üst arama gerçek ürün kayıtlarında da sonuç üretir.
-    ['urunler', ornekVeriler.urunler],
-    ['referanslar', ornekVeriler.referanslar],
-    ['teknik-dokumanlar', ornekVeriler.teknik_dokumanlar]
-  ];
-
-  const sonuclar = await Promise.all(
-    istekler.map(([yol, yedekVeri]) =>
-      veriGetir(`${API_TABANI}/${yol}`, { ...secenekler, yedekVeri })
-    )
-  );
-
-  return Object.fromEntries(istekler.map(([anahtar], indeks) => [anahtar.replace('-', '_'), sonuclar[indeks]]));
+  // PHP geliştirme sunucusu istekleri sırayla işlediği için ilk ekran verilerini tek HTTP çağrısında toplarız.
+  return veriGetir(`${API_TABANI}/baslangic`, {
+    ...secenekler,
+    yedekVeri: ornekVeriler
+  });
 }

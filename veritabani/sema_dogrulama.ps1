@@ -20,7 +20,10 @@ $tablolar = @(
     'referans_sektorleri',
     'referans_sektor_eslesmeleri',
     'teknik_dokuman_kategorileri',
-    'teknik_dokumanlar'
+    'teknik_dokumanlar',
+    'kurumsal_degerler',
+    'kurumsal_urun_gruplari',
+    'kurumsal_ekip'
 )
 
 # Bu kontrol, backend deposunun beklediği temel tabloların şemadan yanlışlıkla çıkarılmasını yakalar.

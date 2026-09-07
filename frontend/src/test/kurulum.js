@@ -20,5 +20,8 @@ HTMLCanvasElement.prototype.getContext = () => ({
   fillStyle: ''
 });
 
+// JSDOM kaydırma motoru içermez; rota testleri çağrı sözleşmesini kendi sahte işlevleriyle ayrıca doğrular.
+window.scrollTo = () => {};
+
 // Her test temiz bir sayfada başlamalı; aksi halde önceki bileşenlerin DOM'u sonucu etkiler.
 afterEach(() => cleanup());

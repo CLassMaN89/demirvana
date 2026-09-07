@@ -277,6 +277,54 @@ CREATE TABLE IF NOT EXISTS `teknik_dokumanlar` (
     CONSTRAINT `teknik_dokuman_sayfa_sayisi_negatif_olamaz` CHECK (`sayfa_sayisi` >= 0)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Kurumsal değerler ayrı satırlardır; admin başlık, açıklama, dil, görünürlük ve sıralamayı bağımsız yönetebilir.
+CREATE TABLE IF NOT EXISTS `kurumsal_degerler` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `baslik` VARCHAR(120) NOT NULL,
+    `aciklama` VARCHAR(500) NOT NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_kurumsal_deger_dili_basligi` (`dil_kodu`, `baslik`),
+    KEY `kurumsal_deger_siralama` (`dil_kodu`, `aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- Sütun numarası yalnız görsel gruplamayı belirtir; ürün adlarının tamamı yönetilebilir veri olarak kalır.
+CREATE TABLE IF NOT EXISTS `kurumsal_urun_gruplari` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `ad` VARCHAR(160) NOT NULL,
+    `sutun_no` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_kurumsal_urun_dili_adi` (`dil_kodu`, `ad`),
+    KEY `kurumsal_urun_siralama` (`dil_kodu`, `aktif_mi`, `sutun_no`, `siralama`),
+    CONSTRAINT `kurumsal_urun_sutun_araligi` CHECK (`sutun_no` BETWEEN 1 AND 3)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- Ekip iletişimi kaynak koda gömülmez; gelecekte admin üzerinden kişi ekleme ve sıralama yapılabilir.
+CREATE TABLE IF NOT EXISTS `kurumsal_ekip` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `ad_soyad` VARCHAR(160) NOT NULL,
+    `gorev` VARCHAR(160) NOT NULL,
+    `eposta` VARCHAR(190) NOT NULL,
+    `telefon` VARCHAR(40) NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_kurumsal_ekip_dili_epostasi` (`dil_kodu`, `eposta`),
+    KEY `kurumsal_ekip_siralama` (`dil_kodu`, `aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
     ('site_adi', 'Demirvana', 'metin', 'Tarayıcı ve marka adı'),
     ('logo_yolu', '/assets/logo.png', 'gorsel', 'Navbar ve footer logo dosyası'),
@@ -338,6 +386,20 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('teknik_pdf_yeni_sekme_metni', 'Yeni sekmede aç', 'metin', 'PDF yeni sekme bağlantısı metni'),
     ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi'),
     ('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png', 'gorsel', 'Teknik doküman listelerinde kullanılan şeffaf PDF ikonu')
+ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
+
+INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
+    ('kurumsal_etiket', 'Kurumsal', 'metin', 'Kurumsal sayfa üst etiketi'),
+    ('kurumsal_baslik_satir_1', 'Güvenilir çözümler.', 'metin', 'Kurumsal ana başlığın ilk satırı'),
+    ('kurumsal_baslik_satir_2', 'Sürdürülebilir iş ortaklıkları.', 'metin', 'Kurumsal ana başlığın vurgulu ikinci satırı'),
+    ('kurumsal_giris_metni', '2007 yılında Demir Ticaret adıyla başlayan yolculuğumuz, 2008 yılından itibaren Demir Vana ve Kontrol Elemanları Makina Sanayi Tic. Ltd. Şti. olarak devam etmektedir. Endüstriyel vana ve akış kontrol çözümlerinde kalite, teknik bilgi ve müşteri odaklı hizmet anlayışımızla uzun vadeli iş ortaklıkları kuruyoruz.', 'metin', 'Kurumsal giriş açıklaması'),
+    ('kurumsal_urunler_basligi', 'Ana Ürün Gruplarımız', 'metin', 'Kurumsal ürün grupları başlığı'),
+    ('kurumsal_cozum_basligi', 'Projeye Özel Çözümler', 'metin', 'Kurumsal özel çözüm alanı başlığı'),
+    ('kurumsal_cozum_aciklamasi', 'Özel vana ihtiyaçlarınız ve projeye özgü teknik talepleriniz için uzman mühendis kadromuzla birlikte çalışıyor, ihtiyacınıza uygun çözüm alternatifleri geliştiriyoruz.', 'metin', 'Kurumsal özel çözüm alanı açıklaması'),
+    ('kurumsal_cozum_buton_metni', 'Teknik ekibimizle iletişime geçin', 'metin', 'Kurumsal özel çözüm düğmesi metni'),
+    ('kurumsal_cozum_buton_baglantisi', '/iletisim', 'baglanti', 'Kurumsal özel çözüm düğmesi bağlantısı'),
+    ('kurumsal_ekip_basligi', 'Ekibimiz', 'metin', 'Kurumsal ekip alanı başlığı'),
+    ('kurumsal_ekip_aciklamasi', 'Doğru insanlarla, daha güçlü çözümler.', 'metin', 'Kurumsal ekip alanı açıklaması')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
@@ -552,3 +614,36 @@ ON DUPLICATE KEY UPDATE
     `orijinal_dosya_adi` = VALUES(`orijinal_dosya_adi`), `alternatif_aciklama` = VALUES(`alternatif_aciklama`),
     `mime_turu` = VALUES(`mime_turu`), `dosya_boyutu` = VALUES(`dosya_boyutu`),
     `sayfa_sayisi` = VALUES(`sayfa_sayisi`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `kurumsal_degerler` (`id`, `dil_kodu`, `baslik`, `aciklama`, `siralama`) VALUES
+    (1, 'tr', 'Şirket Profili', 'Endüstriyel vana ve akış kontrol sistemleri alanında faaliyet gösteren, güvenilir ve köklü bir çözüm ortağıyız.', 1),
+    (2, 'tr', 'Felsefemiz', 'Müşteri odaklı, güvene dayalı ve uzun vadeli iş ortaklıkları kurarız.', 2),
+    (3, 'tr', 'İlkemiz', 'Kalite bir tercih değil, çalışma biçimimizdir.', 3),
+    (4, 'tr', 'Misyonumuz', 'Doğru çözüm, doğru ürün ve sürdürülebilir destekle müşterilerimizin ihtiyaçlarını en iyi şekilde karşılamak.', 4),
+    (5, 'tr', 'Vizyonumuz', 'Endüstriyel akışkan kontrolü alanında tercih edilen, güvenilir ve kaliteli çözüm ortağı olmak.', 5)
+ON DUPLICATE KEY UPDATE
+    `baslik` = VALUES(`baslik`), `aciklama` = VALUES(`aciklama`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `kurumsal_urun_gruplari` (`id`, `dil_kodu`, `ad`, `sutun_no`, `siralama`) VALUES
+    (1, 'tr', 'Sürgülü Vana', 1, 1),
+    (2, 'tr', 'Çapraz Çekvalf', 1, 2),
+    (3, 'tr', 'Flanşlı Kelebek Vana', 1, 3),
+    (4, 'tr', 'Hidrolik Vana', 1, 4),
+    (5, 'tr', 'Wafer / Lug Kelebek Vana', 1, 5),
+    (6, 'tr', 'Tilting Çekvalf', 2, 1),
+    (7, 'tr', 'Glob Vana', 2, 2),
+    (8, 'tr', 'Yaylı Çekvalf', 2, 3),
+    (9, 'tr', 'Yangın Hidrantı', 2, 4),
+    (10, 'tr', 'Hava Tahliye Vanası / Vantuz', 2, 5),
+    (11, 'tr', 'Pislik Tutucu', 3, 1),
+    (12, 'tr', 'Çamur Kutusu', 3, 2),
+    (13, 'tr', 'Fırtına Vanası', 3, 3)
+ON DUPLICATE KEY UPDATE
+    `ad` = VALUES(`ad`), `sutun_no` = VALUES(`sutun_no`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `kurumsal_ekip` (`id`, `dil_kodu`, `ad_soyad`, `gorev`, `eposta`, `telefon`, `siralama`) VALUES
+    (1, 'tr', 'Deniz Demir', 'Şirket Müdürü', 'dd@demirvana.com', NULL, 1),
+    (2, 'tr', 'Murat Aslan', 'Muhasebe Sorumlusu', 'dv@demirvana.com', NULL, 2)
+ON DUPLICATE KEY UPDATE
+    `ad_soyad` = VALUES(`ad_soyad`), `gorev` = VALUES(`gorev`), `telefon` = VALUES(`telefon`),
+    `siralama` = VALUES(`siralama`), `aktif_mi` = 1;

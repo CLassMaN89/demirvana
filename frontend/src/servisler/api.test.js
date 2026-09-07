@@ -40,7 +40,7 @@ describe('veriGetir', () => {
 });
 
 describe('siteVerileriniGetir', () => {
-  it('referans ve ürün kayıtlarını site araması için başlangıç verilerine ekler', async () => {
+  it('ilk ekranı tek başlangıç isteğiyle yükler', async () => {
     const istenenYollar = [];
     const fetchFn = async (yol) => {
       istenenYollar.push(yol);
@@ -49,22 +49,18 @@ describe('siteVerileriniGetir', () => {
         status: 200,
         json: async () => ({
           basarili: true,
-          veri: yol.endsWith('/referanslar')
-            ? { kayitlar: [{ id: 1, baslik: 'Test projesi' }], gorseller: [] }
-            : yol.endsWith('/teknik-dokumanlar')
-              ? [{ id: 1, ad: 'Teknik Tablolar', dokumanlar: [{ baslik: 'Çeviri Tablosu' }] }]
-            : []
+          veri: {
+            referanslar: { kayitlar: [{ id: 1, baslik: 'Test projesi' }], gorseller: [] },
+            teknik_dokumanlar: [{ id: 1, ad: 'Teknik Tablolar', dokumanlar: [{ baslik: 'Çeviri Tablosu' }] }],
+            kurumsal: { degerler: [], urun_gruplari: [], ekip: [] }
+          }
         })
       };
     };
 
     const veri = await siteVerileriniGetir({ fetchFn, gelistirme: false });
 
-    expect(istenenYollar).toContain('/api/referanslar');
-    expect(istenenYollar).toContain('/api/urunler');
-    expect(istenenYollar).toContain('/api/site-ayarlari');
-    expect(istenenYollar).toContain('/api/seo');
-    expect(istenenYollar).toContain('/api/teknik-dokumanlar');
+    expect(istenenYollar).toEqual(['/api/baslangic']);
     expect(veri.referanslar.kayitlar[0].baslik).toBe('Test projesi');
     expect(veri.teknik_dokumanlar[0].dokumanlar[0].baslik).toBe('Çeviri Tablosu');
   });

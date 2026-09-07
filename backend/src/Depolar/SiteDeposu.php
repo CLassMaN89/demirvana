@@ -128,6 +128,27 @@ final class SiteDeposu
         return ['sektorler' => $sektorler, 'kayitlar' => $kayitlar, 'gorseller' => $gorseller];
     }
 
+    public function kurumsal(): array
+    {
+        $degerler = $this->baglanti->query(
+            'SELECT id, dil_kodu, baslik, aciklama, siralama
+             FROM kurumsal_degerler WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        $urunGruplari = $this->baglanti->query(
+            'SELECT id, dil_kodu, ad, sutun_no, siralama
+             FROM kurumsal_urun_gruplari WHERE aktif_mi = 1 ORDER BY sutun_no, siralama, id'
+        )->fetchAll();
+
+        $ekip = $this->baglanti->query(
+            'SELECT id, dil_kodu, ad_soyad, gorev, eposta, telefon, siralama
+             FROM kurumsal_ekip WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        // Tekrarlanabilir kurumsal alanları tek uçta toplamak, admin sıralamalarının aynı görünümde tutarlı kalmasını sağlar.
+        return ['degerler' => $degerler, 'urun_gruplari' => $urunGruplari, 'ekip' => $ekip];
+    }
+
     public function teknikDokumanlar(): array
     {
         $kategoriler = $this->baglanti->query(

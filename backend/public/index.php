@@ -63,7 +63,39 @@ try {
         exit;
     }
 
+    $teknikDokumanlariHazirla = function () use ($denetleyici): array {
+        $kategoriler = $denetleyici->teknikDokumanlar();
+        $pdfKoku = dirname(__DIR__, 2) . '/pdf';
+
+        // Veritabanında kaydı olsa bile fiziksel dosyası bulunmayan belge ziyaretçiye gösterilmez.
+        foreach ($kategoriler as &$kategori) {
+            $kategori['dokumanlar'] = array_values(array_filter(
+                $kategori['dokumanlar'],
+                function (array $ozet) use ($denetleyici, $pdfKoku): bool {
+                    $dokuman = $denetleyici->teknikDokuman((string) $ozet['slug']);
+                    return $dokuman !== null
+                        && PdfDosyaSunucusu::guvenliYol($pdfKoku, (string) $dokuman['dosya_yolu']) !== null;
+                }
+            ));
+        }
+        unset($kategori);
+        return $kategoriler;
+    };
+
     $sabitRotalar = [
+        // İlk görünüm tek bağlantı üzerinden döner; ayrı uçlar admin ve bağımsız yenilemeler için korunur.
+        '/api/baslangic' => fn() => [
+            'site_ayarlari' => $denetleyici->siteAyarlari(),
+            'seo' => $seoDenetleyicisi->seo(),
+            'tema' => $denetleyici->tema(),
+            'menu' => $denetleyici->menu(),
+            'sliderlar' => $denetleyici->sliderlar(),
+            'kategoriler' => $denetleyici->kategoriler(),
+            'urunler' => $denetleyici->urunler(null, null),
+            'referanslar' => $denetleyici->referanslar(),
+            'kurumsal' => $denetleyici->kurumsal(),
+            'teknik_dokumanlar' => $teknikDokumanlariHazirla(),
+        ],
         '/api/site-ayarlari' => fn() => $denetleyici->siteAyarlari(),
         '/api/seo' => fn() => $seoDenetleyicisi->seo(),
         '/api/tema' => fn() => $denetleyici->tema(),
@@ -71,24 +103,8 @@ try {
         '/api/sliderlar' => fn() => $denetleyici->sliderlar(),
         '/api/kategoriler' => fn() => $denetleyici->kategoriler(),
         '/api/referanslar' => fn() => $denetleyici->referanslar(),
-        '/api/teknik-dokumanlar' => function () use ($denetleyici): array {
-            $kategoriler = $denetleyici->teknikDokumanlar();
-            $pdfKoku = dirname(__DIR__, 2) . '/pdf';
-
-            // Veritabanında kaydı olsa bile fiziksel dosyası bulunmayan belge ziyaretçiye gösterilmez.
-            foreach ($kategoriler as &$kategori) {
-                $kategori['dokumanlar'] = array_values(array_filter(
-                    $kategori['dokumanlar'],
-                    function (array $ozet) use ($denetleyici, $pdfKoku): bool {
-                        $dokuman = $denetleyici->teknikDokuman((string) $ozet['slug']);
-                        return $dokuman !== null
-                            && PdfDosyaSunucusu::guvenliYol($pdfKoku, (string) $dokuman['dosya_yolu']) !== null;
-                    }
-                ));
-            }
-            unset($kategori);
-            return $kategoriler;
-        },
+        '/api/kurumsal' => fn() => $denetleyici->kurumsal(),
+        '/api/teknik-dokumanlar' => $teknikDokumanlariHazirla,
         '/api/urunler' => fn() => $denetleyici->urunler(
             isset($_GET['kategori']) ? (string) $_GET['kategori'] : null,
             isset($_GET['arama']) ? (string) $_GET['arama'] : null

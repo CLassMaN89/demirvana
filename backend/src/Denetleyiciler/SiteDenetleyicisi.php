@@ -26,6 +26,7 @@ final class SiteDenetleyicisi
     public function sliderlar(): array { return $this->depo->sliderlar(); }
     public function kategoriler(): array { return $this->depo->kategoriler(); }
     public function referanslar(): array { return $this->depo->referanslar(); }
+    public function kurumsal(): array { return $this->depo->kurumsal(); }
     public function teknikDokumanlar(): array { return $this->depo->teknikDokumanlar(); }
     public function teknikDokuman(string $slug): ?array { return $this->depo->teknikDokuman($slug); }
     public function kategori(string $slug): ?array { return $this->depo->kategori($slug); }

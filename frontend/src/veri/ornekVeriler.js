@@ -130,7 +130,18 @@ export const ornekVeriler = Object.freeze({
     teknik_pdf_indir_metni: 'İndir',
     teknik_pdf_yeni_sekme_metni: 'Yeni sekmede aç',
     teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat',
-    teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png'
+    teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png',
+    kurumsal_etiket: 'Kurumsal',
+    kurumsal_baslik_satir_1: 'Güvenilir çözümler.',
+    kurumsal_baslik_satir_2: 'Sürdürülebilir iş ortaklıkları.',
+    kurumsal_giris_metni: '2007 yılında Demir Ticaret adıyla başlayan yolculuğumuz, 2008 yılından itibaren Demir Vana ve Kontrol Elemanları Makina Sanayi Tic. Ltd. Şti. olarak devam etmektedir. Endüstriyel vana ve akış kontrol çözümlerinde kalite, teknik bilgi ve müşteri odaklı hizmet anlayışımızla uzun vadeli iş ortaklıkları kuruyoruz.',
+    kurumsal_urunler_basligi: 'Ana Ürün Gruplarımız',
+    kurumsal_cozum_basligi: 'Projeye Özel Çözümler',
+    kurumsal_cozum_aciklamasi: 'Özel vana ihtiyaçlarınız ve projeye özgü teknik talepleriniz için uzman mühendis kadromuzla birlikte çalışıyor, ihtiyacınıza uygun çözüm alternatifleri geliştiriyoruz.',
+    kurumsal_cozum_buton_metni: 'Teknik ekibimizle iletişime geçin',
+    kurumsal_cozum_buton_baglantisi: '/iletisim',
+    kurumsal_ekip_basligi: 'Ekibimiz',
+    kurumsal_ekip_aciklamasi: 'Doğru insanlarla, daha güçlü çözümler.'
   },
   tema: {
     ana_mavi: '#28469D',
@@ -195,6 +206,24 @@ export const ornekVeriler = Object.freeze({
       { id: 1, gorsel_yolu: '/assets/referanslar/referans-galerisi.png', alternatif_metin: 'Arıtma tesisinde kullanılan mavi vana sistemi', odak_x: 0, odak_y: 100, gorsel_olcegi: 330, siralama: 1 },
       { id: 2, gorsel_yolu: '/assets/referanslar/referans-galerisi.png', alternatif_metin: 'Arıtma havuzu üzerindeki vana uygulaması', odak_x: 50, odak_y: 100, gorsel_olcegi: 330, siralama: 2 },
       { id: 3, gorsel_yolu: '/assets/referanslar/referans-galerisi.png', alternatif_metin: 'Saha kontrol panosu ve boru hattı uygulaması', odak_x: 100, odak_y: 100, gorsel_olcegi: 330, siralama: 3 }
+    ]
+  },
+  kurumsal: {
+    degerler: [
+      ['Şirket Profili', 'Endüstriyel vana ve akış kontrol sistemleri alanında faaliyet gösteren, güvenilir ve köklü bir çözüm ortağıyız.'],
+      ['Felsefemiz', 'Müşteri odaklı, güvene dayalı ve uzun vadeli iş ortaklıkları kurarız.'],
+      ['İlkemiz', 'Kalite bir tercih değil, çalışma biçimimizdir.'],
+      ['Misyonumuz', 'Doğru çözüm, doğru ürün ve sürdürülebilir destekle müşterilerimizin ihtiyaçlarını en iyi şekilde karşılamak.'],
+      ['Vizyonumuz', 'Endüstriyel akışkan kontrolü alanında tercih edilen, güvenilir ve kaliteli çözüm ortağı olmak.']
+    ].map(([baslik, aciklama], indeks) => ({ id: indeks + 1, dil_kodu: 'tr', baslik, aciklama, siralama: indeks + 1 })),
+    urun_gruplari: [
+      ['Sürgülü Vana', 1], ['Çapraz Çekvalf', 1], ['Flanşlı Kelebek Vana', 1], ['Hidrolik Vana', 1], ['Wafer / Lug Kelebek Vana', 1],
+      ['Tilting Çekvalf', 2], ['Glob Vana', 2], ['Yaylı Çekvalf', 2], ['Yangın Hidrantı', 2], ['Hava Tahliye Vanası / Vantuz', 2],
+      ['Pislik Tutucu', 3], ['Çamur Kutusu', 3], ['Fırtına Vanası', 3]
+    ].map(([ad, sutun_no], indeks) => ({ id: indeks + 1, dil_kodu: 'tr', ad, sutun_no, siralama: indeks + 1 })),
+    ekip: [
+      { id: 1, dil_kodu: 'tr', ad_soyad: 'Deniz Demir', gorev: 'Şirket Müdürü', eposta: 'dd@demirvana.com', telefon: null, siralama: 1 },
+      { id: 2, dil_kodu: 'tr', ad_soyad: 'Murat Aslan', gorev: 'Muhasebe Sorumlusu', eposta: 'dv@demirvana.com', telefon: null, siralama: 2 }
     ]
   },
   teknik_dokumanlar: [

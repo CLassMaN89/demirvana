@@ -41,6 +41,11 @@ const sabitTestVerisi = {
     ikon_adi: 'dosya-hesaplama',
     dokumanlar: [{ id: 1, baslik: 'Çeviri Tablosu', slug: 'ceviri-tablosu' }]
   }],
+  kurumsal: {
+    degerler: [{ id: 1, baslik: 'Şirket Profili', aciklama: 'Test açıklaması' }],
+    urun_gruplari: [{ id: 1, ad: 'Sürgülü Vana', sutun_no: 1, siralama: 1 }],
+    ekip: [{ id: 1, ad_soyad: 'Deniz Demir', gorev: 'Şirket Müdürü', eposta: 'dd@demirvana.com' }]
+  },
   urunler: []
 };
 
@@ -82,6 +87,17 @@ describe('App veri entegrasyonu', () => {
 
     expect(await screen.findByRole('heading', { name: 'Referanslarımız' })).toBeInTheDocument();
     expect(screen.getByText('Test referansı')).toBeInTheDocument();
+  });
+
+  it('kurumsal rotasını API verisiyle bağımsız sayfada açar', async () => {
+    render(
+      <MemoryRouter initialEntries={['/kurumsal']}>
+        <App veriKaynagi={async () => sabitTestVerisi} />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole('heading', { name: /Güvenilir çözümler/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Şirket Profili' })).toBeInTheDocument();
   });
 
   it('bilinmeyen rotada gerçek bulunamadı içeriği ve noindex etiketi gösterir', async () => {
