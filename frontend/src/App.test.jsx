@@ -34,6 +34,13 @@ const sabitTestVerisi = {
     kayitlar: [{ id: 1, baslik: 'Test referansı', konum: 'Ankara', kurum: 'Test Kurumu', yil: '2026', bolge: 'yurtici', siralama: 1 }],
     gorseller: []
   },
+  teknik_dokumanlar: [{
+    id: 1,
+    ad: 'Teknik Tablolar',
+    slug: 'teknik-tablolar',
+    ikon_adi: 'dosya-hesaplama',
+    dokumanlar: [{ id: 1, baslik: 'Çeviri Tablosu', slug: 'ceviri-tablosu' }]
+  }],
   urunler: []
 };
 
@@ -63,6 +70,7 @@ describe('App veri entegrasyonu', () => {
     );
 
     expect(await screen.findByRole('heading', { name: 'Teknik' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Teknik Tablolar' })).toBeInTheDocument();
   });
 
   it('referanslar rotasını API verisiyle bağımsız sayfada açar', async () => {

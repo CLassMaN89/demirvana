@@ -8,6 +8,7 @@ import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
 import KategoriSayfasi from './sayfalar/KategoriSayfasi';
 import ReferanslarSayfasi from './sayfalar/ReferanslarSayfasi';
+import TeknikSayfasi from './sayfalar/TeknikSayfasi';
 import BulunamadiSayfasi from './sayfalar/BulunamadiSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
@@ -101,7 +102,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
           <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
           <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
-          <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
+          <Route path="/teknik" element={<TeknikSayfasi kategoriler={veri.teknik_dokumanlar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
           <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
