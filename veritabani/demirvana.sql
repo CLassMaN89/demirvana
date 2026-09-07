@@ -232,6 +232,51 @@ CREATE TABLE IF NOT EXISTS `referans_sektor_eslesmeleri` (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Teknik doküman grupları ayrı tutulur; admin paneli başlık, açıklama, ikon ve sıralamayı kod değiştirmeden yönetebilir.
+CREATE TABLE IF NOT EXISTS `teknik_dokuman_kategorileri` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `ad` VARCHAR(160) NOT NULL,
+    `slug` VARCHAR(180) NOT NULL,
+    `aciklama` VARCHAR(500) NULL,
+    `ikon_adi` VARCHAR(80) NOT NULL DEFAULT 'dosya-metin',
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_teknik_kategori_dili_slug` (`dil_kodu`, `slug`),
+    KEY `teknik_kategori_siralama` (`dil_kodu`, `aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- PDF dosyasının kendisi dosya sisteminde, yönetilebilir açıklama ve güvenli göreli yolu veritabanında tutulur.
+CREATE TABLE IF NOT EXISTS `teknik_dokumanlar` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `kategori_id` BIGINT UNSIGNED NOT NULL,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `baslik` VARCHAR(200) NOT NULL,
+    `slug` VARCHAR(220) NOT NULL,
+    `dosya_yolu` VARCHAR(500) NOT NULL,
+    `orijinal_dosya_adi` VARCHAR(255) NOT NULL,
+    `alternatif_aciklama` VARCHAR(500) NULL,
+    `mime_turu` VARCHAR(100) NOT NULL DEFAULT 'application/pdf',
+    `dosya_boyutu` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `sayfa_sayisi` INT UNSIGNED NOT NULL DEFAULT 0,
+    `indirmeye_izin_var_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `yeni_sekmede_acmaya_izin_var_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_teknik_dokuman_dili_slug` (`dil_kodu`, `slug`),
+    KEY `teknik_dokuman_siralama` (`kategori_id`, `dil_kodu`, `aktif_mi`, `siralama`),
+    CONSTRAINT `teknik_dokuman_kategorisi` FOREIGN KEY (`kategori_id`) REFERENCES `teknik_dokuman_kategorileri` (`id`)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT `teknik_dokuman_boyutu_negatif_olamaz` CHECK (`dosya_boyutu` >= 0),
+    CONSTRAINT `teknik_dokuman_sayfa_sayisi_negatif_olamaz` CHECK (`sayfa_sayisi` >= 0)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
     ('site_adi', 'Demirvana', 'metin', 'Tarayıcı ve marka adı'),
     ('logo_yolu', '/assets/logo.png', 'gorsel', 'Navbar ve footer logo dosyası'),
@@ -278,6 +323,21 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('referans_bos_aciklamasi', 'Arama kelimesini veya seçili sektörü değiştirebilirsiniz.', 'metin', 'Referans filtresi boş sonuç açıklaması'),
     ('referans_fotograf_sayisi_metni', '{sayi} fotoğraf', 'metin', 'Galeri fotoğraf sayısı metni; {sayi} otomatik değiştirilir')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
+
+INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
+    ('teknik_hero_basligi', 'Teknik', 'metin', 'Teknik sayfası ana başlığı'),
+    ('teknik_hero_aciklamasi', 'Ürünlerimize ait teknik tabloları ve kullanım talimatlarını buradan inceleyebilirsiniz.', 'metin', 'Teknik sayfası giriş açıklaması'),
+    ('teknik_slogan_satir_1', 'Güvenli Akış', 'metin', 'Teknik hero sağ sloganının ilk satırı'),
+    ('teknik_slogan_satir_2', 'Daha Güçlü Yarınlar', 'metin', 'Teknik hero sağ sloganının ikinci satırı'),
+    ('teknik_pdf_goruntule_metni', 'PDF Görüntüle', 'metin', 'Doküman satırı eylem metni'),
+    ('teknik_bos_kategori_metni', 'Bu kategoride henüz doküman bulunmuyor.', 'metin', 'Boş doküman kategorisi açıklaması'),
+    ('teknik_pdf_yukleniyor_metni', 'PDF yükleniyor…', 'metin', 'PDF yükleme durumu metni'),
+    ('teknik_pdf_hata_basligi', 'PDF görüntülenemedi', 'metin', 'PDF yükleme hatası başlığı'),
+    ('teknik_pdf_hata_aciklamasi', 'Doküman şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.', 'metin', 'PDF yükleme hatası açıklaması'),
+    ('teknik_pdf_indir_metni', 'İndir', 'metin', 'PDF indirme bağlantısı metni'),
+    ('teknik_pdf_yeni_sekme_metni', 'Yeni sekmede aç', 'metin', 'PDF yeni sekme bağlantısı metni'),
+    ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi')
+ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
     ('site_ana_adresi', 'https://www.demirvana.com', 'baglanti', 'Canonical ve sitemap için ana site adresi'),
@@ -457,3 +517,22 @@ INSERT INTO `referans_sektor_eslesmeleri` (`referans_id`, `sektor_id`) VALUES
     (13, 4), (14, 4), (15, 4), (16, 6), (17, 5), (18, 6),
     (19, 1), (20, 5), (21, 1), (22, 1)
 ON DUPLICATE KEY UPDATE `sektor_id` = VALUES(`sektor_id`);
+
+INSERT INTO `teknik_dokuman_kategorileri`
+    (`id`, `dil_kodu`, `ad`, `slug`, `aciklama`, `ikon_adi`, `siralama`)
+VALUES
+    (1, 'tr', 'Teknik Tablolar', 'teknik-tablolar', 'Ürünlere ait teknik tablo ve değerleri inceleyin.', 'dosya-hesaplama', 1),
+    (2, 'tr', 'Kullanma Talimatları', 'kullanma-talimatlari', 'Vana ve ekipmanların kullanım talimatlarını inceleyin.', 'kitap-acik', 2)
+ON DUPLICATE KEY UPDATE
+    `ad` = VALUES(`ad`), `aciklama` = VALUES(`aciklama`), `ikon_adi` = VALUES(`ikon_adi`),
+    `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `teknik_dokumanlar`
+    (`id`, `kategori_id`, `dil_kodu`, `baslik`, `slug`, `dosya_yolu`, `orijinal_dosya_adi`, `alternatif_aciklama`, `mime_turu`, `dosya_boyutu`, `sayfa_sayisi`, `siralama`)
+VALUES
+    (1, 1, 'tr', 'Çeviri Tablosu', 'ceviri-tablosu', 'ceviri_tablosu.pdf', 'ceviri_tablosu.pdf', 'Teknik ölçü ve birim çeviri tablosu', 'application/pdf', 297187, 1, 1)
+ON DUPLICATE KEY UPDATE
+    `kategori_id` = VALUES(`kategori_id`), `baslik` = VALUES(`baslik`), `dosya_yolu` = VALUES(`dosya_yolu`),
+    `orijinal_dosya_adi` = VALUES(`orijinal_dosya_adi`), `alternatif_aciklama` = VALUES(`alternatif_aciklama`),
+    `mime_turu` = VALUES(`mime_turu`), `dosya_boyutu` = VALUES(`dosya_boyutu`),
+    `sayfa_sayisi` = VALUES(`sayfa_sayisi`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;

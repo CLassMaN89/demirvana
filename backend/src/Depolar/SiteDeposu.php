@@ -128,6 +128,63 @@ final class SiteDeposu
         return ['sektorler' => $sektorler, 'kayitlar' => $kayitlar, 'gorseller' => $gorseller];
     }
 
+    public function teknikDokumanlar(): array
+    {
+        $kategoriler = $this->baglanti->query(
+            'SELECT id, dil_kodu, ad, slug, aciklama, ikon_adi, siralama
+             FROM teknik_dokuman_kategorileri
+             WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        $dokumanlar = $this->baglanti->query(
+            'SELECT td.id, td.kategori_id, td.baslik, td.slug, td.orijinal_dosya_adi,
+                    td.alternatif_aciklama, td.dosya_boyutu, td.sayfa_sayisi,
+                    td.indirmeye_izin_var_mi, td.yeni_sekmede_acmaya_izin_var_mi, td.siralama
+             FROM teknik_dokumanlar td
+             INNER JOIN teknik_dokuman_kategorileri tdk ON tdk.id = td.kategori_id
+             WHERE td.aktif_mi = 1 AND tdk.aktif_mi = 1
+             ORDER BY td.siralama, td.id'
+        )->fetchAll();
+
+        return self::teknikDokumanAgaciOlustur($kategoriler, $dokumanlar);
+    }
+
+    public static function teknikDokumanAgaciOlustur(array $kategoriler, array $dokumanlar): array
+    {
+        $kategoriIndeksi = [];
+        foreach ($kategoriler as $indeks => $kategori) {
+            $kategoriler[$indeks]['dokumanlar'] = [];
+            $kategoriIndeksi[(int) $kategori['id']] = $indeks;
+        }
+
+        // Dosyanın gerçek konumu dışarı açılmaz; ziyaretçi yalnız kayıtlı slug üzerinden belgeye erişir.
+        foreach ($dokumanlar as $dokuman) {
+            $kategoriId = (int) $dokuman['kategori_id'];
+            if (!isset($kategoriIndeksi[$kategoriId])) {
+                continue;
+            }
+            unset($dokuman['kategori_id']);
+            $dokuman['dosya_adresi'] = '/dokumanlar/' . $dokuman['slug'];
+            $kategoriler[$kategoriIndeksi[$kategoriId]]['dokumanlar'][] = $dokuman;
+        }
+
+        return $kategoriler;
+    }
+
+    public function teknikDokuman(string $slug): ?array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT td.*
+             FROM teknik_dokumanlar td
+             INNER JOIN teknik_dokuman_kategorileri tdk ON tdk.id = td.kategori_id
+             WHERE td.slug = :slug AND td.aktif_mi = 1 AND tdk.aktif_mi = 1 LIMIT 1'
+        );
+        $sorgu->execute(['slug' => $slug]);
+        $dokuman = $sorgu->fetch();
+
+        return $dokuman ?: null;
+    }
+
     public function kategori(string $slug): ?array
     {
         $sorgu = $this->baglanti->prepare(

@@ -18,7 +18,9 @@ $tablolar = @(
     'referanslar',
     'referans_gorselleri',
     'referans_sektorleri',
-    'referans_sektor_eslesmeleri'
+    'referans_sektor_eslesmeleri',
+    'teknik_dokuman_kategorileri',
+    'teknik_dokumanlar'
 )
 
 # Bu kontrol, backend deposunun beklediği temel tabloların şemadan yanlışlıkla çıkarılmasını yakalar.

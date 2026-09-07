@@ -57,6 +57,7 @@ try {
         '/api/sliderlar' => fn() => $denetleyici->sliderlar(),
         '/api/kategoriler' => fn() => $denetleyici->kategoriler(),
         '/api/referanslar' => fn() => $denetleyici->referanslar(),
+        '/api/teknik-dokumanlar' => fn() => $denetleyici->teknikDokumanlar(),
         '/api/urunler' => fn() => $denetleyici->urunler(
             isset($_GET['kategori']) ? (string) $_GET['kategori'] : null,
             isset($_GET['arama']) ? (string) $_GET['arama'] : null

@@ -53,6 +53,15 @@ if (($siteAyarlari['destek_eposta'] ?? null) !== 'dv@demirvana.com') {
     throw new RuntimeException('Site ayarları anahtar/değer nesnesine dönüştürülemedi.');
 }
 
+$dokumanAgaci = SiteDeposu::teknikDokumanAgaciOlustur(
+    [['id' => 1, 'ad' => 'Teknik Tablolar', 'slug' => 'teknik-tablolar']],
+    [['id' => 4, 'kategori_id' => 1, 'baslik' => 'Çeviri Tablosu', 'slug' => 'ceviri-tablosu']]
+);
+
+if (($dokumanAgaci[0]['dokumanlar'][0]['baslik'] ?? null) !== 'Çeviri Tablosu') {
+    throw new RuntimeException('Teknik doküman kategori ağacı doğru kurulmadı.');
+}
+
 $seoSayfalari = SeoDeposu::seoKayitlariniNesneyeDonustur([
     ['rota' => '/', 'dil_kodu' => 'tr', 'seo_basligi' => 'Demirvana'],
 ]);
