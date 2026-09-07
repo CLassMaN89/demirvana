@@ -95,6 +95,11 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - PHP üretim giriş noktası React başlamadan önce rotaya özel SEO etiketlerini HTML'e yazar; bilinmeyen doğrudan rotalar HTTP 404 ve `noindex, nofollow` döndürür.
 - `/robots.txt` ve `/sitemap.xml` etkin SEO sayfaları, kategoriler ve ürünlerden dinamik üretilir; sitemap dışı veya noindex kayıtlar listeye alınmaz.
 - Responsive, tema uyumlu gerçek bulunamadı sayfası eklendi; bilinmeyen React rotaları artık ana sayfaya yönlendirilmez.
+- Referanslar sayfası, verilen yerel HTML tasarımındaki koyu istatistikli hero, yapışkan filtre/arama, kademeli kart girişleri ve açılır kart ayrıntılarıyla yeniden düzenlendi.
+- Yurtiçi referanslarda ilk sekiz kayıt gösterilir ve `Daha Fazla Göster` ile dörder kayıt eklenir; yurtdışı kayıtları ayrı koyu global projeler alanında sunulur.
+- Hero istatistikleri toplam proje, benzersiz konum, sektör ve yıl aralığını canlı kayıtlardan hesaplar; mevcut saha galerisi ve erişilebilir büyütme modalı korunur.
+- Referans hero, istatistik, liste, arama, sonuç, kart detayı, boş durum, daha fazla, yurtdışı ve galeri metinleri için 23 `site_ayarlari` anahtarı eklendi; bütün renkler merkezi tema değişkenlerinden türetilir.
+- Referans kartı açma, hover ve giriş hareketleri azaltılmış hareket tercihinde kapatılır; masaüstünde iki, tablet ve telefonda tek sütun kullanılır.
 
 ## Mevcut durum
 
@@ -114,6 +119,8 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `docs/superpowers/plans/2026-09-07-site-arama-ve-sayfa-gecisi-plani.md`
 - `docs/superpowers/specs/2026-09-07-admin-yonetimli-seo-tasarimi.md`
 - `docs/superpowers/plans/2026-09-07-admin-yonetimli-seo-uygulama-plani.md`
+- `docs/superpowers/specs/2026-09-07-referanslar-gecisli-tasarim.md`
+- `docs/superpowers/plans/2026-09-07-referanslar-gecisli-uygulama-plani.md`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 - `backend/` altındaki PHP API dosyaları
 - `veritabani/demirvana.sql`
@@ -125,7 +132,7 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 14 test dosyasında 41 test, 0 hata.
+- Frontend testleri: 14 test dosyasında 45 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -152,6 +159,8 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 - PHP üretim HTML'i `/teknik` rotasında doğru canonical etiketi üretti; bilinmeyen doğrudan rota HTTP 404 döndürdü.
 - Canlı React doğrulamasında `/teknik` rotası `Teknik Bilgiler | Demirvana`, doğru canonical ve JSON-LD üretti; bilinmeyen rota `Sayfa bulunamadı | Demirvana` ile `noindex, nofollow` kullandı.
 - SEO canlı tarayıcı doğrulamasında konsol hatası veya uyarı görülmedi; Vite üretim derlemesi, 10 PHP dosyasının sözdizimi, PHP API testi ve şema yapısal testi başarılıdır.
+- Yeni Referanslar görünümü 375px, 768px, 1440px ve 1920px genişliklerde doğrulandı; yatay taşma ve konsol hatası yok, kart akordeonu bütün hedeflerde çalışıyor.
+- Canlı MariaDB içe aktarımında 23 Referanslar sayfası ayarı oluştu; `/api/site-ayarlari` üzerinden hero başlığı okunarak React görünümünde doğrulandı.
 
 ## Bilinen durumlar
 
@@ -165,4 +174,4 @@ Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması, yumu�
 
 ## Sıradaki adım
 
-Kullanıcının verdiği `C:/Users/Sinan/Documents/Projeler/vana2/assets/Carousel/index.html` dosyasındaki Referanslar görünümü ve geçişlerini görsel referans olarak incele; yalnız mevcut Referanslar sayfasını bu doğrultuda düzenle. Navbar, footer ve diğer sayfaları koru.
+Geçişli Referanslar sayfası tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer ve diğer tamamlanmış sayfaları koru.

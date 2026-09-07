@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import ReferanslarSayfasi from './ReferanslarSayfasi';
@@ -19,6 +19,34 @@ const referanslar = {
 };
 
 describe('ReferanslarSayfasi', () => {
+  it('referans hero alanında gerçek veriden hesaplanan özetleri gösterir', () => {
+    render(<ReferanslarSayfasi referanslar={referanslar} />);
+
+    expect(screen.getByRole('heading', { name: 'Güvenin Referansa Dönüştüğü Projeler' })).toBeInTheDocument();
+    const istatistikler = screen.getByLabelText('Referans istatistikleri');
+    expect(within(istatistikler).getAllByText('3', { selector: '.referans-istatistik__deger' })).toHaveLength(2);
+    expect(screen.getByText('Proje')).toBeInTheDocument();
+    expect(screen.getByText('2', { selector: '.referans-istatistik__deger' })).toBeInTheDocument();
+    expect(screen.getByText('Sektör')).toBeInTheDocument();
+  });
+
+  it('bölüm metinlerini admin veri sözleşmesinden alır', () => {
+    render(
+      <ReferanslarSayfasi
+        referanslar={referanslar}
+        siteAyarlari={{
+          referans_hero_basligi: 'Yönetilebilir hero başlığı',
+          referans_liste_basligi: 'Yönetilebilir liste başlığı',
+          referans_arama_yertutucusu: 'Referans kaydı ara'
+        }}
+      />
+    );
+
+    expect(screen.getByRole('heading', { name: 'Yönetilebilir hero başlığı' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Yönetilebilir liste başlığı' })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Referans kaydı ara')).toBeInTheDocument();
+  });
+
   it('referans özetini ve bütün kayıtları ilk görünümde sunar', () => {
     render(<ReferanslarSayfasi referanslar={referanslar} />);
 
@@ -71,5 +99,44 @@ describe('ReferanslarSayfasi', () => {
 
     await kullanici.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('referans kartını erişilebilir biçimde açıp kapatır', async () => {
+    const kullanici = userEvent.setup();
+    render(<ReferanslarSayfasi referanslar={referanslar} />);
+
+    const kartDugmesi = screen.getByRole('button', { name: /Antalya Arıtma Tesisi/ });
+    expect(kartDugmesi).toHaveAttribute('aria-expanded', 'false');
+
+    await kullanici.click(kartDugmesi);
+    expect(kartDugmesi).toHaveAttribute('aria-expanded', 'true');
+    expect(within(document.getElementById('referans-detay-1')).getByText('Proje bilgileri')).toBeInTheDocument();
+
+    await kullanici.click(kartDugmesi);
+    expect(kartDugmesi).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('ilk sekiz yurtiçi kayıttan sonrasını daha fazla düğmesiyle gösterir', async () => {
+    const kullanici = userEvent.setup();
+    const cokKayitliVeri = {
+      ...referanslar,
+      kayitlar: Array.from({ length: 9 }, (_, sira) => ({
+        id: sira + 1,
+        baslik: `Yurtiçi Proje ${sira + 1}`,
+        konum: 'Ankara',
+        kurum: 'Test Kurumu',
+        yil: '2026',
+        bolge: 'yurtici',
+        sektor_adi: 'Su ve Atıksu',
+        sektor_slug: 'su-ve-atiksu',
+        siralama: sira + 1
+      }))
+    };
+
+    render(<ReferanslarSayfasi referanslar={cokKayitliVeri} />);
+
+    expect(screen.queryByText('Yurtiçi Proje 9')).not.toBeInTheDocument();
+    await kullanici.click(screen.getByRole('button', { name: 'Daha Fazla Göster' }));
+    expect(screen.getByText('Yurtiçi Proje 9')).toBeInTheDocument();
   });
 });

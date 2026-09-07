@@ -102,7 +102,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
           <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
           <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
-          <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} />} />
+          <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
           <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
           <Route path="*" element={<BulunamadiSayfasi />} />

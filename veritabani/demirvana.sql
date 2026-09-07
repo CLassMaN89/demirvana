@@ -253,7 +253,30 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('firma_adresi', 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye', 'metin', 'Firma açık adresi'),
     ('footer_iletisim_buton_metni', 'Bizimle iletişime geçin', 'metin', 'Footer iletişim düğmesi metni'),
     ('footer_iletisim_buton_baglantisi', '/iletisim', 'baglanti', 'Footer iletişim düğmesi bağlantısı'),
-    ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir')
+    ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir'),
+    ('referans_hero_yol_metni', 'Anasayfa / Referanslar', 'metin', 'Referans hero ekmek kırıntısı metni'),
+    ('referans_hero_basligi', 'Güvenin Referansa Dönüştüğü Projeler', 'metin', 'Referans hero ana başlığı'),
+    ('referans_hero_aciklamasi', 'Türkiye’de ve dünyada tamamladığımız seçkin projeler.', 'metin', 'Referans hero açıklaması'),
+    ('referans_istatistik_proje_etiketi', 'Proje', 'metin', 'Referans toplam proje istatistiği etiketi'),
+    ('referans_istatistik_konum_etiketi', 'Konum', 'metin', 'Referans konum istatistiği etiketi'),
+    ('referans_istatistik_sektor_etiketi', 'Sektör', 'metin', 'Referans sektör istatistiği etiketi'),
+    ('referans_istatistik_yil_etiketi', 'Yıl aralığı', 'metin', 'Referans yıl aralığı istatistiği etiketi'),
+    ('referans_liste_etiketi', 'Projeler', 'metin', 'Referans liste üst etiketi'),
+    ('referans_liste_basligi', 'Referanslarımız', 'metin', 'Referans liste başlığı'),
+    ('referans_liste_aciklamasi', 'Sektörlere göre filtreleyerek projelerimizi inceleyebilirsiniz.', 'metin', 'Referans liste açıklaması'),
+    ('referans_arama_yertutucusu', 'Kurum, şehir veya proje ara', 'metin', 'Referans arama alanı yer tutucusu'),
+    ('referans_daha_fazla_metni', 'Daha Fazla Göster', 'metin', 'Referans ek kayıt düğmesi metni'),
+    ('referans_yurtdisi_etiketi', 'Global projeler', 'metin', 'Yurtdışı referans bölümü üst etiketi'),
+    ('referans_yurtdisi_basligi', 'Yurtdışı Referanslarımız', 'metin', 'Yurtdışı referans bölümü başlığı'),
+    ('referans_yurtdisi_aciklamasi', 'Sınırları aşan kalite, dünyada da tercih ediliyor.', 'metin', 'Yurtdışı referans bölümü açıklaması'),
+    ('referans_galeri_basligi', 'Sahadan görüntüler', 'metin', 'Referans galeri başlığı'),
+    ('referans_galeri_aciklamasi', 'Ürünlerimizin tesis uygulamalarından seçilmiş kareler.', 'metin', 'Referans galeri açıklaması'),
+    ('referans_detay_etiketi', 'Proje bilgileri', 'metin', 'Açılır referans kartı detay etiketi'),
+    ('referans_detay_sablonu', '{kurum} tarafından {konum} konumunda gerçekleştirilen {sektor} projesi{yil}', 'metin', 'Referans detay cümlesi; kayıt alanları süslü parantezle yerleştirilir'),
+    ('referans_sonuc_metni', '{sayi} referans gösteriliyor', 'metin', 'Gösterilen kayıt sayısı metni; {sayi} otomatik değiştirilir'),
+    ('referans_bos_basligi', 'Aramanızla eşleşen bir referans bulunamadı.', 'metin', 'Referans filtresi boş sonuç başlığı'),
+    ('referans_bos_aciklamasi', 'Arama kelimesini veya seçili sektörü değiştirebilirsiniz.', 'metin', 'Referans filtresi boş sonuç açıklaması'),
+    ('referans_fotograf_sayisi_metni', '{sayi} fotoğraf', 'metin', 'Galeri fotoğraf sayısı metni; {sayi} otomatik değiştirilir')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
