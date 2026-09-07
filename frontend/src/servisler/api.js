@@ -48,7 +48,8 @@ export async function siteVerileriniGetir(secenekler = {}) {
     ['kategoriler', ornekVeriler.kategoriler],
     // Ürünler ilk yüklemede alınır; böylece üst arama gerçek ürün kayıtlarında da sonuç üretir.
     ['urunler', ornekVeriler.urunler],
-    ['referanslar', ornekVeriler.referanslar]
+    ['referanslar', ornekVeriler.referanslar],
+    ['teknik-dokumanlar', ornekVeriler.teknik_dokumanlar]
   ];
 
   const sonuclar = await Promise.all(

@@ -117,7 +117,19 @@ export const ornekVeriler = Object.freeze({
     firma_adresi: 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye',
     footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
     footer_iletisim_buton_baglantisi: '/iletisim',
-    footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.'
+    footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.',
+    teknik_hero_basligi: 'Teknik',
+    teknik_hero_aciklamasi: 'Ürünlerimize ait teknik tabloları ve kullanım talimatlarını buradan inceleyebilirsiniz.',
+    teknik_slogan_satir_1: 'Güvenli Akış',
+    teknik_slogan_satir_2: 'Daha Güçlü Yarınlar',
+    teknik_pdf_goruntule_metni: 'PDF Görüntüle',
+    teknik_bos_kategori_metni: 'Bu kategoride henüz doküman bulunmuyor.',
+    teknik_pdf_yukleniyor_metni: 'PDF yükleniyor…',
+    teknik_pdf_hata_basligi: 'PDF görüntülenemedi',
+    teknik_pdf_hata_aciklamasi: 'Doküman şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.',
+    teknik_pdf_indir_metni: 'İndir',
+    teknik_pdf_yeni_sekme_metni: 'Yeni sekmede aç',
+    teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat'
   },
   tema: {
     ana_mavi: '#28469D',
@@ -183,5 +195,41 @@ export const ornekVeriler = Object.freeze({
       { id: 2, gorsel_yolu: '/assets/referanslar/referans-galerisi.png', alternatif_metin: 'Arıtma havuzu üzerindeki vana uygulaması', odak_x: 50, odak_y: 100, gorsel_olcegi: 330, siralama: 2 },
       { id: 3, gorsel_yolu: '/assets/referanslar/referans-galerisi.png', alternatif_metin: 'Saha kontrol panosu ve boru hattı uygulaması', odak_x: 100, odak_y: 100, gorsel_olcegi: 330, siralama: 3 }
     ]
-  }
+  },
+  teknik_dokumanlar: [
+    {
+      id: 1,
+      dil_kodu: 'tr',
+      ad: 'Teknik Tablolar',
+      slug: 'teknik-tablolar',
+      aciklama: 'Ürünlere ait teknik tablo ve değerleri inceleyin.',
+      ikon_adi: 'dosya-hesaplama',
+      siralama: 1,
+      dokumanlar: [
+        {
+          id: 1,
+          baslik: 'Çeviri Tablosu',
+          slug: 'ceviri-tablosu',
+          dosya_adresi: '/dokumanlar/ceviri-tablosu',
+          orijinal_dosya_adi: 'ceviri_tablosu.pdf',
+          alternatif_aciklama: 'Teknik ölçü ve birim çeviri tablosu',
+          dosya_boyutu: 297187,
+          sayfa_sayisi: 1,
+          indirmeye_izin_var_mi: 1,
+          yeni_sekmede_acmaya_izin_var_mi: 1,
+          siralama: 1
+        }
+      ]
+    },
+    {
+      id: 2,
+      dil_kodu: 'tr',
+      ad: 'Kullanma Talimatları',
+      slug: 'kullanma-talimatlari',
+      aciklama: 'Vana ve ekipmanların kullanım talimatlarını inceleyin.',
+      ikon_adi: 'kitap-acik',
+      siralama: 2,
+      dokumanlar: []
+    }
+  ]
 });

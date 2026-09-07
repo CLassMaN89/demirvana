@@ -51,6 +51,8 @@ describe('siteVerileriniGetir', () => {
           basarili: true,
           veri: yol.endsWith('/referanslar')
             ? { kayitlar: [{ id: 1, baslik: 'Test projesi' }], gorseller: [] }
+            : yol.endsWith('/teknik-dokumanlar')
+              ? [{ id: 1, ad: 'Teknik Tablolar', dokumanlar: [{ baslik: 'Çeviri Tablosu' }] }]
             : []
         })
       };
@@ -62,6 +64,8 @@ describe('siteVerileriniGetir', () => {
     expect(istenenYollar).toContain('/api/urunler');
     expect(istenenYollar).toContain('/api/site-ayarlari');
     expect(istenenYollar).toContain('/api/seo');
+    expect(istenenYollar).toContain('/api/teknik-dokumanlar');
     expect(veri.referanslar.kayitlar[0].baslik).toBe('Test projesi');
+    expect(veri.teknik_dokumanlar[0].dokumanlar[0].baslik).toBe('Çeviri Tablosu');
   });
 });
