@@ -6,6 +6,31 @@ import { ornekVeriler } from '../veri/ornekVeriler';
 import Header from './Header';
 
 describe('Header', () => {
+  it('arama panelini açar ve gerçek kategori sonucuna bağlantı verir', async () => {
+    const kullanici = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <Header
+          menu={[{ id: 1, baslik: 'İletişim', baglanti: '/iletisim', alt_ogeler: [] }]}
+          logoYolu="/assets/logo.png"
+          aramaKaynaklari={{
+            kategoriler: [{ id: 8, ad: 'Kelebek Vanalar', slug: 'kelebek-vanalar' }],
+            urunler: [], referanslar: { kayitlar: [] }
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    await kullanici.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
+    const arama = screen.getByRole('searchbox', { name: 'Sitede ara' });
+    expect(arama).toHaveFocus();
+    await kullanici.type(arama, 'kelebek');
+
+    expect(screen.getByRole('link', { name: /Kelebek Vanalar/i })).toHaveAttribute('href', '/kategoriler/kelebek-vanalar');
+    await kullanici.keyboard('{Escape}');
+    expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
+  });
+
   it('üst menü metnini 12px ve masaüstü logoyu daha görünür ölçüde tutar', () => {
     render(
       <MemoryRouter>

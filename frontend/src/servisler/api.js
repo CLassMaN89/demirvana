@@ -44,6 +44,8 @@ export async function siteVerileriniGetir(secenekler = {}) {
     ['menu', ornekVeriler.menu],
     ['sliderlar', ornekVeriler.sliderlar],
     ['kategoriler', ornekVeriler.kategoriler],
+    // Ürünler ilk yüklemede alınır; böylece üst arama gerçek ürün kayıtlarında da sonuç üretir.
+    ['urunler', ornekVeriler.urunler],
     ['referanslar', ornekVeriler.referanslar]
   ];
 

@@ -247,6 +247,117 @@
   justify-self: end;
 }
 
+.site-header__arama-dugmesi {
+  display: grid;
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--renk-metin);
+  cursor: pointer;
+  place-items: center;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.site-header__arama-dugmesi:hover,
+.site-header__arama-dugmesi--acik {
+  background: color-mix(in srgb, var(--renk-acik) 74%, var(--renk-beyaz));
+  color: var(--renk-ana);
+}
+
+.site-header__arama-paneli {
+  position: absolute;
+  z-index: 60;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-height: calc(100vh - var(--navbar-yuksekligi));
+  overflow-y: auto;
+  border-top: 1px solid var(--renk-cizgi);
+  border-bottom: 1px solid var(--renk-cizgi);
+  background: color-mix(in srgb, var(--renk-beyaz) 97%, var(--renk-acik));
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--renk-koyu) 15%, transparent);
+  animation: site-arama-acilis 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 50% 0;
+}
+
+.site-header__arama-ic { padding-block: 20px 24px; }
+
+.site-header__arama-alani {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  gap: 13px;
+  padding-inline: 18px;
+  border: 1px solid color-mix(in srgb, var(--renk-ana) 20%, var(--renk-cizgi));
+  border-radius: 12px;
+  background: var(--renk-beyaz);
+  color: var(--renk-ana);
+}
+
+.site-header__arama-alani:focus-within {
+  border-color: var(--renk-ana);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--renk-ana) 11%, transparent);
+}
+
+.site-header__arama-alani input {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--renk-metin);
+  font-size: 0.95rem;
+}
+
+.site-header__arama-sonuclari p {
+  margin: 16px 2px 0;
+  color: var(--renk-ikincil-metin);
+  font-size: 0.8rem;
+}
+
+.site-header__arama-sonuclari ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+}
+
+.site-header__arama-sonuclari a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  gap: 16px;
+  padding: 11px 14px;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: 10px;
+  background: var(--renk-beyaz);
+  color: var(--renk-metin);
+  text-decoration: none;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.site-header__arama-sonuclari a:hover,
+.site-header__arama-sonuclari a:focus-visible {
+  border-color: color-mix(in srgb, var(--renk-ana) 55%, var(--renk-cizgi));
+  transform: translateY(-2px);
+}
+
+.site-header__arama-sonuclari a > span { display: grid; gap: 4px; min-width: 0; }
+.site-header__arama-sonuclari strong { font-size: 0.82rem; }
+.site-header__arama-sonuclari small { overflow: hidden; color: var(--renk-ikincil-metin); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+.site-header__arama-sonuclari em { flex: 0 0 auto; color: var(--renk-ana); font-size: 0.65rem; font-style: normal; font-weight: 700; text-transform: uppercase; }
+
+@keyframes site-arama-acilis {
+  from { opacity: 0; transform: translateY(-10px) scaleY(0.96); }
+  to { opacity: 1; transform: translateY(0) scaleY(1); }
+}
+
 .site-header__menu-dugmesi {
   display: block;
   width: 44px;
@@ -319,6 +430,18 @@
 
   .site-header__baglanti::after { display: none; }
 
+  .site-header__arama-dugmesi {
+    width: 100%;
+    min-height: 52px;
+    padding-inline: max(20px, calc((100% - var(--icerik-genisligi)) / 2));
+    border-top: 1px solid var(--renk-cizgi);
+    border-radius: 0;
+    place-items: center start;
+  }
+
+  .site-header__arama-paneli { max-height: calc(100vh - var(--navbar-yuksekligi)); }
+  .site-header__arama-sonuclari ul { grid-template-columns: 1fr; }
+
   .site-header__mega-menu {
     position: static;
     width: 100%;
@@ -365,5 +488,8 @@
   .site-header__vurgu,
   .site-header__asagi-ok,
   .site-header__mega-menu,
-  .site-header__vana-menusu { animation: none; transition: none; }
+  .site-header__vana-menusu,
+  .site-header__arama-paneli,
+  .site-header__arama-dugmesi,
+  .site-header__arama-sonuclari a { animation: none; transition: none; }
 }

@@ -1,29 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
 import '../stiller/header.css';
+import { aramaSonuclariOlustur } from './arama';
 
-export default function Header({ menu, logoYolu }) {
+export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   const [menuAcik, setMenuAcik] = useState(false);
   const [acikMenuId, setAcikMenuId] = useState(null);
   const [acikAltMenuId, setAcikAltMenuId] = useState(null);
   const [vurgu, setVurgu] = useState(null);
+  const [aramaAcik, setAramaAcik] = useState(false);
+  const [aramaMetni, setAramaMetni] = useState('');
   const headerRef = useRef(null);
   const navRef = useRef(null);
+  const aramaAlaniRef = useRef(null);
+  const aramaDugmesiRef = useRef(null);
   const konum = useLocation();
+  const aramaSonuclari = useMemo(
+    () => aramaSonuclariOlustur(menu, aramaKaynaklari, aramaMetni),
+    [aramaKaynaklari, aramaMetni, menu]
+  );
 
   useEffect(() => {
     // Yeni sayfaya geçildiğinde mobil paneli kapatarak açık menünün içeriği örtmesini önleriz.
     setMenuAcik(false);
     setAcikMenuId(null);
     setAcikAltMenuId(null);
+    setAramaAcik(false);
+    setAramaMetni('');
   }, [konum.pathname]);
+
+  useEffect(() => {
+    if (aramaAcik) aramaAlaniRef.current?.focus();
+  }, [aramaAcik]);
 
   useEffect(() => {
     const disTiklamayiKapat = (olay) => {
       if (headerRef.current && !headerRef.current.contains(olay.target)) {
         setAcikMenuId(null);
         setAcikAltMenuId(null);
+        setAramaAcik(false);
       }
     };
 
@@ -191,6 +207,25 @@ export default function Header({ menu, logoYolu }) {
               </div>
             );
           })}
+
+          <button
+            ref={aramaDugmesiRef}
+            className={`site-header__arama-dugmesi${aramaAcik ? ' site-header__arama-dugmesi--acik' : ''}`}
+            type="button"
+            aria-expanded={aramaAcik}
+            aria-controls="site-arama-paneli"
+            aria-label={aramaAcik ? 'Site aramasını kapat' : 'Site aramasını aç'}
+            onClick={() => {
+              setAramaAcik((acik) => !acik);
+              setMenuAcik(false);
+              menuleriKapat();
+            }}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" strokeWidth="1.7" />
+              <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            </svg>
+          </button>
         </nav>
 
         <Link className="site-header__teklif" to="/iletisim">
@@ -198,6 +233,63 @@ export default function Header({ menu, logoYolu }) {
           <span aria-hidden="true">→</span>
         </Link>
       </div>
+
+      {aramaAcik && (
+        <div
+          className="site-header__arama-paneli"
+          id="site-arama-paneli"
+          onKeyDown={(olay) => {
+            // Sonuç bağlantısına geçilmiş olsa da Escape tüm arama panelini kapatıp odağı düğmeye döndürür.
+            if (olay.key === 'Escape') {
+              setAramaAcik(false);
+              aramaDugmesiRef.current?.focus();
+            }
+          }}
+        >
+          <div className="site-header__arama-ic icerik-kapsayici">
+            <label className="site-header__arama-alani">
+              <span className="ekran-okuyucu">Sitede ara</span>
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" aria-hidden="true">
+                <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" strokeWidth="1.7" />
+                <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+              <input
+                ref={aramaAlaniRef}
+                type="search"
+                aria-label="Sitede ara"
+                placeholder="Ürün, kategori, proje veya sayfa ara"
+                value={aramaMetni}
+                onChange={(olay) => setAramaMetni(olay.target.value)}
+              />
+            </label>
+
+            <div className="site-header__arama-sonuclari" aria-live="polite">
+              {aramaMetni.trim().length < 2 ? (
+                <p>Aramak için en az iki karakter yazın.</p>
+              ) : aramaSonuclari.length > 0 ? (
+                <ul>
+                  {aramaSonuclari.map((sonuc) => (
+                    <li key={sonuc.id}>
+                      <Link
+                        to={sonuc.baglanti}
+                        onClick={() => {
+                          setAramaAcik(false);
+                          setAramaMetni('');
+                        }}
+                      >
+                        <span><strong>{sonuc.baslik}</strong>{sonuc.altMetin ? <small>{sonuc.altMetin}</small> : null}</span>
+                        <em>{sonuc.tur}</em>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Aramanızla eşleşen içerik bulunamadı.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

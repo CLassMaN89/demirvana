@@ -86,9 +86,18 @@ final class SiteDeposu
 
     public function referanslar(): array
     {
+        $sektorler = $this->baglanti->query(
+            'SELECT id, ad, slug, siralama
+             FROM referans_sektorleri WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
         $kayitlar = $this->baglanti->query(
-            'SELECT id, baslik, konum, kurum, yil, bolge, siralama
-             FROM referanslar WHERE aktif_mi = 1 ORDER BY siralama, id'
+            'SELECT r.id, r.baslik, r.konum, r.kurum, r.yil, r.bolge, r.siralama,
+                    rs.ad AS sektor_adi, rs.slug AS sektor_slug
+             FROM referanslar r
+             LEFT JOIN referans_sektor_eslesmeleri rse ON rse.referans_id = r.id
+             LEFT JOIN referans_sektorleri rs ON rs.id = rse.sektor_id AND rs.aktif_mi = 1
+             WHERE r.aktif_mi = 1 ORDER BY r.siralama, r.id'
         )->fetchAll();
 
         $gorseller = $this->baglanti->query(
@@ -97,7 +106,7 @@ final class SiteDeposu
         )->fetchAll();
 
         // İki dizi tek uçta dönerek sayfa açılışında ikinci bir ağ isteği ve olası içerik sıçramasını önler.
-        return ['kayitlar' => $kayitlar, 'gorseller' => $gorseller];
+        return ['sektorler' => $sektorler, 'kayitlar' => $kayitlar, 'gorseller' => $gorseller];
     }
 
     public function kategori(string $slug): ?array

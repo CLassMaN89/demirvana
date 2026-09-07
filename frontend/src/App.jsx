@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import DurumMesaji from './bilesenler/DurumMesaji';
+import SayfaGecisi from './bilesenler/SayfaGecisi';
 import SayfaIskeleti from './bilesenler/SayfaIskeleti';
 import AnaSayfa from './sayfalar/AnaSayfa';
 import IcerikSayfasi from './sayfalar/IcerikSayfasi';
@@ -65,19 +66,24 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
 
   // Router tek bir iskelet içinde çalışır; böylece navbar sayfa geçişlerinde yeniden kurulmaz.
   return (
-    <SayfaIskeleti menu={veri.menu}>
-      <Routes>
-        <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} />} />
-        <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
-        <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
-        <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
-        <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
-        <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
-        <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} />} />
-        <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
-        <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+    <SayfaIskeleti
+      menu={veri.menu}
+      aramaKaynaklari={{ kategoriler: veri.kategoriler, urunler: veri.urunler, referanslar: veri.referanslar }}
+    >
+      <SayfaGecisi>
+        <Routes>
+          <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} />} />
+          <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
+          <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
+          <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
+          <Route path="/kurumsal" element={<IcerikSayfasi tur="kurumsal" />} />
+          <Route path="/teknik" element={<IcerikSayfasi tur="teknik" />} />
+          <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} />} />
+          <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
+          <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </SayfaGecisi>
     </SayfaIskeleti>
   );
 }

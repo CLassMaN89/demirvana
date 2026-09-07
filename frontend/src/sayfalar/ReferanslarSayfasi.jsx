@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import '../stiller/referanslar.css';
 
-const FILTRELER = [
-  { deger: 'tumu', etiket: 'Tümü' },
-  { deger: 'yurtici', etiket: 'Yurtiçi' },
-  { deger: 'yurtdisi', etiket: 'Yurtdışı' }
-];
+function aramaMetniniNormallestir(metin) {
+  return String(metin ?? '').toLocaleLowerCase('tr-TR').trim();
+}
 
 function GaleriGorseli({ gorsel, sinifAdi }) {
   const gorselStili = {
@@ -27,18 +25,26 @@ function BuyutSimgesi() {
 }
 
 export default function ReferanslarSayfasi({ referanslar = { kayitlar: [], gorseller: [] } }) {
-  const [etkinFiltre, setEtkinFiltre] = useState('tumu');
+  const [etkinSektor, setEtkinSektor] = useState('tumu');
+  const [arama, setArama] = useState('');
   const [seciliGorsel, setSeciliGorsel] = useState(null);
   const kapatmaDugmesi = useRef(null);
   const oncekiOdak = useRef(null);
   const kayitlar = referanslar?.kayitlar ?? [];
   const gorseller = referanslar?.gorseller ?? [];
-
-  const yurticiSayisi = kayitlar.filter((kayit) => kayit.bolge === 'yurtici').length;
-  const yurtdisiSayisi = kayitlar.filter((kayit) => kayit.bolge === 'yurtdisi').length;
+  const sektorler = referanslar?.sektorler ?? [];
   const gorunenKayitlar = useMemo(
-    () => etkinFiltre === 'tumu' ? kayitlar : kayitlar.filter((kayit) => kayit.bolge === etkinFiltre),
-    [etkinFiltre, kayitlar]
+    () => {
+      const aranan = aramaMetniniNormallestir(arama);
+      return kayitlar.filter((kayit) => {
+        const sektorUygun = etkinSektor === 'tumu' || kayit.sektor_slug === etkinSektor;
+        const aranabilirMetin = aramaMetniniNormallestir(
+          `${kayit.baslik} ${kayit.konum} ${kayit.kurum} ${kayit.sektor_adi}`
+        );
+        return sektorUygun && (!aranan || aranabilirMetin.includes(aranan));
+      });
+    },
+    [arama, etkinSektor, kayitlar]
   );
 
   useEffect(() => {
@@ -71,65 +77,65 @@ export default function ReferanslarSayfasi({ referanslar = { kayitlar: [], gorse
       <div className="icerik-kapsayici">
         <header className="referans-giris">
           <div className="referans-giris__metin">
-            <span className="referans-giris__isaret" aria-hidden="true" />
+            <span className="referans-giris__etiket">Projeler</span>
             <h1>Referanslarımız</h1>
-            <p>
-              Su, enerji ve endüstriyel tesislerde üstlendiğimiz projeleri; kurum, konum ve uygulama yılıyla birlikte inceleyin.
-            </p>
+            <p>Sektörlere göre filtreleyerek projelerimizi inceleyebilirsiniz.</p>
           </div>
-
-          <dl className="referans-ozet" aria-label="Referans özeti">
-            <div className="referans-ozet__ana">
-              <dt>Tamamlanan referans</dt>
-              <dd className="referans-ozet__sayi">{kayitlar.length}</dd>
-            </div>
-            <div>
-              <dt>Yurtiçi</dt>
-              <dd>{yurticiSayisi}</dd>
-            </div>
-            <div>
-              <dt>Yurtdışı</dt>
-              <dd>{yurtdisiSayisi}</dd>
-            </div>
-          </dl>
+          <p className="referans-sonuc" aria-live="polite">
+            <strong className="referans-sonuc__sayi">{gorunenKayitlar.length}</strong> referans gösteriliyor
+          </p>
         </header>
 
         <div className="referans-arac-cubugu">
-          <div className="referans-filtreleri" aria-label="Referans bölgesi filtresi">
-            {FILTRELER.map((filtre) => (
+          <div className="referans-filtre-kaydirma">
+            <div className="referans-filtreleri" aria-label="Referans sektör filtresi">
+            {[{ id: 0, ad: 'Tümü', slug: 'tumu' }, ...sektorler].map((sektor) => (
               <button
-                key={filtre.deger}
+                key={sektor.slug}
                 type="button"
-                aria-pressed={etkinFiltre === filtre.deger}
-                onClick={() => setEtkinFiltre(filtre.deger)}
+                aria-pressed={etkinSektor === sektor.slug}
+                onClick={() => setEtkinSektor(sektor.slug)}
               >
-                {filtre.etiket}
+                {sektor.ad}
               </button>
             ))}
+            </div>
           </div>
-          <p className="referans-sonuc" aria-live="polite">{gorunenKayitlar.length} referans gösteriliyor</p>
+          <label className="referans-arama">
+            <span className="ekran-okuyucu">Referanslarda ara</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.7" />
+              <path d="m16 16 4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              aria-label="Referanslarda ara"
+              value={arama}
+              onChange={(olay) => setArama(olay.target.value)}
+              placeholder="Kurum, şehir veya proje ara"
+            />
+          </label>
         </div>
 
         {gorunenKayitlar.length > 0 ? (
           <ol className="referans-listesi">
             {gorunenKayitlar.map((kayit) => (
-              <li key={kayit.id} className="referans-kaydi">
+              <li key={kayit.id} id={`referans-${kayit.id}`} className="referans-kaydi">
                 <span className="referans-kaydi__numara" aria-hidden="true">
                   {String(kayit.siralama ?? kayit.id).padStart(2, '0')}
                 </span>
                 <div className="referans-kaydi__icerik">
-                  <div className="referans-kaydi__ust">
-                    <h2>{kayit.baslik}</h2>
-                    {kayit.yil && <span className="referans-kaydi__yil">{kayit.yil}</span>}
-                  </div>
-                  <p>{kayit.kurum}</p>
-                  <span className="referans-kaydi__konum">{kayit.konum}</span>
+                  <span className="referans-kaydi__sektor">{kayit.sektor_adi}</span>
+                  <h2>{kayit.baslik}</h2>
+                  <p><span>{kayit.konum}</span><span aria-hidden="true"> • </span>{kayit.kurum}</p>
                 </div>
+                {kayit.yil && <span className="referans-kaydi__yil">{kayit.yil}</span>}
+                <span className="referans-kaydi__ok" aria-hidden="true">→</span>
               </li>
             ))}
           </ol>
         ) : (
-          <p className="referans-bos">Bu filtreye ait yayınlanmış referans bulunmuyor.</p>
+          <p className="referans-bos">Aramanızla eşleşen bir referans bulunamadı.</p>
         )}
 
         {gorseller.length > 0 && (

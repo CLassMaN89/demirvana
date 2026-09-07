@@ -40,7 +40,7 @@ describe('veriGetir', () => {
 });
 
 describe('siteVerileriniGetir', () => {
-  it('referans kayıtlarını ve galeri verisini başlangıç verilerine ekler', async () => {
+  it('referans ve ürün kayıtlarını site araması için başlangıç verilerine ekler', async () => {
     const istenenYollar = [];
     const fetchFn = async (yol) => {
       istenenYollar.push(yol);
@@ -59,6 +59,7 @@ describe('siteVerileriniGetir', () => {
     const veri = await siteVerileriniGetir({ fetchFn, gelistirme: false });
 
     expect(istenenYollar).toContain('/api/referanslar');
+    expect(istenenYollar).toContain('/api/urunler');
     expect(veri.referanslar.kayitlar[0].baslik).toBe('Test projesi');
   });
 });

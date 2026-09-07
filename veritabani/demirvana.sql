@@ -180,6 +180,32 @@ CREATE TABLE IF NOT EXISTS `referans_gorselleri` (
     CONSTRAINT `referans_gorseli_olcek_araligi` CHECK (`gorsel_olcegi` BETWEEN 100 AND 500)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Sektörler ayrı tutulur; admin paneli filtre adlarını ve sıralamasını referans kayıtlarına dokunmadan yönetebilir.
+CREATE TABLE IF NOT EXISTS `referans_sektorleri` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `ad` VARCHAR(100) NOT NULL,
+    `slug` VARCHAR(120) NOT NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_referans_sektor_slug` (`slug`),
+    KEY `referans_sektor_siralama` (`aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- Eşleşme tablosu mevcut referans şemasını geriye dönük uyumlu tutarken sektörleri genişletilebilir kılar.
+CREATE TABLE IF NOT EXISTS `referans_sektor_eslesmeleri` (
+    `referans_id` BIGINT UNSIGNED NOT NULL,
+    `sektor_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`referans_id`),
+    KEY `referans_sektor_eslesmesi` (`sektor_id`, `referans_id`),
+    CONSTRAINT `eslesmenin_referansi` FOREIGN KEY (`referans_id`) REFERENCES `referanslar` (`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `eslesmenin_sektoru` FOREIGN KEY (`sektor_id`) REFERENCES `referans_sektorleri` (`id`)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
     ('site_adi', 'Demirvana', 'metin', 'Tarayıcı ve marka adı'),
     ('logo_yolu', '/assets/logo.png', 'gorsel', 'Navbar logo dosyası')
@@ -314,3 +340,19 @@ ON DUPLICATE KEY UPDATE
     `gorsel_yolu` = VALUES(`gorsel_yolu`), `alternatif_metin` = VALUES(`alternatif_metin`),
     `odak_x` = VALUES(`odak_x`), `odak_y` = VALUES(`odak_y`),
     `gorsel_olcegi` = VALUES(`gorsel_olcegi`), `siralama` = VALUES(`siralama`);
+
+INSERT INTO `referans_sektorleri` (`id`, `ad`, `slug`, `siralama`) VALUES
+    (1, 'Su ve Atıksu', 'su-ve-atiksu', 1),
+    (2, 'Sulama', 'sulama', 2),
+    (3, 'Enerji', 'enerji', 3),
+    (4, 'Madencilik', 'madencilik', 4),
+    (5, 'Sanayi', 'sanayi', 5),
+    (6, 'Belediye', 'belediye', 6)
+ON DUPLICATE KEY UPDATE `ad` = VALUES(`ad`), `slug` = VALUES(`slug`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `referans_sektor_eslesmeleri` (`referans_id`, `sektor_id`) VALUES
+    (1, 1), (2, 2), (3, 6), (4, 1), (5, 1), (6, 1),
+    (7, 4), (8, 3), (9, 5), (10, 5), (11, 5), (12, 3),
+    (13, 4), (14, 4), (15, 4), (16, 6), (17, 5), (18, 6),
+    (19, 1), (20, 5), (21, 1), (22, 1)
+ON DUPLICATE KEY UPDATE `sektor_id` = VALUES(`sektor_id`);

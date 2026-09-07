@@ -66,10 +66,16 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - `referanslar` ve `referans_gorselleri` tabloları ile `/api/referanslar` ucu eklendi; 18 yurtiçi ve 4 yurtdışı kayıt canlı veritabanına aktarıldı.
 - Üst menü yazı boyutu kullanıcı isteğiyle 12px yapıldı ve masaüstü logo genişliği 118px'e çıkarıldı.
 - Referanslar sayfası için onaylanan tasarım ve uygulama belgeleri oluşturuldu.
+- Referanslar sayfası açık mavi-gri zemin, sektör filtreleri, birleşik metin araması ve iki sütunlu numaralı proje kartlarıyla onaylanan görsele uyarlandı.
+- Altı sektör `referans_sektorleri` ve `referans_sektor_eslesmeleri` tablolarıyla dinamik veri katmanına taşındı; `/api/referanslar` kayıt başına sektör bilgisini döndürüyor.
+- İletişim menüsünün sağına animasyonlu site araması eklendi; menü sayfaları, ürün kategorileri, ürünler ve referanslar aynı panelden aranabiliyor.
+- Arama sonuçları ilgili sayfaya veya referansın doğrudan bağlantısına gider; panel odağı, Escape ile kapatma ve mobil menü davranışı erişilebilir biçimde uygulandı.
+- Sayfa geçişleri navbarı sabit tutan 420ms içerik giriş animasyonuyla yumuşatıldı; azaltılmış hareket tercihinde animasyon kapatıldı.
+- Yeni tasarım ve uygulama belgeleri `2026-09-07-referanslar-sektor-filtreli-*` ile `2026-09-07-site-arama-ve-sayfa-gecisi-*` dosyalarında kaydedildi.
 
 ## Mevcut durum
 
-Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API ve MySQL/MariaDB referans veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, sektörlü Referanslar sayfası, gerçek site araması ve yumuşak rota geçişi tamamlandı. React frontend, PHP API ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -79,6 +85,10 @@ Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API v
 - `docs/superpowers/plans/2026-09-06-demirvana-site-uygulama-plani.md`
 - `docs/superpowers/specs/2026-09-07-referanslar-sayfasi-tasarimi.md`
 - `docs/superpowers/plans/2026-09-07-referanslar-sayfasi-uygulama-plani.md`
+- `docs/superpowers/specs/2026-09-07-referanslar-sektor-filtreli-tasarim.md`
+- `docs/superpowers/plans/2026-09-07-referanslar-sektor-filtreli-uygulama-plani.md`
+- `docs/superpowers/specs/2026-09-07-site-arama-ve-sayfa-gecisi.md`
+- `docs/superpowers/plans/2026-09-07-site-arama-ve-sayfa-gecisi-plani.md`
 - `frontend/` altındaki React, test, stil ve statik varlık dosyaları
 - `backend/` altındaki PHP API dosyaları
 - `veritabani/demirvana.sql`
@@ -90,7 +100,7 @@ Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API v
 - `Carousel/` içindeki altı görselin boyutları kontrol edildi.
 - Tasarım belgesi eksik ifade, çelişki ve belirsiz rota açısından gözden geçirildi.
 - Ürün ve kategori detay rotaları ayrı tanımlandı.
-- Frontend testleri: 21 test, 0 hata.
+- Frontend testleri: 25 test, 0 hata.
 - Vite üretim derlemesi: başarılı.
 - Node.js `v24.16.0`, npm `11.13.0` ve Git `2.55.0` kullanılabilir.
 - PHP API testi: başarılı; yedi PHP dosyasında sözdizimi hatası yok.
@@ -101,6 +111,9 @@ Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API v
 - Görsel tasarım denetimi: 0 engelleyici, 0 açık kalite sorunu; ürün fotoğrafları yönetim panelinden ekleneceği için şimdilik bilinçli placeholder kullanılıyor.
 - Referanslar canlı API sayımları: toplam 22 kayıt; 18 yurtiçi, 4 yurtdışı ve 3 galeri görseli.
 - Referanslar tarayıcı doğrulaması: 375, 768, 1024 ve 1440px hedeflerinde yatay taşma yok; filtre ve galeri modalı çalışıyor; tarayıcı konsolunda hata/uyarı yok.
+- Sektörlü referans API doğrulaması: 6 sektör ve 22 kayıt canlı MariaDB verisinden başarıyla döndü.
+- Site araması canlı tarayıcı doğrulaması: arama paneli odaklandı, `gazipaşa` sorgusu doğru referansı buldu ve `#referans-1` bağlantısına yönlendirdi.
+- Masaüstü canlı görünümde yatay taşma bulunmadı; `sayfa-giris` animasyonu ve İletişim sonrası arama düğmesi hesaplanan DOM/CSS değerleriyle doğrulandı.
 
 ## Bilinen durumlar
 
@@ -113,4 +126,4 @@ Ana site iskeleti ve Referanslar sayfası tamamlandı. React frontend, PHP API v
 
 ## Sıradaki adım
 
-Kullanıcının belirteceği alanda sınırlı düzenleme yap. Referanslar sayfasında sonraki olası adım, özgün yüksek çözünürlüklü saha fotoğraflarının eklenmesidir.
+Kullanıcının belirteceği alanda sınırlı düzenleme yap. Sonraki olası adım, seçilecek yeni sayfanın tasarlanması veya özgün yüksek çözünürlüklü referans fotoğraflarının eklenmesidir.
