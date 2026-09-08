@@ -277,6 +277,51 @@ CREATE TABLE IF NOT EXISTS `teknik_dokumanlar` (
     CONSTRAINT `teknik_dokuman_sayfa_sayisi_negatif_olamaz` CHECK (`sayfa_sayisi` >= 0)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Sertifika filtreleri ayrı tabloda tutulur; admin yeni belge türlerini kod değişmeden ekleyebilir.
+CREATE TABLE IF NOT EXISTS `sertifika_kategorileri` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `ad` VARCHAR(120) NOT NULL,
+    `slug` VARCHAR(140) NOT NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_sertifika_kategorisi_dili_slug` (`dil_kodu`, `slug`),
+    KEY `sertifika_kategorisi_siralama` (`dil_kodu`, `aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- Fiziksel PDF konumu yalnız sunucuda çözülür; istemci güvenli slug ve hafif önizleme yolunu kullanır.
+CREATE TABLE IF NOT EXISTS `sertifikalar` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `kategori_id` BIGINT UNSIGNED NOT NULL,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `baslik` VARCHAR(200) NOT NULL,
+    `slug` VARCHAR(220) NOT NULL,
+    `aciklama` VARCHAR(500) NULL,
+    `dosya_yolu` VARCHAR(500) NOT NULL,
+    `orijinal_dosya_adi` VARCHAR(255) NOT NULL,
+    `onizleme_yolu` VARCHAR(500) NULL,
+    `alternatif_metin` VARCHAR(300) NULL,
+    `mime_turu` VARCHAR(100) NOT NULL DEFAULT 'application/pdf',
+    `dosya_boyutu` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `sayfa_sayisi` INT UNSIGNED NOT NULL DEFAULT 1,
+    `indirmeye_izin_var_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `yeni_sekmede_acmaya_izin_var_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_sertifika_dili_slug` (`dil_kodu`, `slug`),
+    KEY `sertifika_siralama` (`kategori_id`, `dil_kodu`, `aktif_mi`, `siralama`),
+    CONSTRAINT `sertifikanin_kategorisi` FOREIGN KEY (`kategori_id`) REFERENCES `sertifika_kategorileri` (`id`)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT `sertifika_boyutu_negatif_olamaz` CHECK (`dosya_boyutu` >= 0),
+    CONSTRAINT `sertifika_sayfa_sayisi_pozitif_olmali` CHECK (`sayfa_sayisi` > 0)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 -- Kurumsal değerler ayrı satırlardır; admin başlık, açıklama, dil, görünürlük ve sıralamayı bağımsız yönetebilir.
 CREATE TABLE IF NOT EXISTS `kurumsal_degerler` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -387,6 +432,23 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('teknik_pdf_kapat_etiketi', 'PDF görüntüleyiciyi kapat', 'metin', 'PDF kapatma düğmesi erişilebilir etiketi'),
     ('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png', 'gorsel', 'Teknik doküman listelerinde kullanılan şeffaf PDF ikonu'),
     ('teknik_baslik_gecis_suresi', '2600', 'sayi', 'Teknik hero dönen başlığının milisaniye cinsinden bekleme süresi')
+ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
+
+INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
+    ('sertifika_hero_basligi', 'Sertifikalar', 'metin', 'Sertifika sayfası ana başlığı'),
+    ('sertifika_hero_aciklamasi', 'Kaliteli üretim, güvenilir çözümler. Ulusal ve uluslararası geçerliliğe sahip sertifikalarımızla standartlara bağlılığımızı belgeliyoruz.', 'metin', 'Sertifika sayfası giriş açıklaması'),
+    ('sertifika_slogan_satir_1', 'Güven', 'metin', 'Sertifika hero sloganının ilk satırı'),
+    ('sertifika_slogan_satir_2', 'Kalite', 'metin', 'Sertifika hero sloganının ikinci satırı'),
+    ('sertifika_slogan_satir_3', 'Sürdürülebilirlik', 'metin', 'Sertifika hero sloganının üçüncü satırı'),
+    ('sertifika_kutuphane_basligi', 'Sertifika Kütüphanesi', 'metin', 'Sertifika liste paneli başlığı'),
+    ('sertifika_arama_yertutucusu', 'Sertifika ara...', 'metin', 'Sertifika arama alanı yer tutucusu'),
+    ('sertifika_tumu_metni', 'Tümü', 'metin', 'Bütün sertifikaları gösteren filtre metni'),
+    ('sertifika_bos_metni', 'Aramanızla eşleşen bir sertifika bulunamadı.', 'metin', 'Boş sertifika arama sonucu'),
+    ('sertifika_pdf_ac_metni', 'PDF Aç', 'metin', 'Sertifikayı yeni sekmede açma düğmesi'),
+    ('sertifika_pdf_indir_metni', 'İndir', 'metin', 'Sertifikayı indirme düğmesi'),
+    ('sertifika_pdf_yukleniyor_metni', 'Sertifika yükleniyor…', 'metin', 'Sertifika PDF yükleme durumu'),
+    ('sertifika_pdf_hata_basligi', 'Sertifika görüntülenemedi', 'metin', 'Sertifika PDF yükleme hatası başlığı'),
+    ('sertifika_pdf_hata_aciklamasi', 'Belge şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.', 'metin', 'Sertifika PDF yükleme hatası açıklaması')
 ON DUPLICATE KEY UPDATE `deger` = VALUES(`deger`), `deger_turu` = VALUES(`deger_turu`), `aciklama` = VALUES(`aciklama`);
 
 INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUES
@@ -615,6 +677,26 @@ ON DUPLICATE KEY UPDATE
     `orijinal_dosya_adi` = VALUES(`orijinal_dosya_adi`), `alternatif_aciklama` = VALUES(`alternatif_aciklama`),
     `mime_turu` = VALUES(`mime_turu`), `dosya_boyutu` = VALUES(`dosya_boyutu`),
     `sayfa_sayisi` = VALUES(`sayfa_sayisi`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `sertifika_kategorileri` (`id`, `dil_kodu`, `ad`, `slug`, `siralama`) VALUES
+    (1, 'tr', 'ISO', 'iso', 1),
+    (2, 'tr', 'Resmi Belgeler', 'resmi-belgeler', 2),
+    (3, 'tr', 'Marka', 'marka', 3)
+ON DUPLICATE KEY UPDATE `ad` = VALUES(`ad`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `sertifikalar`
+    (`id`, `kategori_id`, `dil_kodu`, `baslik`, `slug`, `aciklama`, `dosya_yolu`, `orijinal_dosya_adi`, `onizleme_yolu`, `alternatif_metin`, `dosya_boyutu`, `sayfa_sayisi`, `siralama`)
+VALUES
+    (1, 1, 'tr', 'ISO 9001 ENG', 'iso-9001-eng', 'Kalite Yönetim Sistemi Sertifikası (İngilizce)', 'iso 9001 ENG.pdf', 'iso 9001 ENG.pdf', '/assets/sertifikalar/iso-9001-eng.png', 'Demirvana ISO 9001 İngilizce kalite sertifikası', 954894, 1, 1),
+    (2, 1, 'tr', 'ISO 9001 TR', 'iso-9001-tr', 'Kalite Yönetim Sistemi Sertifikası', 'iso 9001.pdf', 'iso 9001.pdf', '/assets/sertifikalar/iso-9001-tr.png', 'Demirvana ISO 9001 Türkçe kalite sertifikası', 909464, 1, 2),
+    (3, 3, 'tr', 'Marka Tescil Belgesi', 'marka-tescil-belgesi', 'Türk Patent ve Marka Kurumu tescil belgesi', 'marka tescil belgesi.pdf', 'marka tescil belgesi.pdf', '/assets/sertifikalar/marka-tescil-belgesi.png', 'Demirvana marka tescil belgesi', 196214, 1, 3),
+    (4, 2, 'tr', 'Sanayi Sicil Belgesi', 'sanayi-sicil-belgesi', 'Sanayi ve Teknoloji Bakanlığı sanayi sicil belgesi', 'sanayi sicil belgesi.pdf', 'sanayi sicil belgesi.pdf', '/assets/sertifikalar/sanayi-sicil-belgesi.png', 'Demirvana sanayi sicil belgesi', 194904, 1, 4)
+ON DUPLICATE KEY UPDATE
+    `kategori_id` = VALUES(`kategori_id`), `baslik` = VALUES(`baslik`), `aciklama` = VALUES(`aciklama`),
+    `dosya_yolu` = VALUES(`dosya_yolu`), `orijinal_dosya_adi` = VALUES(`orijinal_dosya_adi`),
+    `onizleme_yolu` = VALUES(`onizleme_yolu`), `alternatif_metin` = VALUES(`alternatif_metin`),
+    `dosya_boyutu` = VALUES(`dosya_boyutu`), `sayfa_sayisi` = VALUES(`sayfa_sayisi`),
+    `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
 INSERT INTO `kurumsal_degerler` (`id`, `dil_kodu`, `baslik`, `aciklama`, `siralama`) VALUES
     (1, 'tr', 'Şirket Profili', 'Endüstriyel vana ve akış kontrol sistemleri alanında faaliyet gösteren, güvenilir ve köklü bir çözüm ortağıyız.', 1),

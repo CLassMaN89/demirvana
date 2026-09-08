@@ -10,6 +10,7 @@ import KategoriSayfasi from './sayfalar/KategoriSayfasi';
 import KurumsalSayfasi from './sayfalar/KurumsalSayfasi';
 import ReferanslarSayfasi from './sayfalar/ReferanslarSayfasi';
 import TeknikSayfasi from './sayfalar/TeknikSayfasi';
+import SertifikalarSayfasi from './sayfalar/SertifikalarSayfasi';
 import BulunamadiSayfasi from './sayfalar/BulunamadiSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
@@ -105,7 +106,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/kurumsal" element={<KurumsalSayfasi kurumsal={veri.kurumsal} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/teknik" element={<TeknikSayfasi kategoriler={veri.teknik_dokumanlar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} siteAyarlari={veri.site_ayarlari} />} />
-          <Route path="/sertifikalar" element={<IcerikSayfasi tur="sertifikalar" />} />
+          <Route path="/sertifikalar" element={<SertifikalarSayfasi sertifikalar={veri.sertifikalar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
           <Route path="*" element={<BulunamadiSayfasi />} />
         </Routes>

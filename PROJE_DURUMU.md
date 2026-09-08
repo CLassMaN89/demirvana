@@ -123,10 +123,16 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Dönen başlık metinleri mevcut teknik kategori kayıtlarından, renkleri merkezi `--renk-ana` ve `--renk-koyu` tema değişkenlerinden alınır; ek animasyon paketi yüklenmez.
 - Başlık geçiş süresi `teknik_baslik_gecis_suresi` site ayarıyla milisaniye cinsinden yönetilebilir; en uzun yönetilebilir metin görünmez ölçü olarak ayrıldığı için geçişte yerleşim sıçraması oluşmaz.
 - Teknik başlık animasyonu azaltılmış hareket tercihinde ilk metinde sabitlenir ve yanıp sönen imleç kaldırılır.
+- `/sertifikalar` rotası, yönetilebilir hero alanı, aranabilir/kategori filtreli belge kütüphanesi ve seçili PDF önizlemesi bulunan bağımsız `SertifikalarSayfasi` bileşenine taşındı.
+- Kullanıcının sağladığı ISO 9001 ENG, ISO 9001 TR, Marka Tescil Belgesi ve Sanayi Sicil Belgesi PDF'leri değiştirilmeden güvenli slug adreslerine bağlandı; ilk sayfalarından dört hafif liste önizlemesi üretildi.
+- `sertifika_kategorileri` ve `sertifikalar` tabloları; dil, açıklama, önizleme, dosya bilgileri, sıralama, görünürlük ile açma/indirme izinlerini gelecekteki admin panelinden yönetilebilir tutacak biçimde eklendi.
+- Sertifika sayfasındaki 14 genel metin `site_ayarlari` üzerinden yönetilebilir hâle getirildi; bütün renkler merkezi tema değişkenlerinden türetilir.
+- `/api/sertifikalar` yalnız etkin ve fiziksel dosyası bulunan kayıtları döndürür; `/sertifika-dosyalari/{slug}` kök dışı erişimi engelleyerek tam ve byte-range PDF yanıtı verir.
+- Sertifika PDF.js bileşeni yalnız seçili belge için dinamik yüklenir; masaüstünde iki sütun, tablet ve telefonda sıralı tek sütun kullanılır.
 
 ## Mevcut durum
 
-Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, gerçek site araması, hızlı başlangıç verisi, üstten başlayan yumuşak rota geçişi, dinamik footer, admin yönetimine hazır SEO altyapısı ve PDF görüntüleyicili Teknik Doküman Merkezi tamamlandı. React frontend, PHP HTML/API, güvenli PDF sunumu ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
+Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, gerçek site araması, hızlı başlangıç verisi, üstten başlayan yumuşak rota geçişi, dinamik footer, admin yönetimine hazır SEO altyapısı, Teknik Doküman Merkezi ve Sertifika Kütüphanesi tamamlandı. React frontend, PHP HTML/API, güvenli PDF sunumu ve MySQL/MariaDB veri akışı canlı olarak birlikte doğrulandı. Yönetim paneli sonraki aşamanın kapsamıdır.
 
 ## Değiştirilen dosyalar
 
@@ -202,6 +208,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Referanslar sayfasında `scrollY=2237` konumundan Teknik sayfasına geçiş canlı Chrome testinde `scrollY=0` ile sonuçlandı.
 - Teknik Text Loop başlığı 375, 768, 1440 ve 1920px genişliklerde doğrulandı; `TABLOLAR` metni 2600ms sonra `KULLANMA TALİMATLARI` metnine geçti, tema renkli geçiş çalıştı ve yatay taşma oluşmadı.
 - `teknik_baslik_gecis_suresi=2600` ayarı canlı MariaDB ve `/api/baslangic` verisinde doğrulandı; şema iki kez içe aktarıldığında ayar çoğalmadı.
+- Sertifika şeması iki kez canlı MariaDB'ye aktarıldı; 3 kategori ve 4 sertifika kaydı çoğalmadan korundu. `/api/sertifikalar` aynı sayımları döndürdü.
+- ISO 9001 ENG güvenli dosya rotası doğrudan PHP ve Vite vekili üzerinden `206`, 100 bayt ve doğru `Content-Range` döndürdü; bilinmeyen slug `404` verdi.
+- Sertifika sayfasında arama, kategori filtresi, belge seçimi ve boş durum için 3 yeni bileşen testi eklendi; toplam 22 dosyada 65 frontend testi ve üretim derlemesi başarılıdır.
+- Sertifika sayfası 375, 768, 1440 ve 1920px genişliklerde canlı MariaDB/PDF verisiyle doğrulandı; dört kaydın listelendiği, seçimin ve aramanın çalıştığı, PDF canvas'ın çizildiği, yatay taşma ve konsol hatası olmadığı görüldü.
 
 ## Bilinen durumlar
 
@@ -216,4 +226,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Teknik hero Text Loop animasyonu tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Kurumsal ve Teknik sayfanın diğer alanlarını koru.
+Sertifikalar Kütüphanesi tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Kurumsal, Teknik ve Sertifikalar sayfasının diğer alanlarını koru.

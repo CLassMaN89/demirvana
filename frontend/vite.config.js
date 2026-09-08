@@ -8,6 +8,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://127.0.0.1:8080',
       '/dokumanlar': 'http://127.0.0.1:8080',
+      // Sertifika PDF'leri de geliştirmede güvenli PHP dosya sunucusundan gelir.
+      '/sertifika-dosyalari': 'http://127.0.0.1:8080',
       '/robots.txt': 'http://127.0.0.1:8080',
       '/sitemap.xml': 'http://127.0.0.1:8080'
     }

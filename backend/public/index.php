@@ -48,6 +48,20 @@ try {
         PdfDosyaSunucusu::gonder($dokuman, dirname(__DIR__, 2) . '/pdf');
     }
 
+    if (preg_match('#^/sertifika-dosyalari/([^/]+)$#', $yol, $eslesme) === 1) {
+        $slug = $eslesme[1];
+        if (!SiteDenetleyicisi::gecerliSlug($slug)) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, 'Geçersiz sertifika adresi.'), 400);
+        }
+
+        $sertifika = $denetleyici->sertifika($slug);
+        if ($sertifika === null) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, 'Sertifika bulunamadı.'), 404);
+        }
+        // PDF sunucusu kök denetimi ve byte-range desteğini teknik belgelerle aynı güvenli katmanda uygular.
+        PdfDosyaSunucusu::gonder($sertifika, dirname(__DIR__, 2) . '/sertifikalar');
+    }
+
     if (!str_starts_with($yol, '/api')) {
         $htmlDosyasi = dirname(__DIR__, 2) . '/frontend/dist/index.html';
         if (!is_file($htmlDosyasi)) {
@@ -82,6 +96,22 @@ try {
         return $kategoriler;
     };
 
+    $sertifikalariHazirla = function () use ($denetleyici): array {
+        $veri = $denetleyici->sertifikalar();
+        $pdfKoku = dirname(__DIR__, 2) . '/sertifikalar';
+
+        // Silinmiş veya kök dışına yönlendirilmiş PDF kayıtları kütüphane listesine alınmaz.
+        $veri['kayitlar'] = array_values(array_filter(
+            $veri['kayitlar'],
+            function (array $ozet) use ($denetleyici, $pdfKoku): bool {
+                $sertifika = $denetleyici->sertifika((string) $ozet['slug']);
+                return $sertifika !== null
+                    && PdfDosyaSunucusu::guvenliYol($pdfKoku, (string) $sertifika['dosya_yolu']) !== null;
+            }
+        ));
+        return $veri;
+    };
+
     $sabitRotalar = [
         // İlk görünüm tek bağlantı üzerinden döner; ayrı uçlar admin ve bağımsız yenilemeler için korunur.
         '/api/baslangic' => fn() => [
@@ -95,6 +125,7 @@ try {
             'referanslar' => $denetleyici->referanslar(),
             'kurumsal' => $denetleyici->kurumsal(),
             'teknik_dokumanlar' => $teknikDokumanlariHazirla(),
+            'sertifikalar' => $sertifikalariHazirla(),
         ],
         '/api/site-ayarlari' => fn() => $denetleyici->siteAyarlari(),
         '/api/seo' => fn() => $seoDenetleyicisi->seo(),
@@ -105,6 +136,7 @@ try {
         '/api/referanslar' => fn() => $denetleyici->referanslar(),
         '/api/kurumsal' => fn() => $denetleyici->kurumsal(),
         '/api/teknik-dokumanlar' => $teknikDokumanlariHazirla,
+        '/api/sertifikalar' => $sertifikalariHazirla,
         '/api/urunler' => fn() => $denetleyici->urunler(
             isset($_GET['kategori']) ? (string) $_GET['kategori'] : null,
             isset($_GET['arama']) ? (string) $_GET['arama'] : null

@@ -206,6 +206,47 @@ final class SiteDeposu
         return $dokuman ?: null;
     }
 
+    public function sertifikalar(): array
+    {
+        $kategoriler = $this->baglanti->query(
+            'SELECT id, dil_kodu, ad, slug, siralama
+             FROM sertifika_kategorileri WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+
+        $kayitlar = $this->baglanti->query(
+            'SELECT s.id, s.kategori_id, s.dil_kodu, s.baslik, s.slug, s.aciklama,
+                    s.orijinal_dosya_adi, s.onizleme_yolu, s.alternatif_metin,
+                    s.dosya_boyutu, s.sayfa_sayisi, s.indirmeye_izin_var_mi,
+                    s.yeni_sekmede_acmaya_izin_var_mi, s.siralama,
+                    sk.ad AS kategori_adi, sk.slug AS kategori_slug
+             FROM sertifikalar s
+             INNER JOIN sertifika_kategorileri sk ON sk.id = s.kategori_id
+             WHERE s.aktif_mi = 1 AND sk.aktif_mi = 1
+             ORDER BY s.siralama, s.id'
+        )->fetchAll();
+
+        // Güvenli istemci adresi veritabanındaki fiziksel dosya yolunun dışarı sızmasını önler.
+        foreach ($kayitlar as &$kayit) {
+            $kayit['dosya_adresi'] = '/sertifika-dosyalari/' . $kayit['slug'];
+        }
+        unset($kayit);
+
+        return ['kategoriler' => $kategoriler, 'kayitlar' => $kayitlar];
+    }
+
+    public function sertifika(string $slug): ?array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT s.* FROM sertifikalar s
+             INNER JOIN sertifika_kategorileri sk ON sk.id = s.kategori_id
+             WHERE s.slug = :slug AND s.aktif_mi = 1 AND sk.aktif_mi = 1 LIMIT 1'
+        );
+        $sorgu->execute(['slug' => $slug]);
+        $sertifika = $sorgu->fetch();
+
+        return $sertifika ?: null;
+    }
+
     public function kategori(string $slug): ?array
     {
         $sorgu = $this->baglanti->prepare(

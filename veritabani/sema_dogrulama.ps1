@@ -21,6 +21,8 @@ $tablolar = @(
     'referans_sektor_eslesmeleri',
     'teknik_dokuman_kategorileri',
     'teknik_dokumanlar',
+    'sertifika_kategorileri',
+    'sertifikalar',
     'kurumsal_degerler',
     'kurumsal_urun_gruplari',
     'kurumsal_ekip'
@@ -64,6 +66,14 @@ $teknikBasliklar = @(
 foreach ($baslik in $teknikBasliklar) {
     if (-not $sql.Contains("'$baslik'")) {
         throw "Eksik teknik doküman başlangıç kaydı: $baslik"
+    }
+}
+
+# Sertifika kütüphanesi, kullanıcının sağladığı dört gerçek PDF kaydını çoğalmadan tanımlamalıdır.
+$sertifikaBasliklari = @('ISO 9001 ENG', 'ISO 9001 TR', 'Marka Tescil Belgesi', 'Sanayi Sicil Belgesi')
+foreach ($baslik in $sertifikaBasliklari) {
+    if (-not $sql.Contains("'$baslik'")) {
+        throw "Eksik sertifika başlangıç kaydı: $baslik"
     }
 }
 

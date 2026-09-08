@@ -132,6 +132,20 @@ export const ornekVeriler = Object.freeze({
     teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat',
     teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png',
     teknik_baslik_gecis_suresi: '2600',
+    sertifika_hero_basligi: 'Sertifikalar',
+    sertifika_hero_aciklamasi: 'Kaliteli üretim, güvenilir çözümler. Ulusal ve uluslararası geçerliliğe sahip sertifikalarımızla standartlara bağlılığımızı belgeliyoruz.',
+    sertifika_slogan_satir_1: 'Güven',
+    sertifika_slogan_satir_2: 'Kalite',
+    sertifika_slogan_satir_3: 'Sürdürülebilirlik',
+    sertifika_kutuphane_basligi: 'Sertifika Kütüphanesi',
+    sertifika_arama_yertutucusu: 'Sertifika ara...',
+    sertifika_tumu_metni: 'Tümü',
+    sertifika_bos_metni: 'Aramanızla eşleşen bir sertifika bulunamadı.',
+    sertifika_pdf_ac_metni: 'PDF Aç',
+    sertifika_pdf_indir_metni: 'İndir',
+    sertifika_pdf_yukleniyor_metni: 'Sertifika yükleniyor…',
+    sertifika_pdf_hata_basligi: 'Sertifika görüntülenemedi',
+    sertifika_pdf_hata_aciklamasi: 'Belge şu anda açılamıyor. Lütfen daha sonra tekrar deneyin.',
     kurumsal_etiket: 'Kurumsal',
     kurumsal_baslik_satir_1: 'Güvenilir çözümler.',
     kurumsal_baslik_satir_2: 'Sürdürülebilir iş ortaklıkları.',
@@ -226,6 +240,25 @@ export const ornekVeriler = Object.freeze({
       { id: 1, dil_kodu: 'tr', ad_soyad: 'Deniz Demir', gorev: 'Şirket Müdürü', eposta: 'dd@demirvana.com', telefon: null, siralama: 1 },
       { id: 2, dil_kodu: 'tr', ad_soyad: 'Murat Aslan', gorev: 'Muhasebe Sorumlusu', eposta: 'dv@demirvana.com', telefon: null, siralama: 2 }
     ]
+  },
+  sertifikalar: {
+    kategoriler: [
+      { id: 1, dil_kodu: 'tr', ad: 'ISO', slug: 'iso', siralama: 1 },
+      { id: 2, dil_kodu: 'tr', ad: 'Resmi Belgeler', slug: 'resmi-belgeler', siralama: 2 },
+      { id: 3, dil_kodu: 'tr', ad: 'Marka', slug: 'marka', siralama: 3 }
+    ],
+    // Örnek veri gerçek API ile aynı sözleşmeyi korur; dosyalar yalnız güvenli slug adresinden sunulur.
+    kayitlar: [
+      ['ISO 9001 ENG', 'iso-9001-eng', 'Kalite Yönetim Sistemi Sertifikası (İngilizce)', 1, 'ISO', 'iso', 'iso 9001 ENG.pdf', 954894],
+      ['ISO 9001 TR', 'iso-9001-tr', 'Kalite Yönetim Sistemi Sertifikası', 1, 'ISO', 'iso', 'iso 9001.pdf', 909464],
+      ['Marka Tescil Belgesi', 'marka-tescil-belgesi', 'Türk Patent ve Marka Kurumu tescil belgesi', 3, 'Marka', 'marka', 'marka tescil belgesi.pdf', 196214],
+      ['Sanayi Sicil Belgesi', 'sanayi-sicil-belgesi', 'Sanayi ve Teknoloji Bakanlığı sanayi sicil belgesi', 2, 'Resmi Belgeler', 'resmi-belgeler', 'sanayi sicil belgesi.pdf', 194904]
+    ].map(([baslik, slug, aciklama, kategori_id, kategori_adi, kategori_slug, orijinal_dosya_adi, dosya_boyutu], indeks) => ({
+      id: indeks + 1, baslik, slug, aciklama, kategori_id, kategori_adi, kategori_slug,
+      orijinal_dosya_adi, dosya_boyutu, dosya_adresi: `/sertifika-dosyalari/${slug}`,
+      onizleme_yolu: `/assets/sertifikalar/${slug}.png`, alternatif_metin: `${baslik} önizlemesi`,
+      sayfa_sayisi: 1, indirmeye_izin_var_mi: 1, yeni_sekmede_acmaya_izin_var_mi: 1, siralama: indeks + 1
+    }))
   },
   teknik_dokumanlar: [
     {

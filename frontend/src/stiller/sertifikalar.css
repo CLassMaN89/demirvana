@@ -1,0 +1,75 @@
+.sertifikalar-sayfasi { min-height: 70vh; background: color-mix(in srgb, var(--renk-acik) 58%, var(--renk-beyaz)); color: var(--renk-metin); }
+.sertifikalar-hero { position: relative; overflow: hidden; border-bottom: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); background: linear-gradient(105deg, var(--renk-beyaz) 0 48%, color-mix(in srgb, var(--renk-acik) 78%, var(--renk-beyaz)) 100%); }
+.sertifikalar-hero::before, .sertifikalar-hero::after { position: absolute; border: 1px solid color-mix(in srgb, var(--renk-ana) 13%, transparent); border-radius: 50%; content: ''; }
+.sertifikalar-hero::before { width: 260px; height: 260px; right: 16%; top: -132px; box-shadow: 0 0 0 28px color-mix(in srgb, var(--renk-ana) 4%, transparent), 0 0 0 70px color-mix(in srgb, var(--renk-ana) 3%, transparent); }
+.sertifikalar-hero::after { width: 110px; height: 110px; right: 5%; bottom: -60px; }
+.sertifikalar-hero__icerik { display: grid; min-height: 170px; align-items: center; grid-template-columns: minmax(0, 1fr) 220px; gap: 32px; }
+.sertifikalar-hero h1 { margin: 0; color: var(--renk-koyu); font-size: clamp(2rem, 3.2vw, 3.5rem); font-weight: 700; letter-spacing: -.045em; text-transform: uppercase; }
+.sertifikalar-hero p { max-width: 690px; margin: 9px 0 0; color: var(--renk-ikincil); font-size: .88rem; line-height: 1.65; }
+.sertifikalar-hero__slogan { position: relative; z-index: 1; display: grid; gap: 5px; padding-left: 18px; border-left: 2px solid var(--renk-ana); color: var(--renk-koyu); font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.sertifikalar-ana { padding: 26px 0 64px; }
+.sertifikalar-yerlesim { display: grid; align-items: start; grid-template-columns: 340px minmax(0, 1fr); gap: 20px; }
+.sertifika-onizleme { min-width: 0; }
+.sertifika-kutuphanesi, .sertifika-goruntuleyici { min-width: 0; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 16px; background: var(--renk-beyaz); box-shadow: 0 15px 42px color-mix(in srgb, var(--renk-koyu) 8%, transparent); }
+.sertifika-kutuphanesi { padding: 18px; }
+.sertifika-kutuphanesi > h2 { display: flex; align-items: center; gap: 9px; margin: 0 0 14px; color: var(--renk-koyu); font-size: 1rem; }
+.sertifika-kutuphanesi > h2 svg { width: 20px; color: var(--renk-ana); }
+.sertifika-arama { display: flex; height: 42px; align-items: center; gap: 9px; padding: 0 12px; border: 1px solid var(--renk-cizgi); border-radius: 9px; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.sertifika-arama:focus-within { border-color: var(--renk-ana); box-shadow: 0 0 0 3px color-mix(in srgb, var(--renk-ana) 12%, transparent); }
+.sertifika-arama svg { width: 17px; color: var(--renk-ikincil); }
+.sertifika-arama input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--renk-metin); font: inherit; font-size: .78rem; }
+.sertifika-filtreleri { display: flex; overflow-x: auto; gap: 6px; margin: 12px 0; padding-bottom: 2px; scrollbar-width: thin; }
+.sertifika-filtreleri button { min-height: 32px; padding: 0 11px; border: 1px solid transparent; border-radius: 8px; background: var(--renk-acik); color: var(--renk-ikincil); font: inherit; font-size: .66rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.sertifika-filtreleri button.aktif { background: var(--renk-ana); color: var(--renk-beyaz); box-shadow: 0 5px 14px color-mix(in srgb, var(--renk-ana) 25%, transparent); }
+.sertifika-listesi { display: grid; max-height: 520px; overflow-y: auto; padding-right: 3px; scrollbar-color: color-mix(in srgb, var(--renk-ana) 35%, transparent) transparent; }
+.sertifika-karti { position: relative; display: grid; width: 100%; min-height: 102px; align-items: center; grid-template-columns: 62px minmax(0, 1fr) 18px; gap: 12px; padding: 11px 8px 11px 12px; overflow: hidden; border: 0; border-bottom: 1px solid var(--renk-cizgi); background: transparent; color: var(--renk-metin); font: inherit; text-align: left; cursor: pointer; transition: background-color 180ms ease, transform 180ms ease; }
+.sertifika-karti::before { position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--renk-ana); content: ''; transform: scaleY(0); transform-origin: top; transition: transform 250ms cubic-bezier(.22, 1, .36, 1); }
+.sertifika-karti:hover, .sertifika-karti--secili { background: color-mix(in srgb, var(--renk-acik) 72%, var(--renk-beyaz)); }
+.sertifika-karti:hover { transform: translateX(2px); }
+.sertifika-karti:hover::before, .sertifika-karti--secili::before { transform: scaleY(1); }
+.sertifika-karti img { width: 62px; height: 78px; object-fit: contain; border: 1px solid var(--renk-cizgi); background: var(--renk-beyaz); }
+.sertifika-karti span { display: grid; min-width: 0; gap: 4px; }
+.sertifika-karti strong { color: var(--renk-koyu); font-size: .77rem; font-weight: 650; line-height: 1.3; }
+.sertifika-karti small { display: -webkit-box; overflow: hidden; color: var(--renk-ikincil); font-size: .65rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.sertifika-karti em { width: max-content; padding: 3px 7px; border-radius: 6px; background: color-mix(in srgb, var(--renk-ana) 10%, var(--renk-beyaz)); color: var(--renk-ana); font-size: .58rem; font-style: normal; font-weight: 600; }
+.sertifika-karti > svg { width: 17px; color: var(--renk-ana); }
+.sertifika-listesi__bos, .sertifika-yukleniyor { margin: 0; padding: 44px 18px; color: var(--renk-ikincil); font-size: .78rem; text-align: center; }
+.sertifika-goruntuleyici { overflow: hidden; }
+.sertifika-goruntuleyici__ust { display: flex; min-height: 78px; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 18px; }
+.sertifika-goruntuleyici__baslik h2 { margin: 0; color: var(--renk-koyu); font-size: 1.1rem; }
+.sertifika-goruntuleyici__baslik p { margin: 5px 0 0; color: var(--renk-ikincil); font-size: .72rem; }
+.sertifika-goruntuleyici__eylemler { display: flex; gap: 8px; }
+.sertifika-dugme { display: inline-flex; min-height: 38px; align-items: center; gap: 7px; padding: 0 14px; border: 1px solid var(--renk-ana); border-radius: 8px; background: var(--renk-ana); color: var(--renk-beyaz); font-size: .7rem; font-weight: 600; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
+.sertifika-dugme--ikincil { background: var(--renk-beyaz); color: var(--renk-ana); }
+.sertifika-dugme:hover { transform: translateY(-1px); box-shadow: 0 7px 18px color-mix(in srgb, var(--renk-ana) 22%, transparent); }
+.sertifika-dugme svg { width: 15px; }
+.sertifika-goruntuleyici__araclar { display: flex; min-height: 44px; align-items: center; justify-content: flex-end; gap: 7px; padding: 0 16px; border-top: 1px solid var(--renk-cizgi); background: color-mix(in srgb, var(--renk-metin) 91%, var(--renk-koyu)); color: var(--renk-beyaz); }
+.sertifika-goruntuleyici__araclar span, .sertifika-goruntuleyici__araclar strong { min-width: 50px; font-size: .68rem; text-align: center; }
+.sertifika-goruntuleyici__araclar button { display: grid; width: 30px; height: 30px; place-items: center; border: 0; border-radius: 7px; background: transparent; color: var(--renk-beyaz); cursor: pointer; }
+.sertifika-goruntuleyici__araclar button:hover { background: color-mix(in srgb, var(--renk-beyaz) 12%, transparent); }
+.sertifika-goruntuleyici__araclar button:disabled { opacity: .35; }
+.sertifika-goruntuleyici__araclar svg { width: 15px; }
+.sertifika-goruntuleyici__belge { display: grid; height: min(68svh, 720px); min-height: 480px; overflow: auto; place-items: start center; padding: 30px; background: color-mix(in srgb, var(--renk-metin) 87%, var(--renk-koyu)); }
+.sertifika-goruntuleyici__belge > p, .sertifika-goruntuleyici__belge > div { align-self: center; color: var(--renk-beyaz); text-align: center; }
+.sertifika-goruntuleyici__belge canvas { max-width: none; background: var(--renk-beyaz); box-shadow: 0 18px 48px color-mix(in srgb, var(--renk-metin) 60%, transparent); }
+.sertifika-goruntuleyici__canvas--gizli { display: none; }
+
+@media (max-width: 959px) {
+  /* PDF canvas'ının doğal piksel genişliği mobil grid sütununu büyütmemeli; taşma belge panelinin içinde kalır. */
+  .sertifikalar-yerlesim { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+  .sertifika-listesi { max-height: 330px; }
+}
+@media (max-width: 639px) {
+  .sertifikalar-hero__icerik { min-height: 190px; grid-template-columns: 1fr; gap: 14px; padding-block: 28px; }
+  .sertifikalar-hero__slogan { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .sertifikalar-ana { padding-top: 16px; }
+  .sertifika-kutuphanesi { padding: 14px; }
+  .sertifika-goruntuleyici__ust { align-items: flex-start; flex-direction: column; }
+  .sertifika-goruntuleyici__eylemler { width: 100%; }
+  .sertifika-dugme { flex: 1; justify-content: center; }
+  .sertifika-goruntuleyici__belge { height: 62svh; min-height: 390px; padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sertifika-karti, .sertifika-karti::before, .sertifika-dugme { transition: none; }
+  .sertifika-karti:hover, .sertifika-dugme:hover { transform: none; }
+}
