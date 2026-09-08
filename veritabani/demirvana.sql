@@ -583,14 +583,18 @@ ON DUPLICATE KEY UPDATE
     `siralama` = VALUES(`siralama`);
 
 INSERT INTO `kategoriler` (`ad`, `slug`, `gorsel_yolu`, `alternatif_metin`, `siralama`) VALUES
-    ('Küresel Vanalar', 'kuresel-vanalar', '/assets/urun-placeholder.svg', 'Küresel Vanalar ürün grubu', 1),
-    ('Kelebek Vanalar', 'kelebek-vanalar', '/assets/urun-placeholder.svg', 'Kelebek Vanalar ürün grubu', 2),
-    ('Sürgülü Vanalar', 'surgulu-vanalar', '/assets/urun-placeholder.svg', 'Sürgülü Vanalar ürün grubu', 3),
-    ('Çekvalfler', 'cekvalfler', '/assets/urun-placeholder.svg', 'Çekvalfler ürün grubu', 4),
-    ('Globe Vanalar', 'globe-vanalar', '/assets/urun-placeholder.svg', 'Globe Vanalar ürün grubu', 5),
-    ('Pislik Tutucular', 'pislik-tutucular', '/assets/urun-placeholder.svg', 'Pislik Tutucular ürün grubu', 6),
-    ('Kontrol Vanaları', 'kontrol-vanalari', '/assets/urun-placeholder.svg', 'Kontrol Vanaları ürün grubu', 7)
-ON DUPLICATE KEY UPDATE `ad` = VALUES(`ad`), `siralama` = VALUES(`siralama`);
+    ('Küresel Vanalar', 'kuresel-vanalar', '/assets/kategoriler/kuresel-vanalar.webp', 'Mavi endüstriyel küresel vana', 1),
+    ('Kelebek Vanalar', 'kelebek-vanalar', '/assets/kategoriler/kelebek-vanalar.webp', 'Mavi endüstriyel kelebek vana', 2),
+    ('Sürgülü Vanalar', 'surgulu-vanalar', '/assets/kategoriler/surgulu-vanalar.webp', 'Mavi endüstriyel sürgülü vana', 3),
+    ('Çekvalfler', 'cekvalfler', '/assets/kategoriler/cekvalfler.webp', 'Mavi endüstriyel çekvalf', 4),
+    ('Globe Vanalar', 'globe-vanalar', '/assets/kategoriler/globe-vanalar.webp', 'Mavi endüstriyel globe vana', 5),
+    ('Pislik Tutucular', 'pislik-tutucular', '/assets/kategoriler/pislik-tutucular.webp', 'Mavi endüstriyel pislik tutucu', 6),
+    ('Kontrol Vanaları', 'kontrol-vanalari', '/assets/kategoriler/kontrol-vanalari.webp', 'Mavi endüstriyel kontrol vanası', 7)
+ON DUPLICATE KEY UPDATE
+    `ad` = VALUES(`ad`),
+    `gorsel_yolu` = VALUES(`gorsel_yolu`),
+    `alternatif_metin` = VALUES(`alternatif_metin`),
+    `siralama` = VALUES(`siralama`);
 
 INSERT INTO `referanslar` (`id`, `baslik`, `konum`, `kurum`, `yil`, `bolge`, `siralama`) VALUES
     (1, 'Antalya Gazipaşa Atık Su Arıtma Tesisi Vanaları', 'Antalya / Gazipaşa', 'İller Bankası', '2011–2012', 'yurtici', 1),

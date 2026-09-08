@@ -133,6 +133,9 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Kategori kartları referanstaki 320px yerine kullanıcı isteğiyle hafif küçültülerek masaüstünde 256px, tablette 238px ve telefonda 220px yüksekliğinde ayarlandı.
 - Fareyle bir karta gelindiğinde seçili kart netleşip hafif büyürken diğer kartlar kontrollü biçimde geri plana geçer; dokunmatik cihazlarda ve azaltılmış hareket tercihinde bütün kartlar net kalır.
 - Kart görseli, açıklaması, kategori adı ve bağlantısı mevcut dinamik kategori verisinden gelir; açıklaması olmayan kartın yedek metni ile Tüm Ürünler alt metni `site_ayarlari` üzerinden yönetilebilir.
+- Kullanıcı isteğiyle kategori vitrini yeniden tek sıraya alındı; masaüstünde sekiz kart aynı satırda, dar ekranlarda satır bozulmadan dokunmatik yatay kaydırmayla gösterilir.
+- Yedi kategoriye küresel, kelebek, sürgülü, çekvalf, globe, pislik tutucu ve kontrol vanasını ayırt eden tutarlı stüdyo görünümlü ürün fotoğrafları eklendi; görseller 720×1080 WebP olarak optimize edildi.
+- Kategori kartları kare yerine yaklaşık `0.59–0.62` en/boy oranında dikey tutuldu; kategori adları dar kartlarda kesilmeden iki satıra kadar gösterilir.
 
 ## Mevcut durum
 
@@ -218,6 +221,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Sertifika sayfası 375, 768, 1440 ve 1920px genişliklerde canlı MariaDB/PDF verisiyle doğrulandı; dört kaydın listelendiği, seçimin ve aramanın çalıştığı, PDF canvas'ın çizildiği, yatay taşma ve konsol hatası olmadığı görüldü.
 - Yeni kategori vitrini 375, 768, 1440 ve 1920px genişliklerde canlı veriyle doğrulandı; sırasıyla 1, 2, 4 ve 4 sütun, 220/238/256px kart yüksekliği, sekiz bağlantı ve sıfır yatay taşma görüldü.
 - Masaüstü hover doğrulamasında seçili kart opaklığı `1`, diğer kartların opaklığı `0.58` olarak ölçüldü; tarayıcı konsolunda kategori alanına ait hata oluşmadı.
+- Tek sıralı fotoğraflı kategori vitrini 375, 768, 1440 ve 1920px genişliklerde doğrulandı; her ölçüde tek satır, 7/7 yüklenen görsel, sıfır sayfa taşması ve sıfır konsol hatası görüldü.
+- Fotoğraf kartları telefonda 142×228px, tablette 148×238px, masaüstünde yaklaşık 135×232px ölçüldü; dar ekran taşması yalnız kendi yatay kaydırma alanında tutuldu.
 
 ## Bilinen durumlar
 
@@ -232,4 +237,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfa Ürün Kategorilerimiz hover-reveal vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.
+Ana sayfa Ürün Kategorilerimiz tek sıralı, dikey ve fotoğraflı vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.

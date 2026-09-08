@@ -15,7 +15,7 @@ const yediKategori = [
   id: indeks + 1,
   ad,
   slug,
-  gorsel_yolu: '/assets/urun-placeholder.svg',
+  gorsel_yolu: `/assets/kategoriler/${slug}.webp`,
   alternatif_metin: `${ad} ürün grubu`,
   aciklama: `${ad} için endüstriyel çözümler`
 }));
@@ -39,7 +39,7 @@ describe('KategoriBolumu', () => {
     );
     expect(screen.getByRole('img', { name: 'Küresel Vanalar ürün grubu' })).toHaveAttribute(
       'src',
-      '/assets/urun-placeholder.svg'
+      '/assets/kategoriler/kuresel-vanalar.webp'
     );
     expect(screen.getByText('Küresel Vanalar için endüstriyel çözümler')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Tüm Ürünler' })).toHaveAttribute(

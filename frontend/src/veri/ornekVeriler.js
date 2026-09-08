@@ -210,7 +210,7 @@ export const ornekVeriler = Object.freeze({
     { id: 7, ad: 'Kontrol Vanaları', slug: 'kontrol-vanalari' }
   ].map((kategori) => ({
     ...kategori,
-    gorsel_yolu: '/assets/urun-placeholder.svg',
+    gorsel_yolu: `/assets/kategoriler/${kategori.slug}.webp`,
     alternatif_metin: `${kategori.ad} ürün grubu`
   })),
   // API kullanılamadığında arama güvenli biçimde boş ürün listesiyle çalışmayı sürdürür.
