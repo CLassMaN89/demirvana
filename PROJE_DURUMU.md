@@ -229,6 +229,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Ana sayfanın canlı localhost görünümünde yeni alanın kategori bölümünün altında doğru sırada açıldığı ve yedi gerçek vana görselinin yüklendiği doğrulandı. Frontend doğrulaması 23 dosyada 66 test ve başarılı Vite üretim derlemesiyle tamamlandı.
 - Kullanıcı geri bildirimiyle kayan vana vitrini `ÜRÜN KATEGORİLERİMİZ` alanının üstüne taşındı; vitrine ait etiket, başlık, açıklama, alt çağrı metni ve teknik destek butonu tamamen kaldırıldı.
 - Kayan kartların mavi ad paneli yalnız vana adı ve ok yüksekliğinde olacak şekilde inceltildi; arka plan opaklığı azaltıldı ve canlı localhost görünümünde doğrulandı.
+- Kayan kartlardaki ad panelinin koyu mavi oranı kullanıcı geri bildirimiyle `%46` seviyesinden `%28` seviyesine indirildi; arka plandaki vana daha belirgin hale getirildi.
 
 ## Bilinen durumlar
 
