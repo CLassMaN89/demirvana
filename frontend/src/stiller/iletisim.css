@@ -1,4 +1,4 @@
-.iletisim-sayfasi { padding-bottom: clamp(56px, 7vw, 92px); background: linear-gradient(180deg, var(--renk-beyaz), color-mix(in srgb, var(--renk-acik) 38%, var(--renk-beyaz))); }
+.iletisim-sayfasi { padding-bottom: 0; background: var(--iletisim-arkaplan-rengi, #91aec4); }
 .iletisim-harita { position: relative; height: clamp(280px, 33vw, 430px); overflow: hidden; border-bottom: 1px solid var(--renk-cizgi); background: var(--renk-acik); }
 .iletisim-harita iframe { width: 100%; height: 100%; border: 0; filter: saturate(.72) contrast(.94); }
 .iletisim-harita__bilgi { position: absolute; top: 28px; left: max(24px, calc((100% - var(--icerik-genisligi)) / 2)); display: grid; width: min(310px, calc(100% - 48px)); min-height: 102px; grid-template-columns: 52px 1fr; grid-template-rows: auto auto; align-items: center; gap: 3px 14px; padding: 17px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 12px; background: color-mix(in srgb, var(--renk-beyaz) 94%, transparent); box-shadow: 0 15px 36px color-mix(in srgb, var(--renk-koyu) 14%, transparent); color: var(--renk-koyu); text-decoration: none; backdrop-filter: blur(10px); }
@@ -9,7 +9,7 @@
 .iletisim-baslik > span, .iletisim-hesaplar__baslik > span { display: inline-flex; align-items: center; gap: 8px; color: var(--renk-ana); font-size: .75rem; font-weight: 700; text-transform: uppercase; }
 .iletisim-baslik > span::before, .iletisim-hesaplar__baslik > span::before { width: 28px; height: 2px; background: var(--renk-ana); content: ''; }
 .iletisim-baslik h1 { margin: 9px 0 12px; color: var(--renk-koyu); font-size: clamp(2.6rem, 5vw, 4.8rem); letter-spacing: -.055em; line-height: .9; text-transform: uppercase; }
-.iletisim-baslik p { max-width: 62ch; margin: 0; color: var(--renk-ikincil); font-size: .9rem; line-height: 1.6; }
+.iletisim-baslik p { max-width: 62ch; margin: 0; color: color-mix(in srgb, var(--renk-koyu) 78%, var(--renk-beyaz)); font-size: .9rem; line-height: 1.6; }
 .iletisim-kanallari { margin-top: 24px; padding: 7px 22px; border: 1px solid var(--renk-cizgi); border-radius: 14px; background: var(--renk-beyaz); box-shadow: 0 12px 34px color-mix(in srgb, var(--renk-koyu) 6%, transparent); }
 .iletisim-kanallari p { display: grid; min-height: 54px; grid-template-columns: 26px 84px minmax(0, 1fr); align-items: center; gap: 10px; margin: 0; border-bottom: 1px solid var(--renk-cizgi); font-size: .78rem; }
 .iletisim-kanallari p:last-child { border-bottom: 0; }
@@ -50,7 +50,7 @@
 .iletisim-hesaplar { margin-top: clamp(42px, 6vw, 76px); }
 .iletisim-hesaplar__baslik { position: relative; }
 .iletisim-hesaplar__baslik h2 { margin: 7px 0 0; color: var(--renk-koyu); font-size: clamp(2rem, 3.6vw, 3.35rem); letter-spacing: -.045em; text-transform: uppercase; }
-.iletisim-hesaplar__baslik small { position: absolute; right: 0; bottom: 7px; color: var(--renk-ikincil); font-size: .68rem; letter-spacing: .11em; text-transform: uppercase; }
+.iletisim-hesaplar__baslik small { position: absolute; right: 0; bottom: 7px; color: color-mix(in srgb, var(--renk-koyu) 74%, var(--renk-beyaz)); font-size: .68rem; letter-spacing: .11em; text-transform: uppercase; }
 .iletisim-hesaplar__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
 .iletisim-hesap-karti { display: grid; min-width: 0; grid-template-columns: 52px minmax(0, 1fr); gap: 14px; padding: 20px; border: 1px solid var(--renk-cizgi); border-radius: 13px; background: var(--renk-beyaz); box-shadow: 0 12px 30px color-mix(in srgb, var(--renk-koyu) 6%, transparent); }
 .iletisim-hesap-karti__para { display: grid; width: 52px; height: 52px; border-radius: 50%; background: var(--renk-ana); color: var(--renk-beyaz); font-size: 1rem; font-weight: 700; place-items: center; }
@@ -59,14 +59,14 @@
 .iletisim-hesap-karti dl { display: grid; grid-column: 1 / -1; grid-template-columns: 82px minmax(0, 1fr); gap: 7px 10px; margin: 3px 0 0; padding-top: 15px; border-top: 1px solid var(--renk-cizgi); font-size: .7rem; line-height: 1.35; }
 .iletisim-hesap-karti dt { color: var(--renk-ikincil); text-transform: uppercase; }
 .iletisim-hesap-karti dd { min-width: 0; margin: 0; color: var(--renk-koyu); font-weight: 600; overflow-wrap: anywhere; }
-.iletisim-hesaplar__uyari { margin: 16px 0 0; color: var(--renk-ikincil); font-size: .72rem; text-align: right; }
+.iletisim-hesaplar__uyari { margin: 16px 0 0; color: color-mix(in srgb, var(--renk-koyu) 76%, var(--renk-beyaz)); font-size: .72rem; text-align: right; }
 .iletisim-dunya { position: relative; min-height: clamp(680px, 72vw, 940px); margin-top: 0; overflow: hidden; background: transparent; color: var(--renk-koyu); isolation: isolate; }
 .iletisim-dunya__sahne { position: absolute; inset: 0; min-height: 100%; }
 .iletisim-dunya__sahne canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .iletisim-dunya__sahne canvas:active { cursor: grabbing; }
 .iletisim-dunya__bulutlar { position: absolute; z-index: 3; right: -12%; bottom: -1px; left: -12%; height: 29%; overflow: hidden; pointer-events: none; }
 .iletisim-dunya__bulutlar::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 45%; background: linear-gradient(transparent, var(--renk-beyaz) 78%); content: ''; }
-.iletisim-dunya__bulutlar i { position: absolute; width: 72%; height: 86%; background: url('/assets/dunya/earth_clouds_1024.png') center / cover no-repeat; filter: blur(5px) brightness(2.9) contrast(.72); opacity: .72; mask-image: radial-gradient(ellipse at center, #000 0 38%, transparent 76%); animation: iletisim-bulut-akisi 18s ease-in-out infinite alternate; }
+.iletisim-dunya__bulutlar i { position: absolute; width: 72%; height: 86%; background: url('/assets/dunya/earth_clouds_4k.png') center / cover no-repeat; filter: blur(2px) brightness(2.4) contrast(.88); opacity: .76; mask-image: radial-gradient(ellipse at center, #000 0 42%, transparent 78%); animation: iletisim-bulut-akisi 18s ease-in-out infinite alternate; }
 .iletisim-dunya__bulutlar i:nth-child(1) { bottom: -13%; left: -8%; }
 .iletisim-dunya__bulutlar i:nth-child(2) { right: -6%; bottom: -18%; animation-delay: -7s; animation-duration: 23s; }
 .iletisim-dunya__bulutlar i:nth-child(3) { bottom: -32%; left: 24%; opacity: .7; animation-delay: -13s; animation-duration: 27s; }

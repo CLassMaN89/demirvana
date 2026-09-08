@@ -23,18 +23,19 @@ function EtkilesimliDunya({ ayarlar = {} }) {
 
       const sahne = new THREE.Scene();
       const kamera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-      kamera.position.set(0, 0.08, 2.12);
+      kamera.position.set(0, 0.08, 2.78);
       const dunyaGrubu = new THREE.Group();
       // Avrupa ve Türkiye ilk açılışta görünür; kullanıcı sürükleyerek diğer bölgelere geçer.
       dunyaGrubu.rotation.set(0.08, -2.2, 0);
+      dunyaGrubu.position.y = -.28;
       sahne.add(dunyaGrubu);
 
       const yukleyici = new THREE.TextureLoader();
-      const renk = yukleyici.load('/assets/dunya/earth_atmos_2048.jpg');
+      const renk = yukleyici.load('/assets/dunya/earth_blue_marble_4k.jpg');
       renk.colorSpace = THREE.SRGBColorSpace;
       const normal = yukleyici.load('/assets/dunya/earth_normal_2048.jpg');
       const parlaklik = yukleyici.load('/assets/dunya/earth_specular_2048.jpg');
-      const bulut = yukleyici.load('/assets/dunya/earth_clouds_1024.png');
+      const bulut = yukleyici.load('/assets/dunya/earth_clouds_4k.png');
       bulut.colorSpace = THREE.SRGBColorSpace;
       [renk, normal, parlaklik, bulut].forEach((doku) => { doku.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); });
 
@@ -47,7 +48,7 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       // Bulutlar ayrı kürede daha hızlı dönerek yüzeyden bağımsız, canlı bir katman oluşturur.
       const bulutKuresi = new THREE.Mesh(
         new THREE.SphereGeometry(1.008, 64, 64),
-        new THREE.MeshPhongMaterial({ map: bulut, transparent: true, opacity: 0.58, depthWrite: false, blending: THREE.AdditiveBlending })
+        new THREE.MeshPhongMaterial({ map: bulut, transparent: true, opacity: .82, depthWrite: false, blending: THREE.NormalBlending })
       );
       dunyaGrubu.add(bulutKuresi);
 
@@ -62,7 +63,23 @@ function EtkilesimliDunya({ ayarlar = {} }) {
           fragmentShader: 'varying vec3 vNormal; void main(){ float kenar=pow(1.0-max(0.0,dot(normalize(vNormal),vec3(0.0,0.0,1.0))),4.5); gl_FragColor=vec4(0.60,0.82,0.98,kenar*0.24); }'
         })
       );
+      atmosfer.position.y = dunyaGrubu.position.y;
       sahne.add(atmosfer);
+
+      // İkinci çok ince kabuk, referanstaki cam kubbe hissini koyu bir kontur oluşturmadan verir.
+      const disAtmosfer = new THREE.Mesh(
+        new THREE.SphereGeometry(1.047, 64, 64),
+        new THREE.ShaderMaterial({
+          transparent: true,
+          side: THREE.FrontSide,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          vertexShader: 'varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+          fragmentShader: 'varying vec3 vNormal; void main(){ float kenar=pow(1.0-max(0.0,dot(normalize(vNormal),vec3(0.0,0.0,1.0))),7.0); gl_FragColor=vec4(0.78,0.91,1.0,kenar*0.13); }'
+        })
+      );
+      disAtmosfer.position.y = dunyaGrubu.position.y;
+      sahne.add(disAtmosfer);
 
       sahne.add(new THREE.HemisphereLight('#ffffff', '#8cabc1', 3.1));
       const gunes = new THREE.DirectionalLight('#ffffff', 2.1);
@@ -73,7 +90,11 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const azaltildi = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
       const boyutlandir = () => {
         const { width, height } = alan.getBoundingClientRect();
-        renderer.setSize(width, height, false); kamera.aspect = width / Math.max(height, 1); kamera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+        kamera.aspect = width / Math.max(height, 1);
+        // Telefonda kürenin yanlardan taşmasını engeller, geniş ekranda referanstaki büyük yarım küreyi korur.
+        kamera.position.z = kamera.aspect < .8 ? 3.65 : 2.78;
+        kamera.updateProjectionMatrix();
       };
       const baslat = (olay) => { surukleniyor = true; oncekiX = olay.clientX; oncekiY = olay.clientY; canvas.setPointerCapture?.(olay.pointerId); };
       const hareket = (olay) => { if (!surukleniyor) return; dunyaGrubu.rotation.y += (olay.clientX - oncekiX) * .006; dunyaGrubu.rotation.x = THREE.MathUtils.clamp(dunyaGrubu.rotation.x + (olay.clientY - oncekiY) * .004, -.8, .8); oncekiX = olay.clientX; oncekiY = olay.clientY; };
@@ -86,15 +107,6 @@ function EtkilesimliDunya({ ayarlar = {} }) {
         kare = requestAnimationFrame(canlandir); if (!gorunur) return;
         if (!surukleniyor && !azaltildi) dunyaGrubu.rotation.y += .0007;
         bulutKuresi.rotation.y += azaltildi ? 0 : .00018;
-        // Sayfa aşağı kaydıkça dünya yaklaşır ve yükselir; tekerlek normal sayfa kaydırmasını engellemez.
-        const dikdortgen = alan.getBoundingClientRect();
-        const ilerleme = THREE.MathUtils.clamp((window.innerHeight - dikdortgen.top) / (window.innerHeight + dikdortgen.height * .45), 0, 1);
-        const hedefOlcek = azaltildi ? 1.08 : 1.03 + ilerleme * .14;
-        const yeniOlcek = THREE.MathUtils.lerp(dunyaGrubu.scale.x, hedefOlcek, .055);
-        dunyaGrubu.scale.setScalar(yeniOlcek);
-        dunyaGrubu.position.y = THREE.MathUtils.lerp(dunyaGrubu.position.y, azaltildi ? .03 : -.04 + ilerleme * .15, .055);
-        atmosfer.scale.setScalar(yeniOlcek);
-        atmosfer.position.y = dunyaGrubu.position.y;
         renderer.render(sahne, kamera);
       };
       canlandir();

@@ -258,8 +258,11 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Three.js ilk paket yükünü büyütmemesi için dinamik parça olarak indirilir; animasyon ekran dışında durur ve azaltılmış hareket tercihine uyar. Dünya ve bulut dokuları yerel `frontend/public/assets/dunya/` dizininden sunulur.
 - Etkileşimli dünya localhost üzerinde yakın yarım küre kadrajı, gerçek dünya dokusu, ayrı yüzey bulutları, saydam atmosfer ve footer bulut geçişiyle görsel olarak doğrulandı.
 - Dünya bölümü kullanıcı geri bildirimiyle hesap kartlarının hemen altına sıfır üst boşlukla yaklaştırıldı; görünür başlık ve açıklama tamamen kaldırıldı.
-- Mouse tekerleğine bağlı kamera zoom'u kaldırıldı. Normal sayfa kaydırması korunurken aşağı kaydırmada dünyanın hafif büyüyüp yükseldiği, yukarı kaydırmada küçülüp geri oturduğu yumuşak parallax ölçek hareketi eklendi.
+- Mouse tekerleğine bağlı kamera zoom'u ve sayfa kaydırmasına bağlı büyüyüp küçülme tamamen kaldırıldı. Sayfa normal kayar; dünya sabit boyutta otomatik döner ve sürüklenerek çevrilebilir.
 - Gerçek dünya dokusunda ACES renk eşleme ve anizotropik filtreleme etkinleştirildi; atmosfer Fresnel kenar ışığıyla daha ince ve saydam yapıldı. Footer bulutları aynı gerçek bulut dokusundan maskelenerek hareket eden katmanlara dönüştürüldü.
+- Düşük çözünürlüklü yüzey ve bulut dosyaları 4096×2048 dokularla değiştirildi. Bulutlarda ayrıntıyı beyaza patlatan eklemeli harmanlama kaldırılarak normal saydam harmanlamaya geçildi; geniş ekran ve telefon kamera mesafeleri ayrı sabitlendi.
+- İletişim sayfasının harita altındaki bütün zemini referanstaki mavi-gri gökyüzü rengine geçirildi; renk `iletisim_arkaplan_rengi` ayarıyla admin yönetimine hazırdır. Dünya bu ortak zeminde ayrı bir kutu gibi görünmez.
+- Kürenin üst yayının kesilmemesi için çap korunarak model merkezi aşağı alındı; iki farklı yoğunlukta ince Fresnel atmosfer kabuğu referanstaki saydam cam kenarı görünümünü üretir.
 
 ## Bilinen durumlar
 

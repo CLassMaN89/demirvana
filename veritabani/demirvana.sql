@@ -468,6 +468,7 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('iletisim_harita_embed_adresi', 'https://www.google.com/maps/d/embed?mid=1R6ztHB_hDzoxh7P4hUMhGTVWJms', 'baglanti', 'Demirvana resmî Google My Maps gömme adresi'),
     ('iletisim_harita_kart_basligi', 'Bizi Ziyaret Edin', 'metin', 'Harita üzerindeki bilgi kartı başlığı'),
     ('iletisim_harita_kart_aciklamasi', 'İkitelli OSB’deki merkezimizde sizleri ağırlamaktan memnuniyet duyarız.', 'metin', 'Harita üzerindeki bilgi kartı açıklaması'),
+    ('iletisim_arkaplan_rengi', '#91aec4', 'renk', 'İletişim sayfası ve dünya alanının ortak gökyüzü arka plan rengi'),
     ('iletisim_etiketi', 'Demirvana', 'metin', 'İletişim sayfası üst etiketi'),
     ('iletisim_basligi', 'İletişim', 'metin', 'İletişim sayfası ana başlığı'),
     ('iletisim_aciklamasi', 'Sorularınız, talepleriniz veya iş birliği fırsatları için bizimle iletişime geçebilirsiniz. Ekibimiz size en kısa sürede dönüş yapacaktır.', 'metin', 'İletişim sayfası açıklaması'),

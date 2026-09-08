@@ -120,6 +120,7 @@ export const ornekVeriler = Object.freeze({
     iletisim_harita_embed_adresi: 'https://www.google.com/maps/d/embed?mid=1R6ztHB_hDzoxh7P4hUMhGTVWJms',
     iletisim_harita_kart_basligi: 'Bizi Ziyaret Edin',
     iletisim_harita_kart_aciklamasi: 'İkitelli OSB’deki merkezimizde sizleri ağırlamaktan memnuniyet duyarız.',
+    iletisim_arkaplan_rengi: '#91aec4',
     iletisim_etiketi: 'Demirvana',
     iletisim_basligi: 'İletişim',
     iletisim_aciklamasi: 'Sorularınız, talepleriniz veya iş birliği fırsatları için bizimle iletişime geçebilirsiniz. Ekibimiz size en kısa sürede dönüş yapacaktır.',

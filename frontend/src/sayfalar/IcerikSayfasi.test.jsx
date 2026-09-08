@@ -47,10 +47,11 @@ describe('IcerikSayfasi iletişim görünümü', () => {
   });
 
   it('hesapların altında metinsiz etkileşimli dünya alanını gösterir', () => {
-    render(<IcerikSayfasi tur="iletisim" siteAyarlari={{ ...ayarlar, iletisim_dunya_basligi: 'Dünyaya güvenilir akış çözümleri' }} />);
+    render(<IcerikSayfasi tur="iletisim" siteAyarlari={{ ...ayarlar, iletisim_dunya_basligi: 'Dünyaya güvenilir akış çözümleri', iletisim_arkaplan_rengi: '#91aec4' }} />);
 
     expect(screen.queryByRole('heading', { name: 'Dünyaya güvenilir akış çözümleri' })).not.toBeInTheDocument();
     expect(screen.getByLabelText('Demirvana küresel çözüm ağı')).toBeInTheDocument();
     expect(screen.queryByText(/döndürmek için sürükleyin/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('article')).toHaveStyle('--iletisim-arkaplan-rengi: #91aec4');
   });
 });
