@@ -175,6 +175,38 @@
   transition: background-color 170ms ease, color 170ms ease;
 }
 
+.site-header__menu-metin {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.site-header__menu-ikonu {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--renk-acik) 72%, var(--renk-beyaz));
+  color: var(--renk-ana);
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: background-color 170ms ease, color 170ms ease, transform 170ms ease;
+}
+
+.site-header__alt-baglanti:hover .site-header__menu-ikonu,
+.site-header__alt-baglanti:focus-visible .site-header__menu-ikonu,
+.site-header__alt-baglanti--aktif .site-header__menu-ikonu,
+.site-header__vana-baglanti:hover .site-header__menu-ikonu,
+.site-header__vana-baglanti:focus-visible .site-header__menu-ikonu {
+  background: var(--renk-ana);
+  color: var(--renk-beyaz);
+  transform: translateY(-1px);
+}
+
 .site-header__alt-baglanti:hover,
 .site-header__alt-baglanti:focus-visible,
 .site-header__alt-baglanti--aktif {
@@ -199,6 +231,8 @@
   line-height: 1.25;
   transition: background-color 160ms ease, color 160ms ease;
 }
+
+.site-header__vana-baglanti .site-header__menu-ikonu { flex-basis: 19px; width: 19px; height: 19px; padding: 2.5px; }
 
 .site-header__vana-baglanti span:last-child {
   opacity: 0;

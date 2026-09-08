@@ -5,6 +5,15 @@ import '../stiller/header.css';
 import AramaAlani from './AramaAlani';
 import { aramaSonuclariOlustur } from './arama';
 
+function VanaMenuIkonu() {
+  return (
+    <svg className="site-header__menu-ikonu" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="5" r="3.2" />
+      <path d="M12 8.2v3.1M8.2 11.3h7.6M7 11.3v7.2M17 11.3v7.2M5 18.5h14M9 15h6v3.5" />
+    </svg>
+  );
+}
+
 export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
   const [menuAcik, setMenuAcik] = useState(false);
   const [acikMenuId, setAcikMenuId] = useState(null);
@@ -177,7 +186,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                           if (!ucuncuSeviyeVar) {
                             return (
                               <Link className="site-header__alt-baglanti" key={altOge.id} to={altOge.baglanti}>
-                                {altOge.baslik}<span aria-hidden="true">↗</span>
+                                <span className="site-header__menu-metin"><VanaMenuIkonu />{altOge.baslik}</span><span aria-hidden="true">↗</span>
                               </Link>
                             );
                           }
@@ -193,7 +202,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                               onPointerEnter={() => setAcikAltMenuId(altOge.id)}
                               onClick={() => setAcikAltMenuId(altAcik ? null : altOge.id)}
                             >
-                              {altOge.baslik}<span aria-hidden="true">→</span>
+                              <span className="site-header__menu-metin"><VanaMenuIkonu />{altOge.baslik}</span><span aria-hidden="true">→</span>
                             </button>
                           );
                         })}
@@ -207,7 +216,7 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                         >
                           {seciliAltOge.alt_ogeler.map((kategori) => (
                             <Link className="site-header__vana-baglanti" key={kategori.id} to={kategori.baglanti}>
-                              <span>{kategori.baslik}</span><span aria-hidden="true">↗</span>
+                              <span className="site-header__menu-metin"><VanaMenuIkonu />{kategori.baslik}</span><span aria-hidden="true">↗</span>
                             </Link>
                           ))}
                         </div>

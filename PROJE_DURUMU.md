@@ -237,6 +237,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - `ÜRÜN KATEGORİLERİMİZ` bölümü silinmeden `kategori_bolumu_aktif_mi=0` ayarıyla geçici olarak pasife alındı; admin/veritabanında değer `1` yapıldığında yeniden görünür.
 - Fuarlar etiket, başlık ve açıklaması bölüm ekrana girdiğinde 110ms aralıklı yükselme/solma animasyonuyla görünür; azaltılmış hareket tercihinde doğrudan ve animasyonsuz gösterilir.
 - Kayan vana vitrininin alt boşluğu ile Fuarlar bölümünün üst/alt boşlukları ve galeri kenar maskesi azaltılarak ürünler–Fuarlar–footer akışı sıkılaştırıldı. Frontend doğrulaması 24 dosyada 69 test ve başarılı üretim derlemesiyle yenilendi.
+- Navbar Ürünler mega menüsündeki Vana, Aktüatör, Otomasyon ve Temsilcilikler ana grupları ile açılan bütün üçüncü seviye kategori bağlantılarının başına tema renkli, erişilebilirlik ağacından gizlenmiş vana ikonları eklendi.
+- Menü ikonları hover, klavye odağı ve aktif grup durumunda mavi zemine/beyaz çizgiye geçer; masaüstü ve mevcut mobil menü davranışı değiştirilmedi. Header'ın 12 testi ve Vite üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -251,4 +253,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfada `ÜRÜN KATEGORİLERİMİZ` geçici olarak pasif; kayan vana vitrini ile animasyonlu Fuarlar bölümü sıkı boşluklarla footer'a bağlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, ürün vitrini, footer ve diğer iç sayfaları koru.
+Navbar Ürünler menüsünün ana ve alt kategorilerine vana ikonları eklendi. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; mevcut menü etkileşimi, hero, ürün vitrini, Fuarlar ve footer'ı koru.

@@ -272,6 +272,8 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Aktüatör' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Otomasyon' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Temsilcilikler' })).toBeInTheDocument();
+    // Ürün grupları ve açılan alt kategoriler aynı tema uyumlu vana ikonunu kullanır.
+    expect(document.querySelectorAll('.site-header__menu-ikonu')).toHaveLength(6);
 
     await kullanici.keyboard('{Escape}');
     expect(urunlerDugmesi).toHaveAttribute('aria-expanded', 'false');
