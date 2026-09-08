@@ -267,6 +267,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - İletişim ana başlığı, hesaplar başlığı ve mesaj formu okunabilirlik açısından güçlendirildi. Form kartına hafif cam yüzeyi, daha net alan sınırları ve belirgin hover/focus durumları eklendi; mevcut içerik ve davranış korunmuştur.
 - İletişim dünyası masaüstünde yaklaşık `%15` daha yakın kadraja alınarak referanstaki geniş alana yayıldı; telefonda yan taşmayı önleyen ayrı sabit kamera mesafesi korundu. Tekerlek veya sayfa kaydırması dünyayı büyütüp küçültmez.
 - Footer önündeki gerçek dokulu bulut örtüsü üçten dört bağımsız katmana çıkarıldı ve alanın yaklaşık alt yarısına yayıldı. Katmanlara farklı kadraj, yoğunluk ve akış süreleri verilerek yüzeyi tamamen kapatmayan daha doğal bir derinlik oluşturuldu.
+- Kullanıcı geri bildirimiyle dünya kamera mesafesi yeniden azaltılarak küre referanstaki yeşil alan genişliğine yaklaştırıldı; aşağı itilmiş model merkezi kaldırıldığı için kürenin üst yayı hesap güvenlik notuna boşluksuz bağlandı.
+- Dünya sahnesinin gereksiz yüksekliği azaltıldı ve iletişim sayfasına özel footer, bulutların beyaza dönen son kısmını örtecek şekilde yukarı alındı. Böylece dünya/bulut alanı ile footer arasında görünür boş şerit kalmadı.
 
 ## Bilinen durumlar
 
@@ -281,4 +283,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim sayfasındaki büyütülmüş dünya kadrajı ve dört katmanlı yoğun bulut geçişi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim sayfasındaki geniş dünya kadrajı ile üst ve footer sınırındaki sıfır boşluklu birleşim tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.

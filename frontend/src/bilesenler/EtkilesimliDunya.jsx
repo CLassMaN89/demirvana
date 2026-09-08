@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 // Sabit kamera mesafeleri, tekerlek hareketinden etkilenmeden masaüstünde yakın; telefonda taşmasız bir kadraj sağlar.
-export const dunyaKameraMesafesi = (enBoyOrani) => (enBoyOrani < .8 ? 3.28 : 2.42);
+export const dunyaKameraMesafesi = (enBoyOrani) => (enBoyOrani < .8 ? 3.08 : 2.12);
 
 function EtkilesimliDunya({ ayarlar = {} }) {
   const alanRef = useRef(null);
@@ -30,7 +30,8 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const dunyaGrubu = new THREE.Group();
       // Avrupa ve Türkiye ilk açılışta görünür; kullanıcı sürükleyerek diğer bölgelere geçer.
       dunyaGrubu.rotation.set(0.08, -2.2, 0);
-      dunyaGrubu.position.y = -.28;
+      // Küre hesap alanından sonra boşluk bırakmadan başlar; aşağı kaydırılmış eski merkez kaldırılmıştır.
+      dunyaGrubu.position.y = -.02;
       sahne.add(dunyaGrubu);
 
       const yukleyici = new THREE.TextureLoader();
