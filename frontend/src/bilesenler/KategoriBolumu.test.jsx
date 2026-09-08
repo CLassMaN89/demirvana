@@ -16,14 +16,18 @@ const yediKategori = [
   ad,
   slug,
   gorsel_yolu: '/assets/urun-placeholder.svg',
-  alternatif_metin: `${ad} ürün grubu`
+  alternatif_metin: `${ad} ürün grubu`,
+  aciklama: `${ad} için endüstriyel çözümler`
 }));
 
 describe('KategoriBolumu', () => {
   it('yedi kategori ve Tüm Ürünler bağlantısıyla tam sekiz kart gösterir', () => {
     render(
       <MemoryRouter>
-        <KategoriBolumu kategoriler={yediKategori} />
+        <KategoriBolumu
+          kategoriler={yediKategori}
+          siteAyarlari={{ kategori_kart_varsayilan_alt_metni: 'Ürün grubu' }}
+        />
       </MemoryRouter>
     );
 
@@ -33,6 +37,11 @@ describe('KategoriBolumu', () => {
       'href',
       '/kategoriler/kuresel-vanalar'
     );
+    expect(screen.getByRole('img', { name: 'Küresel Vanalar ürün grubu' })).toHaveAttribute(
+      'src',
+      '/assets/urun-placeholder.svg'
+    );
+    expect(screen.getByText('Küresel Vanalar için endüstriyel çözümler')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Tüm Ürünler' })).toHaveAttribute(
       'href',
       '/urunler'

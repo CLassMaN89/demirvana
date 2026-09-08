@@ -129,6 +129,10 @@ Demirvana için React, CSS ve JavaScript tabanlı responsive arayüz; PHP REST A
 - Sertifika sayfasındaki 14 genel metin `site_ayarlari` üzerinden yönetilebilir hâle getirildi; bütün renkler merkezi tema değişkenlerinden türetilir.
 - `/api/sertifikalar` yalnız etkin ve fiziksel dosyası bulunan kayıtları döndürür; `/sertifika-dosyalari/{slug}` kök dışı erişimi engelleyerek tam ve byte-range PDF yanıtı verir.
 - Sertifika PDF.js bileşeni yalnız seçili belge için dinamik yüklenir; masaüstünde iki sütun, tablet ve telefonda sıralı tek sütun kullanılır.
+- Ana sayfadaki `Ürün Kategorilerimiz` vitrini, gönderilen Hover Reveal Cards davranışına uyarlanarak masaüstünde 4×2 görsel kart düzenine geçirildi.
+- Kategori kartları referanstaki 320px yerine kullanıcı isteğiyle hafif küçültülerek masaüstünde 256px, tablette 238px ve telefonda 220px yüksekliğinde ayarlandı.
+- Fareyle bir karta gelindiğinde seçili kart netleşip hafif büyürken diğer kartlar kontrollü biçimde geri plana geçer; dokunmatik cihazlarda ve azaltılmış hareket tercihinde bütün kartlar net kalır.
+- Kart görseli, açıklaması, kategori adı ve bağlantısı mevcut dinamik kategori verisinden gelir; açıklaması olmayan kartın yedek metni ile Tüm Ürünler alt metni `site_ayarlari` üzerinden yönetilebilir.
 
 ## Mevcut durum
 
@@ -212,6 +216,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - ISO 9001 ENG güvenli dosya rotası doğrudan PHP ve Vite vekili üzerinden `206`, 100 bayt ve doğru `Content-Range` döndürdü; bilinmeyen slug `404` verdi.
 - Sertifika sayfasında arama, kategori filtresi, belge seçimi ve boş durum için 3 yeni bileşen testi eklendi; toplam 22 dosyada 65 frontend testi ve üretim derlemesi başarılıdır.
 - Sertifika sayfası 375, 768, 1440 ve 1920px genişliklerde canlı MariaDB/PDF verisiyle doğrulandı; dört kaydın listelendiği, seçimin ve aramanın çalıştığı, PDF canvas'ın çizildiği, yatay taşma ve konsol hatası olmadığı görüldü.
+- Yeni kategori vitrini 375, 768, 1440 ve 1920px genişliklerde canlı veriyle doğrulandı; sırasıyla 1, 2, 4 ve 4 sütun, 220/238/256px kart yüksekliği, sekiz bağlantı ve sıfır yatay taşma görüldü.
+- Masaüstü hover doğrulamasında seçili kart opaklığı `1`, diğer kartların opaklığı `0.58` olarak ölçüldü; tarayıcı konsolunda kategori alanına ait hata oluşmadı.
 
 ## Bilinen durumlar
 
@@ -226,4 +232,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Sertifikalar Kütüphanesi tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, footer, Referanslar, Kurumsal, Teknik ve Sertifikalar sayfasının diğer alanlarını koru.
+Ana sayfa Ürün Kategorilerimiz hover-reveal vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { metinler } from '../metinler/tr';
 import '../stiller/kategoriler.css';
 
-export default function KategoriBolumu({ kategoriler }) {
+export default function KategoriBolumu({ kategoriler, siteAyarlari = {} }) {
   // Ana sayfanın sekizli kompozisyonunu korumak için API daha fazla kayıt döndürse de ilk yedi aktif kategori kullanılır.
   const vitrinKategorileri = kategoriler.slice(0, 7);
 
@@ -19,9 +19,9 @@ export default function KategoriBolumu({ kategoriler }) {
 
         <div className="kategori-bolumu__grid">
           {vitrinKategorileri.map((kategori) => (
-            <KategoriKarti key={kategori.id} kategori={kategori} />
+            <KategoriKarti key={kategori.id} kategori={kategori} varsayilanAltMetin={siteAyarlari.kategori_kart_varsayilan_alt_metni} />
           ))}
-          <KategoriKarti kategori={{}} tumUrunler />
+          <KategoriKarti kategori={{}} tumUrunler tumUrunlerAltMetni={siteAyarlari.kategori_tum_urunler_alt_metni} />
         </div>
       </div>
     </section>

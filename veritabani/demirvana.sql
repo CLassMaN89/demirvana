@@ -392,6 +392,8 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('footer_iletisim_buton_metni', 'Bizimle iletişime geçin', 'metin', 'Footer iletişim düğmesi metni'),
     ('footer_iletisim_buton_baglantisi', '/iletisim', 'baglanti', 'Footer iletişim düğmesi bağlantısı'),
     ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir'),
+    ('kategori_kart_varsayilan_alt_metni', 'Endüstriyel vana çözümleri', 'metin', 'Açıklaması olmayan ana sayfa kategori kartının alt metni'),
+    ('kategori_tum_urunler_alt_metni', 'Ürün kataloğu', 'metin', 'Ana sayfa Tüm Ürünler kartının alt metni'),
     ('referans_hero_yol_metni', 'Anasayfa / Referanslar', 'metin', 'Referans hero ekmek kırıntısı metni'),
     ('referans_hero_basligi', 'Güvenin Referansa Dönüştüğü Projeler', 'metin', 'Referans hero ana başlığı'),
     ('referans_hero_aciklamasi', 'Türkiye’de ve dünyada tamamladığımız seçkin projeler.', 'metin', 'Referans hero açıklaması'),

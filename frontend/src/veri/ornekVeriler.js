@@ -118,6 +118,8 @@ export const ornekVeriler = Object.freeze({
     footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
     footer_iletisim_buton_baglantisi: '/iletisim',
     footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.',
+    kategori_kart_varsayilan_alt_metni: 'Endüstriyel vana çözümleri',
+    kategori_tum_urunler_alt_metni: 'Ürün kataloğu',
     teknik_hero_basligi: 'Teknik',
     teknik_hero_aciklamasi: 'Ürünlerimize ait teknik tabloları ve kullanım talimatlarını buradan inceleyebilirsiniz.',
     teknik_slogan_satir_1: 'Güvenli Akış',
