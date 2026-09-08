@@ -18,10 +18,12 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.16;
 
       const sahne = new THREE.Scene();
       const kamera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-      kamera.position.set(0, 0.12, 2.28);
+      kamera.position.set(0, 0.08, 2.12);
       const dunyaGrubu = new THREE.Group();
       // Avrupa ve Türkiye ilk açılışta görünür; kullanıcı sürükleyerek diğer bölgelere geçer.
       dunyaGrubu.rotation.set(0.08, -2.2, 0);
@@ -34,6 +36,7 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const parlaklik = yukleyici.load('/assets/dunya/earth_specular_2048.jpg');
       const bulut = yukleyici.load('/assets/dunya/earth_clouds_1024.png');
       bulut.colorSpace = THREE.SRGBColorSpace;
+      [renk, normal, parlaklik, bulut].forEach((doku) => { doku.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); });
 
       const kure = new THREE.Mesh(
         new THREE.SphereGeometry(1, 64, 64),
@@ -52,11 +55,11 @@ function EtkilesimliDunya({ ayarlar = {} }) {
         new THREE.SphereGeometry(1.028, 64, 64),
         new THREE.ShaderMaterial({
           transparent: true,
-          side: THREE.BackSide,
+          side: THREE.FrontSide,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
           vertexShader: 'varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-          fragmentShader: 'varying vec3 vNormal; void main(){ float i=pow(max(0.0,0.78-dot(vNormal,vec3(0.0,0.0,1.0))),3.1); gl_FragColor=vec4(0.48,0.76,0.96,i*0.34); }'
+          fragmentShader: 'varying vec3 vNormal; void main(){ float kenar=pow(1.0-max(0.0,dot(normalize(vNormal),vec3(0.0,0.0,1.0))),4.5); gl_FragColor=vec4(0.60,0.82,0.98,kenar*0.24); }'
         })
       );
       sahne.add(atmosfer);
@@ -75,25 +78,34 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const baslat = (olay) => { surukleniyor = true; oncekiX = olay.clientX; oncekiY = olay.clientY; canvas.setPointerCapture?.(olay.pointerId); };
       const hareket = (olay) => { if (!surukleniyor) return; dunyaGrubu.rotation.y += (olay.clientX - oncekiX) * .006; dunyaGrubu.rotation.x = THREE.MathUtils.clamp(dunyaGrubu.rotation.x + (olay.clientY - oncekiY) * .004, -.8, .8); oncekiX = olay.clientX; oncekiY = olay.clientY; };
       const bitir = () => { surukleniyor = false; };
-      const yakinlastir = (olay) => { olay.preventDefault(); kamera.position.z = THREE.MathUtils.clamp(kamera.position.z + olay.deltaY * .0012, 1.95, 3.35); };
       const gozlemci = new IntersectionObserver(([girdi]) => { gorunur = girdi.isIntersecting; }, { threshold: .02 });
       gozlemci.observe(alan); boyutlandir();
-      canvas.addEventListener('pointerdown', baslat); canvas.addEventListener('pointermove', hareket); canvas.addEventListener('pointerup', bitir); canvas.addEventListener('pointercancel', bitir); canvas.addEventListener('wheel', yakinlastir, { passive: false });
+      canvas.addEventListener('pointerdown', baslat); canvas.addEventListener('pointermove', hareket); canvas.addEventListener('pointerup', bitir); canvas.addEventListener('pointercancel', bitir);
       window.addEventListener('resize', boyutlandir);
-      const canlandir = () => { kare = requestAnimationFrame(canlandir); if (!gorunur) return; if (!surukleniyor && !azaltildi) dunyaGrubu.rotation.y += .0007; bulutKuresi.rotation.y += azaltildi ? 0 : .00018; renderer.render(sahne, kamera); };
+      const canlandir = () => {
+        kare = requestAnimationFrame(canlandir); if (!gorunur) return;
+        if (!surukleniyor && !azaltildi) dunyaGrubu.rotation.y += .0007;
+        bulutKuresi.rotation.y += azaltildi ? 0 : .00018;
+        // Sayfa aşağı kaydıkça dünya yaklaşır ve yükselir; tekerlek normal sayfa kaydırmasını engellemez.
+        const dikdortgen = alan.getBoundingClientRect();
+        const ilerleme = THREE.MathUtils.clamp((window.innerHeight - dikdortgen.top) / (window.innerHeight + dikdortgen.height * .45), 0, 1);
+        const hedefOlcek = azaltildi ? 1.08 : 1.03 + ilerleme * .14;
+        const yeniOlcek = THREE.MathUtils.lerp(dunyaGrubu.scale.x, hedefOlcek, .055);
+        dunyaGrubu.scale.setScalar(yeniOlcek);
+        dunyaGrubu.position.y = THREE.MathUtils.lerp(dunyaGrubu.position.y, azaltildi ? .03 : -.04 + ilerleme * .15, .055);
+        atmosfer.scale.setScalar(yeniOlcek);
+        atmosfer.position.y = dunyaGrubu.position.y;
+        renderer.render(sahne, kamera);
+      };
       canlandir();
-      temizle = () => { cancelAnimationFrame(kare); gozlemci.disconnect(); window.removeEventListener('resize', boyutlandir); canvas.removeEventListener('pointerdown', baslat); canvas.removeEventListener('pointermove', hareket); canvas.removeEventListener('pointerup', bitir); canvas.removeEventListener('pointercancel', bitir); canvas.removeEventListener('wheel', yakinlastir); renderer.dispose(); [renk, normal, parlaklik, bulut].forEach((doku) => doku.dispose()); };
+      temizle = () => { cancelAnimationFrame(kare); gozlemci.disconnect(); window.removeEventListener('resize', boyutlandir); canvas.removeEventListener('pointerdown', baslat); canvas.removeEventListener('pointermove', hareket); canvas.removeEventListener('pointerup', bitir); canvas.removeEventListener('pointercancel', bitir); renderer.dispose(); [renk, normal, parlaklik, bulut].forEach((doku) => doku.dispose()); };
     });
 
     return () => { iptalEdildi = true; temizle(); };
   }, []);
 
   return (
-    <section className="iletisim-dunya" aria-labelledby="iletisim-dunya-basligi">
-      <div className="iletisim-dunya__metin">
-        <h2 id="iletisim-dunya-basligi">{ayarlar.iletisim_dunya_basligi || 'Dünyaya güvenilir akış çözümleri'}</h2>
-        <p>{ayarlar.iletisim_dunya_aciklamasi || 'Endüstriyel akış kontrolündeki deneyimimizi dünyanın farklı noktalarındaki iş ortaklarımızla buluşturuyoruz.'}</p>
-      </div>
+    <section className="iletisim-dunya" aria-label="Demirvana küresel görünümü">
       <div className="iletisim-dunya__sahne" ref={alanRef}>
         <canvas ref={canvasRef} aria-label="Demirvana küresel çözüm ağı" />
       </div>
