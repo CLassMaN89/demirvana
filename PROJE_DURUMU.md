@@ -269,6 +269,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Footer önündeki gerçek dokulu bulut örtüsü üçten dört bağımsız katmana çıkarıldı ve alanın yaklaşık alt yarısına yayıldı. Katmanlara farklı kadraj, yoğunluk ve akış süreleri verilerek yüzeyi tamamen kapatmayan daha doğal bir derinlik oluşturuldu.
 - Kullanıcı geri bildirimiyle dünya kamera mesafesi yeniden azaltılarak küre referanstaki yeşil alan genişliğine yaklaştırıldı; aşağı itilmiş model merkezi kaldırıldığı için kürenin üst yayı hesap güvenlik notuna boşluksuz bağlandı.
 - Dünya sahnesinin gereksiz yüksekliği azaltıldı ve iletişim sayfasına özel footer, bulutların beyaza dönen son kısmını örtecek şekilde yukarı alındı. Böylece dünya/bulut alanı ile footer arasında görünür boş şerit kalmadı.
+- Son kadraj düzeltmesinde küre genişliği korunup dikey merkezi yeniden dengelenerek üst atmosfer yayı kesilmeden hesap alanına yaklaştırıldı. Footer'ın önceki akış mesafesi geri getirildi.
+- Alt bulut örtüsü referansa uygun biçimde daha yoğun ve yüksek yapıldı; hareketli dokular dünyanın alt yarısını örterken beyaz kapanış bulut denizi etkisi oluşturur. İletişim sayfasında footer'ın renkli üst ayırıcı çizgisi gizlendi ve footer normal akışta bulutların ardından başlar.
 
 ## Bilinen durumlar
 
@@ -283,4 +285,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim sayfasındaki geniş dünya kadrajı ile üst ve footer sınırındaki sıfır boşluklu birleşim tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim sayfasındaki kesilmeyen geniş dünya kadrajı, yoğun alt bulut denizi ve çizgisiz footer geçişi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
