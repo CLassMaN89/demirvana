@@ -245,6 +245,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Projede resmi marka logo ve katalog dosyaları bulunmadığından, logo yolu boşken okunaklı marka adı gösterilir ve katalog bağlantıları geçici olarak iletişim sayfasına gider. Gerçek dosyalar daha sonra yalnız ilgili veritabanı alanları değiştirilerek bağlanabilir.
 - Temsilcilikler doğrulaması: 25 test dosyasında 70 frontend testi, Vite üretim derlemesi ve üç ilgili PHP dosyasının sözdizimi başarılıdır. Şema canlı MariaDB'ye aktarıldı; 3 etkin temsilcilik, bağımsız menü kaydı ve 4–8 aralığında doğru SEO sırası doğrulandı.
 - Genebre, Mei ve Centork logoları markaların resmî web sitelerinden yerel `frontend/public/assets/temsilcilikler/` klasörüne alındı; fallback veri ve canlı MariaDB `logo_yolu` alanlarına bağlandı. Canlı sayfada üç kaydın da artık metin yerine erişilebilir gerçek logo görseli yüklediği doğrulandı.
+- Proje GitHub'da `CLassMaN89/demirvana` adlı private depoya gönderildi; yerel `master` dalı `origin/master` dalını takip ediyor. Kullanıcıya ait izlenmeyen kök `Carousel/` ve `fuar/` kaynak klasörleri GitHub'a eklenmedi.
 
 ## Bilinen durumlar
 
