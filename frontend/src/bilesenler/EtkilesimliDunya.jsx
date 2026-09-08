@@ -2,7 +2,11 @@ import { useEffect, useRef } from 'react';
 
 // Sabit kamera mesafeleri, tekerlek hareketinden etkilenmeden masaüstünde yakın; telefonda taşmasız bir kadraj sağlar.
 export const dunyaKameraMesafesi = (enBoyOrani) => (enBoyOrani < .8 ? 3.08 : 1.95);
-export const dunyaDikeyKonumu = -.26;
+// Kürenin üst teğetini görüş alanının üst ışınına oturtur; sabit piksel tahmini yerine her kamera mesafesinde kesintisiz tam kavis üretir.
+export const dunyaDikeyKonumu = (kameraMesafesi, kameraY = .08, gorusAcisi = 38) => {
+  const yariAci = (gorusAcisi * Math.PI) / 360;
+  return kameraY + ((kameraMesafesi * Math.sin(yariAci) - 1) / Math.cos(yariAci));
+};
 
 function EtkilesimliDunya({ ayarlar = {} }) {
   const alanRef = useRef(null);
@@ -31,8 +35,7 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       const dunyaGrubu = new THREE.Group();
       // Avrupa ve Türkiye ilk açılışta görünür; kullanıcı sürükleyerek diğer bölgelere geçer.
       dunyaGrubu.rotation.set(0.08, -2.2, 0);
-      // Yakın kadrajın genişliği korunurken merkez aşağı alınır; atmosfer yayı üst sınırda kesilmeden görünür.
-      dunyaGrubu.position.y = dunyaDikeyKonumu;
+      dunyaGrubu.position.y = dunyaDikeyKonumu(kamera.position.z);
       sahne.add(dunyaGrubu);
 
       const yukleyici = new THREE.TextureLoader();
@@ -99,6 +102,9 @@ function EtkilesimliDunya({ ayarlar = {} }) {
         kamera.aspect = width / Math.max(height, 1);
         // Telefonda kürenin yanlardan taşmasını engeller, geniş ekranda yeşil referans alanına yaklaşan büyük kadrajı korur.
         kamera.position.z = dunyaKameraMesafesi(kamera.aspect);
+        dunyaGrubu.position.y = dunyaDikeyKonumu(kamera.position.z);
+        atmosfer.position.y = dunyaGrubu.position.y;
+        disAtmosfer.position.y = dunyaGrubu.position.y;
         kamera.updateProjectionMatrix();
       };
       const baslat = (olay) => { surukleniyor = true; oncekiX = olay.clientX; oncekiY = olay.clientY; canvas.setPointerCapture?.(olay.pointerId); };

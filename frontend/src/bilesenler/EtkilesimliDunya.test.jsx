@@ -6,7 +6,8 @@ describe('EtkilesimliDunya kadrajı', () => {
   it('geniş ekranda dünyayı daha yakın, telefonda güvenli mesafede gösterir', () => {
     expect(dunyaKameraMesafesi(1.8)).toBe(1.95);
     expect(dunyaKameraMesafesi(0.6)).toBe(3.08);
-    expect(dunyaDikeyKonumu).toBe(-0.26);
+    expect(dunyaDikeyKonumu(1.95)).toBeCloseTo(-0.306, 3);
+    expect(dunyaDikeyKonumu(3.08)).toBeCloseTo(0.083, 3);
   });
 
   it('alt yarıyı doğal biçimde doldurmak için dört bulut katmanı oluşturur', () => {
