@@ -60,7 +60,22 @@
 .iletisim-hesap-karti dt { color: var(--renk-ikincil); text-transform: uppercase; }
 .iletisim-hesap-karti dd { min-width: 0; margin: 0; color: var(--renk-koyu); font-weight: 600; overflow-wrap: anywhere; }
 .iletisim-hesaplar__uyari { margin: 16px 0 0; color: var(--renk-ikincil); font-size: .72rem; text-align: right; }
+.iletisim-dunya { position: relative; min-height: clamp(600px, 70vw, 900px); margin-top: clamp(38px, 6vw, 74px); overflow: hidden; background: transparent; color: var(--renk-koyu); isolation: isolate; }
+.iletisim-dunya__metin { position: absolute; z-index: 3; top: clamp(28px, 5vw, 62px); left: 50%; width: min(760px, calc(100% - 40px)); text-align: center; transform: translateX(-50%); }
+.iletisim-dunya__metin h2 { margin: 0; font-size: clamp(1.8rem, 3.4vw, 3.6rem); font-weight: 650; letter-spacing: -.045em; line-height: 1; }
+.iletisim-dunya__metin p { max-width: 670px; margin: 14px auto 0; color: var(--renk-ikincil); font-size: clamp(.8rem, 1.15vw, 1rem); line-height: 1.55; }
+.iletisim-dunya__sahne { position: absolute; inset: 0; min-height: 100%; }
+.iletisim-dunya__sahne canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.iletisim-dunya__sahne canvas:active { cursor: grabbing; }
+.iletisim-dunya__bulutlar { position: absolute; z-index: 3; right: -12%; bottom: -1px; left: -12%; height: 29%; overflow: hidden; pointer-events: none; }
+.iletisim-dunya__bulutlar::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 45%; background: linear-gradient(transparent, var(--renk-beyaz) 78%); content: ''; }
+.iletisim-dunya__bulutlar i { position: absolute; width: 72%; height: 74%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(255,255,255,.98) 0 22%, rgba(255,255,255,.82) 43%, rgba(255,255,255,0) 72%); filter: blur(16px); opacity: .9; animation: iletisim-bulut-akisi 18s ease-in-out infinite alternate; }
+.iletisim-dunya__bulutlar i:nth-child(1) { bottom: -13%; left: -8%; }
+.iletisim-dunya__bulutlar i:nth-child(2) { right: -6%; bottom: -18%; animation-delay: -7s; animation-duration: 23s; }
+.iletisim-dunya__bulutlar i:nth-child(3) { bottom: -32%; left: 24%; opacity: .7; animation-delay: -13s; animation-duration: 27s; }
+@keyframes iletisim-bulut-akisi { from { transform: translate3d(-4%, 2%, 0) scale(1); } to { transform: translate3d(7%, -3%, 0) scale(1.09); } }
 @media (max-width: 720px) { .iletisim-icerik { grid-template-columns: 1fr; } .iletisim-hesaplar__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .iletisim-hesaplar__baslik small { position: static; display: block; margin-top: 8px; } }
 @media (max-width: 520px) { .iletisim-hesaplar__grid { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .iletisim-harita { height: 330px; } .iletisim-harita__bilgi { top: 18px; left: 16px; width: calc(100% - 32px); } .iletisim-icerik { padding-top: 40px; } .iletisim-kanallari { padding-inline: 15px; } .iletisim-kanallari p { grid-template-columns: 24px 74px minmax(0, 1fr); } .iletisim-kisayollar, .iletisim-form-karti form { grid-template-columns: 1fr; } .iletisim-form-karti > header, .iletisim-form-karti form { padding-left: 18px; padding-right: 18px; } .iletisim-form-karti input:not([type='checkbox']), .iletisim-form-karti textarea { font-size: 1rem; } }
-@media (prefers-reduced-motion: reduce) { .iletisim-kisayollar a { transition: none; } }
+@media (max-width: 620px) { .iletisim-dunya { min-height: 520px; } .iletisim-dunya__metin { top: 28px; } .iletisim-dunya__bulutlar { height: 25%; } }
+@media (prefers-reduced-motion: reduce) { .iletisim-kisayollar a { transition: none; } .iletisim-dunya__bulutlar i { animation: none; } }

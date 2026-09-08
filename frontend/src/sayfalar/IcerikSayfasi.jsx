@@ -6,6 +6,7 @@ import {
   faMessage, faPaperPlane, faPhone, faUser, faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { iletisimMesajiGonder } from '../servisler/api';
+import EtkilesimliDunya from '../bilesenler/EtkilesimliDunya';
 import '../stiller/iletisim.css';
 
 function telefonBaglantisi(deger) {
@@ -106,6 +107,7 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
         </div>
         <p className="iletisim-hesaplar__uyari">{ayar('iletisim_hesap_guvenlik_notu', 'Ödeme öncesinde hesap bilgilerini mutlaka telefonla doğrulayın.')}</p>
       </section>
+      {ayar('iletisim_dunya_aktif_mi', '1') !== '0' ? <EtkilesimliDunya ayarlar={siteAyarlari} /> : null}
     </article>
   );
 }

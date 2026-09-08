@@ -45,4 +45,12 @@ describe('IcerikSayfasi iletişim görünümü', () => {
     expect(screen.getByRole('heading', { name: 'QNB Finansbank TL hesabı' })).toBeInTheDocument();
     expect(screen.getByText('TR33 0011')).toBeInTheDocument();
   });
+
+  it('hesapların altında yönetilebilir etkileşimli dünya alanını gösterir', () => {
+    render(<IcerikSayfasi tur="iletisim" siteAyarlari={{ ...ayarlar, iletisim_dunya_basligi: 'Dünyaya güvenilir akış çözümleri' }} />);
+
+    expect(screen.getByRole('heading', { name: 'Dünyaya güvenilir akış çözümleri' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Demirvana küresel çözüm ağı')).toBeInTheDocument();
+    expect(screen.queryByText(/döndürmek için sürükleyin/i)).not.toBeInTheDocument();
+  });
 });

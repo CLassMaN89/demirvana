@@ -250,6 +250,13 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - İletişim mesajları `POST /api/iletisim-mesajlari` üzerinden sunucuda doğrulanıp yeni `iletisim_mesajlari` tablosuna kaydedilir; KVKK onayı ve görünmez bot tuzağı bulunur. Bütün sayfa metinleri `site_ayarlari`, banka hesapları ise yeni `banka_hesaplari` tablosundan admin yönetimine hazırdır.
 - Demirvana'nın mevcut resmî iletişim sayfasında yayımlanan TRY, USD ve EUR banka kayıtları canlı MariaDB'ye işlendi; şema tekrar içe aktarıldığında 3 kayıt korunur. QNB'nin resmî logo dosyası yerel asset olarak kullanılır.
 - İletişim doğrulaması: 26 dosyada 74 frontend testi, Vite üretim derlemesi, üç PHP dosyasının sözdizimi ve PHP API testi başarılıdır. Canlı Vite→PHP→MariaDB mesaj gönderimi `201` cevabıyla sınandı ve doğrulama kaydı test sonunda temizlendi.
+- İletişim sayfasında hesap numaraları ile footer arasına foto-gerçekçi yüzey, bağımsız yarı saydam bulut katmanı ve atmosfer halesi bulunan etkileşimli 3D dünya eklendi.
+- Dünya otomatik döner; masaüstünde fare, dokunmatik cihazlarda parmakla çevrilebilir ve kontrollü yakınlaştırılabilir. İlk kadraj Avrupa/Türkiye odaklıdır.
+- Kullanıcı geri bildirimiyle dünya bölümü ayrı renkli blok olmaktan çıkarıldı; iletişim sayfasının açık zemini kesintisiz sürerken dünya daha yakın ve geniş yarım küre kadrajına alındı.
+- Uçaklı konum işaretleri ve sürükleme yönergesi kaldırıldı. Dünya yüzeyindeki ayrı bulut dokusuna ek olarak footer sınırında yavaşça akan, hareket azaltma tercihinde duran beyaz bulut geçişi eklendi.
+- Atmosfer halesi küçültülüp saydamlaştırıldı; yüzey ışığı dengelenerek siyah küre görünümü giderildi. Başlık, açıklama ve görünürlük `iletisim_dunya_*` site ayarlarıyla admin yönetimine hazırdır.
+- Three.js ilk paket yükünü büyütmemesi için dinamik parça olarak indirilir; animasyon ekran dışında durur ve azaltılmış hareket tercihine uyar. Dünya ve bulut dokuları yerel `frontend/public/assets/dunya/` dizininden sunulur.
+- Etkileşimli dünya localhost üzerinde yakın yarım küre kadrajı, gerçek dünya dokusu, ayrı yüzey bulutları, saydam atmosfer ve footer bulut geçişiyle görsel olarak doğrulandı.
 
 ## Bilinen durumlar
 
@@ -264,4 +271,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim sayfası ve gerçek mesaj kayıt akışı tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim sayfasındaki yakın kadrajlı etkileşimli dünya ve bulut geçişi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
