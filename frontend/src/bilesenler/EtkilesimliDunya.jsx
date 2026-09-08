@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+// Sabit kamera mesafeleri, tekerlek hareketinden etkilenmeden masaüstünde yakın; telefonda taşmasız bir kadraj sağlar.
+export const dunyaKameraMesafesi = (enBoyOrani) => (enBoyOrani < .8 ? 3.28 : 2.42);
+
 function EtkilesimliDunya({ ayarlar = {} }) {
   const alanRef = useRef(null);
   const canvasRef = useRef(null);
@@ -23,7 +26,7 @@ function EtkilesimliDunya({ ayarlar = {} }) {
 
       const sahne = new THREE.Scene();
       const kamera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-      kamera.position.set(0, 0.08, 2.78);
+      kamera.position.set(0, 0.08, dunyaKameraMesafesi(1));
       const dunyaGrubu = new THREE.Group();
       // Avrupa ve Türkiye ilk açılışta görünür; kullanıcı sürükleyerek diğer bölgelere geçer.
       dunyaGrubu.rotation.set(0.08, -2.2, 0);
@@ -92,8 +95,8 @@ function EtkilesimliDunya({ ayarlar = {} }) {
         const { width, height } = alan.getBoundingClientRect();
         renderer.setSize(width, height, false);
         kamera.aspect = width / Math.max(height, 1);
-        // Telefonda kürenin yanlardan taşmasını engeller, geniş ekranda referanstaki büyük yarım küreyi korur.
-        kamera.position.z = kamera.aspect < .8 ? 3.65 : 2.78;
+        // Telefonda kürenin yanlardan taşmasını engeller, geniş ekranda yeşil referans alanına yaklaşan büyük kadrajı korur.
+        kamera.position.z = dunyaKameraMesafesi(kamera.aspect);
         kamera.updateProjectionMatrix();
       };
       const baslat = (olay) => { surukleniyor = true; oncekiX = olay.clientX; oncekiY = olay.clientY; canvas.setPointerCapture?.(olay.pointerId); };
@@ -121,7 +124,7 @@ function EtkilesimliDunya({ ayarlar = {} }) {
       <div className="iletisim-dunya__sahne" ref={alanRef}>
         <canvas ref={canvasRef} aria-label="Demirvana küresel çözüm ağı" />
       </div>
-      <div className="iletisim-dunya__bulutlar" aria-hidden="true"><i /><i /><i /></div>
+      <div className="iletisim-dunya__bulutlar" aria-hidden="true"><i /><i /><i /><i /></div>
     </section>
   );
 }
