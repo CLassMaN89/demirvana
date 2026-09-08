@@ -223,6 +223,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Masaüstü hover doğrulamasında seçili kart opaklığı `1`, diğer kartların opaklığı `0.58` olarak ölçüldü; tarayıcı konsolunda kategori alanına ait hata oluşmadı.
 - Tek sıralı fotoğraflı kategori vitrini 375, 768, 1440 ve 1920px genişliklerde doğrulandı; her ölçüde tek satır, 7/7 yüklenen görsel, sıfır sayfa taşması ve sıfır konsol hatası görüldü.
 - Fotoğraf kartları telefonda 142×228px, tablette 148×238px, masaüstünde yaklaşık 135×232px ölçüldü; dar ekran taşması yalnız kendi yatay kaydırma alanında tutuldu.
+- Ürün kategorileri bölümünün altına yalnız vana görsellerini kullanan ikinci bir kayan vitrin eklendi; gerçek kişiler veya insan görselleri kullanılmadı.
+- Yeni vana vitrini kategori adını, açıklamasını, görselini ve bağlantısını mevcut kategori verisinden alıyor; başlık, açıklama, etiket ve çağrı alanları `site_ayarlari` üzerinden yönetilebilir hazırlandı.
+- Vitrin masaüstünde kesintisiz yatay akıyor, hover/klavye odağında duruyor, gri vana fotoğrafını renkli gösteriyor; hareket azaltma tercihinde animasyon yerine erişilebilir yatay kaydırma kullanıyor.
+- Ana sayfanın canlı localhost görünümünde yeni alanın kategori bölümünün altında doğru sırada açıldığı ve yedi gerçek vana görselinin yüklendiği doğrulandı. Frontend doğrulaması 23 dosyada 66 test ve başarılı Vite üretim derlemesiyle tamamlandı.
 
 ## Bilinen durumlar
 
@@ -237,4 +241,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfa Ürün Kategorilerimiz tek sıralı, dikey ve fotoğraflı vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.
+Ana sayfada Ürün Kategorilerimiz alanı ve hemen altındaki animasyonlu vana vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.
