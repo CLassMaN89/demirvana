@@ -274,6 +274,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Aerodynamics dünya bölümü doğrudan referans alınarak bulut örtüsü yeniden düzenlendi. Ayrı dikdörtgen dokuların kenarlarını belli eden parçalı yerleşim kaldırıldı; dört hareketli doku artık tam genişlikte aynı bulut ufku içinde çalışır.
 - Bulut maskesi üstte tam saydam başlayıp aşağı doğru kademeli yoğunlaşır, dünyanın alt bölümünü kapatıp kesintisiz beyaza dönüşür. Birleşim çizgileri canlı localhost görünümünde giderildi; üst dünya yayı kesilmeden korunur ve footer ayırıcı çizgisi gösterilmez.
 - Kullanıcı ekran görüntüsüyle yapılan son kontrolde önceki üst yayın kesildiği doğrulandı. Masaüstü kamera mesafesi `1.95` yapılarak dünya genişletildi; dikey merkez `-0.18` değerinde dengelenerek tam kavis üst sınırdan kesilmeden ve görünür boşluk bırakmadan başlatıldı.
+- Geniş ekran geri bildiriminde kalan birkaç piksellik kesilme için dikey merkez `-0.26` olarak son kez ayarlandı. Canlı görünümde atmosfer yayı düz kesilmeden tam kavis halinde ve hesap güvenlik notunun hemen altında başladı; dünya genişliği değişmedi.
 
 ## Bilinen durumlar
 

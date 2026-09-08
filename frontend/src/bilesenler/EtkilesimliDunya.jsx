@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 // Sabit kamera mesafeleri, tekerlek hareketinden etkilenmeden masaüstünde yakın; telefonda taşmasız bir kadraj sağlar.
 export const dunyaKameraMesafesi = (enBoyOrani) => (enBoyOrani < .8 ? 3.08 : 1.95);
-export const dunyaDikeyKonumu = -.18;
+export const dunyaDikeyKonumu = -.26;
 
 function EtkilesimliDunya({ ayarlar = {} }) {
   const alanRef = useRef(null);
