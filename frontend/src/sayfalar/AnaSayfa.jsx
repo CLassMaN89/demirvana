@@ -6,8 +6,8 @@ export default function AnaSayfa({ sliderlar, kategoriler, siteAyarlari }) {
   return (
     <>
       <HeroCarousel sliderlar={sliderlar} />
+      <VanaVitrini kategoriler={kategoriler} />
       <KategoriBolumu kategoriler={kategoriler} siteAyarlari={siteAyarlari} />
-      <VanaVitrini kategoriler={kategoriler} siteAyarlari={siteAyarlari} />
     </>
   );
 }

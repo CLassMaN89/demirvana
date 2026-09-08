@@ -227,6 +227,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Yeni vana vitrini kategori adını, açıklamasını, görselini ve bağlantısını mevcut kategori verisinden alıyor; başlık, açıklama, etiket ve çağrı alanları `site_ayarlari` üzerinden yönetilebilir hazırlandı.
 - Vitrin masaüstünde kesintisiz yatay akıyor, hover/klavye odağında duruyor, gri vana fotoğrafını renkli gösteriyor; hareket azaltma tercihinde animasyon yerine erişilebilir yatay kaydırma kullanıyor.
 - Ana sayfanın canlı localhost görünümünde yeni alanın kategori bölümünün altında doğru sırada açıldığı ve yedi gerçek vana görselinin yüklendiği doğrulandı. Frontend doğrulaması 23 dosyada 66 test ve başarılı Vite üretim derlemesiyle tamamlandı.
+- Kullanıcı geri bildirimiyle kayan vana vitrini `ÜRÜN KATEGORİLERİMİZ` alanının üstüne taşındı; vitrine ait etiket, başlık, açıklama, alt çağrı metni ve teknik destek butonu tamamen kaldırıldı.
+- Kayan kartların mavi ad paneli yalnız vana adı ve ok yüksekliğinde olacak şekilde inceltildi; arka plan opaklığı azaltıldı ve canlı localhost görünümünde doğrulandı.
 
 ## Bilinen durumlar
 
@@ -241,4 +243,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfada Ürün Kategorilerimiz alanı ve hemen altındaki animasyonlu vana vitrini tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.
+Ana sayfada animasyonlu vana vitrini hero ile `ÜRÜN KATEGORİLERİMİZ` arasına yerleştirildi; yalnız vana kartları gösteriliyor. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.

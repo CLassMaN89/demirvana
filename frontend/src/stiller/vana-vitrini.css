@@ -1,9 +1,5 @@
-.vana-vitrini { overflow: hidden; padding-block: clamp(64px, 7vw, 104px); background: var(--renk-beyaz); }
-.vana-vitrini__ust { display: grid; max-width: 760px; justify-items: center; text-align: center; }
-.vana-vitrini__etiket { margin-bottom: 12px; color: var(--renk-ana); font-size: .68rem; font-weight: 700; letter-spacing: .16em; }
-.vana-vitrini__ust h2 { max-width: 18ch; margin: 0; color: var(--renk-koyu); font-size: clamp(1.85rem, 4vw, 3.4rem); font-weight: 650; letter-spacing: -.045em; line-height: 1.05; }
-.vana-vitrini__ust p { max-width: 60ch; margin: 18px 0 0; color: var(--renk-ikincil); font-size: clamp(.86rem, 1.2vw, 1rem); line-height: 1.65; }
-.vana-vitrini__maske { position: relative; width: 100%; margin-top: clamp(34px, 5vw, 58px); }
+.vana-vitrini { overflow: hidden; padding-block: clamp(34px, 4vw, 56px); background: var(--renk-beyaz); }
+.vana-vitrini__maske { position: relative; width: 100%; }
 .vana-vitrini__maske::before, .vana-vitrini__maske::after { position: absolute; z-index: 3; top: 0; bottom: 0; width: clamp(36px, 8vw, 150px); pointer-events: none; content: ''; }
 .vana-vitrini__maske::before { left: 0; background: linear-gradient(90deg, var(--renk-beyaz), transparent); }
 .vana-vitrini__maske::after { right: 0; background: linear-gradient(-90deg, var(--renk-beyaz), transparent); }
@@ -13,21 +9,15 @@
 .vana-vitrini__kart { position: relative; width: clamp(176px, 17vw, 248px); aspect-ratio: .72; overflow: hidden; border-radius: 20px; background: var(--renk-acik); box-shadow: 0 14px 38px color-mix(in srgb, var(--renk-koyu) 9%, transparent); color: var(--renk-beyaz); text-decoration: none; }
 .vana-vitrini__kart img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transform: scale(1.01); transition: filter 480ms ease, transform 650ms cubic-bezier(.22, 1, .36, 1); }
 .vana-vitrini__kart::after { position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, color-mix(in srgb, var(--renk-koyu) 92%, transparent)); content: ''; }
-.vana-vitrini__bilgi { position: absolute; z-index: 2; right: 14px; bottom: 14px; left: 14px; display: grid; min-height: 86px; align-content: end; padding: 14px 42px 14px 14px; border: 1px solid color-mix(in srgb, var(--renk-beyaz) 24%, transparent); border-radius: 13px; background: color-mix(in srgb, var(--renk-koyu) 66%, transparent); backdrop-filter: blur(10px); }
-.vana-vitrini__bilgi strong { font-size: .82rem; font-weight: 600; line-height: 1.25; }
-.vana-vitrini__bilgi small { display: -webkit-box; margin-top: 5px; overflow: hidden; color: color-mix(in srgb, var(--renk-beyaz) 76%, transparent); font-size: .65rem; font-style: normal; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-.vana-vitrini__bilgi i { position: absolute; right: 13px; bottom: 13px; display: grid; width: 28px; height: 28px; border-radius: 50%; background: var(--renk-ana); font-style: normal; place-items: center; transition: transform 200ms ease; }
+.vana-vitrini__bilgi { position: absolute; z-index: 2; right: 12px; bottom: 12px; left: 12px; display: flex; min-height: 42px; align-items: center; padding: 9px 42px 9px 12px; border: 1px solid color-mix(in srgb, var(--renk-beyaz) 20%, transparent); border-radius: 11px; background: color-mix(in srgb, var(--renk-koyu) 46%, transparent); backdrop-filter: blur(6px); }
+.vana-vitrini__bilgi strong { font-size: .78rem; font-weight: 600; line-height: 1.2; }
+.vana-vitrini__bilgi i { position: absolute; right: 7px; top: 50%; display: grid; width: 28px; height: 28px; border-radius: 50%; background: color-mix(in srgb, var(--renk-ana) 78%, transparent); font-style: normal; transform: translateY(-50%); place-items: center; transition: transform 200ms ease; }
 .vana-vitrini__kart:hover img, .vana-vitrini__kart:focus-visible img { filter: grayscale(0); transform: scale(1.07); }
-.vana-vitrini__kart:hover .vana-vitrini__bilgi i { transform: rotate(8deg); }
+.vana-vitrini__kart:hover .vana-vitrini__bilgi i { transform: translateY(-50%) rotate(8deg); }
 .vana-vitrini__kart:focus-visible { z-index: 4; }
-.vana-vitrini__alt { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 34px; }
-.vana-vitrini__alt p { margin: 0; color: var(--renk-ikincil); font-size: .84rem; }
-.vana-vitrini__alt a { display: inline-flex; min-height: 42px; align-items: center; gap: 10px; padding: 0 18px; border-radius: 10px; background: var(--renk-ana); color: var(--renk-beyaz); font-size: .76rem; font-weight: 650; text-decoration: none; }
 @keyframes vana-vitrini-akis { to { transform: translateX(-50%); } }
 @media (max-width: 640px) {
-  .vana-vitrini__ust { width: min(calc(100% - 32px), 760px); }
   .vana-vitrini__kart { width: 176px; }
-  .vana-vitrini__alt { flex-direction: column; gap: 14px; text-align: center; }
   .vana-vitrini__maske::before, .vana-vitrini__maske::after { width: 30px; }
 }
 @media (prefers-reduced-motion: reduce) {
