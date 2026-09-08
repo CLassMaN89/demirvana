@@ -53,7 +53,10 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
   };
 
   return (
-    <article className="iletisim-sayfasi" style={{ '--iletisim-arkaplan-rengi': ayar('iletisim_arkaplan_rengi', '#91aec4') }}>
+    <article className="iletisim-sayfasi" style={{
+      '--iletisim-arkaplan-ust-rengi': ayar('iletisim_arkaplan_ust_rengi', '#ffffff'),
+      '--iletisim-arkaplan-rengi': ayar('iletisim_arkaplan_rengi', '#91aec4')
+    }}>
       <Harita adres={adres} haritaAdresi={siteAyarlari.iletisim_harita_embed_adresi} baslik={ayar('iletisim_harita_kart_basligi', 'Bizi Ziyaret Edin')} aciklama={ayar('iletisim_harita_kart_aciklamasi', 'İkitelli OSB’deki merkezimizde sizleri ağırlamaktan memnuniyet duyarız.')} />
       <div className="iletisim-icerik icerik-kapsayici">
         <section className="iletisim-bilgileri" aria-labelledby="iletisim-basligi">

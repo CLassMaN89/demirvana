@@ -263,6 +263,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Düşük çözünürlüklü yüzey ve bulut dosyaları 4096×2048 dokularla değiştirildi. Bulutlarda ayrıntıyı beyaza patlatan eklemeli harmanlama kaldırılarak normal saydam harmanlamaya geçildi; geniş ekran ve telefon kamera mesafeleri ayrı sabitlendi.
 - İletişim sayfasının harita altındaki bütün zemini referanstaki mavi-gri gökyüzü rengine geçirildi; renk `iletisim_arkaplan_rengi` ayarıyla admin yönetimine hazırdır. Dünya bu ortak zeminde ayrı bir kutu gibi görünmez.
 - Kürenin üst yayının kesilmemesi için çap korunarak model merkezi aşağı alındı; iki farklı yoğunlukta ince Fresnel atmosfer kabuğu referanstaki saydam cam kenarı görünümünü üretir.
+- İletişim sayfasının ortak zemini, üstte beyaz başlayıp dünya/footer yönünde mevcut mavi-gri tona ulaşan kesintisiz bir gradiente dönüştürüldü; başlangıç rengi yeni `iletisim_arkaplan_ust_rengi` ayarıyla admin yönetimine hazırdır.
+- İletişim ana başlığı, hesaplar başlığı ve mesaj formu okunabilirlik açısından güçlendirildi. Form kartına hafif cam yüzeyi, daha net alan sınırları ve belirgin hover/focus durumları eklendi; mevcut içerik ve davranış korunmuştur.
 
 ## Bilinen durumlar
 
@@ -277,4 +279,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim sayfasındaki yakın kadrajlı etkileşimli dünya ve bulut geçişi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim sayfasındaki beyazdan mavi-gri tona geçen arka plan, form yüzeyleri ve başlık hiyerarşisi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
