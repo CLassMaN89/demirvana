@@ -149,6 +149,31 @@ CREATE TABLE IF NOT EXISTS `fuar_gorselleri` (
     KEY `fuar_gorseli_siralama` (`aktif_mi`, `siralama`)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Temsil edilen markaların kart içerikleri, etiketleri ve bağlantıları admin panelinden ayrı ayrı yönetilir.
+CREATE TABLE IF NOT EXISTS `temsilcilikler` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `dil_kodu` VARCHAR(10) NOT NULL DEFAULT 'tr',
+    `marka_adi` VARCHAR(120) NOT NULL,
+    `urun_grubu` VARCHAR(160) NOT NULL,
+    `baslik` VARCHAR(180) NOT NULL,
+    `aciklama` TEXT NOT NULL,
+    `etiketler` VARCHAR(500) NULL COMMENT 'Virgülle ayrılmış kısa ürün etiketleri.',
+    `logo_yolu` VARCHAR(500) NULL,
+    `logo_alternatif_metin` VARCHAR(255) NULL,
+    `logo_alt_metni` VARCHAR(180) NULL,
+    `urun_buton_metni` VARCHAR(100) NOT NULL DEFAULT 'Marka ürünleri',
+    `urun_baglantisi` VARCHAR(500) NOT NULL DEFAULT '/urunler',
+    `katalog_buton_metni` VARCHAR(100) NULL,
+    `katalog_baglantisi` VARCHAR(500) NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_temsilcilik_dili_markasi` (`dil_kodu`, `marka_adi`),
+    KEY `temsilcilik_siralama` (`dil_kodu`, `aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 CREATE TABLE IF NOT EXISTS `urunler` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `kategori_id` BIGINT UNSIGNED NOT NULL,
@@ -415,6 +440,8 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('fuarlar_aciklamasi', 'Sektör profesyonelleriyle buluştuğumuz fuarlardan ve ürün tanıtımlarımızdan kareler.', 'metin', 'Fuarlar bölümü açıklaması'),
     ('fuarlar_buton_metni', 'Fuar programı için iletişime geçin', 'metin', 'Fuarlar bölümü buton metni'),
     ('fuarlar_buton_baglantisi', '/iletisim', 'baglanti', 'Fuarlar bölümü buton bağlantısı'),
+    ('temsilcilik_hero_basligi', 'Temsilcilikler', 'metin', 'Temsilcilikler sayfası ana başlığı'),
+    ('temsilcilik_hero_aciklamasi', 'Dünya çapında kalite ve güvenilirliğiyle öne çıkan markaların Türkiye temsilciliğini yapıyoruz. Endüstriyel vana, enstrümantasyon ve aktüatör alanlarında iş ortaklarımızla birlikte doğru çözümler sunuyoruz.', 'metin', 'Temsilcilikler sayfası giriş açıklaması'),
     ('referans_hero_yol_metni', 'Anasayfa / Referanslar', 'metin', 'Referans hero ekmek kırıntısı metni'),
     ('referans_hero_basligi', 'Güvenin Referansa Dönüştüğü Projeler', 'metin', 'Referans hero ana başlığı'),
     ('referans_hero_aciklamasi', 'Türkiye’de ve dünyada tamamladığımız seçkin projeler.', 'metin', 'Referans hero açıklaması'),
@@ -507,10 +534,11 @@ VALUES
     ('/', 'tr', 'Demirvana | Endüstriyel Vana Çözümleri', 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', 'endüstriyel vana, vana üreticisi, vana çözümleri', '/', 'Demirvana Endüstriyel Vana Çözümleri', 'Üretimden sahaya güvenilir vana ve akış kontrol çözümleri.', 'WebSite', 'weekly', 1.0, 1),
     ('/kurumsal', 'tr', 'Kurumsal | Demirvana', 'Demirvana üretim yaklaşımı, mühendislik deneyimi ve kurumsal değerleri hakkında bilgi alın.', 'Demirvana kurumsal, vana üreticisi', '/kurumsal', NULL, NULL, 'AboutPage', 'yearly', 0.7, 2),
     ('/urunler', 'tr', 'Endüstriyel Vana Ürünleri | Demirvana', 'Küresel, kelebek, sürgülü, kontrol vanaları ve diğer endüstriyel vana gruplarını inceleyin.', 'vana çeşitleri, endüstriyel vanalar, kontrol vanaları', '/urunler', NULL, NULL, 'CollectionPage', 'weekly', 0.9, 3),
-    ('/teknik', 'tr', 'Teknik Bilgiler | Demirvana', 'Endüstriyel vana seçimi ve uygulamaları için Demirvana teknik kaynaklarını inceleyin.', 'vana teknik bilgi, vana seçimi', '/teknik', NULL, NULL, 'WebPage', 'monthly', 0.6, 4),
-    ('/referanslar', 'tr', 'Proje Referansları | Demirvana', 'Su, atıksu, enerji, madencilik ve sanayi projelerindeki Demirvana referanslarını inceleyin.', 'vana projeleri, endüstriyel referanslar', '/referanslar', NULL, NULL, 'CollectionPage', 'monthly', 0.7, 5),
-    ('/sertifikalar', 'tr', 'Sertifikalar | Demirvana', 'Demirvana kalite ve üretim standartlarını belgeleyen sertifikaları inceleyin.', 'vana sertifikaları, kalite belgeleri', '/sertifikalar', NULL, NULL, 'WebPage', 'yearly', 0.5, 6),
-    ('/iletisim', 'tr', 'İletişim ve Destek | Demirvana', 'Ürün seçimi, teknik destek ve teklif talepleriniz için Demirvana ile iletişime geçin.', 'Demirvana iletişim, vana teklifi, teknik destek', '/iletisim', NULL, NULL, 'ContactPage', 'yearly', 0.8, 7)
+    ('/temsilcilikler', 'tr', 'Temsilcilikler | Demirvana', 'Demirvana iş ortakları Genebre, Mei ve Centork marka çözümlerini inceleyin.', 'vana temsilcilikleri, Genebre, Mei, Centork', '/temsilcilikler', NULL, NULL, 'CollectionPage', 'monthly', 0.7, 4),
+    ('/teknik', 'tr', 'Teknik Bilgiler | Demirvana', 'Endüstriyel vana seçimi ve uygulamaları için Demirvana teknik kaynaklarını inceleyin.', 'vana teknik bilgi, vana seçimi', '/teknik', NULL, NULL, 'WebPage', 'monthly', 0.6, 5),
+    ('/referanslar', 'tr', 'Proje Referansları | Demirvana', 'Su, atıksu, enerji, madencilik ve sanayi projelerindeki Demirvana referanslarını inceleyin.', 'vana projeleri, endüstriyel referanslar', '/referanslar', NULL, NULL, 'CollectionPage', 'monthly', 0.7, 6),
+    ('/sertifikalar', 'tr', 'Sertifikalar | Demirvana', 'Demirvana kalite ve üretim standartlarını belgeleyen sertifikaları inceleyin.', 'vana sertifikaları, kalite belgeleri', '/sertifikalar', NULL, NULL, 'WebPage', 'yearly', 0.5, 7),
+    ('/iletisim', 'tr', 'İletişim ve Destek | Demirvana', 'Ürün seçimi, teknik destek ve teklif talepleriniz için Demirvana ile iletişime geçin.', 'Demirvana iletişim, vana teklifi, teknik destek', '/iletisim', NULL, NULL, 'ContactPage', 'yearly', 0.8, 8)
 ON DUPLICATE KEY UPDATE
     `seo_basligi` = VALUES(`seo_basligi`),
     `meta_aciklama` = VALUES(`meta_aciklama`),
@@ -540,19 +568,22 @@ INSERT INTO `menu_ogeleri` (`baslik`, `baglanti`, `siralama`) VALUES
     ('Anasayfa', '/', 1),
     ('Kurumsal', '/kurumsal', 2),
     ('Ürünler', '/urunler', 3),
-    ('Teknik', '/teknik', 4),
-    ('Referanslar', '/referanslar', 5),
-    ('Sertifikalar', '/sertifikalar', 6),
-    ('İletişim', '/iletisim', 7)
+    ('Temsilcilikler', '/temsilcilikler', 4),
+    ('Teknik', '/teknik', 5),
+    ('Referanslar', '/referanslar', 6),
+    ('Sertifikalar', '/sertifikalar', 7),
+    ('İletişim', '/iletisim', 8)
 ON DUPLICATE KEY UPDATE `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`);
+
+-- Önceki alt menü kaydı bağımsız üst menüye taşındığı için yalnız eski adres temizlenir.
+DELETE FROM `menu_alt_ogeleri` WHERE `baglanti` = '/urunler/temsilcilikler';
 
 INSERT INTO `menu_alt_ogeleri`
     (`menu_ogesi_id`, `ust_alt_oge_id`, `baslik`, `baglanti`, `siralama`)
 VALUES
     ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Vana', '/urunler/vana', 1),
     ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Aktüatör', '/urunler/aktuator', 2),
-    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Otomasyon', '/urunler/otomasyon', 3),
-    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Temsilcilikler', '/urunler/temsilcilikler', 4)
+    ((SELECT `id` FROM `menu_ogeleri` WHERE `baglanti` = '/urunler'), NULL, 'Otomasyon', '/urunler/otomasyon', 3)
 ON DUPLICATE KEY UPDATE
     `baslik` = VALUES(`baslik`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
@@ -624,6 +655,19 @@ INSERT INTO `fuar_gorselleri` (`gorsel_yolu`, `alternatif_metin`, `siralama`) VA
     ('/assets/fuar/demirvana-fuar-standi.jpg', 'Demirvana sektörel fuar katılımı', 4)
 ON DUPLICATE KEY UPDATE
     `alternatif_metin` = VALUES(`alternatif_metin`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `temsilcilikler`
+    (`dil_kodu`, `marka_adi`, `urun_grubu`, `baslik`, `aciklama`, `etiketler`, `logo_yolu`, `logo_alternatif_metin`, `logo_alt_metni`, `urun_buton_metni`, `urun_baglantisi`, `katalog_buton_metni`, `katalog_baglantisi`, `siralama`)
+VALUES
+    ('tr', 'Genebre', 'Vana ve Akış Kontrol Ürünleri', 'Genebre', 'Genebre 30 yılı aşkın süredir endüstriyel ve sıhhi tesisat sektöründe vanalar, musluklar ve engelliler için sıhhi çözümler sunar.', 'Vana,Endüstriyel Armatür,Akış Kontrol', NULL, 'Genebre logosu', 'Valves & Fluid Control Solutions', 'Marka ürünleri', '/urunler', 'Katalog talep et', '/iletisim', 1),
+    ('tr', 'Mei', 'Manometre ve Enstrümantasyon', 'Mei', 'Mei; manometre, termometre ve endüstriyel enstrümanların üreticisi ve ihracatçısıdır.', 'Enstrümantasyon,Manometre,Termometre', NULL, 'Mei logosu', 'Measurement for a safer tomorrow', 'Marka ürünleri', '/urunler', 'Katalog talep et', '/iletisim', 2),
+    ('tr', 'Centork', 'Aktüatör ve Kontrol Sistemleri', 'Centork', 'Centork; vana aktüasyon çözümleri, otomasyon ve kontrol uygulamalarında uzmanlaşmıştır.', 'Aktüatör,Vana Otomasyonu,Kontrol', NULL, 'Centork logosu', 'Actuation for a better tomorrow', 'Marka ürünleri', '/urunler', 'Katalog talep et', '/iletisim', 3)
+ON DUPLICATE KEY UPDATE
+    `urun_grubu` = VALUES(`urun_grubu`), `baslik` = VALUES(`baslik`), `aciklama` = VALUES(`aciklama`),
+    `etiketler` = VALUES(`etiketler`), `logo_yolu` = VALUES(`logo_yolu`), `logo_alternatif_metin` = VALUES(`logo_alternatif_metin`),
+    `logo_alt_metni` = VALUES(`logo_alt_metni`), `urun_buton_metni` = VALUES(`urun_buton_metni`),
+    `urun_baglantisi` = VALUES(`urun_baglantisi`), `katalog_buton_metni` = VALUES(`katalog_buton_metni`),
+    `katalog_baglantisi` = VALUES(`katalog_baglantisi`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
 INSERT INTO `referanslar` (`id`, `baslik`, `konum`, `kurum`, `yil`, `bolge`, `siralama`) VALUES
     (1, 'Antalya Gazipaşa Atık Su Arıtma Tesisi Vanaları', 'Antalya / Gazipaşa', 'İller Bankası', '2011–2012', 'yurtici', 1),

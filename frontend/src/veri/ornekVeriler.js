@@ -92,7 +92,8 @@ export const ornekVeriler = Object.freeze({
     sayfalar: {
       tr: {
         '/': { seo_basligi: 'Demirvana | Endüstriyel Vana Çözümleri', meta_aciklama: 'Endüstriyel vana üretimi, mühendislik ve satış desteği için Demirvana ürün ve çözümlerini inceleyin.', canonical_yolu: '/', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'WebSite' },
-        '/urunler': { seo_basligi: 'Endüstriyel Vana Ürünleri | Demirvana', meta_aciklama: 'Küresel, kelebek, sürgülü, kontrol vanaları ve diğer endüstriyel vana gruplarını inceleyin.', canonical_yolu: '/urunler', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'CollectionPage' }
+        '/urunler': { seo_basligi: 'Endüstriyel Vana Ürünleri | Demirvana', meta_aciklama: 'Küresel, kelebek, sürgülü, kontrol vanaları ve diğer endüstriyel vana gruplarını inceleyin.', canonical_yolu: '/urunler', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'CollectionPage' },
+        '/temsilcilikler': { seo_basligi: 'Temsilcilikler | Demirvana', meta_aciklama: 'Demirvana iş ortakları Genebre, Mei ve Centork marka çözümlerini inceleyin.', canonical_yolu: '/temsilcilikler', robotlar: 'index, follow, max-image-preview:large', yapilandirilmis_veri_turu: 'CollectionPage' }
       }
     }
   },
@@ -165,7 +166,9 @@ export const ornekVeriler = Object.freeze({
     kurumsal_cozum_buton_metni: 'Teknik ekibimizle iletişime geçin',
     kurumsal_cozum_buton_baglantisi: '/iletisim',
     kurumsal_ekip_basligi: 'Ekibimiz',
-    kurumsal_ekip_aciklamasi: 'Doğru insanlarla, daha güçlü çözümler.'
+    kurumsal_ekip_aciklamasi: 'Doğru insanlarla, daha güçlü çözümler.',
+    temsilcilik_hero_basligi: 'Temsilcilikler',
+    temsilcilik_hero_aciklamasi: 'Dünya çapında kalite ve güvenilirliğiyle öne çıkan markalarla, endüstriyel tesisler için güvenilir çözüm ortaklıkları sunuyoruz.'
   },
   tema: {
     ana_mavi: '#28469D',
@@ -186,14 +189,14 @@ export const ornekVeriler = Object.freeze({
       alt_ogeler: [
         { id: 31, baslik: 'Vana', baglanti: '/urunler/vana', siralama: 1, alt_ogeler: vanaMenuKategorileri },
         { id: 32, baslik: 'Aktüatör', baglanti: '/urunler/aktuator', siralama: 2, alt_ogeler: aktuatorMenuKategorileri },
-        { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: [] },
-        { id: 34, baslik: 'Temsilcilikler', baglanti: '/urunler/temsilcilikler', siralama: 4, alt_ogeler: [] }
+        { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: [] }
       ]
     },
-    { id: 4, baslik: 'Teknik', baglanti: '/teknik', siralama: 4, alt_ogeler: [] },
-    { id: 5, baslik: 'Referanslar', baglanti: '/referanslar', siralama: 5, alt_ogeler: [] },
-    { id: 6, baslik: 'Sertifikalar', baglanti: '/sertifikalar', siralama: 6, alt_ogeler: [] },
-    { id: 7, baslik: 'İletişim', baglanti: '/iletisim', siralama: 7, alt_ogeler: [] }
+    { id: 8, baslik: 'Temsilcilikler', baglanti: '/temsilcilikler', siralama: 4, alt_ogeler: [] },
+    { id: 4, baslik: 'Teknik', baglanti: '/teknik', siralama: 5, alt_ogeler: [] },
+    { id: 5, baslik: 'Referanslar', baglanti: '/referanslar', siralama: 6, alt_ogeler: [] },
+    { id: 6, baslik: 'Sertifikalar', baglanti: '/sertifikalar', siralama: 7, alt_ogeler: [] },
+    { id: 7, baslik: 'İletişim', baglanti: '/iletisim', siralama: 8, alt_ogeler: [] }
   ],
   sliderlar: sliderMetinleri.map(([baslik, aciklama], indeks) => ({
     id: indeks + 1,
@@ -226,6 +229,11 @@ export const ornekVeriler = Object.freeze({
     ['demirvana-fuar-7.jpg', 'Demirvana fuar standı ve vana ürünleri'],
     ['demirvana-fuar-standi.jpg', 'Demirvana sektörel fuar katılımı']
   ].map(([dosya, alternatif_metin], indeks) => ({ id: indeks + 1, gorsel_yolu: `/assets/fuar/${dosya}`, alternatif_metin, siralama: indeks + 1 })),
+  temsilcilikler: [
+    ['Genebre', 'Endüstriyel Vanalar', 'Genebre', 'Genebre, 30 yılı aşkın süredir endüstriyel ve sıhhi tesisat sektöründe vanalar, musluklar ve engelliler için sıhhi çözümler sunar.', 'Valves & Fluid Control Solutions'],
+    ['Mei', 'Manometre & Enstrümantasyon', 'Mei (Manometría e instrumentación, S.L.)', 'Mei; manometre, termometre ve endüstriyel enstrümanların üreticisi ve ihracatçısıdır.', 'Measurement for a safer tomorrow'],
+    ['Centork', 'Vana Aktüatörleri', 'Centork', 'Centork; vana aktüasyon çözümleri, otomasyon ve kontrol uygulamalarında uzmanlaşmıştır.', 'Actuation for a better tomorrow']
+  ].map(([marka_adi, urun_grubu, baslik, aciklama, logo_alt_metni], indeks) => ({ id: indeks + 1, marka_adi, urun_grubu, baslik, aciklama, etiketler: ['Vana,Endüstriyel Armatür,Akış Kontrol', 'Enstrümantasyon,Manometre,Termometre', 'Aktüatör,Vana Otomasyonu,Kontrol'][indeks], logo_yolu: null, logo_alt_metni, urun_buton_metni: 'Marka ürünleri', urun_baglantisi: '/urunler', katalog_buton_metni: 'Katalog talep et', katalog_baglantisi: '/iletisim', siralama: indeks + 1 })),
   // API kullanılamadığında arama güvenli biçimde boş ürün listesiyle çalışmayı sürdürür.
   urunler: [],
   referanslar: {

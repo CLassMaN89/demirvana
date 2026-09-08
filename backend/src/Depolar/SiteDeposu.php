@@ -111,6 +111,16 @@ final class SiteDeposu
         )->fetchAll();
     }
 
+    public function temsilcilikler(): array
+    {
+        return $this->baglanti->query(
+            'SELECT id, dil_kodu, marka_adi, urun_grubu, baslik, aciklama, etiketler, logo_yolu,
+                    logo_alternatif_metin, logo_alt_metni, urun_buton_metni, urun_baglantisi,
+                    katalog_buton_metni, katalog_baglantisi, siralama
+             FROM temsilcilikler WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+    }
+
     public function referanslar(): array
     {
         $sektorler = $this->baglanti->query(

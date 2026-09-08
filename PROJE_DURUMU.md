@@ -239,6 +239,11 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kayan vana vitrininin alt boşluğu ile Fuarlar bölümünün üst/alt boşlukları ve galeri kenar maskesi azaltılarak ürünler–Fuarlar–footer akışı sıkılaştırıldı. Frontend doğrulaması 24 dosyada 69 test ve başarılı üretim derlemesiyle yenilendi.
 - Navbar Ürünler mega menüsündeki Vana, Aktüatör, Otomasyon ve Temsilcilikler ana grupları ile açılan bütün üçüncü seviye kategori bağlantılarının başına tema renkli, erişilebilirlik ağacından gizlenmiş vana ikonları eklendi.
 - Menü ikonları hover, klavye odağı ve aktif grup durumunda mavi zemine/beyaz çizgiye geçer; masaüstü ve mevcut mobil menü davranışı değiştirilmedi. Header'ın 12 testi ve Vite üretim derlemesi başarılıdır.
+- Navbar'a bağımsız `/temsilcilikler` bağlantısı eklendi; önceki Ürünler alt menüsündeki Temsilcilikler kaydı kaldırıldı.
+- Temsilcilikler sayfası, kullanıcı tarafından seçilen üç sütunlu marka kartı düzenine uyarlandı. Genebre, Mei ve Centork kartlarında ürün grubu, etiketler, açıklama, marka ürünleri ve katalog talep bağlantıları bulunur; düzen tablette iki, telefonda tek sütuna iner.
+- Temsilcilik başlık ve açıklaması `site_ayarlari`, kartların bütün içerik ve bağlantıları yeni `temsilcilikler` tablosu üzerinden yönetilebilir. `/api/temsilcilikler` ve başlangıç API cevabı eklendi; SEO kaydı ve menü sırası veritabanına işlendi.
+- Projede resmi marka logo ve katalog dosyaları bulunmadığından, logo yolu boşken okunaklı marka adı gösterilir ve katalog bağlantıları geçici olarak iletişim sayfasına gider. Gerçek dosyalar daha sonra yalnız ilgili veritabanı alanları değiştirilerek bağlanabilir.
+- Temsilcilikler doğrulaması: 25 test dosyasında 70 frontend testi, Vite üretim derlemesi ve üç ilgili PHP dosyasının sözdizimi başarılıdır. Şema canlı MariaDB'ye aktarıldı; 3 etkin temsilcilik, bağımsız menü kaydı ve 4–8 aralığında doğru SEO sırası doğrulandı.
 
 ## Bilinen durumlar
 
@@ -253,4 +258,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Navbar Ürünler menüsünün ana ve alt kategorilerine vana ikonları eklendi. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; mevcut menü etkileşimi, hero, ürün vitrini, Fuarlar ve footer'ı koru.
+Temsilcilikler sayfası üç marka kartlı düzende tamamlandı. Kullanıcı resmi Genebre, Mei ve Centork logo/katalog dosyalarını verdiğinde bunları yalnız `temsilcilikler.logo_yolu` ve `katalog_baglantisi` alanlarına bağla; diğer sayfaları değiştirme.

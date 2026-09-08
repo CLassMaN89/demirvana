@@ -14,11 +14,12 @@ import SertifikalarSayfasi from './sayfalar/SertifikalarSayfasi';
 import BulunamadiSayfasi from './sayfalar/BulunamadiSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
+import TemsilciliklerSayfasi from './sayfalar/TemsilciliklerSayfasi';
 import { siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
 
-const SABIT_YOLLAR = new Set(['/', '/urunler', '/kurumsal', '/teknik', '/referanslar', '/sertifikalar', '/iletisim']);
+const SABIT_YOLLAR = new Set(['/', '/urunler', '/kurumsal', '/temsilcilikler', '/teknik', '/referanslar', '/sertifikalar', '/iletisim']);
 
 function menuBaglantisiVar(menu, yol) {
   return (menu ?? []).some((oge) => oge.baglanti === yol || menuBaglantisiVar(oge.alt_ogeler, yol));
@@ -101,6 +102,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
         <Routes>
           <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} fuarlar={veri.fuarlar ?? []} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
+          <Route path="/temsilcilikler" element={<TemsilciliklerSayfasi temsilcilikler={veri.temsilcilikler ?? []} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
           <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
           <Route path="/kurumsal" element={<KurumsalSayfasi kurumsal={veri.kurumsal} siteAyarlari={veri.site_ayarlari} />} />
