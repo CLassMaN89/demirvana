@@ -244,6 +244,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Temsilcilik başlık ve açıklaması `site_ayarlari`, kartların bütün içerik ve bağlantıları yeni `temsilcilikler` tablosu üzerinden yönetilebilir. `/api/temsilcilikler` ve başlangıç API cevabı eklendi; SEO kaydı ve menü sırası veritabanına işlendi.
 - Projede resmi marka logo ve katalog dosyaları bulunmadığından, logo yolu boşken okunaklı marka adı gösterilir ve katalog bağlantıları geçici olarak iletişim sayfasına gider. Gerçek dosyalar daha sonra yalnız ilgili veritabanı alanları değiştirilerek bağlanabilir.
 - Temsilcilikler doğrulaması: 25 test dosyasında 70 frontend testi, Vite üretim derlemesi ve üç ilgili PHP dosyasının sözdizimi başarılıdır. Şema canlı MariaDB'ye aktarıldı; 3 etkin temsilcilik, bağımsız menü kaydı ve 4–8 aralığında doğru SEO sırası doğrulandı.
+- Genebre, Mei ve Centork logoları markaların resmî web sitelerinden yerel `frontend/public/assets/temsilcilikler/` klasörüne alındı; fallback veri ve canlı MariaDB `logo_yolu` alanlarına bağlandı. Canlı sayfada üç kaydın da artık metin yerine erişilebilir gerçek logo görseli yüklediği doğrulandı.
 
 ## Bilinen durumlar
 
@@ -258,4 +259,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Temsilcilikler sayfası üç marka kartlı düzende tamamlandı. Kullanıcı resmi Genebre, Mei ve Centork logo/katalog dosyalarını verdiğinde bunları yalnız `temsilcilikler.logo_yolu` ve `katalog_baglantisi` alanlarına bağla; diğer sayfaları değiştirme.
+Temsilcilikler sayfası üç marka kartlı ve gerçek marka logolu düzende tamamlandı. Kullanıcı katalog PDF dosyalarını verdiğinde yalnız `temsilcilikler.katalog_baglantisi` alanlarına bağla; diğer sayfaları değiştirme.

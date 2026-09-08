@@ -8,6 +8,9 @@
 .temsilcilik-karti:hover { transform: translateY(-5px); box-shadow: 0 22px 48px color-mix(in srgb, var(--renk-koyu) 12%, transparent); }
 .temsilcilik-karti__logo { display: grid; min-height: 126px; align-content: center; justify-items: center; text-align: center; }
 .temsilcilik-karti__logo img { max-width: 230px; max-height: 88px; object-fit: contain; }
+/* Resmî Genebre dosyası beyaz kullanım için hazırlandığından açık kart üzerinde tema mavisine dönüştürülür. */
+.temsilcilik-karti:first-child .temsilcilik-karti__logo img { filter: brightness(0) saturate(100%) invert(18%) sepia(51%) saturate(2408%) hue-rotate(203deg) brightness(88%) contrast(99%); }
+.temsilcilik-karti:first-child .temsilcilik-karti__logo small { display: none; }
 .temsilcilik-karti__logo strong { color: var(--renk-koyu); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -.055em; }
 .temsilcilik-karti__logo small { margin-top: 10px; color: var(--renk-ikincil); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .temsilcilik-karti__icerik { display: flex; flex: 1; flex-direction: column; }
@@ -20,6 +23,7 @@
 .temsilcilik-karti__eylemler a { display: grid; min-height: 44px; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 0 15px; border: 1px solid var(--renk-ana); border-radius: 7px; background: var(--renk-ana); color: var(--renk-beyaz); font-size: .74rem; font-weight: 650; text-decoration: none; }
 .temsilcilik-karti__eylemler a.ikincil { background: var(--renk-beyaz); color: var(--renk-ana); }
 @keyframes temsilcilik-karti-giris { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 900px) { .temsilcilik-listesi { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Üç kart 840px üzerindeki alanlarda yan yana kalır; daha dar tabletlerde okunabilirlik için iki sütuna iner. */
+@media (max-width: 840px) { .temsilcilik-listesi { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 620px) { .temsilcilik-listesi { grid-template-columns: 1fr; } .temsilcilik-karti { min-height: 0; } }
 @media (prefers-reduced-motion: reduce) { .temsilcilik-karti { animation: none; transition: none; } }
