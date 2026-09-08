@@ -275,6 +275,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Bulut maskesi üstte tam saydam başlayıp aşağı doğru kademeli yoğunlaşır, dünyanın alt bölümünü kapatıp kesintisiz beyaza dönüşür. Birleşim çizgileri canlı localhost görünümünde giderildi; üst dünya yayı kesilmeden korunur ve footer ayırıcı çizgisi gösterilmez.
 - Kullanıcı ekran görüntüsüyle yapılan son kontrolde önceki üst yayın kesildiği doğrulandı. Masaüstü kamera mesafesi `1.95` yapılarak dünya genişletildi; dikey merkez `-0.18` değerinde dengelenerek tam kavis üst sınırdan kesilmeden ve görünür boşluk bırakmadan başlatıldı.
 - Geniş ekran geri bildiriminde kalan birkaç piksellik kesilme için dikey merkez `-0.26` olarak son kez ayarlandı. Canlı görünümde atmosfer yayı düz kesilmeden tam kavis halinde ve hesap güvenlik notunun hemen altında başladı; dünya genişliği değişmedi.
+- Son kadraj 375px telefon, 1440px masaüstü ve 1920px geniş ekran tam sayfa görüntülerinde ayrıca doğrulandı. Üç genişlikte de dünya tam kavisle başlıyor, hesap notundan sonra ek bölüm boşluğu oluşmuyor, bulutlar alt yüzeyi örtüyor ve footer üst ayırıcı çizgisi görünmüyor.
 
 ## Bilinen durumlar
 
