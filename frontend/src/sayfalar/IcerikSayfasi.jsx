@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import {
-  faArrowRight, faBuilding, faEnvelope, faFax, faFileLines, faLocationDot,
-  faMessage, faPaperPlane, faPhone, faUser, faUsers
+  faArrowRight, faBuilding, faCompress, faEnvelope, faExpand, faFax, faFileLines, faLandmark, faLocationDot,
+  faMessage, faPaperPlane, faPhone, faUser, faUsers, faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import { iletisimMesajiGonder } from '../servisler/api';
 import EtkilesimliDunya from '../bilesenler/EtkilesimliDunya';
@@ -27,8 +27,72 @@ function Harita({ adres, haritaAdresi, baslik, aciklama }) {
   );
 }
 
+function HesapNumaralariPenceresi({ acik, ayar, bankaHesaplari, kapat }) {
+  const [genis, setGenis] = useState(false);
+  const kapatDugmesi = useRef(null);
+
+  useEffect(() => {
+    if (!acik) return undefined;
+    const oncekiTasma = document.body.style.overflow;
+    const klavyeDinle = (olay) => olay.key === 'Escape' && kapat();
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', klavyeDinle);
+    kapatDugmesi.current?.focus();
+    return () => {
+      document.body.style.overflow = oncekiTasma;
+      document.removeEventListener('keydown', klavyeDinle);
+    };
+  }, [acik, kapat]);
+
+  if (!acik) return null;
+
+  const baslik = ayar('iletisim_hesap_basligi', 'Hesap numaraları');
+  return (
+    <div className="hesap-penceresi" onMouseDown={(olay) => olay.target === olay.currentTarget && kapat()}>
+      <section className={`hesap-penceresi__panel${genis ? ' hesap-penceresi__panel--genis' : ''}`} role="dialog" aria-modal="true" aria-labelledby="hesap-penceresi-basligi">
+        <header className="hesap-penceresi__baslik">
+          <div>
+            <span>{ayar('iletisim_hesap_etiketi', 'Demirvana')}</span>
+            <h2 id="hesap-penceresi-basligi">{baslik}</h2>
+            <p>{ayar('iletisim_hesap_slogani', 'Güvenilir iş ortağınız')}</p>
+          </div>
+          <div className="hesap-penceresi__islemler">
+            <button type="button" onClick={() => setGenis((deger) => !deger)} aria-label={genis ? 'Pencereyi küçült' : 'Pencereyi büyüt'} title={genis ? 'Küçült' : 'Büyüt'}>
+              <FontAwesomeIcon icon={genis ? faCompress : faExpand} />
+            </button>
+            <button ref={kapatDugmesi} type="button" onClick={kapat} aria-label="Hesap numaralarını kapat" title="Kapat">
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
+        </header>
+        <div className="hesap-penceresi__icerik">
+          {bankaHesaplari.length ? (
+            <div className="iletisim-hesaplar__grid">
+              {bankaHesaplari.map((hesap) => (
+                <article className="iletisim-hesap-karti" key={hesap.id}>
+                  <span className="iletisim-hesap-karti__para">{hesap.para_birimi === 'USD' ? '$' : hesap.para_birimi === 'EUR' ? '€' : 'TL'}</span>
+                  <div><h3>{hesap.hesap_basligi || `${hesap.banka_adi} ${hesap.para_birimi === 'TRY' ? 'TL' : hesap.para_birimi} hesabı`}</h3><img src={hesap.logo_yolu || '/assets/iletisim/qnb.png'} alt={`${hesap.banka_adi} logosu`} /></div>
+                  <dl>
+                    {hesap.swift_kodu ? <><dt>SWIFT kodu</dt><dd>{hesap.swift_kodu}</dd></> : null}
+                    <dt>IBAN</dt><dd>{hesap.iban}</dd>
+                    <dt>Şube</dt><dd>{hesap.sube}</dd>
+                    <dt>Hesap no</dt><dd>{hesap.hesap_no}</dd>
+                  </dl>
+                </article>
+              ))}
+            </div>
+          ) : <p className="hesap-penceresi__bos">Hesap bilgileri kısa süre içinde güncellenecektir.</p>}
+          <p className="iletisim-hesaplar__uyari">{ayar('iletisim_hesap_guvenlik_notu', 'Ödeme öncesinde hesap bilgilerini mutlaka telefonla doğrulayın.')}</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari = [], mesajGonder = iletisimMesajiGonder }) {
   const [durum, setDurum] = useState({ gonderiliyor: false, mesaj: '', hata: false });
+  const [hesaplarAcik, setHesaplarAcik] = useState(false);
+  const hesapDugmesi = useRef(null);
   if (tur !== 'iletisim') return null;
 
   const ayar = (anahtar, yedek) => siteAyarlari[anahtar] || yedek;
@@ -37,6 +101,10 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
   const whatsapp = ayar('iletisim_whatsapp', '+90 (555) 978 18 00');
   const faks = ayar('iletisim_faks', '+90 (212) 297 57 33');
   const eposta = ayar('destek_eposta', 'dv@demirvana.com');
+  const hesaplariKapat = () => {
+    setHesaplarAcik(false);
+    requestAnimationFrame(() => hesapDugmesi.current?.focus());
+  };
 
   const gonder = async (olay) => {
     olay.preventDefault();
@@ -75,6 +143,7 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
           <div className="iletisim-kisayollar">
             <a href={`mailto:${eposta}?subject=İnsan kaynakları başvurusu`}><FontAwesomeIcon icon={faUsers} /><span><strong>{ayar('iletisim_insan_kaynaklari_basligi', 'İnsan kaynakları başvuru formu')}</strong><small>{ayar('iletisim_insan_kaynaklari_aciklamasi', 'Aramıza katılmak için başvurun.')}</small></span><FontAwesomeIcon icon={faArrowRight} /></a>
             <a href={`mailto:${eposta}?subject=Mail Order Formu`}><FontAwesomeIcon icon={faFileLines} /><span><strong>{ayar('iletisim_mail_order_basligi', 'Mail Order Formu')}</strong><small>{ayar('iletisim_mail_order_aciklamasi', 'Talep formu için iletişime geçin.')}</small></span><FontAwesomeIcon icon={faArrowRight} /></a>
+            <button ref={hesapDugmesi} type="button" onClick={() => setHesaplarAcik(true)}><FontAwesomeIcon icon={faLandmark} /><span><strong>{ayar('iletisim_hesap_kisayol_basligi', 'Hesap Numaralarımız')}</strong><small>{ayar('iletisim_hesap_kisayol_aciklamasi', 'Banka hesap bilgilerimizi görüntüleyin.')}</small></span><FontAwesomeIcon icon={faArrowRight} /></button>
           </div>
         </section>
         <section className="iletisim-form-karti" aria-labelledby="mesaj-basligi">
@@ -92,24 +161,7 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
           </form>
         </section>
       </div>
-      <section className="iletisim-hesaplar icerik-kapsayici" aria-labelledby="hesap-basligi">
-        <div className="iletisim-hesaplar__baslik"><span>{ayar('iletisim_hesap_etiketi', 'Demirvana')}</span><h2 id="hesap-basligi">{ayar('iletisim_hesap_basligi', 'Hesap numaraları')}</h2><small>{ayar('iletisim_hesap_slogani', 'Güvenilir iş ortağınız')}</small></div>
-        <div className="iletisim-hesaplar__grid">
-          {bankaHesaplari.map((hesap) => (
-            <article className="iletisim-hesap-karti" key={hesap.id}>
-              <span className="iletisim-hesap-karti__para">{hesap.para_birimi === 'USD' ? '$' : hesap.para_birimi === 'EUR' ? '€' : 'TL'}</span>
-              <div><h3>{hesap.hesap_basligi || `${hesap.banka_adi} ${hesap.para_birimi === 'TRY' ? 'TL' : hesap.para_birimi} hesabı`}</h3><img src={hesap.logo_yolu || '/assets/iletisim/qnb.png'} alt={`${hesap.banka_adi} logosu`} /></div>
-              <dl>
-                {hesap.swift_kodu ? <><dt>SWIFT kodu</dt><dd>{hesap.swift_kodu}</dd></> : null}
-                <dt>IBAN</dt><dd>{hesap.iban}</dd>
-                <dt>Şube</dt><dd>{hesap.sube}</dd>
-                <dt>Hesap no</dt><dd>{hesap.hesap_no}</dd>
-              </dl>
-            </article>
-          ))}
-        </div>
-        <p className="iletisim-hesaplar__uyari">{ayar('iletisim_hesap_guvenlik_notu', 'Ödeme öncesinde hesap bilgilerini mutlaka telefonla doğrulayın.')}</p>
-      </section>
+      <HesapNumaralariPenceresi acik={hesaplarAcik} ayar={ayar} bankaHesaplari={bankaHesaplari} kapat={hesaplariKapat} />
       {ayar('iletisim_dunya_aktif_mi', '1') !== '0' ? <EtkilesimliDunya ayarlar={siteAyarlari} /> : null}
     </article>
   );

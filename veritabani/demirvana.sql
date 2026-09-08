@@ -479,6 +479,8 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('iletisim_insan_kaynaklari_aciklamasi', 'Aramıza katılmak için başvurun.', 'metin', 'İnsan kaynakları kısayol açıklaması'),
     ('iletisim_mail_order_basligi', 'Mail Order Formu', 'metin', 'Mail order kısayol başlığı'),
     ('iletisim_mail_order_aciklamasi', 'Talep formu için iletişime geçin.', 'metin', 'Mail order kısayol açıklaması'),
+    ('iletisim_hesap_kisayol_basligi', 'Hesap Numaralarımız', 'metin', 'Banka hesapları kısayol başlığı'),
+    ('iletisim_hesap_kisayol_aciklamasi', 'Banka hesap bilgilerimizi görüntüleyin.', 'metin', 'Banka hesapları kısayol açıklaması'),
     ('iletisim_form_basligi', 'Bize Mesaj Gönderin', 'metin', 'İletişim formu başlığı'),
     ('iletisim_form_aciklamasi', 'Taleplerinizi, sorularınızı veya iş birliği önerilerinizi form aracılığıyla bize iletebilirsiniz.', 'metin', 'İletişim formu açıklaması'),
     ('iletisim_hesap_etiketi', 'Demirvana', 'metin', 'Hesap bilgileri alanı etiketi'),

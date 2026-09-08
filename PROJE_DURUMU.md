@@ -277,6 +277,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Geniş ekran geri bildiriminde kalan birkaç piksellik kesilme için dikey merkez `-0.26` olarak son kez ayarlandı. Canlı görünümde atmosfer yayı düz kesilmeden tam kavis halinde ve hesap güvenlik notunun hemen altında başladı; dünya genişliği değişmedi.
 - Son kadraj 375px telefon, 1440px masaüstü ve 1920px geniş ekran tam sayfa görüntülerinde ayrıca doğrulandı. Üç genişlikte de dünya tam kavisle başlıyor, hesap notundan sonra ek bölüm boşluğu oluşmuyor, bulutlar alt yüzeyi örtüyor ve footer üst ayırıcı çizgisi görünmüyor.
 - Kullanıcı geniş ekranında sabit dikey konumun yeniden kesilme oluşturduğu görüldü; sabit değer kaldırıldı. Kürenin merkezi artık kamera mesafesi ve 38° görüş açısıyla üst teğet geometrisinden hesaplanır; masaüstü ve mobil kamera değiştiğinde tam kavis otomatik olarak üst sınıra oturur.
+- İletişim sayfasındaki sürekli görünen geniş hesap numaraları bölümü kaldırıldı. İnsan kaynakları, Mail Order ve Hesap Numaralarımız işlemleri aynı hizada üç kısayol kartına dönüştürüldü.
+- Hesap Numaralarımız kartı mevcut API/veritabanı banka kayıtlarını kullanan, tema renklerine uyumlu animasyonlu bir pencere açar. Pencere büyütme/küçültme, içerik kaydırma, dış alana tıklama, kapatma düğmesi ve Escape ile kapanmayı destekler.
+- Hesap kısayolunun başlık ve açıklaması `iletisim_hesap_kisayol_basligi` ile `iletisim_hesap_kisayol_aciklamasi` site ayarlarına eklendi; ileride yönetim panelinden değiştirilebilir yapı korunmuştur.
+- Hesap penceresi masaüstünde üç banka kartını düzenli gösterir, mobilde alt panel biçimine geçerek tek sütunlu kaydırılabilir içerik sunar. `IcerikSayfasi` testleri 5 senaryoya genişletildi; tüm 78 test ve üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -291,4 +295,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim sayfasındaki geniş ve üst sınırda kesilmeyen dünya kadrajı ile Aerodynamics referanslı bulut ufku tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim sayfasındaki üçlü işlem kartları ve açılır hesap numaraları penceresi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.

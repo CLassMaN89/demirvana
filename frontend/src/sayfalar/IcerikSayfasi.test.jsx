@@ -39,11 +39,27 @@ describe('IcerikSayfasi iletişim görünümü', () => {
     expect(await screen.findByRole('status')).toHaveTextContent('Mesajınız başarıyla alındı.');
   });
 
-  it('doğrulanmış banka hesaplarını para birimine göre kartlarda gösterir', () => {
+  it('hesap numaralarını üçüncü kısayoldan açılan pencerede gösterir', () => {
     const hesaplar = [{ id: 1, banka_adi: 'QNB Finansbank', para_birimi: 'TL', iban: 'TR33 0011', sube: 'İstanbul Enpara 03663', hesap_no: '80393611' }];
     render(<IcerikSayfasi tur="iletisim" siteAyarlari={ayarlar} bankaHesaplari={hesaplar} />);
+
+    expect(screen.getAllByRole('link')).toEqual(expect.arrayContaining([
+      expect.objectContaining({ textContent: expect.stringContaining('İnsan kaynakları') }),
+      expect.objectContaining({ textContent: expect.stringContaining('Mail Order') })
+    ]));
+    expect(screen.queryByRole('dialog', { name: 'Hesap numaraları' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /hesap numaralarımız/i }));
+
+    expect(screen.getByRole('dialog', { name: 'Hesap numaraları' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'QNB Finansbank TL hesabı' })).toBeInTheDocument();
     expect(screen.getByText('TR33 0011')).toBeInTheDocument();
+  });
+
+  it('hesap penceresini Escape tuşuyla kapatır', () => {
+    render(<IcerikSayfasi tur="iletisim" siteAyarlari={ayarlar} bankaHesaplari={[]} />);
+    fireEvent.click(screen.getByRole('button', { name: /hesap numaralarımız/i }));
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: 'Hesap numaraları' })).not.toBeInTheDocument();
   });
 
   it('hesapların altında metinsiz etkileşimli dünya alanını gösterir', () => {
