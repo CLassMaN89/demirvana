@@ -230,6 +230,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcı geri bildirimiyle kayan vana vitrini `ÜRÜN KATEGORİLERİMİZ` alanının üstüne taşındı; vitrine ait etiket, başlık, açıklama, alt çağrı metni ve teknik destek butonu tamamen kaldırıldı.
 - Kayan kartların mavi ad paneli yalnız vana adı ve ok yüksekliğinde olacak şekilde inceltildi; arka plan opaklığı azaltıldı ve canlı localhost görünümünde doğrulandı.
 - Kayan kartlardaki ad panelinin koyu mavi oranı kullanıcı geri bildirimiyle `%46` seviyesinden `%28` seviyesine indirildi; arka plandaki vana daha belirgin hale getirildi.
+- Ana sayfada footer'ın hemen üstüne, solda yönetilebilir metin ve sağda birbirine ters yönde akan iki fotoğraf sütunundan oluşan responsive `Fuarlar` bölümü eklendi.
+- Kullanıcının `fuar/` klasöründeki dört fotoğrafı değiştirilmeden `frontend/public/assets/fuar/` altında web için yerel olarak sunuldu; kaynak `fuar/` klasörü korundu.
+- `fuar_gorselleri` tablosu, `/api/fuarlar` ucu ve başlangıç API verisi eklendi; görünürlük, başlık, etiket, açıklama ve buton alanları `site_ayarlari`, görseller ile sıraları ayrı tablo üzerinden admin yönetimine hazırlandı.
+- Fuarlar bileşeni 24 test dosyasında 68 test, Vite üretim derlemesi, PHP sözdizimi/API testi ve canlı MariaDB'de 4 kayıtla doğrulandı; localhost masaüstü görünümünde bölümün footer üstündeki konumu kontrol edildi.
 
 ## Bilinen durumlar
 
@@ -244,4 +248,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfada animasyonlu vana vitrini hero ile `ÜRÜN KATEGORİLERİMİZ` arasına yerleştirildi; yalnız vana kartları gösteriliyor. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, footer ve diğer iç sayfaları koru.
+Ana sayfada footer üstündeki dinamik Fuarlar bölümü tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, ürün vitrinleri, footer ve diğer iç sayfaları koru.

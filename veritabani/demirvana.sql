@@ -135,6 +135,20 @@ CREATE TABLE IF NOT EXISTS `kategoriler` (
     KEY `kategori_siralama` (`aktif_mi`, `siralama`)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Fuar görselleri dosya yoluyla saklanır; sıra, görünürlük ve alternatif metin admin panelinden yönetilebilir.
+CREATE TABLE IF NOT EXISTS `fuar_gorselleri` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `gorsel_yolu` VARCHAR(500) NOT NULL,
+    `alternatif_metin` VARCHAR(255) NOT NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_fuar_gorseli` (`gorsel_yolu`),
+    KEY `fuar_gorseli_siralama` (`aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 CREATE TABLE IF NOT EXISTS `urunler` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `kategori_id` BIGINT UNSIGNED NOT NULL,
@@ -394,6 +408,12 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir'),
     ('kategori_kart_varsayilan_alt_metni', 'Endüstriyel vana çözümleri', 'metin', 'Açıklaması olmayan ana sayfa kategori kartının alt metni'),
     ('kategori_tum_urunler_alt_metni', 'Ürün kataloğu', 'metin', 'Ana sayfa Tüm Ürünler kartının alt metni'),
+    ('fuarlar_aktif_mi', '1', 'sayi', 'Ana sayfa Fuarlar bölümünün görünürlük durumu'),
+    ('fuarlar_etiketi', 'SEKTÖREL BULUŞMALAR', 'metin', 'Fuarlar bölümü üst etiketi'),
+    ('fuarlar_basligi', 'Fuarlar', 'metin', 'Fuarlar bölümü ana başlığı'),
+    ('fuarlar_aciklamasi', 'Sektör profesyonelleriyle buluştuğumuz fuarlardan ve ürün tanıtımlarımızdan kareler.', 'metin', 'Fuarlar bölümü açıklaması'),
+    ('fuarlar_buton_metni', 'Fuar programı için iletişime geçin', 'metin', 'Fuarlar bölümü buton metni'),
+    ('fuarlar_buton_baglantisi', '/iletisim', 'baglanti', 'Fuarlar bölümü buton bağlantısı'),
     ('referans_hero_yol_metni', 'Anasayfa / Referanslar', 'metin', 'Referans hero ekmek kırıntısı metni'),
     ('referans_hero_basligi', 'Güvenin Referansa Dönüştüğü Projeler', 'metin', 'Referans hero ana başlığı'),
     ('referans_hero_aciklamasi', 'Türkiye’de ve dünyada tamamladığımız seçkin projeler.', 'metin', 'Referans hero açıklaması'),
@@ -595,6 +615,14 @@ ON DUPLICATE KEY UPDATE
     `gorsel_yolu` = VALUES(`gorsel_yolu`),
     `alternatif_metin` = VALUES(`alternatif_metin`),
     `siralama` = VALUES(`siralama`);
+
+INSERT INTO `fuar_gorselleri` (`gorsel_yolu`, `alternatif_metin`, `siralama`) VALUES
+    ('/assets/fuar/demirvana-fuar-5.jpg', 'Demirvana fuar standından ürün tanıtımı', 1),
+    ('/assets/fuar/demirvana-fuar-6.jpg', 'Demirvana fuar alanında ziyaretçi buluşması', 2),
+    ('/assets/fuar/demirvana-fuar-7.jpg', 'Demirvana fuar standı ve vana ürünleri', 3),
+    ('/assets/fuar/demirvana-fuar-standi.jpg', 'Demirvana sektörel fuar katılımı', 4)
+ON DUPLICATE KEY UPDATE
+    `alternatif_metin` = VALUES(`alternatif_metin`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
 INSERT INTO `referanslar` (`id`, `baslik`, `konum`, `kurum`, `yil`, `bolge`, `siralama`) VALUES
     (1, 'Antalya Gazipaşa Atık Su Arıtma Tesisi Vanaları', 'Antalya / Gazipaşa', 'İller Bankası', '2011–2012', 'yurtici', 1),

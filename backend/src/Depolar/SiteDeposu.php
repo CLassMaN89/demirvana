@@ -103,6 +103,14 @@ final class SiteDeposu
         )->fetchAll();
     }
 
+    public function fuarlar(): array
+    {
+        return $this->baglanti->query(
+            'SELECT id, gorsel_yolu, alternatif_metin, siralama
+             FROM fuar_gorselleri WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+    }
+
     public function referanslar(): array
     {
         $sektorler = $this->baglanti->query(

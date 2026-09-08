@@ -30,6 +30,7 @@ const sabitTestVerisi = {
     odak_y: 50
   }],
   kategoriler,
+  fuarlar: [{ id: 1, gorsel_yolu: '/assets/fuar/test.jpg', alternatif_metin: 'Test fuar görseli', siralama: 1 }],
   referanslar: {
     kayitlar: [{ id: 1, baslik: 'Test referansı', konum: 'Ankara', kurum: 'Test Kurumu', yil: '2026', bolge: 'yurtici', siralama: 1 }],
     gorseller: []
@@ -65,6 +66,8 @@ describe('App veri entegrasyonu', () => {
     expect(screen.getByRole('region', { name: /öne çıkan içerikler/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'ÜRÜN KATEGORİLERİMİZ' })).toBeInTheDocument();
     expect(screen.getAllByTestId('kategori-karti')).toHaveLength(8);
+    expect(screen.getByRole('heading', { name: 'Fuarlar' })).toBeInTheDocument();
+    expect(screen.getAllByRole('img', { name: 'Test fuar görseli' })).toHaveLength(2);
   });
 
   it('yeni üst menü rotasını kendi içerik sayfasında açar', async () => {

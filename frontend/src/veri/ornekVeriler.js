@@ -120,6 +120,12 @@ export const ornekVeriler = Object.freeze({
     footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.',
     kategori_kart_varsayilan_alt_metni: 'Endüstriyel vana çözümleri',
     kategori_tum_urunler_alt_metni: 'Ürün kataloğu',
+    fuarlar_aktif_mi: '1',
+    fuarlar_etiketi: 'SEKTÖREL BULUŞMALAR',
+    fuarlar_basligi: 'Fuarlar',
+    fuarlar_aciklamasi: 'Sektör profesyonelleriyle buluştuğumuz fuarlardan ve ürün tanıtımlarımızdan kareler.',
+    fuarlar_buton_metni: 'Fuar programı için iletişime geçin',
+    fuarlar_buton_baglantisi: '/iletisim',
     teknik_hero_basligi: 'Teknik',
     teknik_hero_aciklamasi: 'Ürünlerimize ait teknik tabloları ve kullanım talimatlarını buradan inceleyebilirsiniz.',
     teknik_slogan_satir_1: 'Güvenli Akış',
@@ -213,6 +219,12 @@ export const ornekVeriler = Object.freeze({
     gorsel_yolu: `/assets/kategoriler/${kategori.slug}.webp`,
     alternatif_metin: `${kategori.ad} ürün grubu`
   })),
+  fuarlar: [
+    ['demirvana-fuar-5.jpg', 'Demirvana fuar standından ürün tanıtımı'],
+    ['demirvana-fuar-6.jpg', 'Demirvana fuar alanında ziyaretçi buluşması'],
+    ['demirvana-fuar-7.jpg', 'Demirvana fuar standı ve vana ürünleri'],
+    ['demirvana-fuar-standi.jpg', 'Demirvana sektörel fuar katılımı']
+  ].map(([dosya, alternatif_metin], indeks) => ({ id: indeks + 1, gorsel_yolu: `/assets/fuar/${dosya}`, alternatif_metin, siralama: indeks + 1 })),
   // API kullanılamadığında arama güvenli biçimde boş ürün listesiyle çalışmayı sürdürür.
   urunler: [],
   referanslar: {
