@@ -44,3 +44,15 @@ export async function siteVerileriniGetir(secenekler = {}) {
     yedekVeri: ornekVeriler
   });
 }
+
+// İletişim formu üretimde örnek veriye düşmeden doğrudan PHP kayıt ucuna gönderilir.
+export async function iletisimMesajiGonder(veriler, { fetchFn = globalThis.fetch } = {}) {
+  const yanit = await fetchFn(`${API_TABANI}/iletisim-mesajlari`, {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(veriler)
+  });
+  const govde = await yanit.json();
+  if (!yanit.ok || govde?.basarili !== true) throw new Error(govde?.mesaj || 'Mesaj gönderilemedi.');
+  return { ...govde.veri, mesaj: govde.mesaj };
+}

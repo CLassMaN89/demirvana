@@ -116,6 +116,20 @@ export const ornekVeriler = Object.freeze({
     destek_telefonu: '+90 (212) 297 57 30',
     destek_eposta: 'dv@demirvana.com',
     firma_adresi: 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye',
+    iletisim_harita_adresi: 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye',
+    iletisim_harita_embed_adresi: 'https://www.google.com/maps/d/embed?mid=1R6ztHB_hDzoxh7P4hUMhGTVWJms',
+    iletisim_harita_kart_basligi: 'Bizi Ziyaret Edin',
+    iletisim_harita_kart_aciklamasi: 'İkitelli OSB’deki merkezimizde sizleri ağırlamaktan memnuniyet duyarız.',
+    iletisim_etiketi: 'Demirvana',
+    iletisim_basligi: 'İletişim',
+    iletisim_aciklamasi: 'Sorularınız, talepleriniz veya iş birliği fırsatları için bizimle iletişime geçebilirsiniz. Ekibimiz size en kısa sürede dönüş yapacaktır.',
+    iletisim_whatsapp: '+90 (555) 978 18 00',
+    iletisim_faks: '+90 (212) 297 57 33',
+    iletisim_form_basligi: 'Bize Mesaj Gönderin',
+    iletisim_form_aciklamasi: 'Taleplerinizi, sorularınızı veya iş birliği önerilerinizi form aracılığıyla bize iletebilirsiniz.',
+    iletisim_hesap_basligi: 'Hesap numaraları',
+    iletisim_hesap_slogani: 'Güvenilir iş ortağınız',
+    iletisim_hesap_guvenlik_notu: 'Güncel banka ve ödeme bilgileri için muhasebe birimimizle iletişime geçin. Ödeme öncesinde hesap bilgilerini mutlaka telefonla doğrulayın.',
     footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
     footer_iletisim_buton_baglantisi: '/iletisim',
     footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.',
@@ -234,6 +248,11 @@ export const ornekVeriler = Object.freeze({
     ['Mei', 'Manometre & Enstrümantasyon', 'Mei (Manometría e instrumentación, S.L.)', 'Mei; manometre, termometre ve endüstriyel enstrümanların üreticisi ve ihracatçısıdır.', 'Measurement for a safer tomorrow', '/assets/temsilcilikler/mei.png'],
     ['Centork', 'Vana Aktüatörleri', 'Centork', 'Centork; vana aktüasyon çözümleri, otomasyon ve kontrol uygulamalarında uzmanlaşmıştır.', 'Actuation for a better tomorrow', '/assets/temsilcilikler/centork.svg']
   ].map(([marka_adi, urun_grubu, baslik, aciklama, logo_alt_metni, logo_yolu], indeks) => ({ id: indeks + 1, marka_adi, urun_grubu, baslik, aciklama, etiketler: ['Vana,Endüstriyel Armatür,Akış Kontrol', 'Enstrümantasyon,Manometre,Termometre', 'Aktüatör,Vana Otomasyonu,Kontrol'][indeks], logo_yolu, logo_alternatif_metin: `${marka_adi} logosu`, logo_alt_metni, urun_buton_metni: 'Marka ürünleri', urun_baglantisi: '/urunler', katalog_buton_metni: 'Katalog talep et', katalog_baglantisi: '/iletisim', siralama: indeks + 1 })),
+  banka_hesaplari: [
+    ['TRY', 'TR33 0011 1000 0000 0080 3936 11', null, '80393611'],
+    ['USD', 'TR84 0011 1000 0000 0082 0144 36', 'FNNBTRISXXX', '8214436'],
+    ['EUR', 'TR76 0011 1000 0000 0082 3613 55', 'FNNBTRISXXX', '8214436']
+  ].map(([para_birimi, iban, swift_kodu, hesap_no], indeks) => ({ id: indeks + 1, banka_adi: 'QNB Finansbank', hesap_basligi: `QNB Finansbank ${para_birimi} Hesabı`, para_birimi, iban, swift_kodu, sube: 'İstanbul Enpara 03663', hesap_no, logo_yolu: '/assets/iletisim/qnb.png', siralama: indeks + 1 })),
   // API kullanılamadığında arama güvenli biçimde boş ürün listesiyle çalışmayı sürdürür.
   urunler: [],
   referanslar: {

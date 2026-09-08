@@ -21,6 +21,42 @@ CREATE TABLE IF NOT EXISTS `site_ayarlari` (
     UNIQUE KEY `benzersiz_site_ayari` (`anahtar`)
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- Ziyaretçi talepleri ilerideki admin panelinde durum ve tarih bilgisiyle yönetilir.
+CREATE TABLE IF NOT EXISTS `iletisim_mesajlari` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `ad_soyad` VARCHAR(120) NOT NULL,
+    `eposta` VARCHAR(180) NOT NULL,
+    `telefon` VARCHAR(40) NOT NULL,
+    `firma` VARCHAR(180) NULL,
+    `mesaj` TEXT NOT NULL,
+    `durum` ENUM('yeni', 'okundu', 'yanitlandi', 'arsivlendi') NOT NULL DEFAULT 'yeni',
+    `veri_onayi_tarihi` TIMESTAMP NOT NULL,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `iletisim_mesaji_durumu` (`durum`, `olusturulma_tarihi`),
+    KEY `iletisim_mesaji_epostasi` (`eposta`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
+-- Banka bilgileri finansal hata riskini azaltmak için her para birimi ve görünürlük durumuyla ayrı yönetilir.
+CREATE TABLE IF NOT EXISTS `banka_hesaplari` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `banka_adi` VARCHAR(120) NOT NULL,
+    `hesap_basligi` VARCHAR(160) NOT NULL,
+    `para_birimi` ENUM('TRY', 'USD', 'EUR') NOT NULL,
+    `iban` VARCHAR(40) NOT NULL,
+    `swift_kodu` VARCHAR(20) NULL,
+    `sube` VARCHAR(140) NOT NULL,
+    `hesap_no` VARCHAR(40) NOT NULL,
+    `logo_yolu` VARCHAR(500) NULL,
+    `siralama` INT UNSIGNED NOT NULL DEFAULT 0,
+    `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
+    `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `guncellenme_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `benzersiz_banka_para_birimi` (`banka_adi`, `para_birimi`),
+    KEY `banka_hesabi_siralama` (`aktif_mi`, `siralama`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+
 -- Her rota için ayrı SEO kaydı tutulur; admin aynı rota için gelecekte farklı dil kayıtları açabilir.
 CREATE TABLE IF NOT EXISTS `seo_sayfalari` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -428,6 +464,25 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('destek_telefonu', '+90 (212) 297 57 30', 'telefon', 'Destek telefon numarası'),
     ('destek_eposta', 'dv@demirvana.com', 'eposta', 'Destek e-posta adresi'),
     ('firma_adresi', 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye', 'metin', 'Firma açık adresi'),
+    ('iletisim_harita_adresi', 'İkitelli OSB Pik Dökümcüler Sanayi Sitesi CA Blok No:3, 34490 İkitelli - İstanbul / Türkiye', 'metin', 'Google Harita üzerinde aranacak firma konumu'),
+    ('iletisim_harita_embed_adresi', 'https://www.google.com/maps/d/embed?mid=1R6ztHB_hDzoxh7P4hUMhGTVWJms', 'baglanti', 'Demirvana resmî Google My Maps gömme adresi'),
+    ('iletisim_harita_kart_basligi', 'Bizi Ziyaret Edin', 'metin', 'Harita üzerindeki bilgi kartı başlığı'),
+    ('iletisim_harita_kart_aciklamasi', 'İkitelli OSB’deki merkezimizde sizleri ağırlamaktan memnuniyet duyarız.', 'metin', 'Harita üzerindeki bilgi kartı açıklaması'),
+    ('iletisim_etiketi', 'Demirvana', 'metin', 'İletişim sayfası üst etiketi'),
+    ('iletisim_basligi', 'İletişim', 'metin', 'İletişim sayfası ana başlığı'),
+    ('iletisim_aciklamasi', 'Sorularınız, talepleriniz veya iş birliği fırsatları için bizimle iletişime geçebilirsiniz. Ekibimiz size en kısa sürede dönüş yapacaktır.', 'metin', 'İletişim sayfası açıklaması'),
+    ('iletisim_whatsapp', '+90 (555) 978 18 00', 'telefon', 'WhatsApp iletişim numarası'),
+    ('iletisim_faks', '+90 (212) 297 57 33', 'telefon', 'Faks numarası'),
+    ('iletisim_insan_kaynaklari_basligi', 'İnsan kaynakları başvuru formu', 'metin', 'İnsan kaynakları kısayol başlığı'),
+    ('iletisim_insan_kaynaklari_aciklamasi', 'Aramıza katılmak için başvurun.', 'metin', 'İnsan kaynakları kısayol açıklaması'),
+    ('iletisim_mail_order_basligi', 'Mail Order Formu', 'metin', 'Mail order kısayol başlığı'),
+    ('iletisim_mail_order_aciklamasi', 'Talep formu için iletişime geçin.', 'metin', 'Mail order kısayol açıklaması'),
+    ('iletisim_form_basligi', 'Bize Mesaj Gönderin', 'metin', 'İletişim formu başlığı'),
+    ('iletisim_form_aciklamasi', 'Taleplerinizi, sorularınızı veya iş birliği önerilerinizi form aracılığıyla bize iletebilirsiniz.', 'metin', 'İletişim formu açıklaması'),
+    ('iletisim_hesap_etiketi', 'Demirvana', 'metin', 'Hesap bilgileri alanı etiketi'),
+    ('iletisim_hesap_basligi', 'Hesap numaraları', 'metin', 'Hesap bilgileri alanı başlığı'),
+    ('iletisim_hesap_slogani', 'Güvenilir iş ortağınız', 'metin', 'Hesap bilgileri alanı sağ sloganı'),
+    ('iletisim_hesap_guvenlik_notu', 'Güncel banka ve ödeme bilgileri için muhasebe birimimizle iletişime geçin. Ödeme öncesinde hesap bilgilerini mutlaka telefonla doğrulayın.', 'metin', 'Hesap bilgileri güvenlik açıklaması'),
     ('footer_iletisim_buton_metni', 'Bizimle iletişime geçin', 'metin', 'Footer iletişim düğmesi metni'),
     ('footer_iletisim_buton_baglantisi', '/iletisim', 'baglanti', 'Footer iletişim düğmesi bağlantısı'),
     ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir'),
@@ -668,6 +723,18 @@ ON DUPLICATE KEY UPDATE
     `logo_alt_metni` = VALUES(`logo_alt_metni`), `urun_buton_metni` = VALUES(`urun_buton_metni`),
     `urun_baglantisi` = VALUES(`urun_baglantisi`), `katalog_buton_metni` = VALUES(`katalog_buton_metni`),
     `katalog_baglantisi` = VALUES(`katalog_baglantisi`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+-- Aşağıdaki hesap bilgileri Demirvana'nın mevcut resmî iletişim sayfasındaki yayınlanmış kayıtlarla eşleştirilmiştir.
+INSERT INTO `banka_hesaplari`
+    (`banka_adi`, `hesap_basligi`, `para_birimi`, `iban`, `swift_kodu`, `sube`, `hesap_no`, `logo_yolu`, `siralama`)
+VALUES
+    ('QNB Finansbank', 'QNB Finansbank TL Hesabı', 'TRY', 'TR33 0011 1000 0000 0080 3936 11', NULL, 'İstanbul Enpara 03663', '80393611', '/assets/iletisim/qnb.png', 1),
+    ('QNB Finansbank', 'QNB Finansbank USD Hesabı', 'USD', 'TR84 0011 1000 0000 0082 0144 36', 'FNNBTRISXXX', 'İstanbul Enpara 03663', '8214436', '/assets/iletisim/qnb.png', 2),
+    ('QNB Finansbank', 'QNB Finansbank Euro Hesabı', 'EUR', 'TR76 0011 1000 0000 0082 3613 55', 'FNNBTRISXXX', 'İstanbul Enpara 03663', '8214436', '/assets/iletisim/qnb.png', 3)
+ON DUPLICATE KEY UPDATE
+    `hesap_basligi` = VALUES(`hesap_basligi`), `iban` = VALUES(`iban`), `swift_kodu` = VALUES(`swift_kodu`),
+    `sube` = VALUES(`sube`), `hesap_no` = VALUES(`hesap_no`), `logo_yolu` = VALUES(`logo_yolu`),
+    `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 
 INSERT INTO `referanslar` (`id`, `baslik`, `konum`, `kurum`, `yil`, `bolge`, `siralama`) VALUES
     (1, 'Antalya Gazipaşa Atık Su Arıtma Tesisi Vanaları', 'Antalya / Gazipaşa', 'İller Bankası', '2011–2012', 'yurtici', 1),

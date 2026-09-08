@@ -33,6 +33,21 @@ if (SiteDenetleyicisi::gecerliReferansBolgesi('tum-dunya')) {
     throw new RuntimeException('Tanımsız referans bölgesi kabul edildi.');
 }
 
+$iletisimMesaji = SiteDenetleyicisi::iletisimMesajiDogrula([
+    'ad_soyad' => '  Sinan Demir  ', 'eposta' => 'sinan@example.com', 'telefon' => '+90 555 111 22 33',
+    'firma' => 'Demirvana', 'mesaj' => 'Ürünler hakkında bilgi almak istiyorum.', 'veri_onayi' => '1',
+]);
+if (($iletisimMesaji['ad_soyad'] ?? null) !== 'Sinan Demir') {
+    throw new RuntimeException('İletişim mesajı temizlenemedi.');
+}
+
+try {
+    SiteDenetleyicisi::iletisimMesajiDogrula(['ad_soyad' => 'A', 'eposta' => 'gecersiz', 'mesaj' => 'Kısa']);
+    throw new RuntimeException('Geçersiz iletişim mesajı kabul edildi.');
+} catch (InvalidArgumentException) {
+    // Beklenen doğrulama reddi.
+}
+
 $menuAgaci = SiteDeposu::menuAgaciOlustur(
     [['id' => 3, 'baslik' => 'Ürünler', 'baglanti' => '/urunler', 'siralama' => 3]],
     [

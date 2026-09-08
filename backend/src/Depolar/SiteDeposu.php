@@ -121,6 +121,25 @@ final class SiteDeposu
         )->fetchAll();
     }
 
+    public function bankaHesaplari(): array
+    {
+        return $this->baglanti->query(
+            'SELECT id, banka_adi, hesap_basligi, para_birimi, iban, swift_kodu, sube, hesap_no, logo_yolu, siralama
+             FROM banka_hesaplari WHERE aktif_mi = 1 ORDER BY siralama, id'
+        )->fetchAll();
+    }
+
+    /** Form mesajları admin panelinde sonradan okunabilmesi için hazırlanmış sorguyla saklanır. */
+    public function iletisimMesajiKaydet(array $veri): int
+    {
+        $sorgu = $this->baglanti->prepare(
+            'INSERT INTO iletisim_mesajlari (ad_soyad, eposta, telefon, firma, mesaj, veri_onayi_tarihi)
+             VALUES (:ad_soyad, :eposta, :telefon, :firma, :mesaj, CURRENT_TIMESTAMP)'
+        );
+        $sorgu->execute($veri);
+        return (int) $this->baglanti->lastInsertId();
+    }
+
     public function referanslar(): array
     {
         $sektorler = $this->baglanti->query(

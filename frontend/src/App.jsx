@@ -109,7 +109,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/teknik" element={<TeknikSayfasi kategoriler={veri.teknik_dokumanlar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/sertifikalar" element={<SertifikalarSayfasi sertifikalar={veri.sertifikalar} siteAyarlari={veri.site_ayarlari} />} />
-          <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" />} />
+          <Route path="/iletisim" element={<IcerikSayfasi tur="iletisim" siteAyarlari={veri.site_ayarlari} bankaHesaplari={veri.banka_hesaplari ?? []} />} />
           <Route path="*" element={<BulunamadiSayfasi />} />
         </Routes>
       </SayfaGecisi>

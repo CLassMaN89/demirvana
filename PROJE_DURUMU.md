@@ -246,6 +246,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Temsilcilikler doğrulaması: 25 test dosyasında 70 frontend testi, Vite üretim derlemesi ve üç ilgili PHP dosyasının sözdizimi başarılıdır. Şema canlı MariaDB'ye aktarıldı; 3 etkin temsilcilik, bağımsız menü kaydı ve 4–8 aralığında doğru SEO sırası doğrulandı.
 - Genebre, Mei ve Centork logoları markaların resmî web sitelerinden yerel `frontend/public/assets/temsilcilikler/` klasörüne alındı; fallback veri ve canlı MariaDB `logo_yolu` alanlarına bağlandı. Canlı sayfada üç kaydın da artık metin yerine erişilebilir gerçek logo görseli yüklediği doğrulandı.
 - Proje GitHub'da `CLassMaN89/demirvana` adlı private depoya gönderildi; yerel `master` dalı `origin/master` dalını takip ediyor. Kullanıcıya ait izlenmeyen kök `Carousel/` ve `fuar/` kaynak klasörleri GitHub'a eklenmedi.
+- İletişim sayfası resmî Demirvana Google My Maps konumu, aynı Font Awesome ikon ailesi, iletişim kanalları, insan kaynakları/mail order kısayolları, gerçek mesaj formu ve doğrulanmış QNB hesap kartlarıyla yenilendi.
+- İletişim mesajları `POST /api/iletisim-mesajlari` üzerinden sunucuda doğrulanıp yeni `iletisim_mesajlari` tablosuna kaydedilir; KVKK onayı ve görünmez bot tuzağı bulunur. Bütün sayfa metinleri `site_ayarlari`, banka hesapları ise yeni `banka_hesaplari` tablosundan admin yönetimine hazırdır.
+- Demirvana'nın mevcut resmî iletişim sayfasında yayımlanan TRY, USD ve EUR banka kayıtları canlı MariaDB'ye işlendi; şema tekrar içe aktarıldığında 3 kayıt korunur. QNB'nin resmî logo dosyası yerel asset olarak kullanılır.
+- İletişim doğrulaması: 26 dosyada 74 frontend testi, Vite üretim derlemesi, üç PHP dosyasının sözdizimi ve PHP API testi başarılıdır. Canlı Vite→PHP→MariaDB mesaj gönderimi `201` cevabıyla sınandı ve doğrulama kaydı test sonunda temizlendi.
 
 ## Bilinen durumlar
 
@@ -260,4 +264,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Temsilcilikler sayfası üç marka kartlı ve gerçek marka logolu düzende tamamlandı. Kullanıcı katalog PDF dosyalarını verdiğinde yalnız `temsilcilikler.katalog_baglantisi` alanlarına bağla; diğer sayfaları değiştirme.
+İletişim sayfası ve gerçek mesaj kayıt akışı tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.

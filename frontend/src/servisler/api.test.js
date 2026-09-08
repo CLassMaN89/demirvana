@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { siteVerileriniGetir, veriGetir } from './api';
+import { iletisimMesajiGonder, siteVerileriniGetir, veriGetir } from './api';
 
 describe('veriGetir', () => {
   it('başarılı API yanıtındaki veriyi döndürür', async () => {
@@ -63,5 +63,21 @@ describe('siteVerileriniGetir', () => {
     expect(istenenYollar).toEqual(['/api/baslangic']);
     expect(veri.referanslar.kayitlar[0].baslik).toBe('Test projesi');
     expect(veri.teknik_dokumanlar[0].dokumanlar[0].baslik).toBe('Çeviri Tablosu');
+  });
+});
+
+describe('iletisimMesajiGonder', () => {
+  it('form verisini JSON olarak PHP kayıt ucuna gönderir', async () => {
+    let istek;
+    const fetchFn = async (yol, secenekler) => {
+      istek = { yol, secenekler };
+      return { ok: true, json: async () => ({ basarili: true, veri: { id: 12 }, mesaj: 'Mesajınız başarıyla alındı.' }) };
+    };
+
+    const sonuc = await iletisimMesajiGonder({ ad_soyad: 'Sinan Demir' }, { fetchFn });
+    expect(istek.yol).toBe('/api/iletisim-mesajlari');
+    expect(istek.secenekler.method).toBe('POST');
+    expect(JSON.parse(istek.secenekler.body)).toEqual({ ad_soyad: 'Sinan Demir' });
+    expect(sonuc).toMatchObject({ id: 12, mesaj: 'Mesajınız başarıyla alındı.' });
   });
 });

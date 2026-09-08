@@ -11,17 +11,31 @@ require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SeoDenetleyicisi.php';
 
-// API salt okunur başlar; gelecekteki admin yazma uçları kimlik doğrulama katmanıyla ayrı eklenecektir.
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
-    JsonYanit::gonder(JsonYanit::olustur(false, null, 'Bu yöntem desteklenmiyor.'), 405);
-}
-
 $yol = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $yol = '/' . trim($yol, '/');
+$yontem = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+// Genel API salt okunurdur; yalnız ziyaretçi iletişim formu kayıt oluşturabilir.
+if ($yontem !== 'GET' && !($yontem === 'POST' && $yol === '/api/iletisim-mesajlari')) {
+    JsonYanit::gonder(JsonYanit::olustur(false, null, 'Bu yöntem desteklenmiyor.'), 405);
+}
 
 try {
     $denetleyici = new SiteDenetleyicisi(new SiteDeposu(Veritabani::baglanti()));
     $seoDenetleyicisi = new SeoDenetleyicisi(new SeoDeposu(Veritabani::baglanti()));
+
+    if ($yontem === 'POST' && $yol === '/api/iletisim-mesajlari') {
+        $girdi = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($girdi) || trim((string) ($girdi['internet_sitesi'] ?? '')) !== '') {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, 'Form bilgileri doğrulanamadı.'), 422);
+        }
+        try {
+            $id = $denetleyici->iletisimMesajiKaydet($girdi);
+            JsonYanit::gonder(JsonYanit::olustur(true, ['id' => $id], 'Mesajınız başarıyla alındı.'), 201);
+        } catch (InvalidArgumentException $hata) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+        }
+    }
 
     if ($yol === '/robots.txt') {
         header('Content-Type: text/plain; charset=utf-8');
@@ -123,6 +137,7 @@ try {
             'kategoriler' => $denetleyici->kategoriler(),
             'fuarlar' => $denetleyici->fuarlar(),
             'temsilcilikler' => $denetleyici->temsilcilikler(),
+            'banka_hesaplari' => $denetleyici->bankaHesaplari(),
             'urunler' => $denetleyici->urunler(null, null),
             'referanslar' => $denetleyici->referanslar(),
             'kurumsal' => $denetleyici->kurumsal(),
@@ -137,6 +152,7 @@ try {
         '/api/kategoriler' => fn() => $denetleyici->kategoriler(),
         '/api/fuarlar' => fn() => $denetleyici->fuarlar(),
         '/api/temsilcilikler' => fn() => $denetleyici->temsilcilikler(),
+        '/api/banka-hesaplari' => fn() => $denetleyici->bankaHesaplari(),
         '/api/referanslar' => fn() => $denetleyici->referanslar(),
         '/api/kurumsal' => fn() => $denetleyici->kurumsal(),
         '/api/teknik-dokumanlar' => $teknikDokumanlariHazirla,
