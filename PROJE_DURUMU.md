@@ -234,6 +234,9 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcının `fuar/` klasöründeki dört fotoğrafı değiştirilmeden `frontend/public/assets/fuar/` altında web için yerel olarak sunuldu; kaynak `fuar/` klasörü korundu.
 - `fuar_gorselleri` tablosu, `/api/fuarlar` ucu ve başlangıç API verisi eklendi; görünürlük, başlık, etiket, açıklama ve buton alanları `site_ayarlari`, görseller ile sıraları ayrı tablo üzerinden admin yönetimine hazırlandı.
 - Fuarlar bileşeni 24 test dosyasında 68 test, Vite üretim derlemesi, PHP sözdizimi/API testi ve canlı MariaDB'de 4 kayıtla doğrulandı; localhost masaüstü görünümünde bölümün footer üstündeki konumu kontrol edildi.
+- `ÜRÜN KATEGORİLERİMİZ` bölümü silinmeden `kategori_bolumu_aktif_mi=0` ayarıyla geçici olarak pasife alındı; admin/veritabanında değer `1` yapıldığında yeniden görünür.
+- Fuarlar etiket, başlık ve açıklaması bölüm ekrana girdiğinde 110ms aralıklı yükselme/solma animasyonuyla görünür; azaltılmış hareket tercihinde doğrudan ve animasyonsuz gösterilir.
+- Kayan vana vitrininin alt boşluğu ile Fuarlar bölümünün üst/alt boşlukları ve galeri kenar maskesi azaltılarak ürünler–Fuarlar–footer akışı sıkılaştırıldı. Frontend doğrulaması 24 dosyada 69 test ve başarılı üretim derlemesiyle yenilendi.
 
 ## Bilinen durumlar
 
@@ -248,4 +251,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Ana sayfada footer üstündeki dinamik Fuarlar bölümü tamamlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, ürün vitrinleri, footer ve diğer iç sayfaları koru.
+Ana sayfada `ÜRÜN KATEGORİLERİMİZ` geçici olarak pasif; kayan vana vitrini ile animasyonlu Fuarlar bölümü sıkı boşluklarla footer'a bağlandı. Kullanıcının belirteceği bir sonraki alanda sınırlı düzenleme yap; navbar, hero, ürün vitrini, footer ve diğer iç sayfaları koru.

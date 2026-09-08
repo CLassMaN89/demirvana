@@ -51,4 +51,9 @@ describe('KategoriBolumu', () => {
       '/urunler'
     );
   });
+
+  it('admin görünürlük ayarı kapalıyken bölümü çizmez', () => {
+    const { container } = render(<MemoryRouter><KategoriBolumu kategoriler={yediKategori} siteAyarlari={{ kategori_bolumu_aktif_mi: '0' }} /></MemoryRouter>);
+    expect(container).toBeEmptyDOMElement();
+  });
 });

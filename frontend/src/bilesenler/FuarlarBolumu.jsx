@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../stiller/fuarlar.css';
@@ -21,6 +22,27 @@ function FuarSutunu({ gorseller, ters = false }) {
 }
 
 export default function FuarlarBolumu({ fuarlar = [], siteAyarlari = {} }) {
+  const bolumRef = useRef(null);
+  const [gorunur, setGorunur] = useState(false);
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      setGorunur(true);
+      return undefined;
+    }
+
+    // Metin hareketi bölüm ekrana yaklaşınca başlar; sayfa aşağıdayken animasyonun boşa tamamlanmasını önler.
+    const gozlemci = new IntersectionObserver(([girdi]) => {
+      if (girdi.isIntersecting) {
+        setGorunur(true);
+        gozlemci.disconnect();
+      }
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.18 });
+
+    if (bolumRef.current) gozlemci.observe(bolumRef.current);
+    return () => gozlemci.disconnect();
+  }, []);
+
   if (fuarlar.length === 0 || siteAyarlari.fuarlar_aktif_mi === '0') return null;
 
   const ortaNokta = Math.ceil(fuarlar.length / 2);
@@ -28,7 +50,7 @@ export default function FuarlarBolumu({ fuarlar = [], siteAyarlari = {} }) {
   const ikinciSutun = fuarlar.slice(ortaNokta);
 
   return (
-    <section className="fuarlar-bolumu" aria-labelledby="fuarlar-basligi">
+    <section ref={bolumRef} className={`fuarlar-bolumu${gorunur ? ' fuarlar-bolumu--gorunur' : ''}`} aria-labelledby="fuarlar-basligi">
       <div className="icerik-kapsayici fuarlar-bolumu__yerlesim">
         <header className="fuarlar-bolumu__metin">
           <span>{siteAyarlari.fuarlar_etiketi || 'SEKTÖREL BULUŞMALAR'}</span>

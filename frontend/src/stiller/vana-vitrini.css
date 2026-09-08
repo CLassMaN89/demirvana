@@ -1,4 +1,4 @@
-.vana-vitrini { overflow: hidden; padding-block: clamp(34px, 4vw, 56px); background: var(--renk-beyaz); }
+.vana-vitrini { overflow: hidden; padding-block: clamp(24px, 2.5vw, 36px) clamp(14px, 1.8vw, 26px); background: var(--renk-beyaz); }
 .vana-vitrini__maske { position: relative; width: 100%; }
 .vana-vitrini__maske::before, .vana-vitrini__maske::after { position: absolute; z-index: 3; top: 0; bottom: 0; width: clamp(36px, 8vw, 150px); pointer-events: none; content: ''; }
 .vana-vitrini__maske::before { left: 0; background: linear-gradient(90deg, var(--renk-beyaz), transparent); }

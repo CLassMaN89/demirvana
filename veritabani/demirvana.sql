@@ -408,6 +408,7 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('footer_telif_metni', '© {yil} Demirvana. Tüm hakları saklıdır.', 'metin', 'Footer telif metni; {yil} otomatik değiştirilir'),
     ('kategori_kart_varsayilan_alt_metni', 'Endüstriyel vana çözümleri', 'metin', 'Açıklaması olmayan ana sayfa kategori kartının alt metni'),
     ('kategori_tum_urunler_alt_metni', 'Ürün kataloğu', 'metin', 'Ana sayfa Tüm Ürünler kartının alt metni'),
+    ('kategori_bolumu_aktif_mi', '0', 'sayi', 'Ana sayfa Ürün Kategorilerimiz bölümünün görünürlük durumu; 1 değeri bölümü yeniden açar'),
     ('fuarlar_aktif_mi', '1', 'sayi', 'Ana sayfa Fuarlar bölümünün görünürlük durumu'),
     ('fuarlar_etiketi', 'SEKTÖREL BULUŞMALAR', 'metin', 'Fuarlar bölümü üst etiketi'),
     ('fuarlar_basligi', 'Fuarlar', 'metin', 'Fuarlar bölümü ana başlığı'),

@@ -120,6 +120,7 @@ export const ornekVeriler = Object.freeze({
     footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.',
     kategori_kart_varsayilan_alt_metni: 'Endüstriyel vana çözümleri',
     kategori_tum_urunler_alt_metni: 'Ürün kataloğu',
+    kategori_bolumu_aktif_mi: '0',
     fuarlar_aktif_mi: '1',
     fuarlar_etiketi: 'SEKTÖREL BULUŞMALAR',
     fuarlar_basligi: 'Fuarlar',

@@ -7,6 +7,9 @@ export default function KategoriBolumu({ kategoriler, siteAyarlari = {} }) {
   // Ana sayfanın sekizli kompozisyonunu korumak için API daha fazla kayıt döndürse de ilk yedi aktif kategori kullanılır.
   const vitrinKategorileri = kategoriler.slice(0, 7);
 
+  // Bölüm silinmez; admin ayarı yeniden 1 yapıldığında bütün içeriğiyle anında geri açılır.
+  if (siteAyarlari.kategori_bolumu_aktif_mi === '0') return null;
+
   return (
     <section className="kategori-bolumu" aria-labelledby="kategori-basligi">
       <div className="icerik-kapsayici">
