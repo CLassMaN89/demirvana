@@ -48,6 +48,7 @@ describe('Footer', () => {
     expect(document.querySelector('.site-footer__iletisim-ikon')?.tagName).toBe('svg');
     expect(document.querySelector('.site-footer__guven-ikon')?.tagName).toBe('svg');
     expect(document.querySelector('.site-footer__sosyal-ikon')?.tagName).toBe('svg');
+    expect(document.querySelector('.site-footer__marka-isin')).toBeInTheDocument();
     expect(screen.queryByText('Çalışma Saatleri')).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://linkedin.com/company/demirvana');
     expect(screen.getByText('Endüstrinin her noktasında, daha güvenli bir akış için.')).toBeInTheDocument();
@@ -69,7 +70,7 @@ describe('Footer', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText('Firma bilgileri')).toHaveStyle({ order: '4' });
+    expect(screen.getByLabelText('Firma bilgileri').parentElement).toHaveStyle({ order: '4' });
     expect(screen.queryByRole('navigation', { name: 'Footer hızlı bağlantılar' })).not.toBeInTheDocument();
   });
 });

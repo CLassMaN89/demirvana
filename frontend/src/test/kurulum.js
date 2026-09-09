@@ -23,5 +23,12 @@ HTMLCanvasElement.prototype.getContext = () => ({
 // JSDOM kaydırma motoru içermez; rota testleri çağrı sözleşmesini kendi sahte işlevleriyle ayrıca doğrular.
 window.scrollTo = () => {};
 
+// Border Beam hareket tercihini sorgular; JSDOM'da bulunmayan tarayıcı API'sini test ortamında tamamlarız.
+window.matchMedia ??= () => ({
+  matches: false,
+  addEventListener: () => {},
+  removeEventListener: () => {}
+});
+
 // Her test temiz bir sayfada başlamalı; aksi halde önceki bileşenlerin DOM'u sonucu etkiler.
 afterEach(() => cleanup());

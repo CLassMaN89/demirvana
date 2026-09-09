@@ -68,7 +68,13 @@
 .site-footer__marka,
 .site-footer__sutun,
 .site-footer__destek { position: relative; min-width: 0; }
+.site-footer__marka-isin {
+  min-width: 0;
+  border-radius: 14px;
+}
 .site-footer__marka {
+  height: 100%;
+  box-sizing: border-box;
   padding: 32px;
   border: 1px solid color-mix(in srgb, var(--renk-acik) 30%, transparent);
   border-radius: 14px;
@@ -260,6 +266,9 @@
   .site-footer__alt button { grid-column: 2; grid-row: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .site-footer__marka-isin::before,
+  .site-footer__marka-isin::after,
+  .site-footer__marka-isin [data-beam-bloom] { animation: none !important; }
   .site-footer__sutun a,
   .site-footer__iletisim { transition: none; }
 }

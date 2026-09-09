@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUp, BarChart3, Box, ChevronRight, Link2, Mail, MapPin, Phone, Settings, ShieldCheck } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { BorderBeam } from 'border-beam';
 import '../stiller/footer.css';
 
 function telefonBaglantisiOlustur(telefon) {
@@ -76,10 +77,20 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
       </div>
       <div className="site-footer__ic icerik-kapsayici">
         {ayarAcikMi(siteAyarlari.footer_marka_aktif_mi) ? (
+        <BorderBeam
+          className="site-footer__marka-isin"
+          size="md"
+          colorVariant="ocean"
+          theme="dark"
+          staticColors
+          duration={7}
+          strength={0.58}
+          borderRadius={14}
+          style={{ order: siraDegeri(siteAyarlari.footer_marka_sirasi, 1) }}
+        >
         <section
           className="site-footer__marka"
           aria-label="Firma bilgileri"
-          style={{ order: siraDegeri(siteAyarlari.footer_marka_sirasi, 1) }}
         >
           <Link className="site-footer__logo" to="/" aria-label={`${siteAyarlari.site_adi ?? 'Demirvana'} ana sayfa`}>
             <img src={siteAyarlari.logo_yolu ?? '/assets/logo.png'} alt={siteAyarlari.site_adi ?? 'Demirvana'} />
@@ -96,6 +107,7 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
             <ChevronRight className="site-footer__ok-ikon" aria-hidden="true" />
           </Link>
         </section>
+        </BorderBeam>
         ) : null}
 
         {ayarAcikMi(siteAyarlari.footer_hizli_baglantilar_aktif_mi) ? (
