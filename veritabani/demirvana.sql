@@ -483,6 +483,7 @@ INSERT INTO `site_ayarlari` (`anahtar`, `deger`, `deger_turu`, `aciklama`) VALUE
     ('iletisim_hesap_kisayol_aciklamasi', 'Banka hesap bilgilerimizi görüntüleyin.', 'metin', 'Banka hesapları kısayol açıklaması'),
     ('iletisim_form_basligi', 'Bize Mesaj Gönderin', 'metin', 'İletişim formu başlığı'),
     ('iletisim_form_aciklamasi', 'Taleplerinizi, sorularınızı veya iş birliği önerilerinizi form aracılığıyla bize iletebilirsiniz.', 'metin', 'İletişim formu açıklaması'),
+    ('iletisim_form_slogani', 'Sanayide güvenilir çözüm ortağınız', 'metin', 'İletişim formu üst panel sloganı'),
     ('iletisim_hesap_etiketi', 'Demirvana', 'metin', 'Hesap bilgileri alanı etiketi'),
     ('iletisim_hesap_basligi', 'Hesap numaraları', 'metin', 'Hesap bilgileri alanı başlığı'),
     ('iletisim_hesap_slogani', 'Güvenilir iş ortağınız', 'metin', 'Hesap bilgileri alanı sağ sloganı'),

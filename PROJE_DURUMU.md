@@ -282,6 +282,9 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Hesap kısayolunun başlık ve açıklaması `iletisim_hesap_kisayol_basligi` ile `iletisim_hesap_kisayol_aciklamasi` site ayarlarına eklendi; ileride yönetim panelinden değiştirilebilir yapı korunmuştur.
 - Hesap penceresi masaüstünde üç banka kartını düzenli gösterir, mobilde alt panel biçimine geçerek tek sütunlu kaydırılabilir içerik sunar. `IcerikSayfasi` testleri 5 senaryoya genişletildi; tüm 78 test ve üretim derlemesi başarılıdır.
 - İletişim ana başlığı daha kompakt hale getirildi. Masaüstü ve tablette soldaki iletişim bilgileri kartı ile sağdaki mesaj formunun üst sınırı aynı grid çizgisine oturtuldu; canlı geniş ekran ölçümünde fark `0.61px` olarak doğrulandı. Mobilde doğal tek sütun sırası değişmedi.
+- İletişim bilgi/form alanı onaylanan referansa göre yeniden biçimlendirildi: sol iletişim satırları ve üç kısayol kartı sıkılaştırıldı; sağ formun mavi geçişli üst paneline beyaz uçak simgesi ile yönetilebilir `iletisim_form_slogani` eklendi ve gönder düğmesi aynı tema diline uyarlandı.
+- Kullanıcının son hiza talebi için soldaki kısayol kartlarının görünen alt kenarı ile sağ mesaj formunun alt kenarı doğrudan tarayıcı koordinatlarıyla ölçüldü. 2133px genişlikte kalan fark `0.31px`, yatay taşma `0px` olarak doğrulandı; mobil tek sütun düzenindeki bağımsız yükseklik korundu.
+- Son iletişim düzeni 27 test dosyasında 78 test ve başarılı Vite üretim derlemesiyle doğrulandı.
 
 ## Bilinen durumlar
 
@@ -297,4 +300,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim kartlarının masaüstü/tablet hizası ve kompakt başlık tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim bilgi alanı ile mesaj formunun görünür alt hizası tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.

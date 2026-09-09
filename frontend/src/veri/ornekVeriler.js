@@ -129,6 +129,7 @@ export const ornekVeriler = Object.freeze({
     iletisim_faks: '+90 (212) 297 57 33',
     iletisim_form_basligi: 'Bize Mesaj Gönderin',
     iletisim_form_aciklamasi: 'Taleplerinizi, sorularınızı veya iş birliği önerilerinizi form aracılığıyla bize iletebilirsiniz.',
+    iletisim_form_slogani: 'Sanayide güvenilir çözüm ortağınız',
     iletisim_hesap_kisayol_basligi: 'Hesap Numaralarımız',
     iletisim_hesap_kisayol_aciklamasi: 'Banka hesap bilgilerimizi görüntüleyin.',
     iletisim_hesap_basligi: 'Hesap numaraları',

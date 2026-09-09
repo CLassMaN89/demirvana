@@ -14,13 +14,14 @@ const ayarlar = {
 
 describe('IcerikSayfasi iletişim görünümü', () => {
   it('konuma bağlı haritayı ve görseldeki iletişim kanallarını gösterir', () => {
-    render(<IcerikSayfasi tur="iletisim" siteAyarlari={ayarlar} />);
+    render(<IcerikSayfasi tur="iletisim" siteAyarlari={{ ...ayarlar, iletisim_form_slogani: 'Sanayide güvenilir çözüm ortağınız' }} />);
 
     expect(screen.getByTitle('Demirvana konumu')).toHaveAttribute('src', expect.stringContaining('%C4%B0kitelli%20OSB'));
     expect(screen.getByText('+90 (212) 297 57 30')).toBeInTheDocument();
     expect(screen.getByText('+90 (555) 978 18 00')).toBeInTheDocument();
     expect(screen.getByText('+90 (212) 297 57 33')).toBeInTheDocument();
     expect(screen.getByText('dv@demirvana.com')).toBeInTheDocument();
+    expect(screen.getByText('Sanayide güvenilir çözüm ortağınız')).toBeInTheDocument();
   });
 
   it('geçerli formu API üzerinden gönderip başarı bildirimini gösterir', async () => {
