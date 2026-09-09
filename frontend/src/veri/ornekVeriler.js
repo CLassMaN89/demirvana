@@ -300,15 +300,15 @@ export const ornekVeriler = Object.freeze({
       teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
       teknik_cizim_alt: 'Metal sitli sürgülü vana teknik çizimi – F4 D-001',
       parcalar: [
-        ['1', 'Gövde', 'GG 25 / GGG-40'], ['2', 'Gövde Burcu', 'Ms 58 / Bronz / Paslanmaz Çelik'],
-        ['3', 'Sürgü (DN40–100)', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['3', 'Sürgü (DN125–900)', 'GG 25 / GGG-40'],
-        ['4', 'Sürgü Burcu', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['5', 'Sürgü Somunu', 'Ms 58 / Bronz / GGG-40'],
-        ['6', 'Mil', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['7', 'Conta', 'EPDM / Franzelit / Klingerit'],
-        ['8', 'Kapak', 'GG 25 / GGG-40'], ['9', 'Civata', '5D / Paslanmaz Çelik'],
-        ['10', 'Mil Somunu', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['11', 'O-Ring', 'EPDM'], ['12', 'Volan', 'GG 20']
+        ['1', 'Gövde', 'GG 25 / GGG-40'], ['2', 'Gövde Burcu', 'Ms 58 / Bronze / S.S.'],
+        ['3', 'Sürgü (DN40–100)', 'Ms 58 / Bronze / S.S.'], ['3', 'Sürgü (DN125–900)', 'GG 25 / GGG-40'],
+        ['4', 'Sürgü Burcu', 'Ms 58 / Bronze / S.S.'], ['5', 'Sürgü Somunu', 'Ms 58 / Bronze / GGG-40'],
+        ['6', 'Mil', 'Ms 58 / Bronze / S.S.'], ['7', 'Conta', 'NBR / FKM (Viton) / Klingerit'],
+        ['8', 'Kapak', 'GG 25 / GGG-40'], ['9', 'Civata', 'St 37 / S.S.'],
+        ['10', 'Mil Somunu', 'Mr 58 / Bronze / S.S.'], ['11', 'O-Ring', 'EPDM'], ['12', 'Volan', 'GG 20']
       ].map(([no, ad, malzeme]) => ({ no, ad, malzeme })),
       olcu_basliklari: ['40', '50', '65', '80', '100', '125', '150', '200', '250', '300', '350', '400', '500', '600', '700', '800', '900'],
-      anma_basinci_degerleri: ['10', '6', '4', '2,5', '1,6', '1', '', '', '', '', '', '', '', '', '', '', ''],
+      anma_basinci_gruplari: [{ deger: '10', sutun: 8 }, { deger: '6', sutun: 3 }, { deger: '4', sutun: 2 }, { deger: '2,5', sutun: 2 }, { deger: '1,6', sutun: 1 }, { deger: '1', sutun: 1 }],
       olculer: [
         { grup: 'Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24', kod: 'L', degerler: ['140', '150', '170', '180', '190', '200', '210', '230', '250', '270', '290', '310', '350', '390', '430', '470', '510'] },
         { grup: '', kod: 'H', degerler: ['157', '190', '210', '230', '260', '365', '375', '500', '630', '715', '820', '910', '1135', '1300', '1480', '1690', '1820'] },

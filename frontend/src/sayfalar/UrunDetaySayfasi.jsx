@@ -36,6 +36,7 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
   }
 
   const teknik = teknikBilgileriOku(urun.teknik_bilgiler);
+  const basincGruplari = teknik.anma_basinci_gruplari || (teknik.anma_basinci_degerleri || []).filter(Boolean).map((deger) => ({ deger, sutun: 1 }));
   const cizimAlternatifMetni = teknik.teknik_cizim_alt
     || `${urun.ad.replace(/\s+F\d+\s+D-\d+$/i, '')} teknik çizimi`;
   const guvenDegerleri = [
@@ -99,10 +100,10 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
         <div className="urun-detay__tablo-kaydir">
           <table className="urun-detay__tablo urun-detay__tablo--olcu">
             <thead>
-              <tr><th>Anma Basıncı</th><th>PN</th>{(teknik.anma_basinci_degerleri || []).map((deger, indeks) => <th key={`pn-${indeks}`}>{deger}</th>)}</tr>
-              <tr><th>Anma Çapı</th><th>DN</th>{(teknik.olcu_basliklari || []).map((baslik) => <th key={baslik}>{baslik}</th>)}</tr>
+              <tr><th>Anma Basıncı</th><th>PN</th>{basincGruplari.map(({ deger, sutun }) => <th key={deger} colSpan={sutun}>{deger}</th>)}</tr>
             </thead>
             <tbody>
+              <tr className="urun-detay__cap-satiri"><th scope="row">Anma Çapı</th><th scope="row">DN</th>{(teknik.olcu_basliklari || []).map((baslik) => <td key={baslik}>{baslik}</td>)}</tr>
               {(teknik.olculer || []).map((satir, satirIndeksi, satirlar) => (
                 <tr key={`${satir.grup}-${satir.kod}`}>
                   {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}

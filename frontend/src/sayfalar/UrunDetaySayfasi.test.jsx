@@ -14,7 +14,7 @@ const urun = {
     teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
     parcalar: [{ no: '1', ad: 'Gövde', malzeme: 'GG 25 / GGG-40' }],
     olcu_basliklari: ['40', '50'],
-    anma_basinci_degerleri: ['10', '6'],
+    anma_basinci_gruplari: [{ deger: '10', sutun: 1 }, { deger: '6', sutun: 1 }],
     olculer: [
       { grup: 'Vana Boyutları', kod: 'L', degerler: ['140', '150'] },
       { grup: '', kod: 'H', degerler: ['157', '190'] }

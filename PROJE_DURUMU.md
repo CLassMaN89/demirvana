@@ -310,6 +310,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Teknik ölçü tablosundaki Anma Basıncı ve Anma Çapı başlık satırları kullanıcı geri bildirimiyle hücre geçişleri ve dikey ayırıcılar olmadan kesintisiz tek koyu Demirvana mavisine geçirildi.
 - Parça Listesi tablosunun sütun başlığı da kesintisiz tek koyu mavi zemine geçirildi. Teknik ölçülerde aynı renkli PN ve DN başlıklarının tek satır gibi algılanmaması için yalnız yatay, düşük kontrastlı bir ayırıcı korundu.
 - Teknik ölçülerde H, D1 ve k satırlarının boş görünen grup hücreleri gerçek `rowSpan` yapısına dönüştürüldü; Vana Boyutları başlığı üç, Flanş Ölçüleri başlığı iki teknik satırı dikey olarak kapsar.
+- Teknik ölçü tablosu son referansa göre yeniden kuruldu: iki sol açıklama/kod sütunu mavi, ölçü hücreleri beyaz, tüm ızgara çizgileri mavi ve basınç değerleri ilgili DN aralıklarını gerçek `colSpan` değerleriyle kapsar.
+- Parça malzemelerindeki açıklama amaçlı Türkçeleştirmeler kaldırıldı; kaynakta bulunan `Bronze`, `S.S.`, `St 37`, `Mr 58` ve conta tanımları aynen korunur.
 
 ## Bilinen durumlar
 

@@ -753,7 +753,23 @@ FROM `urunler` WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001'
 UPDATE `urunler`
 SET `teknik_bilgiler` = JSON_SET(
     `teknik_bilgiler`,
+    '$.anma_basinci_gruplari', JSON_ARRAY(JSON_OBJECT('deger','10','sutun',8),JSON_OBJECT('deger','6','sutun',3),JSON_OBJECT('deger','4','sutun',2),JSON_OBJECT('deger','2,5','sutun',2),JSON_OBJECT('deger','1,6','sutun',1),JSON_OBJECT('deger','1','sutun',1)),
     '$.anma_basinci_degerleri', JSON_ARRAY('10','6','4','2,5','1,6','1','','','','','','','','','','',''),
+    '$.parcalar', JSON_ARRAY(
+        JSON_OBJECT('no','1','ad','Gövde','malzeme','GG 25 / GGG-40'),
+        JSON_OBJECT('no','2','ad','Gövde Burcu','malzeme','Ms 58 / Bronze / S.S.'),
+        JSON_OBJECT('no','3','ad','Sürgü (DN40–100)','malzeme','Ms 58 / Bronze / S.S.'),
+        JSON_OBJECT('no','3','ad','Sürgü (DN125–900)','malzeme','GG 25 / GGG-40'),
+        JSON_OBJECT('no','4','ad','Sürgü Burcu','malzeme','Ms 58 / Bronze / S.S.'),
+        JSON_OBJECT('no','5','ad','Sürgü Somunu','malzeme','Ms 58 / Bronze / GGG-40'),
+        JSON_OBJECT('no','6','ad','Mil','malzeme','Ms 58 / Bronze / S.S.'),
+        JSON_OBJECT('no','7','ad','Conta','malzeme','NBR / FKM (Viton) / Klingerit'),
+        JSON_OBJECT('no','8','ad','Kapak','malzeme','GG 25 / GGG-40'),
+        JSON_OBJECT('no','9','ad','Civata','malzeme','St 37 / S.S.'),
+        JSON_OBJECT('no','10','ad','Mil Somunu','malzeme','Mr 58 / Bronze / S.S.'),
+        JSON_OBJECT('no','11','ad','O-Ring','malzeme','EPDM'),
+        JSON_OBJECT('no','12','ad','Volan','malzeme','GG 20')
+    ),
     '$.olculer', JSON_ARRAY(
         JSON_OBJECT('grup','Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24','kod','L','degerler',JSON_ARRAY('140','150','170','180','190','200','210','230','250','270','290','310','350','390','430','470','510')),
         JSON_OBJECT('grup','','kod','H','degerler',JSON_ARRAY('157','190','210','230','260','365','375','500','630','715','820','910','1135','1300','1480','1690','1820')),
