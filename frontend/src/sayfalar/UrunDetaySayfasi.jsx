@@ -105,8 +105,8 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
             <tbody>
               {(teknik.olculer || []).map((satir, satirIndeksi, satirlar) => (
                 <tr key={`${satir.grup}-${satir.kod}`}>
-                  {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
-                  <th>{satir.kod}</th>
+                  {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
+                  <th scope="row">{satir.kod}</th>
                   {satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
                 </tr>
               ))}
