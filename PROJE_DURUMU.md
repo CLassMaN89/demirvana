@@ -307,6 +307,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - F4 D-001 teknik ölçü tablosunda birleşik hücrelerin düz diziye yanlış yayılması kullanıcı tarafından sağlanan kaynak değerlerle düzeltildi. Anma Basıncı/PN ve Anma Çapı/DN satırları eklendi; D1, flanş D/k ve ağırlık satırlarında boş hücreler aynen korunur.
 - Canlı ürün sayfasındaki gerçek birim fiyat Excel dosyası yerelleştirilerek Teknik Dokümanlar alanına eklendi. PDF ve XLSX dosyaları karışmaması için ürünün tam adıyla kaydedildi; PDF bağlantısı, örnek veri, SQL başlangıç verisi ve canlı MariaDB kaydı yeni dosya adına geçirildi.
 - Ürün detayındaki panel başlıkları merkezi Demirvana renklerinden üretilen açık lacivert–mavi gradient şeritlere dönüştürüldü; tablo sütun başlıklarının koyu site rengi geçişi korundu.
+- Teknik ölçü tablosundaki Anma Basıncı ve Anma Çapı başlık satırları kullanıcı geri bildirimiyle hücre geçişleri ve dikey ayırıcılar olmadan kesintisiz tek koyu Demirvana mavisine geçirildi.
 
 ## Bilinen durumlar
 
