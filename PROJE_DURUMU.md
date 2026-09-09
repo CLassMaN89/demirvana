@@ -304,6 +304,9 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Ürün detay sayfası referanstaki premium teknik föy düzenine geçirildi: üst ürün özeti ve güven göstergeleri, teknik çizim, 13 satırlı parça/malzeme tablosu, DN40–DN900 teknik ölçü tablosu ve indirilebilir ürün PDF kartı responsive biçimde yerleştirildi.
 - Örnek veri ve MariaDB başlangıç verisi aynı ürün sözleşmesiyle güncellendi. Canlı MariaDB kaydı, `/api/baslangic` yanıtı, PNG/PDF dosyalarının HTTP yanıtları ve ürün sayfasının localhost görünümü doğrulandı.
 - Ürün detayına özel bileşen testi eklendi; toplam 29 test dosyasında 81 test ve Vite üretim derlemesi başarılıdır.
+- F4 D-001 teknik ölçü tablosunda birleşik hücrelerin düz diziye yanlış yayılması kullanıcı tarafından sağlanan kaynak değerlerle düzeltildi. Anma Basıncı/PN ve Anma Çapı/DN satırları eklendi; D1, flanş D/k ve ağırlık satırlarında boş hücreler aynen korunur.
+- Canlı ürün sayfasındaki gerçek birim fiyat Excel dosyası yerelleştirilerek Teknik Dokümanlar alanına eklendi. PDF ve XLSX dosyaları karışmaması için ürünün tam adıyla kaydedildi; PDF bağlantısı, örnek veri, SQL başlangıç verisi ve canlı MariaDB kaydı yeni dosya adına geçirildi.
+- Ürün detayındaki panel başlıkları merkezi Demirvana renklerinden üretilen açık lacivert–mavi gradient şeritlere dönüştürüldü; tablo sütun başlıklarının koyu site rengi geçişi korundu.
 
 ## Bilinen durumlar
 
@@ -320,4 +323,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-F4 D-001 örnek ürün detay sayfası tamamlandı. Sonraki net adım, kullanıcı değerlendirmesinden sonra Su Grubu ürünleri için sol kategori/ürün menüsünü bu sayfa düzenine bağlamaktır.
+F4 D-001 örnek ürün detay sayfasındaki ölçü ve doküman doğrulaması tamamlandı. Sonraki net adım, yalnız kaynak belgesi hücre hücre doğrulanan ürünleri eklemek ve kullanıcı değerlendirmesinden sonra Su Grubu sol kategori/ürün menüsünü bağlamaktır.

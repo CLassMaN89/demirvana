@@ -14,8 +14,12 @@ const urun = {
     teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
     parcalar: [{ no: '1', ad: 'Gövde', malzeme: 'GG 25 / GGG-40' }],
     olcu_basliklari: ['40', '50'],
+    anma_basinci_degerleri: ['10', '6'],
     olculer: [{ grup: 'Vana Boyutları', kod: 'L', degerler: ['140', '150'] }],
-    dokumanlar: [{ baslik: 'Ürün PDF', tur: 'PDF', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/urun-foyu.pdf' }]
+    dokumanlar: [
+      { baslik: 'Birim Fiyat Excel', tur: 'XLSX', belge_turu: 'excel', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001 Birim Fiyat.xlsx' },
+      { baslik: 'Ürün PDF', tur: 'PDF', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001.pdf' }
+    ]
   })
 };
 
@@ -34,6 +38,8 @@ describe('UrunDetaySayfasi', () => {
     expect(screen.getByRole('heading', { name: 'Parça Listesi ve Malzeme Yapısı' })).toBeInTheDocument();
     expect(screen.getByText('GG 25 / GGG-40')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Teknik Ölçüler ve Boyutlar' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Ürün PDF/i })).toHaveAttribute('href', expect.stringContaining('urun-foyu.pdf'));
+    expect(screen.getByRole('row', { name: 'Anma Basıncı PN 10 6' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Birim Fiyat Excel/i })).toHaveAttribute('href', expect.stringContaining('Birim Fiyat.xlsx'));
+    expect(screen.getByRole('link', { name: /Ürün PDF/i })).toHaveAttribute('href', expect.stringContaining('Metal Sitli Sürgülü Vana F4 D-001.pdf'));
   });
 });

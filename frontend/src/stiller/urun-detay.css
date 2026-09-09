@@ -43,7 +43,7 @@
 
 .urun-detay__ust-grid { display: grid; grid-template-columns: minmax(420px, .9fr) minmax(520px, 1.1fr); gap: 18px; }
 .urun-detay__panel { overflow: hidden; }
-.urun-detay__panel-baslik { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 58px; padding: 14px 20px; border-bottom: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); }
+.urun-detay__panel-baslik { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 58px; padding: 14px 20px; border-bottom: 1px solid color-mix(in srgb, var(--renk-ana) 18%, transparent); background: linear-gradient(105deg, color-mix(in srgb, var(--renk-koyu) 8%, #fff), color-mix(in srgb, var(--renk-ana) 13%, #fff)); }
 .urun-detay__panel-baslik h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 17px; }
 .urun-detay__panel-baslik h2 svg { width: 21px; color: var(--renk-ana); }
 .urun-detay__panel-baslik > svg { width: 18px; color: var(--renk-ana); }
@@ -63,6 +63,9 @@
 .urun-detay__tablo--olcu { min-width: 1250px; text-align: center; }
 .urun-detay__tablo--olcu th, .urun-detay__tablo--olcu td { padding: 8px 10px; text-align: center; white-space: nowrap; }
 .urun-detay__tablo--olcu tbody th:first-child { text-align: left; color: var(--renk-koyu); }
+.urun-detay__tablo--olcu tbody th:first-child { white-space: pre-line; }
+.urun-detay__tablo--olcu thead tr:first-child th { color: var(--renk-koyu); background: #eef5fb; border-right: 1px solid #d8e5f0; }
+.urun-detay__tablo--olcu thead tr:last-child th { color: #fff; background: linear-gradient(100deg, var(--renk-koyu), var(--renk-ana)); }
 
 .urun-detay__dokumanlar { padding-bottom: 18px; }
 .urun-detay__dokuman-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 18px; }
@@ -70,6 +73,7 @@
 .urun-detay__dokuman:hover { transform: translateY(-2px); border-color: var(--renk-ana); box-shadow: 0 12px 28px rgba(10, 71, 139, .11); }
 .urun-detay__dokuman-ikon { display: grid; place-items: center; width: 48px; height: 56px; border-radius: 8px; color: #fff; background: linear-gradient(145deg, #e93d45, #b90d19); }
 .urun-detay__dokuman-ikon svg { width: 25px; }
+.urun-detay__dokuman-ikon--excel { background: linear-gradient(145deg, #21a366, #107c41); }
 .urun-detay__dokuman strong, .urun-detay__dokuman small, .urun-detay__dokuman em { display: block; }
 .urun-detay__dokuman strong { margin-bottom: 5px; }
 .urun-detay__dokuman small { color: var(--renk-metin); }

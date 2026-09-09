@@ -308,15 +308,19 @@ export const ornekVeriler = Object.freeze({
         ['10', 'Mil Somunu', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['11', 'O-Ring', 'EPDM'], ['12', 'Volan', 'GG 20']
       ].map(([no, ad, malzeme]) => ({ no, ad, malzeme })),
       olcu_basliklari: ['40', '50', '65', '80', '100', '125', '150', '200', '250', '300', '350', '400', '500', '600', '700', '800', '900'],
+      anma_basinci_degerleri: ['10', '6', '4', '2,5', '1,6', '1', '', '', '', '', '', '', '', '', '', '', ''],
       olculer: [
-        { grup: 'Vana Boyutları', kod: 'L', degerler: ['140', '150', '170', '180', '190', '200', '210', '230', '250', '270', '290', '310', '350', '390', '430', '470', '510'] },
-        { grup: 'Vana Boyutları', kod: 'H', degerler: ['157', '190', '210', '230', '260', '365', '375', '500', '630', '715', '820', '910', '1135', '1300', '1480', '1690', '1820'] },
-        { grup: 'Vana Boyutları', kod: 'D1', degerler: ['160', '160', '160', '160', '200', '250', '250', '250', '315', '315', '400', '400', '500', '500', '630', '800', '800'] },
-        { grup: 'Flanş Ölçüleri PN10', kod: 'D', degerler: ['150', '165', '185', '200', '220', '250', '285', '340', '395', '445', '505', '565', '670', '780', '895', '1015', '1115'] },
-        { grup: 'Flanş Ölçüleri PN10', kod: 'k', degerler: ['110', '125', '145', '160', '180', '210', '240', '295', '350', '400', '460', '515', '620', '725', '840', '950', '1050'] },
+        { grup: 'Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24', kod: 'L', degerler: ['140', '150', '170', '180', '190', '200', '210', '230', '250', '270', '290', '310', '350', '390', '430', '470', '510'] },
+        { grup: '', kod: 'H', degerler: ['157', '190', '210', '230', '260', '365', '375', '500', '630', '715', '820', '910', '1135', '1300', '1480', '1690', '1820'] },
+        { grup: '', kod: 'D1', degerler: ['160', '200', '250', '315', '400', '500', '630', '800', '', '', '', '', '', '', '', '', ''] },
+        { grup: 'Flanş Ölçüleri\nDIN 2501 / TS 810\nPN10', kod: 'D', degerler: ['150', '165', '185', '200', '220', '250', '285', '340', '295', '445', '505', '565', '670', '780', '895', '1015', '1115'] },
+        { grup: '', kod: 'k', degerler: ['110', '125', '145', '160', '180', '210', '240', '295', '350', '400', '460', '515', '620', '725', '480', '950', '1050'] },
         { grup: 'Ağırlık', kod: 'kg', degerler: ['8,3', '10,2', '13,7', '15,5', '22,1', '37', '44,2', '81', '123', '176', '225', '290', '460', '680', '870', '1200', '1400'] }
       ],
-      dokumanlar: [{ baslik: 'Ürün PDF', aciklama: 'Ürün kataloğu ve teknik bilgiler', tur: 'PDF · 533 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/urun-foyu.pdf' }]
+      dokumanlar: [
+        { baslik: 'Birim Fiyat Excel', aciklama: 'Metal Sitli Sürgülü Vana F4 D-001 fiyat listesi', tur: 'XLSX · 12 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001 Birim Fiyat.xlsx', belge_turu: 'excel' },
+        { baslik: 'Ürün PDF', aciklama: 'Ürün kataloğu ve teknik bilgiler', tur: 'PDF · 533 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001.pdf' }
+      ]
     })
   }],
   referanslar: {

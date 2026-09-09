@@ -91,7 +91,10 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
         </div>
         <div className="urun-detay__tablo-kaydir">
           <table className="urun-detay__tablo urun-detay__tablo--olcu">
-            <thead><tr><th>Ölçü Grubu</th><th>Kod</th>{(teknik.olcu_basliklari || []).map((baslik) => <th key={baslik}>{baslik}</th>)}</tr></thead>
+            <thead>
+              <tr><th>Anma Basıncı</th><th>PN</th>{(teknik.anma_basinci_degerleri || []).map((deger, indeks) => <th key={`pn-${indeks}`}>{deger}</th>)}</tr>
+              <tr><th>Anma Çapı</th><th>DN</th>{(teknik.olcu_basliklari || []).map((baslik) => <th key={baslik}>{baslik}</th>)}</tr>
+            </thead>
             <tbody>
               {(teknik.olculer || []).map((satir) => (
                 <tr key={`${satir.grup}-${satir.kod}`}><th>{satir.grup}</th><th>{satir.kod}</th>{satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}</tr>
@@ -109,7 +112,7 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
         <div className="urun-detay__dokuman-grid">
           {(teknik.dokumanlar || []).map((dokuman) => (
             <a key={dokuman.baslik} href={dokuman.dosya_yolu} download className="urun-detay__dokuman">
-              <span className="urun-detay__dokuman-ikon"><FileText aria-hidden="true" /></span>
+              <span className={`urun-detay__dokuman-ikon${dokuman.belge_turu === 'excel' ? ' urun-detay__dokuman-ikon--excel' : ''}`}><FileText aria-hidden="true" /></span>
               <span><strong>{dokuman.baslik}</strong><small>{dokuman.aciklama || 'Teknik ürün dokümanı'}</small><em>{dokuman.tur || 'PDF'}</em></span>
               <span className="urun-detay__indir"><Download aria-hidden="true" /> İndir</span>
             </a>

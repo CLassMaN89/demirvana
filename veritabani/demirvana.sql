@@ -749,6 +749,26 @@ SELECT `id`, '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png
 FROM `urunler` WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001'
   AND NOT EXISTS (SELECT 1 FROM `urun_gorselleri` WHERE `gorsel_yolu` = '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png');
 
+-- Kaynak tablodaki boş ve birleşik hücreler korunur; çap değerleri tahmin edilerek yayılmaz.
+UPDATE `urunler`
+SET `teknik_bilgiler` = JSON_SET(
+    `teknik_bilgiler`,
+    '$.anma_basinci_degerleri', JSON_ARRAY('10','6','4','2,5','1,6','1','','','','','','','','','','',''),
+    '$.olculer', JSON_ARRAY(
+        JSON_OBJECT('grup','Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24','kod','L','degerler',JSON_ARRAY('140','150','170','180','190','200','210','230','250','270','290','310','350','390','430','470','510')),
+        JSON_OBJECT('grup','','kod','H','degerler',JSON_ARRAY('157','190','210','230','260','365','375','500','630','715','820','910','1135','1300','1480','1690','1820')),
+        JSON_OBJECT('grup','','kod','D1','degerler',JSON_ARRAY('160','200','250','315','400','500','630','800','','','','','','','','','')),
+        JSON_OBJECT('grup','Flanş Ölçüleri\nDIN 2501 / TS 810\nPN10','kod','D','degerler',JSON_ARRAY('150','165','185','200','220','250','285','340','295','445','505','565','670','780','895','1015','1115')),
+        JSON_OBJECT('grup','','kod','k','degerler',JSON_ARRAY('110','125','145','160','180','210','240','295','350','400','460','515','620','725','480','950','1050')),
+        JSON_OBJECT('grup','Ağırlık','kod','kg','degerler',JSON_ARRAY('8,3','10,2','13,7','15,5','22,1','37','44,2','81','123','176','225','290','460','680','870','1200','1400'))
+    ),
+    '$.dokumanlar', JSON_ARRAY(
+        JSON_OBJECT('baslik','Birim Fiyat Excel','aciklama','Metal Sitli Sürgülü Vana F4 D-001 fiyat listesi','tur','XLSX · 12 KB','belge_turu','excel','dosya_yolu','/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001 Birim Fiyat.xlsx'),
+        JSON_OBJECT('baslik','Ürün PDF','aciklama','Ürün kataloğu ve teknik bilgiler','tur','PDF · 533 KB','dosya_yolu','/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001.pdf')
+    )
+)
+WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001';
+
 INSERT INTO `fuar_gorselleri` (`gorsel_yolu`, `alternatif_metin`, `siralama`) VALUES
     ('/assets/fuar/demirvana-fuar-5.jpg', 'Demirvana fuar standından ürün tanıtımı', 1),
     ('/assets/fuar/demirvana-fuar-6.jpg', 'Demirvana fuar alanında ziyaretçi buluşması', 2),
