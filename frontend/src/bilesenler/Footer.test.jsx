@@ -15,7 +15,10 @@ describe('Footer', () => {
       destek_telefonu: '+90 (212) 297 57 30',
       destek_eposta: 'dv@demirvana.com',
       firma_adresi: 'İkitelli, İstanbul / Türkiye',
-      footer_teknik_cizim_yolu: '/assets/footer/teknik-vana-cizimi.svg',
+      footer_teknik_cizim_yolu: '/assets/footer-vana2.png',
+      footer_teknik_cizim_ikincil_yolu: '/assets/footer-vana.png',
+      footer_teknik_cizim_detay_yolu: '/assets/footer-vana3.png',
+      footer_ikon_dizini: '/assets/footer-icons',
       footer_calisma_saatleri: 'Pzt - Cum 08:00 - 18:00',
       footer_linkedin_baglantisi: 'https://linkedin.com/company/demirvana',
       footer_slogan_metni: 'Endüstrinin her noktasında, daha güvenli bir akış için.',
@@ -40,7 +43,12 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: 'Küresel Vanalar' })).toHaveAttribute('href', '/kategoriler/kuresel-vanalar');
     expect(screen.getByRole('link', { name: '+90 (212) 297 57 30' })).toHaveAttribute('href', 'tel:+902122975730');
     expect(screen.getByRole('link', { name: 'dv@demirvana.com' })).toHaveAttribute('href', 'mailto:dv@demirvana.com');
-    expect(screen.getByRole('img', { name: 'Teknik vana çizimi' })).toHaveAttribute('src', '/assets/footer/teknik-vana-cizimi.svg');
+    expect(screen.getByRole('img', { name: 'Teknik vana ana görünüşü' })).toHaveAttribute('src', '/assets/footer-vana2.png');
+    expect(screen.getByRole('img', { name: 'Teknik vana yan görünüşü' })).toHaveAttribute('src', '/assets/footer-vana.png');
+    expect(screen.getByRole('img', { name: 'Teknik vana detay görünüşü' })).toHaveAttribute('src', '/assets/footer-vana3.png');
+    expect(document.querySelector('.site-footer__iletisim-ikon')).toHaveAttribute('src', '/assets/footer-icons/eposta-clean.png');
+    expect(document.querySelector('.site-footer__guven-ikon')).toHaveAttribute('src', '/assets/footer-icons/guven-clean.png');
+    expect(document.querySelector('.site-footer__sosyal-ikon')).toHaveAttribute('src', '/assets/footer-icons/linkedin-clean.png');
     expect(screen.getByText('Pzt - Cum 08:00 - 18:00')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://linkedin.com/company/demirvana');
     expect(screen.getByText('Endüstrinin her noktasında, daha güvenli bir akış için.')).toBeInTheDocument();

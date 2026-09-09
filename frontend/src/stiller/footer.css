@@ -4,11 +4,9 @@
   margin-top: clamp(56px, 8vw, 112px);
   overflow: hidden;
   background:
-    linear-gradient(rgba(61, 139, 255, .055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61, 139, 255, .055) 1px, transparent 1px),
-    radial-gradient(circle at 12% 42%, color-mix(in srgb, var(--renk-ana) 35%, transparent), transparent 36%),
-    linear-gradient(135deg, color-mix(in srgb, var(--renk-koyu) 94%, #0754b7), var(--renk-koyu));
-  background-size: 72px 72px, 72px 72px, auto, auto;
+    radial-gradient(circle at 10% 28%, rgba(17, 81, 184, .3), transparent 38%),
+    radial-gradient(circle at 88% 10%, rgba(9, 62, 147, .22), transparent 35%),
+    linear-gradient(135deg, #063579 0%, #032967 40%, #022257 72%, #011a45 100%);
   color: color-mix(in srgb, var(--renk-beyaz) 80%, transparent);
 }
 
@@ -26,17 +24,38 @@
   max-width: none;
 }
 
-.site-footer__teknik-cizim {
+.site-footer__teknik-cizimler {
   position: absolute;
   z-index: -1;
-  top: 18px;
-  right: -56px;
-  width: min(31vw, 520px);
-  height: calc(100% - 72px);
-  object-fit: contain;
-  object-position: right center;
-  opacity: .54;
+  top: 0;
+  right: 0;
+  width: min(35vw, 650px);
+  height: calc(100% - 82px);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 24%, #000);
   pointer-events: none;
+}
+.site-footer__teknik-cizim { position: absolute; object-fit: contain; }
+.site-footer__teknik-cizim--ana {
+  inset: 12% -4% 0 auto;
+  width: 100%;
+  height: 88%;
+  opacity: .42;
+  mix-blend-mode: screen;
+}
+.site-footer__teknik-cizim--yan {
+  top: -10%;
+  right: 48%;
+  width: 45%;
+  height: 52%;
+  opacity: .22;
+}
+.site-footer__teknik-cizim--detay {
+  right: -7%;
+  bottom: -8%;
+  width: 49%;
+  height: 51%;
+  opacity: .28;
 }
 
 .site-footer__ic {
@@ -82,6 +101,36 @@
   text-transform: uppercase;
 }
 .site-footer h2 svg { width: 27px; height: 27px; color: color-mix(in srgb, var(--renk-acik) 65%, white); stroke-width: 1.7; }
+.site-footer__sprite {
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
+  /* Verilen ikonlar şeffaf dosyalar halinde kullanılır ve referanstaki beyaz çizgi tonuna eşitlenir. */
+  filter: brightness(0) invert(1);
+}
+.site-footer__guven-ikon { width: 40px; height: 40px; }
+.site-footer__baslik-ikon { width: 28px; height: 28px; }
+.site-footer__iletisim-ikon { width: 36px; height: 36px; }
+.site-footer__sosyal-ikon { width: 36px; height: 36px; }
+.site-footer__ok-ikon { width: 14px; height: 14px; }
+.site-footer__ok-ikon--sag {
+  width: 7px;
+  height: 7px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  background-image: none !important;
+  filter: none;
+  transform: rotate(45deg);
+}
+.site-footer__ok-ikon--yukari {
+  width: 9px;
+  height: 9px;
+  border-top: 1.5px solid currentColor;
+  border-left: 1.5px solid currentColor;
+  background-image: none !important;
+  filter: none;
+  transform: translateY(2px) rotate(45deg);
+}
 .site-footer__logo {
   display: flex;
   width: 194px;
@@ -103,7 +152,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--renk-acik) 25%, transparent);
 }
 .site-footer__guvenler span { display: grid; justify-items: center; gap: 8px; text-align: center; }
-.site-footer__guvenler svg { width: 19px; height: 19px; padding: 10px; border: 1px solid color-mix(in srgb, var(--renk-acik) 42%, transparent); border-radius: 9px; color: color-mix(in srgb, var(--renk-acik) 70%, white); }
+.site-footer__guvenler .site-footer__guven-ikon { box-sizing: border-box; border: 1px solid color-mix(in srgb, var(--renk-acik) 42%, transparent); border-radius: 9px; }
 .site-footer__guvenler small { font-size: 11px; line-height: 1.35; }
 .site-footer ul { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; }
 .site-footer__sutun li a {
@@ -135,12 +184,12 @@
   line-height: 1.55;
   text-decoration: none;
 }
-.site-footer__destek address svg,
-.site-footer__mesai > svg {
-  box-sizing: content-box;
-  width: 18px;
-  height: 18px;
-  padding: 9px;
+.site-footer__destek address .site-footer__iletisim-ikon,
+.site-footer__mesai > .site-footer__iletisim-ikon {
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border: 1px solid color-mix(in srgb, var(--renk-acik) 48%, transparent);
   border-radius: 50%;
   color: color-mix(in srgb, var(--renk-acik) 72%, white);
@@ -167,7 +216,6 @@
   text-decoration: none;
   transition: filter 180ms ease, transform 180ms ease;
 }
-.site-footer__iletisim svg { width: 18px; height: 18px; }
 .site-footer__iletisim:hover,
 .site-footer__iletisim:focus-visible { filter: brightness(1.12); transform: translateY(-2px); }
 .site-footer__alt { padding: 0 0 22px; background: transparent; }
@@ -186,16 +234,14 @@
 .site-footer__sosyal > span { padding-right: 20px; border-right: 1px solid color-mix(in srgb, white 26%, transparent); font-size: 11px; }
 .site-footer__sosyal a,
 .site-footer__alt button { display: grid; width: 36px; height: 36px; border: 1px solid color-mix(in srgb, var(--renk-acik) 28%, transparent); border-radius: 8px; background: color-mix(in srgb, var(--renk-ana) 14%, transparent); color: var(--renk-beyaz); place-items: center; }
-.site-footer__sosyal svg { width: 17px; height: 17px; }
 .site-footer__alt p { padding: 0 0 0 34px; margin: 0; border-left: 1px solid color-mix(in srgb, white 26%, transparent); color: color-mix(in srgb, var(--renk-beyaz) 63%, transparent); font-size: 11px; }
 .site-footer__slogan { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding-left: 28px; border-left: 1px solid color-mix(in srgb, white 26%, transparent); font-size: 11px; line-height: 1.5; }
 .site-footer__slogan i { display: flex; gap: 5px; transform: skewX(-28deg); }
 .site-footer__slogan i span { width: 6px; height: 25px; border-radius: 2px; background: color-mix(in srgb, var(--renk-acik) 78%, white); }
 .site-footer__alt button { border-radius: 50%; cursor: pointer; }
-.site-footer__alt button svg { width: 17px; height: 17px; }
 @media (max-width: 1320px) {
   .site-footer__ic { grid-template-columns: minmax(270px, 1.1fr) repeat(3, minmax(190px, .8fr)); }
-  .site-footer__teknik-cizim { display: none; }
+  .site-footer__teknik-cizimler { display: none; }
   .site-footer__destek::after { display: none; }
   .site-footer__alt-ic { grid-template-columns: 1fr 1.3fr 1fr 44px; }
 }

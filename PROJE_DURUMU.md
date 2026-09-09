@@ -289,6 +289,9 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Sağ arka plan için ayrı, saydam çizgilerden oluşan küresel vana teknik çizimi `frontend/public/assets/footer/teknik-vana-cizimi.svg` olarak üretildi. Görsel kaynak koda gömülmedi; `footer_teknik_cizim_yolu` ayarıyla değiştirilebilir tutuldu.
 - Alt footer şeridine LinkedIn, YouTube ve Instagram bağlantıları, telif metni, yönetilebilir slogan ve yumuşak biçimde sayfa başına dönen düğme eklendi. Teknik çizim, çalışma saatleri, sosyal bağlantılar, sosyal başlık ve slogan için yeni `site_ayarlari` anahtarları örnek veri ile SQL şemasına işlendi.
 - Footer canlı geniş ekranda ekranın `%89.8` genişliğinde, teknik çizimli ve `0px` yatay taşmayla doğrulandı. Tablet düzeni iki sütuna, telefon düzeni tek sütuna iner; teknik çizim dar ekranlarda içerik okunabilirliği için gizlenir. Tüm 78 frontend testi ve Vite üretim derlemesi başarılıdır.
+- Footer arka planındaki açık çizgili doku kaldırılıp kullanıcı referansındaki koyu lacivert, yumuşak radyal geçişli gradient uygulandı. `footer-vana.png`, `footer-vana2.png` ve `footer-vana3.png` sağ teknik çizim kompozisyonunda birlikte kullanıldı.
+- `footer-all.png` paftasının beyaz zeminini taşımaması için paftadaki gerekli ikonlar ayrı şeffaf PNG dosyalarına ayrıldı ve `frontend/public/assets/footer-icons/` dizinine bağlandı. İkonlar artık sprite kırpması olmadan `img` olarak yüklenir; beyaz kutu ve kesilme sorunu giderildi.
+- Footer son hali canlı localhost ekranında görsel olarak kontrol edildi. 27 test dosyasında 78 test ve Vite üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -304,4 +307,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Blueprint referanslı footer tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+Koyu gradientli blueprint footer ve şeffaf ikon yerleşimi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
