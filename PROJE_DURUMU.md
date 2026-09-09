@@ -296,6 +296,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcı talebiyle footer destek sütunundaki “Çalışma Saatleri / Pzt - Cum 08:00 - 18:00” satırı tamamen kaldırıldı; diğer footer içeriği korunmuştur.
 - Footer sol marka kartına `border-beam` bileşeniyle yalnız kart sınırında dolaşan, Demirvana mavi tonlarındaki yavaş Border Beam animasyonu eklendi. Kart içeriği, grid sırası ve responsive ölçüler korunurken hareket azaltma tercihinde animasyon durdurulur.
 - Kullanıcı geri bildiriminde marka kartındaki Border Beam'in koyu zeminde fazla silik kaldığı canlı DOM ve ekran görünümüyle doğrulandı. Efekt aynı sol logo kartında korunarak güç `1`, parlaklık `2.7`, doygunluk `1.8` ve tur süresi `4.2s` değerlerine çıkarıldı; dış ışık katmanı `14px` yayılımla güçlendirildi ve mavi-camgöbeği ışık kartın dış kenarında daha belirgin hale getirildi.
+- Demirvana'nın canlı sitesindeki ürün ağacı kaynak alınarak navbar menüsü eşitlendi. Vana altında 12 kategori canlı sitedeki sıraya getirildi; Aktüatör altında `Pnömatik Aktüatör`, `Elektrik Aktüatörler`, `Aktüatörlü Vanalar`, `Aksesuarlar`; Otomasyon altında `Debi (Akış)`, `Basınç`, `Seviye`, `Sıcaklık`, `Proses Kontrol` eklendi.
+- Ürün alt menüleri hem API kapalıyken kullanılan örnek veriye hem `menu_alt_ogeleri` başlangıç verisine işlendi. Yerel MariaDB kayıtları ayrıca doğrudan güncellendi ve `/api/menu` yanıtında üç grubun sırası ile toplam `12 + 4 + 5` alt kategori doğrulandı.
 
 ## Bilinen durumlar
 
@@ -308,6 +310,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Google Search Console doğrulama kodu veri alanı hazırdır; üretim alan adı yayına alındığında doğrulama ve sitemap gönderimi admin/dağıtım aşamasında yapılmalıdır.
 - Yeni ve önbelleksiz tarayıcı oturumunda mevcut `/favicon.ico` dosyası olmadığı için tek bir 404 konsol kaydı oluşur; Teknik sayfa/PDF isteklerinden kaynaklanmaz ve yalnız istenen alanı değiştirme kuralı nedeniyle global `frontend/index.html` bu görevde değiştirilmedi.
 - Codex için `hostinger` adlı global MCP sunucusu `npx -y hostinger-api-mcp` komutuyla kaydedildi.
+- Mevcut yerel veritabanında `site_ayarlari.deger_turu` sütunu eski enum yapısında olduğu için tüm şema dosyasının yeniden içe aktarımı 23. site ayarında durur. Bu menü görevi yalnız ilgili `menu_alt_ogeleri` kayıtlarına uygulandığından canlı menü güncellemesi etkilenmemiştir; ileride şema göçü hazırlanırken enum ayrıca genişletilmelidir.
 
 ## Sıradaki adım
 

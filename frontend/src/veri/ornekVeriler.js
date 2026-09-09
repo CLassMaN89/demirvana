@@ -9,12 +9,12 @@ const sliderMetinleri = [
 ];
 
 const vanaMenuKategorileri = [
-  ['Yangın Vanaları', 'yangin-vanalari'],
   ['Su Grubu Vanaları', 'su-grubu-vanalari'],
   ['Buhar Grubu Vanaları', 'buhar-grubu-vanalari'],
   ['Kontrol Vanaları', 'kontrol-vanalari'],
   ['Hidrolik Vanalar', 'hidrolik-vanalar'],
   ['Basınç Düşürücü Vanalar', 'basinc-dusurucu-vanalar'],
+  ['Yangın Vanaları', 'yangin-vanalari'],
   ['Paslanmaz Vanalar', 'paslanmaz-vanalar'],
   ['Gemi Vanaları', 'gemi-vanalari'],
   ['Balans Vanaları', 'balans-vanalari'],
@@ -30,12 +30,26 @@ const vanaMenuKategorileri = [
 }));
 
 const aktuatorMenuKategorileri = [
-  ['Elektrik Aktüatörler', 'elektrik-aktuatorler'],
   ['Pnömatik Aktüatör', 'pnomatik-aktuator'],
+  ['Elektrik Aktüatörler', 'elektrik-aktuatorler'],
   ['Aktüatörlü Vanalar', 'aktuatorlu-vanalar'],
-  ['Aksesuarlar', 'aktuator-aksesuarlari']
+  ['Aksesuarlar', 'aksesuarlar']
 ].map(([baslik, slug], indeks) => ({
   id: 330 + indeks,
+  baslik,
+  baglanti: `/urunler/${slug}`,
+  siralama: indeks + 1,
+  alt_ogeler: []
+}));
+
+const otomasyonMenuKategorileri = [
+  ['Debi (Akış)', 'debi-akis'],
+  ['Basınç', 'basinc'],
+  ['Seviye', 'seviye'],
+  ['Sıcaklık', 'sicaklik'],
+  ['Proses Kontrol', 'proses-kontrol']
+].map(([baslik, slug], indeks) => ({
+  id: 350 + indeks,
   baslik,
   baglanti: `/urunler/${slug}`,
   siralama: indeks + 1,
@@ -221,7 +235,7 @@ export const ornekVeriler = Object.freeze({
       alt_ogeler: [
         { id: 31, baslik: 'Vana', baglanti: '/urunler/vana', siralama: 1, alt_ogeler: vanaMenuKategorileri },
         { id: 32, baslik: 'Aktüatör', baglanti: '/urunler/aktuator', siralama: 2, alt_ogeler: aktuatorMenuKategorileri },
-        { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: [] }
+        { id: 33, baslik: 'Otomasyon', baglanti: '/urunler/otomasyon', siralama: 3, alt_ogeler: otomasyonMenuKategorileri }
       ]
     },
     { id: 8, baslik: 'Temsilcilikler', baglanti: '/temsilcilikler', siralama: 4, alt_ogeler: [] },

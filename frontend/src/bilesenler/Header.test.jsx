@@ -296,4 +296,23 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Aktüatörlü Vanalar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Aksesuarlar' })).toBeInTheDocument();
   });
+
+  it('Otomasyon grubunda canlı sitedeki beş alt kategoriyi gösterir', async () => {
+    const kullanici = userEvent.setup();
+
+    render(
+      <MemoryRouter>
+        <Header menu={ornekVeriler.menu} logoYolu="/assets/logo.png" />
+      </MemoryRouter>
+    );
+
+    await kullanici.click(screen.getByRole('button', { name: /ürünler alt menüsünü aç/i }));
+    fireEvent.click(screen.getByRole('button', { name: /otomasyon alt menüsünü aç/i }));
+
+    expect(screen.getByRole('link', { name: 'Debi (Akış)' })).toHaveAttribute('href', '/urunler/debi-akis');
+    expect(screen.getByRole('link', { name: 'Basınç' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Seviye' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Sıcaklık' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Proses Kontrol' })).toBeInTheDocument();
+  });
 });
