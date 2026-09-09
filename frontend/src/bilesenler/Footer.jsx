@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUp, BarChart3, Box, ChevronRight, Clock3, Link2, Mail, MapPin, Phone, Settings, ShieldCheck } from 'lucide-react';
+import { ArrowUp, BarChart3, Box, ChevronRight, Link2, Mail, MapPin, Phone, Settings, ShieldCheck } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import '../stiller/footer.css';
@@ -18,7 +18,7 @@ function siraDegeri(deger, varsayilan) {
 }
 
 function SpriteIkon({ sinifAdi }) {
-  const ikonAdi = ['guven', 'muhendislik', 'surdulebilir', 'telefon', 'eposta', 'konum', 'saat', 'baglanti', 'urun', 'linkedin', 'youtube', 'instagram']
+  const ikonAdi = ['guven', 'muhendislik', 'surdulebilir', 'telefon', 'eposta', 'konum', 'baglanti', 'urun', 'linkedin', 'youtube', 'instagram']
     .find((ad) => sinifAdi.includes(`--${ad}`));
 
   const cizgiIkonlari = {
@@ -28,7 +28,6 @@ function SpriteIkon({ sinifAdi }) {
     telefon: Phone,
     eposta: Mail,
     konum: MapPin,
-    saat: Clock3,
     baglanti: Link2,
     urun: Box
   };
@@ -155,10 +154,6 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
               <p><SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--konum" /><span>{siteAyarlari.firma_adresi}</span></p>
             ) : null}
           </address>
-          <div className="site-footer__mesai">
-            <SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--saat" />
-            <span><strong>Çalışma Saatleri</strong>{siteAyarlari.footer_calisma_saatleri ?? 'Pzt - Cum 08:00 - 18:00'}</span>
-          </div>
         </section>
         ) : null}
       </div>

@@ -19,7 +19,6 @@ describe('Footer', () => {
       footer_teknik_cizim_ikincil_yolu: '/assets/footer-vana.png',
       footer_teknik_cizim_detay_yolu: '/assets/footer-vana3.png',
       footer_ikon_dizini: '/assets/footer-icons',
-      footer_calisma_saatleri: 'Pzt - Cum 08:00 - 18:00',
       footer_linkedin_baglantisi: 'https://linkedin.com/company/demirvana',
       footer_slogan_metni: 'Endüstrinin her noktasında, daha güvenli bir akış için.',
       footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
@@ -49,7 +48,7 @@ describe('Footer', () => {
     expect(document.querySelector('.site-footer__iletisim-ikon')?.tagName).toBe('svg');
     expect(document.querySelector('.site-footer__guven-ikon')?.tagName).toBe('svg');
     expect(document.querySelector('.site-footer__sosyal-ikon')?.tagName).toBe('svg');
-    expect(screen.getByText('Pzt - Cum 08:00 - 18:00')).toBeInTheDocument();
+    expect(screen.queryByText('Çalışma Saatleri')).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://linkedin.com/company/demirvana');
     expect(screen.getByText('Endüstrinin her noktasında, daha güvenli bir akış için.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sayfanın başına dön' })).toBeInTheDocument();

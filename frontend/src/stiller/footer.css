@@ -171,8 +171,7 @@
 .site-footer__destek { padding-right: 26px; }
 .site-footer__destek address { display: grid; gap: 10px; margin: 0; font-style: normal; }
 .site-footer__destek address a,
-.site-footer__destek address p,
-.site-footer__mesai {
+.site-footer__destek address p {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
@@ -183,8 +182,7 @@
   line-height: 1.55;
   text-decoration: none;
 }
-.site-footer__destek address .site-footer__iletisim-ikon,
-.site-footer__mesai > .site-footer__iletisim-ikon {
+.site-footer__destek address .site-footer__iletisim-ikon {
   box-sizing: border-box;
   width: 36px;
   height: 36px;
@@ -194,9 +192,6 @@
   color: color-mix(in srgb, var(--renk-acik) 72%, white);
 }
 .site-footer__destek address a:hover { color: var(--renk-beyaz); }
-.site-footer__mesai { padding-top: 18px; margin-top: 18px; border-top: 1px solid color-mix(in srgb, var(--renk-acik) 28%, transparent); }
-.site-footer__mesai span { display: grid; gap: 2px; }
-.site-footer__mesai strong { color: color-mix(in srgb, var(--renk-beyaz) 70%, transparent); font-size: 11px; font-weight: 500; }
 .site-footer__iletisim {
   display: grid;
   min-height: 50px;
