@@ -21,6 +21,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Kısa veya boş sayfalarda footer ekranın altında kalır; uzun içerik normal akışta büyümeye devam eder. */
+.site-uygulama {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+#ana-icerik {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex: 0 0 auto;
+}
+
 button,
 input,
 textarea,

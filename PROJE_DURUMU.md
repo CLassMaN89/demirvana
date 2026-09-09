@@ -298,6 +298,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcı geri bildiriminde marka kartındaki Border Beam'in koyu zeminde fazla silik kaldığı canlı DOM ve ekran görünümüyle doğrulandı. Efekt aynı sol logo kartında korunarak güç `1`, parlaklık `2.7`, doygunluk `1.8` ve tur süresi `4.2s` değerlerine çıkarıldı; dış ışık katmanı `14px` yayılımla güçlendirildi ve mavi-camgöbeği ışık kartın dış kenarında daha belirgin hale getirildi.
 - Demirvana'nın canlı sitesindeki ürün ağacı kaynak alınarak navbar menüsü eşitlendi. Vana altında 12 kategori canlı sitedeki sıraya getirildi; Aktüatör altında `Pnömatik Aktüatör`, `Elektrik Aktüatörler`, `Aktüatörlü Vanalar`, `Aksesuarlar`; Otomasyon altında `Debi (Akış)`, `Basınç`, `Seviye`, `Sıcaklık`, `Proses Kontrol` eklendi.
 - Ürün alt menüleri hem API kapalıyken kullanılan örnek veriye hem `menu_alt_ogeleri` başlangıç verisine işlendi. Yerel MariaDB kayıtları ayrıca doğrudan güncellendi ve `/api/menu` yanıtında üç grubun sırası ile toplam `12 + 4 + 5` alt kategori doğrulandı.
+- Kısa içerikli ve ürün bulunamayan sayfalarda footer sonrasında görünen beyaz boşluk giderildi. Ortak `SayfaIskeleti` ekran yüksekliğini dolduran dikey flex düzene geçirildi; ana içerik kalan yüksekliği alırken footer küçülmeden en alta oturur, uzun sayfaların doğal kaydırması korunur.
+- Boş ürün rotası canlı localhost görünümünde kontrol edildi; footer ekranın alt sınırına kadar kesintisiz devam eder ve footer sonrasında beyaz şerit oluşmaz.
 
 ## Bilinen durumlar
 
