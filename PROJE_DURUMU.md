@@ -281,6 +281,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Hesap Numaralarımız kartı mevcut API/veritabanı banka kayıtlarını kullanan, tema renklerine uyumlu animasyonlu bir pencere açar. Pencere büyütme/küçültme, içerik kaydırma, dış alana tıklama, kapatma düğmesi ve Escape ile kapanmayı destekler.
 - Hesap kısayolunun başlık ve açıklaması `iletisim_hesap_kisayol_basligi` ile `iletisim_hesap_kisayol_aciklamasi` site ayarlarına eklendi; ileride yönetim panelinden değiştirilebilir yapı korunmuştur.
 - Hesap penceresi masaüstünde üç banka kartını düzenli gösterir, mobilde alt panel biçimine geçerek tek sütunlu kaydırılabilir içerik sunar. `IcerikSayfasi` testleri 5 senaryoya genişletildi; tüm 78 test ve üretim derlemesi başarılıdır.
+- İletişim ana başlığı daha kompakt hale getirildi. Masaüstü ve tablette soldaki iletişim bilgileri kartı ile sağdaki mesaj formunun üst sınırı aynı grid çizgisine oturtuldu; canlı geniş ekran ölçümünde fark `0.61px` olarak doğrulandı. Mobilde doğal tek sütun sırası değişmedi.
 
 ## Bilinen durumlar
 
@@ -292,7 +293,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Referans galerisindeki başlangıç fotoğrafları kullanıcının ekran görüntüsünden kadrajlanır; yönetim panelinde özgün yüksek çözünürlüklü dosyalarla değiştirilebilir.
 - Google Search Console doğrulama kodu veri alanı hazırdır; üretim alan adı yayına alındığında doğrulama ve sitemap gönderimi admin/dağıtım aşamasında yapılmalıdır.
 - Yeni ve önbelleksiz tarayıcı oturumunda mevcut `/favicon.ico` dosyası olmadığı için tek bir 404 konsol kaydı oluşur; Teknik sayfa/PDF isteklerinden kaynaklanmaz ve yalnız istenen alanı değiştirme kuralı nedeniyle global `frontend/index.html` bu görevde değiştirilmedi.
+- Codex için `hostinger` adlı global MCP sunucusu `npx -y hostinger-api-mcp` komutuyla kaydedildi.
 
 ## Sıradaki adım
 
-İletişim sayfasındaki üçlü işlem kartları ve açılır hesap numaraları penceresi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+İletişim kartlarının masaüstü/tablet hizası ve kompakt başlık tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
