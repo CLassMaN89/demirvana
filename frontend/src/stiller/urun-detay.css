@@ -57,6 +57,8 @@
 .urun-detay__tablo { width: 100%; border-collapse: collapse; font-size: 12px; }
 .urun-detay__tablo th, .urun-detay__tablo td { padding: 9px 12px; text-align: left; border-bottom: 1px solid #e3edf6; }
 .urun-detay__tablo thead th { color: #fff; background: linear-gradient(100deg, var(--renk-koyu), var(--renk-ana)); font-weight: 700; }
+.urun-detay__ust-grid .urun-detay__tablo thead { background: var(--renk-koyu); }
+.urun-detay__ust-grid .urun-detay__tablo thead th { background: transparent; border-bottom: 0; }
 .urun-detay__tablo tbody tr:nth-child(even) { background: #f1f7fc; }
 .urun-detay__tablo tbody tr:hover { background: #e7f3fd; }
 .urun-detay__olculer, .urun-detay__dokumanlar { margin-top: 18px; }
@@ -65,6 +67,7 @@
 .urun-detay__tablo--olcu th, .urun-detay__tablo--olcu td { padding: 8px 10px; text-align: center; white-space: nowrap; }
 .urun-detay__tablo--olcu tbody th:first-child { text-align: left; color: var(--renk-koyu); }
 .urun-detay__tablo--olcu tbody th:first-child { white-space: pre-line; }
+.urun-detay__tablo--olcu tbody th[rowspan] { vertical-align: middle; background: #eef5fb; }
 .urun-detay__tablo--olcu thead th,
 .urun-detay__tablo--olcu thead tr:first-child th,
 .urun-detay__tablo--olcu thead tr:last-child th {
@@ -73,6 +76,7 @@
   border-right: 0;
   border-bottom: 0;
 }
+.urun-detay__tablo--olcu thead tr:first-child th { border-bottom: 1px solid rgba(255, 255, 255, .28); }
 
 .urun-detay__dokumanlar { padding-bottom: 18px; }
 .urun-detay__dokuman-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 18px; }

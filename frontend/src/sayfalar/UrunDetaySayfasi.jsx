@@ -14,6 +14,13 @@ function teknikBilgileriOku(deger) {
   }
 }
 
+function grupSatirSayisi(satirlar, indeks) {
+  if (!satirlar[indeks]?.grup) return 0;
+  let satirSayisi = 1;
+  while (satirlar[indeks + satirSayisi] && !satirlar[indeks + satirSayisi].grup) satirSayisi += 1;
+  return satirSayisi;
+}
+
 export default function UrunDetaySayfasi({ urunler = [] }) {
   const { slug } = useParams();
   const urun = urunler.find((kayit) => kayit.slug === slug);
@@ -96,8 +103,12 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
               <tr><th>Anma Çapı</th><th>DN</th>{(teknik.olcu_basliklari || []).map((baslik) => <th key={baslik}>{baslik}</th>)}</tr>
             </thead>
             <tbody>
-              {(teknik.olculer || []).map((satir) => (
-                <tr key={`${satir.grup}-${satir.kod}`}><th>{satir.grup}</th><th>{satir.kod}</th>{satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}</tr>
+              {(teknik.olculer || []).map((satir, satirIndeksi, satirlar) => (
+                <tr key={`${satir.grup}-${satir.kod}`}>
+                  {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
+                  <th>{satir.kod}</th>
+                  {satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
+                </tr>
               ))}
             </tbody>
           </table>
