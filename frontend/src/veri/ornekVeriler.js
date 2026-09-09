@@ -285,8 +285,40 @@ export const ornekVeriler = Object.freeze({
     ['USD', 'TR84 0011 1000 0000 0082 0144 36', 'FNNBTRISXXX', '8214436'],
     ['EUR', 'TR76 0011 1000 0000 0082 3613 55', 'FNNBTRISXXX', '8214436']
   ].map(([para_birimi, iban, swift_kodu, hesap_no], indeks) => ({ id: indeks + 1, banka_adi: 'QNB Finansbank', hesap_basligi: `QNB Finansbank ${para_birimi} Hesabı`, para_birimi, iban, swift_kodu, sube: 'İstanbul Enpara 03663', hesap_no, logo_yolu: '/assets/iletisim/qnb.png', siralama: indeks + 1 })),
-  // API kullanılamadığında arama güvenli biçimde boş ürün listesiyle çalışmayı sürdürür.
-  urunler: [],
+  // Örnek ürün, API kapalıyken de gerçek teknik çizim ve yerel dokümanla aynı detay deneyimini korur.
+  urunler: [{
+    id: 1,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Metal Sitli Sürgülü Vana F4 D-001',
+    slug: 'metal-sitli-surgulu-vana-f4-d-001',
+    stok_kodu: 'D-001',
+    kisa_aciklama: 'Endüstriyel akışkan kontrolünde yüksek dayanım ve güvenilir performans.',
+    teknik_bilgiler: JSON.stringify({
+      grup_adi: 'Sürgülü Vanalar',
+      basinc: 'PN 10 / 6 / 4 / 2,5 / 1,6 / 1',
+      teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
+      teknik_cizim_alt: 'Metal sitli sürgülü vana teknik çizimi – F4 D-001',
+      parcalar: [
+        ['1', 'Gövde', 'GG 25 / GGG-40'], ['2', 'Gövde Burcu', 'Ms 58 / Bronz / Paslanmaz Çelik'],
+        ['3', 'Sürgü (DN40–100)', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['3', 'Sürgü (DN125–900)', 'GG 25 / GGG-40'],
+        ['4', 'Sürgü Burcu', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['5', 'Sürgü Somunu', 'Ms 58 / Bronz / GGG-40'],
+        ['6', 'Mil', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['7', 'Conta', 'EPDM / Franzelit / Klingerit'],
+        ['8', 'Kapak', 'GG 25 / GGG-40'], ['9', 'Civata', '5D / Paslanmaz Çelik'],
+        ['10', 'Mil Somunu', 'Ms 58 / Bronz / Paslanmaz Çelik'], ['11', 'O-Ring', 'EPDM'], ['12', 'Volan', 'GG 20']
+      ].map(([no, ad, malzeme]) => ({ no, ad, malzeme })),
+      olcu_basliklari: ['40', '50', '65', '80', '100', '125', '150', '200', '250', '300', '350', '400', '500', '600', '700', '800', '900'],
+      olculer: [
+        { grup: 'Vana Boyutları', kod: 'L', degerler: ['140', '150', '170', '180', '190', '200', '210', '230', '250', '270', '290', '310', '350', '390', '430', '470', '510'] },
+        { grup: 'Vana Boyutları', kod: 'H', degerler: ['157', '190', '210', '230', '260', '365', '375', '500', '630', '715', '820', '910', '1135', '1300', '1480', '1690', '1820'] },
+        { grup: 'Vana Boyutları', kod: 'D1', degerler: ['160', '160', '160', '160', '200', '250', '250', '250', '315', '315', '400', '400', '500', '500', '630', '800', '800'] },
+        { grup: 'Flanş Ölçüleri PN10', kod: 'D', degerler: ['150', '165', '185', '200', '220', '250', '285', '340', '395', '445', '505', '565', '670', '780', '895', '1015', '1115'] },
+        { grup: 'Flanş Ölçüleri PN10', kod: 'k', degerler: ['110', '125', '145', '160', '180', '210', '240', '295', '350', '400', '460', '515', '620', '725', '840', '950', '1050'] },
+        { grup: 'Ağırlık', kod: 'kg', degerler: ['8,3', '10,2', '13,7', '15,5', '22,1', '37', '44,2', '81', '123', '176', '225', '290', '460', '680', '870', '1200', '1400'] }
+      ],
+      dokumanlar: [{ baslik: 'Ürün PDF', aciklama: 'Ürün kataloğu ve teknik bilgiler', tur: 'PDF · 533 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/urun-foyu.pdf' }]
+    })
+  }],
   referanslar: {
     sektorler: referansSektorleri,
     kayitlar: referansKayitlari,

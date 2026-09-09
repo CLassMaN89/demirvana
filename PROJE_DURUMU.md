@@ -1,6 +1,6 @@
 # Demirvana Proje Durumu
 
-Son güncelleme: 8 Eylül 2026
+Son güncelleme: 9 Eylül 2026
 
 ## Projenin amacı
 
@@ -300,6 +300,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Ürün alt menüleri hem API kapalıyken kullanılan örnek veriye hem `menu_alt_ogeleri` başlangıç verisine işlendi. Yerel MariaDB kayıtları ayrıca doğrudan güncellendi ve `/api/menu` yanıtında üç grubun sırası ile toplam `12 + 4 + 5` alt kategori doğrulandı.
 - Kısa içerikli ve ürün bulunamayan sayfalarda footer sonrasında görünen beyaz boşluk giderildi. Ortak `SayfaIskeleti` ekran yüksekliğini dolduran dikey flex düzene geçirildi; ana içerik kalan yüksekliği alırken footer küçülmeden en alta oturur, uzun sayfaların doğal kaydırması korunur.
 - Boş ürün rotası canlı localhost görünümünde kontrol edildi; footer ekranın alt sınırına kadar kesintisiz devam eder ve footer sonrasında beyaz şerit oluşmaz.
+- Deneme ürünü olarak `Metal Sitli Sürgülü Vana F4 D-001` eklendi. Gerçek teknik çizimi ve ürün föyü yerel `frontend/public/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/` dizininden sunulur; dış siteye çalışma zamanı bağımlılığı yoktur.
+- Ürün detay sayfası referanstaki premium teknik föy düzenine geçirildi: üst ürün özeti ve güven göstergeleri, teknik çizim, 13 satırlı parça/malzeme tablosu, DN40–DN900 teknik ölçü tablosu ve indirilebilir ürün PDF kartı responsive biçimde yerleştirildi.
+- Örnek veri ve MariaDB başlangıç verisi aynı ürün sözleşmesiyle güncellendi. Canlı MariaDB kaydı, `/api/baslangic` yanıtı, PNG/PDF dosyalarının HTTP yanıtları ve ürün sayfasının localhost görünümü doğrulandı.
+- Ürün detayına özel bileşen testi eklendi; toplam 29 test dosyasında 81 test ve Vite üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -316,4 +320,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-Koyu gradientli blueprint footer ve şeffaf ikon yerleşimi tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+F4 D-001 örnek ürün detay sayfası tamamlandı. Sonraki net adım, kullanıcı değerlendirmesinden sonra Su Grubu ürünleri için sol kategori/ürün menüsünü bu sayfa düzenine bağlamaktır.

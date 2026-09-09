@@ -735,6 +735,20 @@ ON DUPLICATE KEY UPDATE
     `alternatif_metin` = VALUES(`alternatif_metin`),
     `siralama` = VALUES(`siralama`);
 
+-- İlk ürün detayı, ileride kurulacak Su Grubu sol menüsüne bağlanmaya hazır biçimde Sürgülü Vanalar kategorisinde tutulur.
+INSERT INTO `urunler` (`kategori_id`, `ad`, `slug`, `kisa_aciklama`, `teknik_bilgiler`, `stok_kodu`, `siralama`)
+SELECT `id`, 'Metal Sitli Sürgülü Vana F4 D-001', 'metal-sitli-surgulu-vana-f4-d-001',
+    'Endüstriyel akışkan kontrolünde yüksek dayanım ve güvenilir performans.',
+    '{"grup_adi":"Sürgülü Vanalar","basinc":"PN 10 / 6 / 4 / 2,5 / 1,6 / 1","teknik_cizim_yolu":"/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png","teknik_cizim_alt":"Metal sitli sürgülü vana teknik çizimi – F4 D-001","parcalar":[{"no":"1","ad":"Gövde","malzeme":"GG 25 / GGG-40"},{"no":"2","ad":"Gövde Burcu","malzeme":"Ms 58 / Bronz / Paslanmaz Çelik"},{"no":"3","ad":"Sürgü (DN40–100)","malzeme":"Ms 58 / Bronz / Paslanmaz Çelik"},{"no":"3","ad":"Sürgü (DN125–900)","malzeme":"GG 25 / GGG-40"},{"no":"4","ad":"Sürgü Burcu","malzeme":"Ms 58 / Bronz / Paslanmaz Çelik"},{"no":"5","ad":"Sürgü Somunu","malzeme":"Ms 58 / Bronz / GGG-40"},{"no":"6","ad":"Mil","malzeme":"Ms 58 / Bronz / Paslanmaz Çelik"},{"no":"7","ad":"Conta","malzeme":"EPDM / Franzelit / Klingerit"},{"no":"8","ad":"Kapak","malzeme":"GG 25 / GGG-40"},{"no":"9","ad":"Civata","malzeme":"5D / Paslanmaz Çelik"},{"no":"10","ad":"Mil Somunu","malzeme":"Ms 58 / Bronz / Paslanmaz Çelik"},{"no":"11","ad":"O-Ring","malzeme":"EPDM"},{"no":"12","ad":"Volan","malzeme":"GG 20"}],"olcu_basliklari":["40","50","65","80","100","125","150","200","250","300","350","400","500","600","700","800","900"],"olculer":[{"grup":"Vana Boyutları","kod":"L","degerler":["140","150","170","180","190","200","210","230","250","270","290","310","350","390","430","470","510"]},{"grup":"Vana Boyutları","kod":"H","degerler":["157","190","210","230","260","365","375","500","630","715","820","910","1135","1300","1480","1690","1820"]},{"grup":"Vana Boyutları","kod":"D1","degerler":["160","160","160","160","200","250","250","250","315","315","400","400","500","500","630","800","800"]},{"grup":"Flanş Ölçüleri PN10","kod":"D","degerler":["150","165","185","200","220","250","285","340","395","445","505","565","670","780","895","1015","1115"]},{"grup":"Flanş Ölçüleri PN10","kod":"k","degerler":["110","125","145","160","180","210","240","295","350","400","460","515","620","725","840","950","1050"]},{"grup":"Ağırlık","kod":"kg","degerler":["8,3","10,2","13,7","15,5","22,1","37","44,2","81","123","176","225","290","460","680","870","1200","1400"]}],"dokumanlar":[{"baslik":"Ürün PDF","aciklama":"Ürün kataloğu ve teknik bilgiler","tur":"PDF · 533 KB","dosya_yolu":"/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/urun-foyu.pdf"}]}',
+    'D-001', 1
+FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
+ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `aktif_mi` = 1;
+
+INSERT INTO `urun_gorselleri` (`urun_id`, `gorsel_yolu`, `alternatif_metin`, `siralama`)
+SELECT `id`, '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png', 'Metal sitli sürgülü vana F4 D-001 teknik çizimi', 1
+FROM `urunler` WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001'
+  AND NOT EXISTS (SELECT 1 FROM `urun_gorselleri` WHERE `gorsel_yolu` = '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png');
+
 INSERT INTO `fuar_gorselleri` (`gorsel_yolu`, `alternatif_metin`, `siralama`) VALUES
     ('/assets/fuar/demirvana-fuar-5.jpg', 'Demirvana fuar standından ürün tanıtımı', 1),
     ('/assets/fuar/demirvana-fuar-6.jpg', 'Demirvana fuar alanında ziyaretçi buluşması', 2),
