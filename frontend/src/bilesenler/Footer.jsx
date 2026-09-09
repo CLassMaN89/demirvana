@@ -82,11 +82,20 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           size="md"
           colorVariant="ocean"
           theme="dark"
-          staticColors
-          duration={7}
-          strength={0.58}
+          duration={4.2}
+          strength={1}
+          brightness={2.7}
+          saturation={1.8}
+          hueRange={13}
           borderRadius={14}
-          style={{ order: siraDegeri(siteAyarlari.footer_marka_sirasi, 1) }}
+          style={{
+            order: siraDegeri(siteAyarlari.footer_marka_sirasi, 1),
+            '--beam-stroke-opacity': 1,
+            '--beam-inner-opacity': 1,
+            '--beam-bloom-opacity': 1,
+            '--beam-core-blur': '4px',
+            '--beam-bloom-blur': '14px'
+          }}
         >
         <section
           className="site-footer__marka"

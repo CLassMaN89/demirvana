@@ -295,6 +295,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcının birebir karşılaştırma geri bildirimiyle paftadan kırpılmış ikonların kullanımı kaldırıldı. Footer ikonları referanstaki temiz çizgi biçimlerine geçirildi; güven alanlarında tek kare, iletişim alanlarında tek daire ve sosyal bağlantılarda tek dış çerçeve bırakılarak çift çerçeve, kayma ve kesilme giderildi. Canlı iletişim sayfasında footer görsel olarak yeniden karşılaştırıldı; 78 test ve üretim derlemesi başarılıdır.
 - Kullanıcı talebiyle footer destek sütunundaki “Çalışma Saatleri / Pzt - Cum 08:00 - 18:00” satırı tamamen kaldırıldı; diğer footer içeriği korunmuştur.
 - Footer sol marka kartına `border-beam` bileşeniyle yalnız kart sınırında dolaşan, Demirvana mavi tonlarındaki yavaş Border Beam animasyonu eklendi. Kart içeriği, grid sırası ve responsive ölçüler korunurken hareket azaltma tercihinde animasyon durdurulur.
+- Kullanıcı geri bildiriminde marka kartındaki Border Beam'in koyu zeminde fazla silik kaldığı canlı DOM ve ekran görünümüyle doğrulandı. Efekt aynı sol logo kartında korunarak güç `1`, parlaklık `2.7`, doygunluk `1.8` ve tur süresi `4.2s` değerlerine çıkarıldı; dış ışık katmanı `14px` yayılımla güçlendirildi ve mavi-camgöbeği ışık kartın dış kenarında daha belirgin hale getirildi.
 
 ## Bilinen durumlar
 
