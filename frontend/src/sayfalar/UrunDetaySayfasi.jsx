@@ -1,4 +1,4 @@
-import { BarChart3, Download, FileText, Layers3, Maximize2, Settings, ShieldCheck } from 'lucide-react';
+import { BarChart3, Download, FileText, Layers3, Maximize2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
@@ -39,11 +39,6 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
   const basincGruplari = teknik.anma_basinci_gruplari || (teknik.anma_basinci_degerleri || []).filter(Boolean).map((deger) => ({ deger, sutun: 1 }));
   const cizimAlternatifMetni = teknik.teknik_cizim_alt
     || `${urun.ad.replace(/\s+F\d+\s+D-\d+$/i, '')} teknik çizimi`;
-  const guvenDegerleri = [
-    { ikon: ShieldCheck, baslik: 'Yüksek Dayanım' },
-    { ikon: Settings, baslik: 'Güvenilir Performans' },
-    { ikon: BarChart3, baslik: 'Endüstriyel Kullanım' }
-  ];
 
   return (
     <article className="urun-detay">
@@ -52,21 +47,13 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           <span className="urun-detay__etiket">{teknik.grup_adi || urun.kategori_adi}</span>
           <h1>{urun.ad}</h1>
           <p>{urun.kisa_aciklama}</p>
-          {teknik.urun_tanimi && (
-            <div className="urun-detay__teknik-tanim">
-              <strong>{teknik.urun_tanimi.baslik}</strong>
-              <span>{teknik.urun_tanimi.satirlar.join('\n')}</span>
-            </div>
-          )}
         </div>
-        <div className="urun-detay__guven" aria-label="Ürün özellikleri">
-          {guvenDegerleri.map(({ ikon: Ikon, baslik }) => (
-            <div key={baslik} className="urun-detay__guven-oge">
-              <span><Ikon aria-hidden="true" /></span>
-              <strong>{baslik}</strong>
-            </div>
-          ))}
-        </div>
+        {teknik.urun_tanimi && (
+          <div className="urun-detay__teknik-tanim">
+            <strong>{teknik.urun_tanimi.baslik}</strong>
+            <span>{teknik.urun_tanimi.satirlar.join('\n')}</span>
+          </div>
+        )}
       </header>
 
       <div className="urun-detay__ust-grid">

@@ -314,6 +314,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Parça malzemelerindeki açıklama amaçlı Türkçeleştirmeler kaldırıldı; kaynakta bulunan `Bronze`, `S.S.`, `St 37`, `Mr 58` ve conta tanımları aynen korunur.
 - Teknik tablo kod sütununda birleşik hücre sonrasındaki CSS sıra hatası giderildi; DN, L, H, D1, D, k ve kg aynı sabit sütun eksenine alındı. D1 değerleri referanstaki gerçek DN aralıklarına 4/1/3/2/2/2/1/2 sütun genişlikleriyle yayıldı.
 - Ürün üst alanına kaynakta bulunan metal sitli sürgülü vana teknik tanım bloğu; O-Ring sistemi, PN10/PN6 ve TS/DIN standartlarıyla aynen eklendi.
+- Ürün üst alanındaki Yüksek Dayanım, Güvenilir Performans ve Endüstriyel Kullanım göstergeleri kaldırıldı; teknik tanım bloğu bu göstergelerin bulunduğu sağ kolona taşındı.
+- Teknik Ölçüler ve Boyutlar tablosu içeriği bozulmadan panel kenarlarından ayrıldı; masaüstünde 14px, telefonda 10px iç yerleşim boşluğu ve bağımsız yuvarlatılmış sınır eklendi.
 
 ## Bilinen durumlar
 
