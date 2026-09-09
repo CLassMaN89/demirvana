@@ -104,14 +104,13 @@
 .site-footer__sprite {
   display: block;
   flex: 0 0 auto;
-  object-fit: contain;
-  /* Verilen ikonlar şeffaf dosyalar halinde kullanılır ve referanstaki beyaz çizgi tonuna eşitlenir. */
-  filter: brightness(0) invert(1);
+  color: color-mix(in srgb, var(--renk-acik) 72%, white);
 }
-.site-footer__guven-ikon { width: 40px; height: 40px; }
+.site-footer__guven-ikon { box-sizing: border-box; width: 40px; height: 40px; padding: 9px; }
 .site-footer__baslik-ikon { width: 28px; height: 28px; }
-.site-footer__iletisim-ikon { width: 36px; height: 36px; }
-.site-footer__sosyal-ikon { width: 36px; height: 36px; }
+.site-footer__iletisim-ikon { box-sizing: border-box; width: 36px; height: 36px; padding: 8px; }
+.site-footer__iletisim-buton-ikon { width: 18px; height: 18px; }
+.site-footer__sosyal-ikon { width: 16px; height: 16px; }
 .site-footer__ok-ikon { width: 14px; height: 14px; }
 .site-footer__ok-ikon--sag {
   width: 7px;
@@ -189,7 +188,7 @@
   box-sizing: border-box;
   width: 36px;
   height: 36px;
-  padding: 0;
+  padding: 8px;
   border: 1px solid color-mix(in srgb, var(--renk-acik) 48%, transparent);
   border-radius: 50%;
   color: color-mix(in srgb, var(--renk-acik) 72%, white);

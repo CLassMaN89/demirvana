@@ -46,9 +46,9 @@ describe('Footer', () => {
     expect(screen.getByRole('img', { name: 'Teknik vana ana görünüşü' })).toHaveAttribute('src', '/assets/footer-vana2.png');
     expect(screen.getByRole('img', { name: 'Teknik vana yan görünüşü' })).toHaveAttribute('src', '/assets/footer-vana.png');
     expect(screen.getByRole('img', { name: 'Teknik vana detay görünüşü' })).toHaveAttribute('src', '/assets/footer-vana3.png');
-    expect(document.querySelector('.site-footer__iletisim-ikon')).toHaveAttribute('src', '/assets/footer-icons/eposta-clean.png');
-    expect(document.querySelector('.site-footer__guven-ikon')).toHaveAttribute('src', '/assets/footer-icons/guven-clean.png');
-    expect(document.querySelector('.site-footer__sosyal-ikon')).toHaveAttribute('src', '/assets/footer-icons/linkedin-clean.png');
+    expect(document.querySelector('.site-footer__iletisim-ikon')?.tagName).toBe('svg');
+    expect(document.querySelector('.site-footer__guven-ikon')?.tagName).toBe('svg');
+    expect(document.querySelector('.site-footer__sosyal-ikon')?.tagName).toBe('svg');
     expect(screen.getByText('Pzt - Cum 08:00 - 18:00')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://linkedin.com/company/demirvana');
     expect(screen.getByText('Endüstrinin her noktasında, daha güvenli bir akış için.')).toBeInTheDocument();

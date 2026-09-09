@@ -292,6 +292,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Footer arka planındaki açık çizgili doku kaldırılıp kullanıcı referansındaki koyu lacivert, yumuşak radyal geçişli gradient uygulandı. `footer-vana.png`, `footer-vana2.png` ve `footer-vana3.png` sağ teknik çizim kompozisyonunda birlikte kullanıldı.
 - `footer-all.png` paftasının beyaz zeminini taşımaması için paftadaki gerekli ikonlar ayrı şeffaf PNG dosyalarına ayrıldı ve `frontend/public/assets/footer-icons/` dizinine bağlandı. İkonlar artık sprite kırpması olmadan `img` olarak yüklenir; beyaz kutu ve kesilme sorunu giderildi.
 - Footer son hali canlı localhost ekranında görsel olarak kontrol edildi. 27 test dosyasında 78 test ve Vite üretim derlemesi başarılıdır.
+- Kullanıcının birebir karşılaştırma geri bildirimiyle paftadan kırpılmış ikonların kullanımı kaldırıldı. Footer ikonları referanstaki temiz çizgi biçimlerine geçirildi; güven alanlarında tek kare, iletişim alanlarında tek daire ve sosyal bağlantılarda tek dış çerçeve bırakılarak çift çerçeve, kayma ve kesilme giderildi. Canlı iletişim sayfasında footer görsel olarak yeniden karşılaştırıldı; 78 test ve üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 

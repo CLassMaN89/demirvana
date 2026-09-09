@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { ArrowUp, BarChart3, Box, ChevronRight, Clock3, Link2, Mail, MapPin, Phone, Settings, ShieldCheck } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import '../stiller/footer.css';
 
 function telefonBaglantisiOlustur(telefon) {
@@ -14,13 +17,31 @@ function siraDegeri(deger, varsayilan) {
   return Number.isFinite(sira) ? sira : varsayilan;
 }
 
-function SpriteIkon({ kaynak, sinifAdi }) {
+function SpriteIkon({ sinifAdi }) {
   const ikonAdi = ['guven', 'muhendislik', 'surdulebilir', 'telefon', 'eposta', 'konum', 'saat', 'baglanti', 'urun', 'linkedin', 'youtube', 'instagram']
     .find((ad) => sinifAdi.includes(`--${ad}`));
 
-  if (!ikonAdi) return <i className={`site-footer__sprite ${sinifAdi}`} aria-hidden="true" />;
+  const cizgiIkonlari = {
+    guven: ShieldCheck,
+    muhendislik: Settings,
+    surdulebilir: BarChart3,
+    telefon: Phone,
+    eposta: Mail,
+    konum: MapPin,
+    saat: Clock3,
+    baglanti: Link2,
+    urun: Box
+  };
+  const markaIkonlari = { linkedin: faLinkedinIn, youtube: faYoutube, instagram: faInstagram };
 
-  return <img className={`site-footer__sprite ${sinifAdi}`} src={`${kaynak}/${ikonAdi}-clean.png`} alt="" aria-hidden="true" />;
+  if (ikonAdi === 'sag') return <ChevronRight className={`site-footer__sprite ${sinifAdi}`} aria-hidden="true" />;
+  if (ikonAdi === 'yukari') return <ArrowUp className={`site-footer__sprite ${sinifAdi}`} aria-hidden="true" />;
+  if (markaIkonlari[ikonAdi]) return <FontAwesomeIcon className={`site-footer__sprite ${sinifAdi}`} icon={markaIkonlari[ikonAdi]} aria-hidden="true" />;
+
+  const Ikon = cizgiIkonlari[ikonAdi];
+  if (!Ikon) return <ChevronRight className={`site-footer__sprite ${sinifAdi}`} aria-hidden="true" />;
+
+  return <Ikon className={`site-footer__sprite ${sinifAdi}`} strokeWidth={1.7} aria-hidden="true" />;
 }
 
 export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] }) {
@@ -29,11 +50,6 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
   const yil = new Date().getFullYear();
   const telifMetni = (siteAyarlari.footer_telif_metni ?? '© {yil} Demirvana.')
     .replace('{yil}', String(yil));
-  // Pafta görseli yerine alfa kanallı ikon setleri kullanılır; böylece koyu zeminde beyaz kutu oluşmaz.
-  const footerIkonDizini = siteAyarlari.footer_ikon_dizini ?? '/assets/footer-icons';
-  const footerIletisimIkonYolu = footerIkonDizini;
-  const footerKurumsalIkonYolu = footerIkonDizini;
-  const footerSosyalIkonYolu = footerIkonDizini;
   const sosyalBaglantilar = [
     { ad: 'LinkedIn', baglanti: siteAyarlari.footer_linkedin_baglantisi ?? 'https://www.linkedin.com', sinif: 'site-footer__sosyal-ikon site-footer__sosyal-ikon--linkedin' },
     { ad: 'YouTube', baglanti: siteAyarlari.footer_youtube_baglantisi ?? 'https://www.youtube.com', sinif: 'site-footer__sosyal-ikon site-footer__sosyal-ikon--youtube' },
@@ -71,14 +87,14 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           </Link>
           <p>{siteAyarlari.footer_sirket_aciklamasi}</p>
           <div className="site-footer__guvenler" aria-label="Demirvana hizmet değerleri">
-            <span><SpriteIkon kaynak={footerKurumsalIkonYolu} sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--guven" /><small>Güvenilir<br />Çözümler</small></span>
-            <span><SpriteIkon kaynak={footerKurumsalIkonYolu} sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--muhendislik" /><small>Mühendislik<br />Desteği</small></span>
-            <span><SpriteIkon kaynak={footerKurumsalIkonYolu} sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--surdulebilir" /><small>Sürdürülebilir<br />Endüstri</small></span>
+            <span><SpriteIkon sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--guven" /><small>Güvenilir<br />Çözümler</small></span>
+            <span><SpriteIkon sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--muhendislik" /><small>Mühendislik<br />Desteği</small></span>
+            <span><SpriteIkon sinifAdi="site-footer__guven-ikon site-footer__guven-ikon--surdulebilir" /><small>Sürdürülebilir<br />Endüstri</small></span>
           </div>
           <Link className="site-footer__iletisim" to={siteAyarlari.footer_iletisim_buton_baglantisi ?? '/iletisim'}>
-            <SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--eposta" />
+            <SpriteIkon sinifAdi="site-footer__iletisim-buton-ikon site-footer__iletisim-ikon--eposta" />
             <span>{siteAyarlari.footer_iletisim_buton_metni ?? 'Bizimle iletişime geçin'}</span>
-            <SpriteIkon kaynak={footerSosyalIkonYolu} sinifAdi="site-footer__ok-ikon site-footer__ok-ikon--sag" />
+            <ChevronRight className="site-footer__ok-ikon" aria-hidden="true" />
           </Link>
         </section>
         ) : null}
@@ -89,10 +105,10 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           aria-label="Footer hızlı bağlantılar"
           style={{ order: siraDegeri(siteAyarlari.footer_hizli_baglantilar_sirasi, 2) }}
         >
-          <h2><SpriteIkon kaynak={footerKurumsalIkonYolu} sinifAdi="site-footer__baslik-ikon site-footer__baslik-ikon--baglanti" />{siteAyarlari.footer_hizli_baglantilar_basligi ?? 'Hızlı Bağlantılar'}</h2>
+          <h2><SpriteIkon sinifAdi="site-footer__baslik-ikon site-footer__baslik-ikon--baglanti" />{siteAyarlari.footer_hizli_baglantilar_basligi ?? 'Hızlı Bağlantılar'}</h2>
           <ul>
             {menu.map((oge) => (
-              <li key={oge.id}><Link to={oge.baglanti}><span>{oge.baslik}</span><SpriteIkon kaynak={footerSosyalIkonYolu} sinifAdi="site-footer__ok-ikon site-footer__ok-ikon--sag" /></Link></li>
+              <li key={oge.id}><Link to={oge.baglanti}><span>{oge.baslik}</span><ChevronRight aria-hidden="true" /></Link></li>
             ))}
           </ul>
         </nav>
@@ -104,11 +120,11 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           aria-label="Footer ürün grupları"
           style={{ order: siraDegeri(siteAyarlari.footer_urunler_sirasi, 3) }}
         >
-          <h2><SpriteIkon kaynak={footerKurumsalIkonYolu} sinifAdi="site-footer__baslik-ikon site-footer__baslik-ikon--urun" />{siteAyarlari.footer_urunler_basligi ?? 'Ürün Grupları'}</h2>
+          <h2><SpriteIkon sinifAdi="site-footer__baslik-ikon site-footer__baslik-ikon--urun" />{siteAyarlari.footer_urunler_basligi ?? 'Ürün Grupları'}</h2>
           <ul>
             {kategoriler.map((kategori) => (
               <li key={kategori.id}>
-                <Link to={`/kategoriler/${kategori.slug}`}><span>{kategori.ad}</span><SpriteIkon kaynak={footerSosyalIkonYolu} sinifAdi="site-footer__ok-ikon site-footer__ok-ikon--sag" /></Link>
+                <Link to={`/kategoriler/${kategori.slug}`}><span>{kategori.ad}</span><ChevronRight aria-hidden="true" /></Link>
               </li>
             ))}
           </ul>
@@ -121,26 +137,26 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           aria-labelledby="footer-destek-basligi"
           style={{ order: siraDegeri(siteAyarlari.footer_destek_sirasi, 4) }}
         >
-          <h2 id="footer-destek-basligi"><SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__baslik-ikon site-footer__iletisim-ikon--telefon" />{siteAyarlari.footer_destek_basligi ?? 'Destek & İletişim'}</h2>
+          <h2 id="footer-destek-basligi"><SpriteIkon sinifAdi="site-footer__baslik-ikon site-footer__iletisim-ikon--telefon" />{siteAyarlari.footer_destek_basligi ?? 'Destek & İletişim'}</h2>
           <address>
             {siteAyarlari.destek_telefonu ? (
               <a href={telefonBaglantisiOlustur(siteAyarlari.destek_telefonu)}>
-                <SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--telefon" />
+                <SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--telefon" />
                 <span>{siteAyarlari.destek_telefonu}</span>
               </a>
             ) : null}
             {siteAyarlari.destek_eposta ? (
               <a href={`mailto:${siteAyarlari.destek_eposta}`}>
-                <SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--eposta" />
+                <SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--eposta" />
                 <span>{siteAyarlari.destek_eposta}</span>
               </a>
             ) : null}
             {siteAyarlari.firma_adresi ? (
-              <p><SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--konum" /><span>{siteAyarlari.firma_adresi}</span></p>
+              <p><SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--konum" /><span>{siteAyarlari.firma_adresi}</span></p>
             ) : null}
           </address>
           <div className="site-footer__mesai">
-            <SpriteIkon kaynak={footerIletisimIkonYolu} sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--saat" />
+            <SpriteIkon sinifAdi="site-footer__iletisim-ikon site-footer__iletisim-ikon--saat" />
             <span><strong>Çalışma Saatleri</strong>{siteAyarlari.footer_calisma_saatleri ?? 'Pzt - Cum 08:00 - 18:00'}</span>
           </div>
         </section>
@@ -152,7 +168,7 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
           <div className="site-footer__sosyal">
             <span>{siteAyarlari.footer_sosyal_basligi ?? 'Bizi takip edin'}</span>
             {sosyalBaglantilar.map(({ ad, baglanti, sinif }) => (
-              <a key={ad} href={baglanti} target="_blank" rel="noreferrer" aria-label={ad}><SpriteIkon kaynak={footerSosyalIkonYolu} sinifAdi={sinif} /></a>
+              <a key={ad} href={baglanti} target="_blank" rel="noreferrer" aria-label={ad}><SpriteIkon sinifAdi={sinif} /></a>
             ))}
           </div>
           <p>{telifMetni}</p>
@@ -161,7 +177,7 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
             <span>{siteAyarlari.footer_slogan_metni ?? 'Endüstrinin her noktasında, daha güvenli bir akış için.'}</span>
           </div>
           <button type="button" aria-label="Sayfanın başına dön" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <SpriteIkon kaynak={footerSosyalIkonYolu} sinifAdi="site-footer__ok-ikon site-footer__ok-ikon--yukari" />
+            <ArrowUp aria-hidden="true" />
           </button>
         </div>
       </div>
