@@ -297,6 +297,7 @@ export const ornekVeriler = Object.freeze({
     teknik_bilgiler: JSON.stringify({
       grup_adi: 'Sürgülü Vanalar',
       basinc: 'PN 10 / 6 / 4 / 2,5 / 1,6 / 1',
+      urun_tanimi: { baslik: 'METAL SİTLİ SÜRGÜLÜ VANA', satirlar: ['O-RİNG SİSTEMİ', 'PN10 / PN6', 'TS 457/1', 'DIN 3352/2-F4 (DIN 3216)'] },
       teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
       teknik_cizim_alt: 'Metal sitli sürgülü vana teknik çizimi – F4 D-001',
       parcalar: [
@@ -312,7 +313,7 @@ export const ornekVeriler = Object.freeze({
       olculer: [
         { grup: 'Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24', kod: 'L', degerler: ['140', '150', '170', '180', '190', '200', '210', '230', '250', '270', '290', '310', '350', '390', '430', '470', '510'] },
         { grup: '', kod: 'H', degerler: ['157', '190', '210', '230', '260', '365', '375', '500', '630', '715', '820', '910', '1135', '1300', '1480', '1690', '1820'] },
-        { grup: '', kod: 'D1', degerler: ['160', '200', '250', '315', '400', '500', '630', '800', '', '', '', '', '', '', '', '', ''] },
+        { grup: '', kod: 'D1', degerler: [], gruplu_degerler: [{ deger: '160', sutun: 4 }, { deger: '200', sutun: 1 }, { deger: '250', sutun: 3 }, { deger: '315', sutun: 2 }, { deger: '400', sutun: 2 }, { deger: '500', sutun: 2 }, { deger: '630', sutun: 1 }, { deger: '800', sutun: 2 }] },
         { grup: 'Flanş Ölçüleri\nDIN 2501 / TS 810\nPN10', kod: 'D', degerler: ['150', '165', '185', '200', '220', '250', '285', '340', '295', '445', '505', '565', '670', '780', '895', '1015', '1115'] },
         { grup: '', kod: 'k', degerler: ['110', '125', '145', '160', '180', '210', '240', '295', '350', '400', '460', '515', '620', '725', '480', '950', '1050'] },
         { grup: 'Ağırlık', kod: 'kg', degerler: ['8,3', '10,2', '13,7', '15,5', '22,1', '37', '44,2', '81', '123', '176', '225', '290', '460', '680', '870', '1200', '1400'] }

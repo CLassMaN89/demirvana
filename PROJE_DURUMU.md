@@ -312,6 +312,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Teknik ölçülerde H, D1 ve k satırlarının boş görünen grup hücreleri gerçek `rowSpan` yapısına dönüştürüldü; Vana Boyutları başlığı üç, Flanş Ölçüleri başlığı iki teknik satırı dikey olarak kapsar.
 - Teknik ölçü tablosu son referansa göre yeniden kuruldu: iki sol açıklama/kod sütunu mavi, ölçü hücreleri beyaz, tüm ızgara çizgileri mavi ve basınç değerleri ilgili DN aralıklarını gerçek `colSpan` değerleriyle kapsar.
 - Parça malzemelerindeki açıklama amaçlı Türkçeleştirmeler kaldırıldı; kaynakta bulunan `Bronze`, `S.S.`, `St 37`, `Mr 58` ve conta tanımları aynen korunur.
+- Teknik tablo kod sütununda birleşik hücre sonrasındaki CSS sıra hatası giderildi; DN, L, H, D1, D, k ve kg aynı sabit sütun eksenine alındı. D1 değerleri referanstaki gerçek DN aralıklarına 4/1/3/2/2/2/1/2 sütun genişlikleriyle yayıldı.
+- Ürün üst alanına kaynakta bulunan metal sitli sürgülü vana teknik tanım bloğu; O-Ring sistemi, PN10/PN6 ve TS/DIN standartlarıyla aynen eklendi.
 
 ## Bilinen durumlar
 

@@ -753,6 +753,7 @@ FROM `urunler` WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001'
 UPDATE `urunler`
 SET `teknik_bilgiler` = JSON_SET(
     `teknik_bilgiler`,
+    '$.urun_tanimi', JSON_OBJECT('baslik','METAL SİTLİ SÜRGÜLÜ VANA','satirlar',JSON_ARRAY('O-RİNG SİSTEMİ','PN10 / PN6','TS 457/1','DIN 3352/2-F4 (DIN 3216)')),
     '$.anma_basinci_gruplari', JSON_ARRAY(JSON_OBJECT('deger','10','sutun',8),JSON_OBJECT('deger','6','sutun',3),JSON_OBJECT('deger','4','sutun',2),JSON_OBJECT('deger','2,5','sutun',2),JSON_OBJECT('deger','1,6','sutun',1),JSON_OBJECT('deger','1','sutun',1)),
     '$.anma_basinci_degerleri', JSON_ARRAY('10','6','4','2,5','1,6','1','','','','','','','','','','',''),
     '$.parcalar', JSON_ARRAY(
@@ -773,7 +774,7 @@ SET `teknik_bilgiler` = JSON_SET(
     '$.olculer', JSON_ARRAY(
         JSON_OBJECT('grup','Vana Boyutları\nTS 457 /1\nDIN / 3352 / 24','kod','L','degerler',JSON_ARRAY('140','150','170','180','190','200','210','230','250','270','290','310','350','390','430','470','510')),
         JSON_OBJECT('grup','','kod','H','degerler',JSON_ARRAY('157','190','210','230','260','365','375','500','630','715','820','910','1135','1300','1480','1690','1820')),
-        JSON_OBJECT('grup','','kod','D1','degerler',JSON_ARRAY('160','200','250','315','400','500','630','800','','','','','','','','','')),
+        JSON_OBJECT('grup','','kod','D1','degerler',JSON_ARRAY(),'gruplu_degerler',JSON_ARRAY(JSON_OBJECT('deger','160','sutun',4),JSON_OBJECT('deger','200','sutun',1),JSON_OBJECT('deger','250','sutun',3),JSON_OBJECT('deger','315','sutun',2),JSON_OBJECT('deger','400','sutun',2),JSON_OBJECT('deger','500','sutun',2),JSON_OBJECT('deger','630','sutun',1),JSON_OBJECT('deger','800','sutun',2))),
         JSON_OBJECT('grup','Flanş Ölçüleri\nDIN 2501 / TS 810\nPN10','kod','D','degerler',JSON_ARRAY('150','165','185','200','220','250','285','340','295','445','505','565','670','780','895','1015','1115')),
         JSON_OBJECT('grup','','kod','k','degerler',JSON_ARRAY('110','125','145','160','180','210','240','295','350','400','460','515','620','725','480','950','1050')),
         JSON_OBJECT('grup','Ağırlık','kod','kg','degerler',JSON_ARRAY('8,3','10,2','13,7','15,5','22,1','37','44,2','81','123','176','225','290','460','680','870','1200','1400'))

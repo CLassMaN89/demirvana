@@ -35,6 +35,9 @@
 
 .urun-detay h1 { margin: 0; font-size: clamp(26px, 3vw, 44px); line-height: 1.05; }
 .urun-detay__hero p { margin: 10px 0 0; color: var(--renk-metin); }
+.urun-detay__teknik-tanim { display: grid; grid-template-columns: max-content 1fr; align-items: start; gap: 14px; width: fit-content; margin-top: 16px; padding: 11px 14px; border-left: 3px solid var(--renk-ana); border-radius: 0 8px 8px 0; color: var(--renk-koyu); background: color-mix(in srgb, var(--renk-ana) 7%, #fff); font-size: 11px; }
+.urun-detay__teknik-tanim strong { max-width: 150px; line-height: 1.35; }
+.urun-detay__teknik-tanim span { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--renk-ana) 25%, transparent); white-space: pre-line; line-height: 1.45; }
 .urun-detay__guven { display: flex; gap: 22px; }
 .urun-detay__guven-oge { width: 105px; text-align: center; font-size: 11px; }
 .urun-detay__guven-oge span { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 8px; border-radius: 50%; color: var(--renk-ana); background: color-mix(in srgb, var(--renk-ana) 8%, #fff); }
@@ -65,10 +68,10 @@
 .urun-detay__tablo--olcu { min-width: 1250px; table-layout: fixed; text-align: center; border: 2px solid var(--renk-ana); background: var(--renk-ana); }
 .urun-detay__tablo--olcu thead { background: var(--renk-ana); }
 .urun-detay__tablo--olcu th, .urun-detay__tablo--olcu td { height: 29px; padding: 4px 7px; text-align: center; white-space: nowrap; border: 1px solid var(--renk-ana); }
-.urun-detay__tablo--olcu th:first-child { width: 165px; text-align: left; }
-.urun-detay__tablo--olcu th:nth-child(2) { width: 48px; }
+.urun-detay__tablo--olcu .urun-detay__olcu-grup { width: 165px; text-align: left; border-right-color: rgba(255, 255, 255, .72); }
+.urun-detay__tablo--olcu .urun-detay__olcu-kod { width: 48px; text-align: center; border-right-color: #fff; }
 .urun-detay__tablo--olcu tbody th { color: #fff; background: var(--renk-ana); }
-.urun-detay__tablo--olcu tbody th:first-child { white-space: pre-line; }
+.urun-detay__tablo--olcu tbody .urun-detay__olcu-grup { white-space: pre-line; }
 .urun-detay__tablo--olcu tbody th[rowspan] { vertical-align: middle; background: var(--renk-ana); }
 .urun-detay__tablo--olcu tbody td { color: var(--renk-koyu); background: #fff; }
 .urun-detay__tablo--olcu tbody tr:nth-child(even),
@@ -108,6 +111,8 @@
   .urun-detay__hero { padding: 20px; }
   .urun-detay__guven { justify-content: space-between; gap: 8px; }
   .urun-detay__guven-oge { width: 30%; }
+  .urun-detay__teknik-tanim { grid-template-columns: 1fr; width: 100%; }
+  .urun-detay__teknik-tanim span { padding: 8px 0 0; border-top: 1px solid color-mix(in srgb, var(--renk-ana) 25%, transparent); border-left: 0; }
   .urun-detay__cizim { min-height: 300px; }
   .urun-detay__cizim img { height: 280px; }
   .urun-detay__panel-baslik { align-items: flex-start; }
