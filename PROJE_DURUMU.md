@@ -285,6 +285,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - İletişim bilgi/form alanı onaylanan referansa göre yeniden biçimlendirildi: sol iletişim satırları ve üç kısayol kartı sıkılaştırıldı; sağ formun mavi geçişli üst paneline beyaz uçak simgesi ile yönetilebilir `iletisim_form_slogani` eklendi ve gönder düğmesi aynı tema diline uyarlandı.
 - Kullanıcının son hiza talebi için soldaki kısayol kartlarının görünen alt kenarı ile sağ mesaj formunun alt kenarı doğrudan tarayıcı koordinatlarıyla ölçüldü. 2133px genişlikte kalan fark `0.31px`, yatay taşma `0px` olarak doğrulandı; mobil tek sütun düzenindeki bağımsız yükseklik korundu.
 - Son iletişim düzeni 27 test dosyasında 78 test ve başarılı Vite üretim derlemesiyle doğrulandı.
+- Footer, kullanıcının verdiği blueprint referansı doğrudan izleyen geniş kompozisyona dönüştürüldü. Sol marka kartına üç hizmet değeri ve iletişim düğmesi; orta bölüme ikonlu hızlı bağlantı/ürün sütunları; destek sütununa dairesel iletişim ikonları ve çalışma saatleri eklendi.
+- Sağ arka plan için ayrı, saydam çizgilerden oluşan küresel vana teknik çizimi `frontend/public/assets/footer/teknik-vana-cizimi.svg` olarak üretildi. Görsel kaynak koda gömülmedi; `footer_teknik_cizim_yolu` ayarıyla değiştirilebilir tutuldu.
+- Alt footer şeridine LinkedIn, YouTube ve Instagram bağlantıları, telif metni, yönetilebilir slogan ve yumuşak biçimde sayfa başına dönen düğme eklendi. Teknik çizim, çalışma saatleri, sosyal bağlantılar, sosyal başlık ve slogan için yeni `site_ayarlari` anahtarları örnek veri ile SQL şemasına işlendi.
+- Footer canlı geniş ekranda ekranın `%89.8` genişliğinde, teknik çizimli ve `0px` yatay taşmayla doğrulandı. Tablet düzeni iki sütuna, telefon düzeni tek sütuna iner; teknik çizim dar ekranlarda içerik okunabilirliği için gizlenir. Tüm 78 frontend testi ve Vite üretim derlemesi başarılıdır.
 
 ## Bilinen durumlar
 
@@ -300,4 +304,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-İletişim bilgi alanı ile mesaj formunun görünür alt hizası tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.
+Blueprint referanslı footer tamamlandı. Kullanıcının belirteceği sonraki alanda sınırlı değişiklik yap; diğer sayfaları koru.

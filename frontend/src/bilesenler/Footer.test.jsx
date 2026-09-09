@@ -15,6 +15,10 @@ describe('Footer', () => {
       destek_telefonu: '+90 (212) 297 57 30',
       destek_eposta: 'dv@demirvana.com',
       firma_adresi: 'İkitelli, İstanbul / Türkiye',
+      footer_teknik_cizim_yolu: '/assets/footer/teknik-vana-cizimi.svg',
+      footer_calisma_saatleri: 'Pzt - Cum 08:00 - 18:00',
+      footer_linkedin_baglantisi: 'https://linkedin.com/company/demirvana',
+      footer_slogan_metni: 'Endüstrinin her noktasında, daha güvenli bir akış için.',
       footer_iletisim_buton_metni: 'Bizimle iletişime geçin',
       footer_iletisim_buton_baglantisi: '/iletisim',
       footer_telif_metni: '© {yil} Demirvana. Tüm hakları saklıdır.'
@@ -36,6 +40,11 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: 'Küresel Vanalar' })).toHaveAttribute('href', '/kategoriler/kuresel-vanalar');
     expect(screen.getByRole('link', { name: '+90 (212) 297 57 30' })).toHaveAttribute('href', 'tel:+902122975730');
     expect(screen.getByRole('link', { name: 'dv@demirvana.com' })).toHaveAttribute('href', 'mailto:dv@demirvana.com');
+    expect(screen.getByRole('img', { name: 'Teknik vana çizimi' })).toHaveAttribute('src', '/assets/footer/teknik-vana-cizimi.svg');
+    expect(screen.getByText('Pzt - Cum 08:00 - 18:00')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://linkedin.com/company/demirvana');
+    expect(screen.getByText('Endüstrinin her noktasında, daha güvenli bir akış için.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sayfanın başına dön' })).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${new Date().getFullYear()} Demirvana`))).toBeInTheDocument();
   });
 

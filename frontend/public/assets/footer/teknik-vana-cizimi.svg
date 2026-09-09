@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 560" fill="none">
+  <g stroke="#68a8ff" stroke-width="1" opacity=".22">
+    <path d="M0 40h620M0 100h620M0 160h620M0 220h620M0 280h620M0 340h620M0 400h620M0 460h620M0 520h620"/>
+    <path d="M20 0v560M80 0v560M140 0v560M200 0v560M260 0v560M320 0v560M380 0v560M440 0v560M500 0v560M560 0v560"/>
+  </g>
+  <g stroke="#89bbff" stroke-width="2" opacity=".72" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 364V226l34-34h72l30 28h236l34-28h72l30 34v138l-30 34h-72l-34-28H192l-30 28H90z"/>
+    <ellipse cx="126" cy="295" rx="66" ry="118"/>
+    <ellipse cx="494" cy="295" rx="66" ry="118"/>
+    <ellipse cx="126" cy="295" rx="38" ry="84"/>
+    <ellipse cx="494" cy="295" rx="38" ry="84"/>
+    <path d="M192 220c26-20 55-31 86-33h64c31 2 60 13 86 33v150c-26 20-55 31-86 33h-64c-31-2-60-13-86-33z"/>
+    <path d="M215 207v176M405 207v176M238 196v198M382 196v198"/>
+    <path d="M258 188v-48h104v48M276 140v-38h68v38M291 102V72h38v30"/>
+    <path d="M258 140h104M276 102h68"/>
+    <path d="M304 72V48h90l22-22h126"/>
+    <circle cx="310" cy="295" r="70"/>
+    <circle cx="310" cy="295" r="50"/>
+    <path d="M260 295h100M310 245v100"/>
+    <path d="M99 188l15 22M153 188l-15 22M99 402l15-22M153 402l-15-22M467 188l15 22M521 188l-15 22M467 402l15-22M521 402l-15-22"/>
+    <circle cx="126" cy="207" r="7"/><circle cx="126" cy="383" r="7"/>
+    <circle cx="75" cy="260" r="7"/><circle cx="75" cy="330" r="7"/>
+    <circle cx="177" cy="260" r="7"/><circle cx="177" cy="330" r="7"/>
+    <circle cx="494" cy="207" r="7"/><circle cx="494" cy="383" r="7"/>
+    <circle cx="443" cy="260" r="7"/><circle cx="443" cy="330" r="7"/>
+    <circle cx="545" cy="260" r="7"/><circle cx="545" cy="330" r="7"/>
+  </g>
+  <g stroke="#b8d6ff" stroke-width="1" opacity=".38">
+    <path d="M42 437h536M42 448h536M28 177h564M28 166h564"/>
+    <path d="M42 428v28M578 428v28M19 177h18M19 166h18M583 177h18M583 166h18"/>
+    <path d="M310 20v430" stroke-dasharray="8 8"/>
+    <path d="M24 295h572" stroke-dasharray="8 8"/>
+  </g>
+  <g fill="#a8ceff" font-family="Arial, sans-serif" font-size="12" opacity=".58">
+    <text x="282" y="322">DN100</text>
+    <text x="455" y="475">KÜRESEL VANA</text>
+    <text x="455" y="492">TEKNİK ÇİZİM</text>
+  </g>
+</svg>
