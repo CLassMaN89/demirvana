@@ -1,7 +1,8 @@
 .site-footer {
   position: relative;
   isolation: isolate;
-  margin-top: clamp(56px, 8vw, 112px);
+  /* Sayfa içeriğiyle footer arasında yapay beyaz bant oluşmaması için ortak dış boşluk kullanılmaz. */
+  margin-top: 0;
   overflow: hidden;
   background:
     radial-gradient(circle at 10% 28%, rgba(17, 81, 184, .3), transparent 38%),

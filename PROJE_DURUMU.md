@@ -316,6 +316,8 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Ürün üst alanına kaynakta bulunan metal sitli sürgülü vana teknik tanım bloğu; O-Ring sistemi, PN10/PN6 ve TS/DIN standartlarıyla aynen eklendi.
 - Ürün üst alanındaki Yüksek Dayanım, Güvenilir Performans ve Endüstriyel Kullanım göstergeleri kaldırıldı; teknik tanım bloğu bu göstergelerin bulunduğu sağ kolona taşındı.
 - Teknik Ölçüler ve Boyutlar tablosu içeriği bozulmadan panel kenarlarından ayrıldı; masaüstünde 14px, telefonda 10px iç yerleşim boşluğu ve bağımsız yuvarlatılmış sınır eklendi.
+- Tüm sayfalarda ana içerik ile footer arasına ekran yüksekliğini doldurmak amacıyla eklenen yapay boşluk kaldırıldı. Ortak footer dış üst boşluğu sıfırlandı; kısa sayfalarda footer sonrasındaki ekran alanı beyaz bant yerine footer zeminiyle devam eder. F4 D-001 ürün detayında son teknik panel footer'a yapışmaması için yalnız 32px kontrollü alt ritim bırakıldı.
+- Yeni ürün sayfaları için F4 D-001 doğrulanmış şablonu esas alınacaktır: teknik tablo birleşik hücreleri, DN/L/H/D1/D/k/kg sütun eksenleri, basınç grupları, boş kaynak hücreleri, malzeme ifadeleri ve ürün adıyla kaydedilen PDF/XLSX dosyaları değiştirilmeden uygulanacak; tablo verileri tahmin edilmeyip kaynakla hücre hücre doğrulanacaktır.
 
 ## Bilinen durumlar
 
@@ -332,4 +334,4 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Sıradaki adım
 
-F4 D-001 örnek ürün detay sayfasındaki ölçü ve doküman doğrulaması tamamlandı. Sonraki net adım, yalnız kaynak belgesi hücre hücre doğrulanan ürünleri eklemek ve kullanıcı değerlendirmesinden sonra Su Grubu sol kategori/ürün menüsünü bağlamaktır.
+F4 D-001 örnek ürün detay sayfasındaki ölçü ve doküman doğrulaması tamamlandı. Sonraki net adım, aynı doğrulanmış görsel/tablo şablonunu bozmadan ve kaynak belgesini hücre hücre kontrol ederek diğer ürünleri eklemek; ardından kullanıcı değerlendirmesine göre Su Grubu sol kategori/ürün menüsünü bağlamaktır.

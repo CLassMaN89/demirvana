@@ -1,7 +1,8 @@
 .urun-detay {
   width: min(1480px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 34px 0 64px;
+  /* Son teknik panel footer'a yapışmaz; büyük yapay bant yerine kontrollü bir ritim bırakılır. */
+  padding: 34px 0 32px;
   color: var(--renk-koyu);
 }
 
