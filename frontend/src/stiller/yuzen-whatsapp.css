@@ -3,30 +3,16 @@
   position: fixed;
   z-index: 90;
   right: 22px;
-  bottom: 24px;
+  bottom: 46px;
   display: grid;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 10px 26px rgba(15, 35, 25, .22);
+  width: 72px;
+  height: 72px;
   place-items: center;
-  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
-.yuzen-whatsapp img { width: 40px; height: 40px; }
-
-.yuzen-whatsapp:hover,
-.yuzen-whatsapp:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 32px rgba(15, 35, 25, .28);
-}
+.yuzen-whatsapp img { width: 68px; height: 68px; }
 
 @media (max-width: 520px) {
-  .yuzen-whatsapp { right: 14px; bottom: 18px; width: 50px; height: 50px; }
-  .yuzen-whatsapp img { width: 34px; height: 34px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .yuzen-whatsapp { transition: none; }
+  .yuzen-whatsapp { right: 14px; bottom: 34px; width: 58px; height: 58px; }
+  .yuzen-whatsapp img { width: 54px; height: 54px; }
 }
