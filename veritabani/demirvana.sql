@@ -786,7 +786,7 @@ SET `teknik_bilgiler` = JSON_SET(
 )
 WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001';
 
--- Ürün kataloğunun ilk tesliminde üç gerçek ürün adı gösterilir; yalnız doğrulanmış F4 D-001 detayı aktiftir.
+-- Ürün kataloğunun ilk tesliminde beş gerçek ürün adı gösterilir; yalnız doğrulanmış F4 D-001 detayı aktiftir.
 UPDATE `urunler`
 SET `teknik_bilgiler` = JSON_SET(
     `teknik_bilgiler`,
@@ -810,6 +810,22 @@ SELECT `id`, 'Elastomer Sitli Sürgülü Vana F4 D-010', 'elastomer-sitli-surgul
     'Elastomer sitli kısa tip sürgülü vana.',
     '{"detay_hazir_mi":false,"katalog_bilgileri":{"dn":"DN 40 - 600","standart":"TS EN 1074-2","basinc":"PN 10 / PN 16","gorsel_yolu":"/assets/kategoriler/surgulu-vanalar.webp"}}',
     'D-010', 3
+FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
+ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `urunler` (`kategori_id`, `ad`, `slug`, `kisa_aciklama`, `teknik_bilgiler`, `stok_kodu`, `siralama`)
+SELECT `id`, 'Elastomer Sitli Sürgülü Vana F5 D-385', 'elastomer-sitli-surgulu-vana-f5-d-385',
+    'Elastomer sitli uzun tip sürgülü vana.',
+    '{"detay_hazir_mi":false,"katalog_bilgileri":{"dn":"DN 50 - 600","standart":"TS EN 1074-2","basinc":"PN 10 / PN 16","gorsel_yolu":"/assets/kategoriler/surgulu-vanalar.webp"}}',
+    'D-385', 4
+FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
+ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `urunler` (`kategori_id`, `ad`, `slug`, `kisa_aciklama`, `teknik_bilgiler`, `stok_kodu`, `siralama`)
+SELECT `id`, 'Yükselen Milli Sürgülü Vana F4/S D-000', 'yukselen-milli-surgulu-vana-f4-s-d-000',
+    'Yükselen milli flanşlı sürgülü vana.',
+    '{"detay_hazir_mi":false,"katalog_bilgileri":{"dn":"DN 50 - 600","standart":"TS 1171","basinc":"PN 10 / PN 16","gorsel_yolu":"/assets/kategoriler/surgulu-vanalar.webp"}}',
+    'D-000', 5
 FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
 ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
 

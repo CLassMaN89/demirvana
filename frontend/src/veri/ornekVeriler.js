@@ -342,6 +342,24 @@ export const ornekVeriler = Object.freeze({
     stok_kodu: 'D-010',
     kisa_aciklama: 'Elastomer sitli kısa tip sürgülü vana.',
     teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 40 - 600', standart: 'TS EN 1074-2', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
+  }, {
+    id: 4,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Elastomer Sitli Sürgülü Vana F5 D-385',
+    slug: 'elastomer-sitli-surgulu-vana-f5-d-385',
+    stok_kodu: 'D-385',
+    kisa_aciklama: 'Elastomer sitli uzun tip sürgülü vana.',
+    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS EN 1074-2', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
+  }, {
+    id: 5,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Yükselen Milli Sürgülü Vana F4/S D-000',
+    slug: 'yukselen-milli-surgulu-vana-f4-s-d-000',
+    stok_kodu: 'D-000',
+    kisa_aciklama: 'Yükselen milli flanşlı sürgülü vana.',
+    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS 1171', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
   }],
   referanslar: {
     sektorler: referansSektorleri,

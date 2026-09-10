@@ -26,7 +26,9 @@ const menu = [{
 const urunler = [
   { id: 1, ad: 'Metal Sitli Sürgülü Vana F4 D-001', slug: 'metal-sitli-surgulu-vana-f4-d-001', stok_kodu: 'D-001', katalog_bilgileri: { dn: 'DN 40 - 900', standart: 'TS 457/1', basinc: 'PN 10 / PN 6' } },
   { id: 2, ad: 'Metal Sitli Sürgülü Vana F5 D-003', slug: 'metal-sitli-surgulu-vana-f5-d-003', stok_kodu: 'D-003', detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600' } },
-  { id: 3, ad: 'Elastomer Sitli Sürgülü Vana F4 D-010', slug: 'elastomer-sitli-surgulu-vana-f4-d-010', stok_kodu: 'D-010', detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 40 - 600' } }
+  { id: 3, ad: 'Elastomer Sitli Sürgülü Vana F4 D-010', slug: 'elastomer-sitli-surgulu-vana-f4-d-010', stok_kodu: 'D-010', detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 40 - 600' } },
+  { id: 4, ad: 'Elastomer Sitli Sürgülü Vana F5 D-385', slug: 'elastomer-sitli-surgulu-vana-f5-d-385', stok_kodu: 'D-385', detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600' } },
+  { id: 5, ad: 'Yükselen Milli Sürgülü Vana F4/S D-000', slug: 'yukselen-milli-surgulu-vana-f4-s-d-000', stok_kodu: 'D-000', detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600' } }
 ];
 
 function sayfayiAc() {
@@ -38,13 +40,13 @@ function sayfayiAc() {
 }
 
 describe('Ürün kataloğu sayfası', () => {
-  it('su grubu kataloğunda üç ürünü ve yalnız hazır ürünün detay bağlantısını gösterir', () => {
+  it('su grubu kataloğunda beş ürünü ve yalnız hazır ürünün detay bağlantısını gösterir', () => {
     sayfayiAc();
 
     expect(screen.getByRole('heading', { name: 'Su Grubu Vanaları' })).toBeInTheDocument();
-    expect(screen.getAllByTestId('urun-katalog-karti')).toHaveLength(3);
+    expect(screen.getAllByTestId('urun-katalog-karti')).toHaveLength(5);
     expect(screen.getByRole('link', { name: /Metal Sitli Sürgülü Vana F4 D-001 detayını gör/i })).toHaveAttribute('href', '/urunler/metal-sitli-surgulu-vana-f4-d-001');
-    expect(screen.getAllByText('Detay hazırlanıyor')).toHaveLength(2);
+    expect(screen.getAllByText('Detay hazırlanıyor')).toHaveLength(4);
   });
 
   it('liste görünümü düğmesine basınca ürünleri liste düzenine geçirir', async () => {

@@ -35,31 +35,38 @@
 .urun-katalog__gorunum button[aria-pressed='true'] { border-color: var(--renk-ana); background: var(--renk-ana); color: #fff; }
 .urun-katalog__gorunum button:active { transform: scale(.94); }
 .urun-katalog__gorunum svg { width: 17px; }
-.urun-katalog__urunler { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: 180px 1fr auto; padding: 14px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 11px; background: rgba(255,255,255,.96); box-shadow: 0 12px 30px color-mix(in srgb, var(--renk-koyu) 5%, transparent); transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
+.urun-katalog__urunler { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: auto 1fr auto; padding: 10px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 10px; background: rgba(255,255,255,.96); box-shadow: 0 10px 24px color-mix(in srgb, var(--renk-koyu) 5%, transparent); transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
 .urun-katalog__kart:hover { border-color: color-mix(in srgb, var(--renk-ana) 40%, transparent); box-shadow: 0 18px 38px color-mix(in srgb, var(--renk-koyu) 10%, transparent); transform: translateY(-3px); }
 .urun-katalog__sira { position: absolute; z-index: 2; top: 10px; left: 10px; display: grid; width: 30px; height: 25px; border-radius: 7px; background: var(--renk-acik); color: var(--renk-ana); font-size: .65rem; font-weight: 700; place-items: center; }
-.urun-katalog__gorsel { display: block; min-width: 0; overflow: hidden; border-radius: 8px; background: linear-gradient(#f8fbff, #fff); }
+.urun-katalog__gorsel { display: block; min-width: 0; aspect-ratio: 1; overflow: hidden; border-radius: 8px; background: linear-gradient(#f8fbff, #fff); }
 .urun-katalog__gorsel img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 320ms cubic-bezier(.22,1,.36,1); }
 /* Kaynak katalogdaki ikinci metal gövdeyi, aynı doğrulanmış ürün fotoğrafından geçici olarak nötr tonda ayırır. */
-.urun-katalog__kart:nth-child(2) .urun-katalog__gorsel img { filter: grayscale(.92) contrast(1.06); }
+.urun-katalog__kart:nth-child(2) .urun-katalog__gorsel img,
+.urun-katalog__kart:nth-child(5) .urun-katalog__gorsel img { filter: grayscale(.92) contrast(1.06); }
 .urun-katalog__kart:hover .urun-katalog__gorsel img { transform: scale(1.035); }
-.urun-katalog__kart-metin { padding: 12px 2px 14px; }
-.urun-katalog__kart h2 { margin: 0; color: var(--renk-ana); font-size: .88rem; line-height: 1.28; }
+.urun-katalog__kart-metin { padding: 10px 2px 12px; }
+.urun-katalog__kart h2 { margin: 0; color: var(--renk-ana); font-size: .78rem; line-height: 1.28; }
 .urun-katalog__kart dl, .urun-katalog__kart dd { margin: 0; }
-.urun-katalog__kart dl { margin-top: 8px; color: var(--renk-ikincil); font-size: .69rem; line-height: 1.45; }
-.urun-katalog__detay, .urun-katalog__hazirlaniyor { display: flex; min-height: 38px; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--renk-ana); border-radius: 7px; color: var(--renk-ana); font-size: .72rem; font-weight: 700; text-decoration: none; }
+.urun-katalog__kart dl { margin-top: 7px; color: var(--renk-ikincil); font-size: .65rem; line-height: 1.42; }
+.urun-katalog__detay, .urun-katalog__hazirlaniyor { display: flex; min-height: 36px; align-items: center; justify-content: center; gap: 8px; border: 1px solid color-mix(in srgb, var(--renk-ana) 58%, #fff); border-radius: 7px; background: color-mix(in srgb, var(--renk-ana) 7%, #fff); color: var(--renk-ana); font-size: .7rem; font-weight: 700; text-decoration: none; }
 .urun-katalog__detay svg { width: 15px; transition: transform 180ms ease; }
 .urun-katalog__detay:hover { background: var(--renk-ana); color: #fff; }
 .urun-katalog__detay:hover svg { transform: translateX(3px); }
-.urun-katalog__hazirlaniyor { border-color: var(--renk-cizgi); background: var(--renk-acik); color: var(--renk-ikincil); }
+.urun-katalog__hazirlaniyor { border-color: var(--renk-cizgi); background: color-mix(in srgb, var(--renk-ana) 5%, #fff); color: var(--renk-ikincil); }
 
 /* Liste görünümünde aynı kart semantiği korunur; yalnız yerleşim ekseni değişir. */
 .urun-katalog__urunler--liste { grid-template-columns: 1fr; }
 .urun-katalog__urunler--liste .urun-katalog__kart { min-height: 142px; grid-template-columns: 150px minmax(0, 1fr) 150px; grid-template-rows: 1fr; align-items: center; gap: 18px; }
-.urun-katalog__urunler--liste .urun-katalog__gorsel { height: 112px; }
+.urun-katalog__urunler--liste .urun-katalog__gorsel { height: 112px; aspect-ratio: auto; }
 .urun-katalog__urunler--liste .urun-katalog__kart-metin { padding: 0; }
 
+@media (max-width: 1440px) {
+  .urun-katalog__urunler { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 1180px) {
+  .urun-katalog__urunler { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 1000px) {
   .urun-katalog__yerlesim { grid-template-columns: 210px minmax(0, 1fr); gap: 16px; }
   .urun-katalog__urunler { grid-template-columns: repeat(2, minmax(0, 1fr)); }
