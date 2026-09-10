@@ -232,6 +232,10 @@
   background: rgba(1, 28, 74, .26);
 }
 .site-footer__sosyal { display: flex; align-items: center; gap: 12px; }
+/* Sosyal ağlar arasında dönüşümlü canlanan dekoratif ikon; kendi arka planı şeffaf, ek çerçeve/arka plan eklenmez.
+   Alan yüksekliği alt şeridin diğer öğeleriyle aynı kalır; görsel yalnızca üstten şeridin dışına taşıyormuş gibi yükselir. */
+.site-footer__sosyal-animasyon-alani { position: relative; flex: 0 0 auto; width: 46px; height: 36px; }
+.site-footer__sosyal-animasyon { position: absolute; bottom: 0; left: 0; width: 46px; height: 130px; }
 .site-footer__sosyal > span { padding-right: 20px; border-right: 1px solid color-mix(in srgb, white 26%, transparent); font-size: 11px; }
 .site-footer__sosyal a,
 .site-footer__alt button { display: grid; width: 36px; height: 36px; border: 1px solid color-mix(in srgb, var(--renk-acik) 28%, transparent); border-radius: 8px; background: color-mix(in srgb, var(--renk-ana) 14%, transparent); color: var(--renk-beyaz); place-items: center; }

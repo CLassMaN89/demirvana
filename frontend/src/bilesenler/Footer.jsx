@@ -183,6 +183,9 @@ export default function Footer({ siteAyarlari = {}, menu = [], kategoriler = [] 
         <div className="site-footer__alt-ic icerik-kapsayici">
           <div className="site-footer__sosyal">
             <span>{siteAyarlari.footer_sosyal_basligi ?? 'Bizi takip edin'}</span>
+            <span className="site-footer__sosyal-animasyon-alani">
+              <img className="site-footer__sosyal-animasyon" src="/assets/sosyal.svg" alt="" aria-hidden="true" />
+            </span>
             {sosyalBaglantilar.map(({ ad, baglanti, sinif }) => (
               <a key={ad} href={baglanti} target="_blank" rel="noreferrer" aria-label={ad}><SpriteIkon sinifAdi={sinif} /></a>
             ))}
