@@ -191,6 +191,21 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                             );
                           }
 
+                          // Vana grubu kendi katalog sayfasına gider; üzerine gelmek alt kategori panelini açık tutar.
+                          if (altOge.baglanti === '/urunler/vana') {
+                            return (
+                              <Link
+                                className={`site-header__alt-baglanti${altAcik ? ' site-header__alt-baglanti--aktif' : ''}`}
+                                key={altOge.id}
+                                to={altOge.baglanti}
+                                onPointerEnter={() => setAcikAltMenuId(altOge.id)}
+                                onFocus={() => setAcikAltMenuId(altOge.id)}
+                              >
+                                <span className="site-header__menu-metin"><VanaMenuIkonu />{altOge.baslik}</span><span aria-hidden="true">→</span>
+                              </Link>
+                            );
+                          }
+
                           return (
                             <button
                               className={`site-header__alt-baglanti${altAcik ? ' site-header__alt-baglanti--aktif' : ''}`}

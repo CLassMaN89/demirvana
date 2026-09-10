@@ -101,7 +101,9 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
       <SayfaGecisi>
         <Routes>
           <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} fuarlar={veri.fuarlar ?? []} siteAyarlari={veri.site_ayarlari} />} />
-          <Route path="/urunler" element={<UrunlerSayfasi kategoriler={veri.kategoriler} />} />
+          <Route path="/urunler" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
+          <Route path="/urunler/vana" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
+          <Route path="/urunler/su-grubu-vanalari" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
           <Route path="/temsilcilikler" element={<TemsilciliklerSayfasi temsilcilikler={veri.temsilcilikler ?? []} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
           <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />

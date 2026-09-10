@@ -1,0 +1,89 @@
+.urun-katalog { padding: 24px 0 36px; background: linear-gradient(135deg, #fff 0%, color-mix(in srgb, var(--renk-acik) 48%, #fff) 100%); }
+.urun-katalog__yerlesim { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; gap: 24px; }
+.urun-katalog__yan-menu { position: sticky; top: calc(var(--navbar-yuksekligi) + 18px); display: grid; gap: 12px; }
+.urun-katalog__yan-menu-icerik { display: grid; gap: 12px; }
+.urun-katalog__mobil-menu { display: none; }
+.urun-katalog__menu-grubu { overflow: hidden; border: 1px solid color-mix(in srgb, var(--renk-ana) 11%, transparent); border-radius: 12px; background: rgba(255,255,255,.92); box-shadow: 0 12px 34px color-mix(in srgb, var(--renk-koyu) 6%, transparent); }
+.urun-katalog__menu-grubu > button { display: flex; width: 100%; min-height: 51px; align-items: center; justify-content: space-between; padding: 0 16px; border: 0; background: transparent; color: var(--renk-koyu); font-weight: 700; cursor: pointer; }
+.urun-katalog__menu-grubu > button svg { width: 17px; transition: transform 280ms cubic-bezier(.22,1,.36,1); }
+.urun-katalog__menu-grubu--acik > button svg { transform: rotate(180deg); }
+.urun-katalog__menu-gecis { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 330ms cubic-bezier(.22,1,.36,1), opacity 220ms ease; }
+.urun-katalog__menu-gecis > div { overflow: hidden; }
+.urun-katalog__menu-grubu--acik .urun-katalog__menu-gecis { grid-template-rows: 1fr; opacity: 1; }
+.urun-katalog__menu-gecis nav { display: grid; padding: 0 8px 10px; }
+.urun-katalog__menu-gecis a { position: relative; min-height: 34px; padding: 9px 11px; border-radius: 7px; color: var(--renk-ikincil); font-size: .75rem; line-height: 1.25; text-decoration: none; transition: color 180ms ease, background-color 180ms ease, padding-left 180ms ease; }
+.urun-katalog__menu-gecis a:hover, .urun-katalog__menu-gecis a.aktif { padding-left: 15px; background: color-mix(in srgb, var(--renk-ana) 8%, #fff); color: var(--renk-ana); }
+.urun-katalog__menu-gecis a.aktif::before { position: absolute; inset: 7px auto 7px 0; width: 2px; border-radius: 2px; background: var(--renk-ana); content: ''; }
+.urun-katalog__teklif { display: grid; min-height: 82px; grid-template-columns: 34px 1fr 18px; align-items: center; gap: 10px; padding: 14px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 12px; background: rgba(255,255,255,.92); color: var(--renk-ana); font-size: .7rem; line-height: 1.45; text-decoration: none; }
+.urun-katalog__teklif > svg:first-child { width: 28px; }
+.urun-katalog__teklif > svg:last-child { width: 16px; }
+.urun-katalog__icerik { min-width: 0; }
+.urun-katalog__kirinti { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--renk-ikincil); font-size: .67rem; }
+.urun-katalog__kirinti a { text-decoration: none; }
+.urun-katalog__hero { position: relative; display: flex; min-height: 112px; align-items: center; justify-content: space-between; gap: 24px; overflow: hidden; padding: 22px 26px; border-radius: 14px 14px 0 0; background: radial-gradient(circle at 90% 28%, color-mix(in srgb, var(--renk-ana) 17%, transparent), transparent 34%), linear-gradient(105deg, #fff, color-mix(in srgb, var(--renk-acik) 56%, #fff)); }
+.urun-katalog__hero::after { position: absolute; right: -45px; bottom: -78px; width: 300px; height: 160px; border: 2px solid color-mix(in srgb, var(--renk-ana) 14%, transparent); border-radius: 50%; content: ''; transform: rotate(-10deg); }
+.urun-katalog__hero h1 { margin: 0; color: var(--renk-koyu); font-size: clamp(1.8rem, 3vw, 3rem); letter-spacing: -.045em; }
+.urun-katalog__hero p { margin: 6px 0 0; color: var(--renk-ikincil); font-size: .82rem; }
+.urun-katalog__hero .urun-katalog__hero-soz { position: relative; z-index: 1; padding-right: 8px; color: var(--renk-ana); font-size: .7rem; line-height: 1.55; text-align: right; }
+.urun-katalog__bilgi { display: flex; min-height: 48px; align-items: center; gap: 12px; padding: 0 18px; border-top: 1px solid color-mix(in srgb, var(--renk-ana) 8%, transparent); border-radius: 0 0 12px 12px; background: color-mix(in srgb, var(--renk-ana) 5%, #fff); color: var(--renk-ikincil); font-size: .72rem; }
+.urun-katalog__bilgi svg { flex: 0 0 19px; width: 19px; color: var(--renk-ana); }
+.urun-katalog__araclar { display: flex; min-height: 60px; align-items: center; justify-content: flex-end; gap: 10px; }
+.urun-katalog__araclar > span { margin-right: auto; color: var(--renk-ikincil); font-size: .7rem; }
+.urun-katalog__araclar select { height: 36px; padding: 0 30px 0 11px; border: 1px solid var(--renk-cizgi); border-radius: 7px; outline: 0; background: #fff; color: var(--renk-koyu); font-size: .7rem; }
+.urun-katalog__gorunum { display: flex; gap: 5px; }
+.urun-katalog__gorunum button { display: grid; width: 36px; height: 36px; border: 1px solid var(--renk-cizgi); border-radius: 7px; background: #fff; color: var(--renk-ana); cursor: pointer; place-items: center; transition: background-color 180ms ease, color 180ms ease, transform 180ms ease; }
+.urun-katalog__gorunum button[aria-pressed='true'] { border-color: var(--renk-ana); background: var(--renk-ana); color: #fff; }
+.urun-katalog__gorunum button:active { transform: scale(.94); }
+.urun-katalog__gorunum svg { width: 17px; }
+.urun-katalog__urunler { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: 180px 1fr auto; padding: 14px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 11px; background: rgba(255,255,255,.96); box-shadow: 0 12px 30px color-mix(in srgb, var(--renk-koyu) 5%, transparent); transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
+.urun-katalog__kart:hover { border-color: color-mix(in srgb, var(--renk-ana) 40%, transparent); box-shadow: 0 18px 38px color-mix(in srgb, var(--renk-koyu) 10%, transparent); transform: translateY(-3px); }
+.urun-katalog__sira { position: absolute; z-index: 2; top: 10px; left: 10px; display: grid; width: 30px; height: 25px; border-radius: 7px; background: var(--renk-acik); color: var(--renk-ana); font-size: .65rem; font-weight: 700; place-items: center; }
+.urun-katalog__gorsel { display: block; min-width: 0; overflow: hidden; border-radius: 8px; background: linear-gradient(#f8fbff, #fff); }
+.urun-katalog__gorsel img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 320ms cubic-bezier(.22,1,.36,1); }
+/* Kaynak katalogdaki ikinci metal gövdeyi, aynı doğrulanmış ürün fotoğrafından geçici olarak nötr tonda ayırır. */
+.urun-katalog__kart:nth-child(2) .urun-katalog__gorsel img { filter: grayscale(.92) contrast(1.06); }
+.urun-katalog__kart:hover .urun-katalog__gorsel img { transform: scale(1.035); }
+.urun-katalog__kart-metin { padding: 12px 2px 14px; }
+.urun-katalog__kart h2 { margin: 0; color: var(--renk-ana); font-size: .88rem; line-height: 1.28; }
+.urun-katalog__kart dl, .urun-katalog__kart dd { margin: 0; }
+.urun-katalog__kart dl { margin-top: 8px; color: var(--renk-ikincil); font-size: .69rem; line-height: 1.45; }
+.urun-katalog__detay, .urun-katalog__hazirlaniyor { display: flex; min-height: 38px; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--renk-ana); border-radius: 7px; color: var(--renk-ana); font-size: .72rem; font-weight: 700; text-decoration: none; }
+.urun-katalog__detay svg { width: 15px; transition: transform 180ms ease; }
+.urun-katalog__detay:hover { background: var(--renk-ana); color: #fff; }
+.urun-katalog__detay:hover svg { transform: translateX(3px); }
+.urun-katalog__hazirlaniyor { border-color: var(--renk-cizgi); background: var(--renk-acik); color: var(--renk-ikincil); }
+
+/* Liste görünümünde aynı kart semantiği korunur; yalnız yerleşim ekseni değişir. */
+.urun-katalog__urunler--liste { grid-template-columns: 1fr; }
+.urun-katalog__urunler--liste .urun-katalog__kart { min-height: 142px; grid-template-columns: 150px minmax(0, 1fr) 150px; grid-template-rows: 1fr; align-items: center; gap: 18px; }
+.urun-katalog__urunler--liste .urun-katalog__gorsel { height: 112px; }
+.urun-katalog__urunler--liste .urun-katalog__kart-metin { padding: 0; }
+
+@media (max-width: 1000px) {
+  .urun-katalog__yerlesim { grid-template-columns: 210px minmax(0, 1fr); gap: 16px; }
+  .urun-katalog__urunler { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .urun-katalog { padding-top: 14px; }
+  .urun-katalog__yerlesim { grid-template-columns: 1fr; }
+  .urun-katalog__yan-menu { position: static; }
+  .urun-katalog__mobil-menu { display: flex; width: 100%; min-height: 46px; align-items: center; justify-content: space-between; padding: 0 14px; border: 1px solid var(--renk-cizgi); border-radius: 10px; background: #fff; color: var(--renk-koyu); font-weight: 700; }
+  .urun-katalog__mobil-menu svg { width: 18px; }
+  .urun-katalog__mobil-menu span { flex: 1; padding-left: 10px; text-align: left; }
+  .urun-katalog__yan-menu-icerik { display: grid; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 520ms cubic-bezier(.22,1,.36,1), opacity 220ms ease, margin-top 220ms ease; }
+  .urun-katalog__yan-menu--mobil-acik .urun-katalog__yan-menu-icerik { max-height: 1300px; margin-top: 10px; opacity: 1; }
+  .urun-katalog__hero { min-height: 104px; padding: 18px; }
+  .urun-katalog__hero-soz { display: none; }
+}
+@media (max-width: 560px) {
+  .urun-katalog__urunler { grid-template-columns: 1fr; }
+  .urun-katalog__araclar { flex-wrap: wrap; padding: 10px 0; }
+  .urun-katalog__araclar > span { flex-basis: 100%; }
+  .urun-katalog__urunler--liste .urun-katalog__kart { min-height: 132px; grid-template-columns: 105px minmax(0, 1fr); gap: 10px; }
+  .urun-katalog__urunler--liste .urun-katalog__gorsel { height: 100px; }
+  .urun-katalog__urunler--liste .urun-katalog__detay, .urun-katalog__urunler--liste .urun-katalog__hazirlaniyor { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .urun-katalog__menu-gecis, .urun-katalog__yan-menu-icerik, .urun-katalog__kart, .urun-katalog__gorsel img, .urun-katalog__detay svg { transition: none; }
+}

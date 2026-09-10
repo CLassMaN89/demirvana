@@ -297,6 +297,7 @@ export const ornekVeriler = Object.freeze({
     teknik_bilgiler: JSON.stringify({
       grup_adi: 'Sürgülü Vanalar',
       basinc: 'PN 10 / 6 / 4 / 2,5 / 1,6 / 1',
+      katalog_bilgileri: { dn: 'DN 40 - 900', standart: 'TS 457/1 · DIN 3352/2-F4', basinc: 'PN 10 / PN 6', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' },
       urun_tanimi: { baslik: 'METAL SİTLİ SÜRGÜLÜ VANA', satirlar: ['O-RİNG SİSTEMİ', 'PN10 / PN6', 'TS 457/1', 'DIN 3352/2-F4 (DIN 3216)'] },
       teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
       teknik_cizim_alt: 'Metal sitli sürgülü vana teknik çizimi – F4 D-001',
@@ -323,6 +324,24 @@ export const ornekVeriler = Object.freeze({
         { baslik: 'Ürün PDF', aciklama: 'Ürün kataloğu ve teknik bilgiler', tur: 'PDF · 533 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001.pdf' }
       ]
     })
+  }, {
+    id: 2,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Metal Sitli Sürgülü Vana F5 D-003',
+    slug: 'metal-sitli-surgulu-vana-f5-d-003',
+    stok_kodu: 'D-003',
+    kisa_aciklama: 'Uzun tip metal sitli sürgülü vana.',
+    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS 457/1 · DIN 3352/2-F5', basinc: 'PN 10 / PN 6', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
+  }, {
+    id: 3,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Elastomer Sitli Sürgülü Vana F4 D-010',
+    slug: 'elastomer-sitli-surgulu-vana-f4-d-010',
+    stok_kodu: 'D-010',
+    kisa_aciklama: 'Elastomer sitli kısa tip sürgülü vana.',
+    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 40 - 600', standart: 'TS EN 1074-2', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
   }],
   referanslar: {
     sektorler: referansSektorleri,

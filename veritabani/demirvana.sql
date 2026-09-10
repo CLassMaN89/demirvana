@@ -786,6 +786,33 @@ SET `teknik_bilgiler` = JSON_SET(
 )
 WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001';
 
+-- Ürün kataloğunun ilk tesliminde üç gerçek ürün adı gösterilir; yalnız doğrulanmış F4 D-001 detayı aktiftir.
+UPDATE `urunler`
+SET `teknik_bilgiler` = JSON_SET(
+    `teknik_bilgiler`,
+    '$.katalog_bilgileri', JSON_OBJECT(
+        'dn','DN 40 - 900', 'standart','TS 457/1 · DIN 3352/2-F4', 'basinc','PN 10 / PN 6',
+        'gorsel_yolu','/assets/kategoriler/surgulu-vanalar.webp'
+    )
+)
+WHERE `slug` = 'metal-sitli-surgulu-vana-f4-d-001';
+
+INSERT INTO `urunler` (`kategori_id`, `ad`, `slug`, `kisa_aciklama`, `teknik_bilgiler`, `stok_kodu`, `siralama`)
+SELECT `id`, 'Metal Sitli Sürgülü Vana F5 D-003', 'metal-sitli-surgulu-vana-f5-d-003',
+    'Uzun tip metal sitli sürgülü vana.',
+    '{"detay_hazir_mi":false,"katalog_bilgileri":{"dn":"DN 50 - 600","standart":"TS 457/1 · DIN 3352/2-F5","basinc":"PN 10 / PN 6","gorsel_yolu":"/assets/kategoriler/surgulu-vanalar.webp"}}',
+    'D-003', 2
+FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
+ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
+INSERT INTO `urunler` (`kategori_id`, `ad`, `slug`, `kisa_aciklama`, `teknik_bilgiler`, `stok_kodu`, `siralama`)
+SELECT `id`, 'Elastomer Sitli Sürgülü Vana F4 D-010', 'elastomer-sitli-surgulu-vana-f4-d-010',
+    'Elastomer sitli kısa tip sürgülü vana.',
+    '{"detay_hazir_mi":false,"katalog_bilgileri":{"dn":"DN 40 - 600","standart":"TS EN 1074-2","basinc":"PN 10 / PN 16","gorsel_yolu":"/assets/kategoriler/surgulu-vanalar.webp"}}',
+    'D-010', 3
+FROM `kategoriler` WHERE `slug` = 'surgulu-vanalar'
+ON DUPLICATE KEY UPDATE `kategori_id` = VALUES(`kategori_id`), `ad` = VALUES(`ad`), `kisa_aciklama` = VALUES(`kisa_aciklama`), `teknik_bilgiler` = VALUES(`teknik_bilgiler`), `stok_kodu` = VALUES(`stok_kodu`), `siralama` = VALUES(`siralama`), `aktif_mi` = 1;
+
 INSERT INTO `fuar_gorselleri` (`gorsel_yolu`, `alternatif_metin`, `siralama`) VALUES
     ('/assets/fuar/demirvana-fuar-5.jpg', 'Demirvana fuar standından ürün tanıtımı', 1),
     ('/assets/fuar/demirvana-fuar-6.jpg', 'Demirvana fuar alanında ziyaretçi buluşması', 2),

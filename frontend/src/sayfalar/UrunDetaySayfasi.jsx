@@ -36,6 +36,18 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
   }
 
   const teknik = teknikBilgileriOku(urun.teknik_bilgiler);
+
+  // Kaynağı doğrulanmayan ürünlerde boş veya tahmini teknik tablolar göstermiyoruz.
+  if (teknik.detay_hazir_mi === false) {
+    return (
+      <DurumMesaji
+        baslik="Ürün detayı hazırlanıyor"
+        aciklama="Bu ürünün doğrulanmış teknik çizimi, tabloları ve dokümanları hazırlanıyor."
+        eylem={<Link to="/urunler/su-grubu-vanalari">Su Grubu Vanalarına dön</Link>}
+      />
+    );
+  }
+
   const basincGruplari = teknik.anma_basinci_gruplari || (teknik.anma_basinci_degerleri || []).filter(Boolean).map((deger) => ({ deger, sutun: 1 }));
   const cizimAlternatifMetni = teknik.teknik_cizim_alt
     || `${urun.ad.replace(/\s+F\d+\s+D-\d+$/i, '')} teknik çizimi`;

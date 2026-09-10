@@ -318,6 +318,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Teknik Ölçüler ve Boyutlar tablosu içeriği bozulmadan panel kenarlarından ayrıldı; masaüstünde 14px, telefonda 10px iç yerleşim boşluğu ve bağımsız yuvarlatılmış sınır eklendi.
 - Tüm sayfalarda ana içerik ile footer arasına ekran yüksekliğini doldurmak amacıyla eklenen yapay boşluk kaldırıldı. Ortak footer dış üst boşluğu sıfırlandı; kısa sayfalarda footer sonrasındaki ekran alanı beyaz bant yerine footer zeminiyle devam eder. F4 D-001 ürün detayında son teknik panel footer'a yapışmaması için yalnız 32px kontrollü alt ritim bırakıldı.
 - Yeni ürün sayfaları için F4 D-001 doğrulanmış şablonu esas alınacaktır: teknik tablo birleşik hücreleri, DN/L/H/D1/D/k/kg sütun eksenleri, basınç grupları, boş kaynak hücreleri, malzeme ifadeleri ve ürün adıyla kaydedilen PDF/XLSX dosyaları değiştirilmeden uygulanacak; tablo verileri tahmin edilmeyip kaynakla hücre hücre doğrulanacaktır.
+- Ürünler, Vana ve Su Grubu Vanaları rotaları referanstaki iki görünümlü kataloğa bağlandı. Sol taraftaki Vana, Aktüatör ve Otomasyon grupları açılış/kapanış animasyonlu akordeon menüdür; mobilde bütün yan menü ayrıca tek düğmeyle açılıp kapanır.
+- Katalogda şimdilik Metal Sitli Sürgülü Vana F4 D-001, Metal Sitli Sürgülü Vana F5 D-003 ve Elastomer Sitli Sürgülü Vana F4 D-010 kayıtları yer alır. İlk ürünün görseli ve Detayı Gör düğmesi doğrulanmış detay sayfasına gider; diğer iki kayıt yanlış teknik detay sunmamak için “Detay hazırlanıyor” durumundadır.
+- Kart ve liste görünüm düğmeleri aynı ürün verisini iki farklı düzende gösterir. Katalog temel teknik değerleri MariaDB, SQL başlangıç verisi ve frontend geliştirme yedeğinde aynı sözleşmeyle tutulur.
+- Teknik içeriği henüz kaynakla doğrulanmamış katalog ürünlerinin doğrudan detay adresleri boş veya tahmini tablo üretmez; hazırlık durumu ve Su Grubu Vanaları kataloğuna dönüş bağlantısı gösterir.
 
 ## Bilinen durumlar
 

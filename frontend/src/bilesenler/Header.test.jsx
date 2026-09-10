@@ -262,8 +262,8 @@ describe('Header', () => {
     await kullanici.click(urunlerDugmesi);
 
     expect(urunlerDugmesi).toHaveAttribute('aria-expanded', 'true');
-    const vanaDugmesi = screen.getByRole('button', { name: /vana alt menüsünü kapat/i });
-    expect(vanaDugmesi).toHaveAttribute('aria-expanded', 'true');
+    const vanaBaglantisi = screen.getByRole('link', { name: 'Vana' });
+    expect(vanaBaglantisi).toHaveAttribute('href', '/urunler/vana');
     expect(screen.getByRole('link', { name: 'Yangın Vanaları' })).toHaveAttribute(
       'href',
       '/urunler/yangin-vanalari'

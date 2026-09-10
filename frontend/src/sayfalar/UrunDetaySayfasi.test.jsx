@@ -52,4 +52,24 @@ describe('UrunDetaySayfasi', () => {
     expect(screen.getByRole('link', { name: /Birim Fiyat Excel/i })).toHaveAttribute('href', expect.stringContaining('Birim Fiyat.xlsx'));
     expect(screen.getByRole('link', { name: /Ürün PDF/i })).toHaveAttribute('href', expect.stringContaining('Metal Sitli Sürgülü Vana F4 D-001.pdf'));
   });
+
+  it('teknik içeriği henüz doğrulanmamış ürün için eksik tablo üretmez', () => {
+    const hazirlanacakUrun = {
+      id: 2,
+      ad: 'Metal Sitli Sürgülü Vana F5 D-003',
+      slug: 'metal-sitli-surgulu-vana-f5-d-003',
+      teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false })
+    };
+
+    render(
+      <MemoryRouter initialEntries={[`/urunler/${hazirlanacakUrun.slug}`]}>
+        <Routes>
+          <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={[hazirlanacakUrun]} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('heading', { name: 'Ürün detayı hazırlanıyor' })).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+  });
 });
