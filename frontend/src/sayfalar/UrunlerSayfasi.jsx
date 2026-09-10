@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Grid2X2, Headphones, Info, List, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronRight, Grid2X2, Headphones, Info, List, Minus, Plus, SlidersHorizontal } from 'lucide-react';
+import { altOgeIkonuGetir, grupIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
 import '../stiller/urun-katalog.css';
 
 function teknikBilgileriOku(urun) {
@@ -36,9 +37,20 @@ function UrunKarti({ urun, sira }) {
   const bilgiler = teknikBilgileriOku(urun);
   const hazir = detayHazirMi(urun);
   const detayAdresi = `/urunler/${urun.slug}`;
+  const kartRef = useRef(null);
+
+  // Fare kart üzerindeyken ışık halkasının açısını günceller; CSS geçişi açı değişimini yumuşak biçimde canlandırır.
+  const isikAcisiniGuncelle = (olay) => {
+    const kart = kartRef.current;
+    if (!kart) return;
+    const { left, top, width, height } = kart.getBoundingClientRect();
+    const aci = (180 * Math.atan2(olay.clientY - (top + height / 2), olay.clientX - (left + width / 2))) / Math.PI + 90;
+    kart.style.setProperty('--isik-acisi', `${aci}deg`);
+  };
 
   return (
-    <article className="urun-katalog__kart" data-testid="urun-katalog-karti">
+    <article className="urun-katalog__kart" data-testid="urun-katalog-karti" ref={kartRef} onPointerMove={isikAcisiniGuncelle}>
+      <span className="urun-katalog__isik" aria-hidden="true" />
       <span className="urun-katalog__sira">{String(sira).padStart(2, '0')}</span>
       {hazir ? (
         <Link className="urun-katalog__gorsel" to={detayAdresi} aria-label={`${urun.ad} görselini aç`}><img src={urunGorseliniBul(urun)} alt={`${urun.ad} ürün görseli`} /></Link>
@@ -62,14 +74,38 @@ function UrunKarti({ urun, sira }) {
 
 function YanMenuGrubu({ grup, varsayilanAcik, etkinYol }) {
   const [acik, setAcik] = useState(varsayilanAcik);
+  // Fare menü öğeleri arasında gezinirken tek bir vurgu şeridi konum/yükseklik değiştirerek kayar;
+  // her satırın kendi arka planını ayrı ayrı açıp kapatması yerine tek bir öğe animasyon yapar.
+  const [hoverKonumu, setHoverKonumu] = useState(null);
+  const GrupIkonu = grupIkonuGetir(grup.baslik);
+
   return (
     <section className={`urun-katalog__menu-grubu${acik ? ' urun-katalog__menu-grubu--acik' : ''}`}>
       <button type="button" aria-expanded={acik} aria-label={`${grup.baslik} menüsünü aç veya kapat`} onClick={() => setAcik((deger) => !deger)}>
-        <span>{grup.baslik}</span><ChevronDown aria-hidden="true" />
+        <span><GrupIkonu className="urun-katalog__menu-baslik-ikon" />{grup.baslik}</span>
+        {/* Aç/kapat göstergesi her durum değişiminde yeniden monte olarak kısa bir giriş animasyonu oynatır. */}
+        <span className="urun-katalog__menu-ok" key={acik ? 'kapat' : 'ac'}>{acik ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}</span>
       </button>
       <div className="urun-katalog__menu-gecis"><div>
-        <nav aria-label={`${grup.baslik} kategorileri`}>
-          {(grup.alt_ogeler ?? []).map((oge) => <Link className={etkinYol === oge.baglanti ? 'aktif' : ''} to={oge.baglanti} key={oge.id}>{oge.baslik}</Link>)}
+        <nav aria-label={`${grup.baslik} kategorileri`} onMouseLeave={() => setHoverKonumu(null)}>
+          <span
+            className="urun-katalog__menu-hover"
+            aria-hidden="true"
+            style={hoverKonumu ? { top: `${hoverKonumu.top}px`, height: `${hoverKonumu.height}px`, opacity: 1 } : { opacity: 0 }}
+          />
+          {(grup.alt_ogeler ?? []).map((oge) => {
+            const OgeIkonu = altOgeIkonuGetir(oge.baslik);
+            return (
+              <Link
+                className={etkinYol === oge.baglanti ? 'aktif' : ''}
+                to={oge.baglanti}
+                key={oge.id}
+                onMouseEnter={(olay) => setHoverKonumu({ top: olay.currentTarget.offsetTop, height: olay.currentTarget.offsetHeight })}
+              >
+                <OgeIkonu className="urun-katalog__menu-ikon" /><span>{oge.baslik}</span>
+              </Link>
+            );
+          })}
         </nav>
       </div></div>
     </section>

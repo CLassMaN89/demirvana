@@ -186,7 +186,7 @@ export const ornekVeriler = Object.freeze({
     teknik_pdf_indir_metni: 'İndir',
     teknik_pdf_yeni_sekme_metni: 'Yeni sekmede aç',
     teknik_pdf_kapat_etiketi: 'PDF görüntüleyiciyi kapat',
-    teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu.png',
+    teknik_pdf_ikon_yolu: '/assets/ikonlar/pdf-ikonu-karti.png',
     teknik_baslik_gecis_suresi: '2600',
     sertifika_hero_basligi: 'Sertifikalar',
     sertifika_hero_aciklamasi: 'Kaliteli üretim, güvenilir çözümler. Ulusal ve uluslararası geçerliliğe sahip sertifikalarımızla standartlara bağlılığımızı belgeliyoruz.',

@@ -79,7 +79,9 @@ export default function TeknikSayfasi({ kategoriler = [], siteAyarlari = {} }) {
                             style={{ '--teknik-gecikme': `${Math.min(indeks, 7) * 45}ms` }}
                           >
                             <span className="teknik-dokuman__pdf">
-                              <img src={ayar('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png')} alt="PDF" />
+                              <img src={ayar('teknik_pdf_ikon_yolu', '/assets/ikonlar/pdf-ikonu.png')} alt="" aria-hidden="true" />
+                              {/* Kaynak görseldeki rozet metni küçük boyutta okunmadığı için gerçek metin olarak eklendi. */}
+                              <span className="teknik-dokuman__pdf-rozet">PDF</span>
                             </span>
                             <span className="teknik-dokuman__metin">
                               <strong>{dokuman.baslik}</strong>

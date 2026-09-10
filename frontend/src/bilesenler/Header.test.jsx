@@ -34,17 +34,6 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /Kelebek Vanalar/i }).closest('.site-header__arama-acilir')).not.toBeNull();
   });
 
-  it('arama açıkken Teklif Al düğmesini görünür tutar', () => {
-    render(
-      <MemoryRouter>
-        <Header menu={[]} logoYolu="/assets/logo.png" />
-      </MemoryRouter>
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: 'Site aramasını aç' }));
-    expect(screen.getByRole('link', { name: 'Teklif Al' })).toBeVisible();
-  });
-
   it('fare arama alanından ayrılsa bile tıklama yapılana kadar açık kalır', () => {
     vi.useFakeTimers();
     render(
@@ -64,7 +53,7 @@ describe('Header', () => {
   it('arama dışındaki bir alana sol tıklanınca aramayı kapatır', () => {
     render(
       <MemoryRouter>
-        <Header menu={[]} logoYolu="/assets/logo.png" />
+        <Header menu={[{ id: 1, baslik: 'İletişim', baglanti: '/iletisim', alt_ogeler: [] }]} logoYolu="/assets/logo.png" />
       </MemoryRouter>
     );
 
@@ -75,8 +64,8 @@ describe('Header', () => {
     fireEvent.pointerDown(arama, { button: 0 });
     expect(arama).toBeInTheDocument();
 
-    // Aynı header içindeki Teklif Al bağlantısı da arama alanının dışıdır ve paneli kapatmalıdır.
-    fireEvent.pointerDown(screen.getByRole('link', { name: 'Teklif Al' }), { button: 0 });
+    // Aynı header içindeki başka bir bağlantı da arama alanının dışıdır ve paneli kapatmalıdır.
+    fireEvent.pointerDown(screen.getByRole('link', { name: 'İletişim' }), { button: 0 });
     expect(screen.queryByRole('searchbox', { name: 'Sitede ara' })).not.toBeInTheDocument();
   });
 
@@ -211,7 +200,6 @@ describe('Header', () => {
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /ürünler/i })).toHaveAttribute('href', '/urunler');
-    expect(screen.getByRole('link', { name: 'Teklif Al' })).toHaveAttribute('href', '/iletisim');
 
     const dugme = screen.getByRole('button', { name: /menüyü aç/i });
     expect(dugme).toHaveAttribute('aria-expanded', 'false');

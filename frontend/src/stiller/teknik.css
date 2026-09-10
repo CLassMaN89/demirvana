@@ -48,8 +48,10 @@
 .teknik-dokuman:hover, .teknik-dokuman--secili { background: color-mix(in srgb, var(--renk-acik) 68%, var(--renk-beyaz)); }
 .teknik-dokuman:hover { box-shadow: 0 6px 18px color-mix(in srgb, var(--renk-koyu) 7%, transparent); transform: translateX(2px); }
 .teknik-dokuman:hover::before, .teknik-dokuman--secili::before { transform: scaleY(1); }
-.teknik-dokuman__pdf { display: grid; width: 27px; height: 27px; place-items: center; }
-.teknik-dokuman__pdf img { width: 25px; height: 25px; object-fit: contain; }
+/* Kaynak görseldeki "PDF" rozeti küçük boyutta okunmadığı için kaldırıldı; yerine her boyutta net kalan gerçek metin rozeti eklendi. */
+.teknik-dokuman__pdf { position: relative; display: grid; width: 36px; height: 40px; place-items: center; }
+.teknik-dokuman__pdf img { width: 34px; height: 38px; object-fit: contain; }
+.teknik-dokuman__pdf-rozet { position: absolute; right: -3px; bottom: 2px; padding: 1px 4px; border-radius: 3px; background: #e5343d; color: #fff; font-size: 7.5px; font-weight: 800; letter-spacing: .02em; line-height: 1.4; box-shadow: 0 2px 4px rgba(0,0,0,.18); }
 .teknik-dokuman__metin { min-width: 0; }
 .teknik-dokuman__metin strong { display: block; overflow: hidden; font-size: .79rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .teknik-dokuman__eylem { display: flex; align-items: center; gap: 7px; color: var(--renk-ana); font-size: .72rem; font-weight: 650; white-space: nowrap; }

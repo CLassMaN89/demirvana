@@ -36,7 +36,7 @@ describe('TeknikSayfasi', () => {
     expect(screen.getByRole('heading', { name: 'TEKNİK TABLOLAR' })).toBeInTheDocument();
     expect(screen.getByText('2 doküman')).toBeInTheDocument();
     expect(screen.getByText('0 doküman')).toBeInTheDocument();
-    expect(screen.getAllByRole('img', { name: 'PDF' })).toHaveLength(2);
+    expect(screen.getAllByText('PDF')).toHaveLength(2);
     await kullanici.click(screen.getByRole('button', { name: /Çeviri Tablosu/ }));
     expect(await screen.findByTestId('pdf-goruntuleyici')).toBeInTheDocument();
   });

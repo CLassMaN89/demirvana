@@ -131,7 +131,17 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
         <div className="urun-detay__dokuman-grid">
           {(teknik.dokumanlar || []).map((dokuman) => (
             <a key={dokuman.baslik} href={dokuman.dosya_yolu} download className="urun-detay__dokuman">
-              <span className={`urun-detay__dokuman-ikon${dokuman.belge_turu === 'excel' ? ' urun-detay__dokuman-ikon--excel' : ''}`}><FileText aria-hidden="true" /></span>
+              <span className="urun-detay__dokuman-ikon">
+                <img
+                  src={dokuman.belge_turu === 'excel' ? '/assets/ikonlar/excel-ikonu-karti.png' : '/assets/ikonlar/pdf-ikonu-karti.png'}
+                  alt=""
+                  aria-hidden="true"
+                />
+                {/* Kaynak görseldeki rozet metni küçük boyutta okunmadığı için gerçek metin olarak eklendi; her boyutta net kalır. */}
+                <span className={`urun-detay__dokuman-rozet${dokuman.belge_turu === 'excel' ? ' urun-detay__dokuman-rozet--excel' : ''}`}>
+                  {dokuman.belge_turu === 'excel' ? 'XLS' : 'PDF'}
+                </span>
+              </span>
               <span><strong>{dokuman.baslik}</strong><small>{dokuman.aciklama || 'Teknik ürün dokümanı'}</small><em>{dokuman.tur || 'PDF'}</em></span>
               <span className="urun-detay__indir"><Download aria-hidden="true" /> İndir</span>
             </a>
