@@ -25,6 +25,24 @@ function menuBaglantisiVar(menu, yol) {
   return (menu ?? []).some((oge) => oge.baglanti === yol || menuBaglantisiVar(oge.alt_ogeler, yol));
 }
 
+// /urunler/:slug adresinin bir ürün kategorisi mi yoksa tekil ürün detayı mı olduğunu menu verisine bakarak ayırt eder.
+function urunKategoriYoluMu(menu, yol) {
+  const urunMenusu = (menu ?? []).find((oge) => oge.baglanti === '/urunler');
+  for (const grup of urunMenusu?.alt_ogeler ?? []) {
+    if (grup.baglanti === yol) return true;
+    if ((grup.alt_ogeler ?? []).some((alt) => alt.baglanti === yol)) return true;
+  }
+  return false;
+}
+
+function UrunYoluCozucu({ menu, urunler }) {
+  const konum = useLocation();
+  if (urunKategoriYoluMu(menu, konum.pathname)) {
+    return <UrunlerSayfasi menu={menu} urunler={urunler} />;
+  }
+  return <UrunDetaySayfasi urunler={urunler} />;
+}
+
 function yolMevcutMu(yol, veri) {
   if (SABIT_YOLLAR.has(yol) || menuBaglantisiVar(veri.menu, yol)) return true;
   if (yol.startsWith('/kategoriler/')) return veri.kategoriler.some((oge) => `/kategoriler/${oge.slug}` === yol);
@@ -102,11 +120,9 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
         <Routes>
           <Route path="/" element={<AnaSayfa sliderlar={veri.sliderlar} kategoriler={veri.kategoriler} fuarlar={veri.fuarlar ?? []} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/urunler" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
-          <Route path="/urunler/vana" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
-          <Route path="/urunler/su-grubu-vanalari" element={<UrunlerSayfasi menu={veri.menu} urunler={veri.urunler ?? []} />} />
           <Route path="/temsilcilikler" element={<TemsilciliklerSayfasi temsilcilikler={veri.temsilcilikler ?? []} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/kategoriler/:slug" element={<KategoriSayfasi kategoriler={veri.kategoriler} />} />
-          <Route path="/urunler/:slug" element={<UrunDetaySayfasi urunler={veri.urunler ?? []} />} />
+          <Route path="/urunler/:slug" element={<UrunYoluCozucu menu={veri.menu} urunler={veri.urunler ?? []} />} />
           <Route path="/kurumsal" element={<KurumsalSayfasi kurumsal={veri.kurumsal} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/teknik" element={<TeknikSayfasi kategoriler={veri.teknik_dokumanlar} siteAyarlari={veri.site_ayarlari} />} />
           <Route path="/referanslar" element={<ReferanslarSayfasi referanslar={veri.referanslar} siteAyarlari={veri.site_ayarlari} />} />

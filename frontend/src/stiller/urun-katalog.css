@@ -47,6 +47,10 @@
 .urun-katalog__gorunum button:active { transform: scale(.94); }
 .urun-katalog__gorunum svg { width: 17px; }
 .urun-katalog__urunler { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.urun-katalog__sayfalama { display: flex; justify-content: center; gap: 6px; margin-top: 22px; }
+.urun-katalog__sayfalama button { display: grid; min-width: 36px; height: 36px; padding: 0 10px; border: 1px solid var(--renk-cizgi); border-radius: 7px; background: #fff; color: var(--renk-koyu); font-size: .75rem; cursor: pointer; place-items: center; transition: background-color 180ms ease, color 180ms ease; }
+.urun-katalog__sayfalama button.aktif { border-color: var(--renk-ana); background: var(--renk-ana); color: #fff; }
+.urun-katalog__sayfalama button:disabled { opacity: .4; cursor: not-allowed; }
 .urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: auto 1fr auto; padding: 10px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 10px; background: rgba(255,255,255,.96); box-shadow: 0 10px 24px color-mix(in srgb, var(--renk-koyu) 5%, transparent); transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
 .urun-katalog__kart:hover { border-color: color-mix(in srgb, var(--renk-ana) 40%, transparent); box-shadow: 0 18px 38px color-mix(in srgb, var(--renk-koyu) 10%, transparent); transform: translateY(-3px); }
 /* Fareyle kart kenarında dolaşan, site mavilerini kullanan yumuşak ışık halkası. Açı değişimi tarayıcı tarafından

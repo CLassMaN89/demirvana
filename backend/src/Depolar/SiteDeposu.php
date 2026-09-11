@@ -316,7 +316,7 @@ final class SiteDeposu
             $parametreler['arama'] = '%' . trim($arama) . '%';
         }
 
-        $sql = 'SELECT u.id, u.ad, u.slug, u.kisa_aciklama, u.teknik_bilgiler,
+        $sql = 'SELECT u.id, u.ad, u.slug, u.kisa_aciklama, u.teknik_bilgiler, u.menu_kategori_adi,
                        k.ad AS kategori_adi, k.slug AS kategori_slug
                 FROM urunler u
                 INNER JOIN kategoriler k ON k.id = u.kategori_id
@@ -331,7 +331,7 @@ final class SiteDeposu
     public function urun(string $slug): ?array
     {
         $sorgu = $this->baglanti->prepare(
-            'SELECT u.id, u.ad, u.slug, u.kisa_aciklama, u.uzun_aciklama, u.teknik_bilgiler,
+            'SELECT u.id, u.ad, u.slug, u.kisa_aciklama, u.uzun_aciklama, u.teknik_bilgiler, u.menu_kategori_adi,
                     k.ad AS kategori_adi, k.slug AS kategori_slug
              FROM urunler u
              INNER JOIN kategoriler k ON k.id = u.kategori_id

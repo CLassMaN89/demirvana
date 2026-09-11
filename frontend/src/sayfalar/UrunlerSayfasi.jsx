@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Grid2X2, Headphones, Info, List, Minus, Plus, SlidersHorizontal } from 'lucide-react';
 import { altOgeIkonuGetir, grupIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
@@ -15,11 +15,12 @@ function teknikBilgileriOku(urun) {
 }
 
 function urunGorseliniBul(urun) {
+  // Gerçek sitede fotoğrafı bulunmayan ürünler yanıltıcı bir kategori görseli yerine nötr placeholder kullanır.
   try {
     const teknik = typeof urun.teknik_bilgiler === 'string' ? JSON.parse(urun.teknik_bilgiler) : urun.teknik_bilgiler;
-    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/kategoriler/surgulu-vanalar.webp';
+    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/urun-placeholder.svg';
   } catch {
-    return urun.gorsel_yolu || '/assets/kategoriler/surgulu-vanalar.webp';
+    return urun.gorsel_yolu || '/assets/urun-placeholder.svg';
   }
 }
 
@@ -112,12 +113,54 @@ function YanMenuGrubu({ grup, varsayilanAcik, etkinYol }) {
   );
 }
 
+const SAYFA_BASINA_URUN = 15;
+
+// Canlı API'de kategori_adi, kategori_id'nin bağlı olduğu 7 genel gruptan gelir (menu_kategori_adi ile aynı olmayabilir);
+// 21 gerçek menü kategorisi menu_kategori_adi alanında tutulur, örnek veri ise doğrudan kategori_adi kullanır.
+function urunMenuKategorisi(urun) {
+  return urun.menu_kategori_adi ?? urun.kategori_adi;
+}
+
 export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const konum = useLocation();
   const [gorunum, setGorunum] = useState('kart');
   const [mobilMenuAcik, setMobilMenuAcik] = useState(false);
+  const [sayfa, setSayfa] = useState(1);
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
+
+  // Adres yoluna göre etkin grup ve/veya alt kategoriyi bulur; hiçbiri eşleşmezse (örn. /urunler) tüm ürünler gösterilir.
+  const { baslik, aciklama, gosterilecekUrunler } = useMemo(() => {
+    for (const grup of gruplar) {
+      if (grup.baglanti === konum.pathname) {
+        const altBasliklar = new Set((grup.alt_ogeler ?? []).map((alt) => alt.baslik));
+        return {
+          baslik: grup.baslik,
+          aciklama: `${grup.baslik} kategorisindeki tüm ürünler.`,
+          gosterilecekUrunler: urunler.filter((urun) => altBasliklar.has(urunMenuKategorisi(urun))),
+        };
+      }
+      for (const alt of grup.alt_ogeler ?? []) {
+        if (alt.baglanti === konum.pathname) {
+          return {
+            baslik: alt.baslik,
+            aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.',
+            gosterilecekUrunler: urunler.filter((urun) => urunMenuKategorisi(urun) === alt.baslik),
+          };
+        }
+      }
+    }
+    return { baslik: 'Tüm Ürünler', aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.', gosterilecekUrunler: urunler };
+  }, [gruplar, konum.pathname, urunler]);
+
+  const toplamSayfa = Math.max(1, Math.ceil(gosterilecekUrunler.length / SAYFA_BASINA_URUN));
+  const etkinSayfa = Math.min(sayfa, toplamSayfa);
+  const sayfalanmisUrunler = gosterilecekUrunler.slice((etkinSayfa - 1) * SAYFA_BASINA_URUN, etkinSayfa * SAYFA_BASINA_URUN);
+
+  // Kategori değiştiğinde sayfa numarası bir önceki kategoriden kalmasın.
+  useEffect(() => {
+    setSayfa(1);
+  }, [konum.pathname]);
 
   return (
     <main className="urun-katalog">
@@ -133,14 +176,14 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
         </aside>
 
         <section className="urun-katalog__icerik" aria-labelledby="urun-katalog-basligi">
-          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu"><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>Su Grubu Vanaları</span></nav>
+          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu"><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>{baslik}</span></nav>
           <header className="urun-katalog__hero">
-            <div><h1 id="urun-katalog-basligi">Su Grubu Vanaları</h1><p>Endüstriyel su sistemleri için yüksek performanslı vana çözümleri.</p></div>
+            <div><h1 id="urun-katalog-basligi">{baslik}</h1><p>{aciklama}</p></div>
             <p className="urun-katalog__hero-soz">Güvenilir Akış<br />Daha Güçlü Yarınlar</p>
           </header>
           <div className="urun-katalog__bilgi"><Info aria-hidden="true" /><span>Teknik detaylar, sertifikalar ve dokümanlar için lütfen ilgili ürünün detay sayfasını ziyaret ediniz.</span></div>
           <div className="urun-katalog__araclar">
-            <span>{urunler.length} ürün listeleniyor</span>
+            <span>{gosterilecekUrunler.length} ürün listeleniyor</span>
             <label><span className="ekran-okuyucu">Ürün sıralaması</span><select defaultValue="varsayilan"><option value="varsayilan">Varsayılan Sıralama</option><option value="ad">Ürün adına göre</option></select></label>
             <div className="urun-katalog__gorunum" aria-label="Görünüm seçimi">
               <button type="button" aria-label="Kart görünümü" aria-pressed={gorunum === 'kart'} onClick={() => setGorunum('kart')}><Grid2X2 aria-hidden="true" /></button>
@@ -148,8 +191,25 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
             </div>
           </div>
           <div className={`urun-katalog__urunler${gorunum === 'liste' ? ' urun-katalog__urunler--liste' : ''}`} data-testid="urun-katalog-listesi">
-            {urunler.map((urun, indeks) => <UrunKarti urun={urun} sira={indeks + 1} key={urun.id} />)}
+            {sayfalanmisUrunler.map((urun, indeks) => <UrunKarti urun={urun} sira={(etkinSayfa - 1) * SAYFA_BASINA_URUN + indeks + 1} key={urun.id} />)}
           </div>
+          {toplamSayfa > 1 && (
+            <nav className="urun-katalog__sayfalama" aria-label="Sayfalama">
+              <button type="button" disabled={etkinSayfa === 1} onClick={() => setSayfa((deger) => Math.max(1, deger - 1))}>Önceki</button>
+              {Array.from({ length: toplamSayfa }, (_, i) => i + 1).map((numara) => (
+                <button
+                  type="button"
+                  key={numara}
+                  aria-current={numara === etkinSayfa ? 'page' : undefined}
+                  className={numara === etkinSayfa ? 'aktif' : ''}
+                  onClick={() => setSayfa(numara)}
+                >
+                  {numara}
+                </button>
+              ))}
+              <button type="button" disabled={etkinSayfa === toplamSayfa} onClick={() => setSayfa((deger) => Math.min(toplamSayfa, deger + 1))}>Sonraki</button>
+            </nav>
+          )}
         </section>
       </div>
     </main>

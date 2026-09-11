@@ -324,42 +324,2147 @@ export const ornekVeriler = Object.freeze({
         { baslik: 'Ürün PDF', aciklama: 'Ürün kataloğu ve teknik bilgiler', tur: 'PDF · 533 KB', dosya_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/Metal Sitli Sürgülü Vana F4 D-001.pdf' }
       ]
     })
-  }, {
-    id: 2,
+  },   {
+    id: 6,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Akış Göstergesi D-149',
+    slug: 'akis-gostergesi-d-149',
+    stok_kodu: 'D-149',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 7,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Ani Kapama Vanası Düz Tip D-155',
+    slug: 'ani-kapama-vanasi-duz-tip-d-155',
+    stok_kodu: 'D-155',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 8,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Ani Kapama Vanası Köşe Tip D-119',
+    slug: 'ani-kapama-vanasi-kose-tip-d-119',
+    stok_kodu: 'D-119',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 9,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Çamur Sandığı Düz Tip D-157',
+    slug: 'camur-sandigi-duz-tip-d-157',
+    stok_kodu: 'D-157',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/camur-sandigi-duz-tip-d-157.png"}})
+  },
+  {
+    id: 10,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Çamur Sandığı Köşe Tip D-205',
+    slug: 'camur-sandigi-kose-tip-d-205',
+    stok_kodu: 'D-205',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 11,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Vana Sandığı D-160',
+    slug: 'vana-sandigi-d-160',
+    stok_kodu: 'D-160',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 12,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Köşe Drenaj Vanası D-206',
+    slug: 'kose-drenaj-vanasi-d-206',
+    stok_kodu: 'D-206',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 13,
+    kategori_id: 6,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Suction Pislik Tutucu D-207',
+    slug: 'suction-pislik-tutucu-d-207',
+    stok_kodu: 'D-207',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 14,
+    kategori_id: 5,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Bronz Glob Vana Düz - Köşe D-208',
+    slug: 'bronz-glob-vana-duz-kose-d-208',
+    stok_kodu: 'D-208',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 15,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Bronz Yangın Vanası Düz - Köşe D-209',
+    slug: 'bronz-yangin-vanasi-duz-kose-d-209',
+    stok_kodu: 'D-209',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 16,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Dışşarj Vanası Yaylı Tip Düz - Köşe D-084',
+    slug: 'dissarj-vanasi-yayli-tip-duz-kose-d-084',
+    stok_kodu: 'D-084',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 17,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'İskandil Vanası D-086',
+    slug: '129-iskandil-vanasi-d-086',
+    stok_kodu: 'D-086',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 18,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Hidrolik Kol D-087',
+    slug: 'hidrolik-kol-d-087',
+    stok_kodu: 'D-087',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 19,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Self Closing Vana D-223',
+    slug: 'self-closing-vana-d-223',
+    stok_kodu: 'D-223',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 20,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Fırtına Vanası Düz Tip D-156',
+    slug: 'firtina-vanasi-duz-tip-d-156',
+    stok_kodu: 'D-156',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 21,
+    kategori_id: 3,
+    kategori_adi: 'Gemi Vanaları',
+    ad: 'Fırtına Vanası Köşe Tip D-224',
+    slug: 'firtina-vanasi-kose-tip-d-224',
+    stok_kodu: 'D-224',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 22,
     kategori_id: 3,
     kategori_adi: 'Su Grubu Vanaları',
     ad: 'Metal Sitli Sürgülü Vana F5 D-003',
     slug: 'metal-sitli-surgulu-vana-f5-d-003',
     stok_kodu: 'D-003',
-    kisa_aciklama: 'Uzun tip metal sitli sürgülü vana.',
-    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS 457/1 · DIN 3352/2-F5', basinc: 'PN 10 / PN 6', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
-  }, {
-    id: 3,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/metal-sitli-surgulu-vana-f5-d-003.png"}})
+  },
+  {
+    id: 23,
     kategori_id: 3,
     kategori_adi: 'Su Grubu Vanaları',
     ad: 'Elastomer Sitli Sürgülü Vana F4 D-010',
     slug: 'elastomer-sitli-surgulu-vana-f4-d-010',
     stok_kodu: 'D-010',
-    kisa_aciklama: 'Elastomer sitli kısa tip sürgülü vana.',
-    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 40 - 600', standart: 'TS EN 1074-2', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
-  }, {
-    id: 4,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/elastomer-sitli-surgulu-vana-f4-d-010.png"}})
+  },
+  {
+    id: 24,
     kategori_id: 3,
     kategori_adi: 'Su Grubu Vanaları',
     ad: 'Elastomer Sitli Sürgülü Vana F5 D-385',
     slug: 'elastomer-sitli-surgulu-vana-f5-d-385',
     stok_kodu: 'D-385',
-    kisa_aciklama: 'Elastomer sitli uzun tip sürgülü vana.',
-    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS EN 1074-2', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
-  }, {
-    id: 5,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/elastomer-sitli-surgulu-vana-f5-d-385.jpg"}})
+  },
+  {
+    id: 25,
     kategori_id: 3,
     kategori_adi: 'Su Grubu Vanaları',
-    ad: 'Yükselen Milli Sürgülü Vana F4/S D-000',
-    slug: 'yukselen-milli-surgulu-vana-f4-s-d-000',
-    stok_kodu: 'D-000',
-    kisa_aciklama: 'Yükselen milli flanşlı sürgülü vana.',
-    teknik_bilgiler: JSON.stringify({ detay_hazir_mi: false, katalog_bilgileri: { dn: 'DN 50 - 600', standart: 'TS 1171', basinc: 'PN 10 / PN 16', gorsel_yolu: '/assets/kategoriler/surgulu-vanalar.webp' } })
+    ad: 'Yükselen Milli Sürgülü Vana F4,F5 D-008',
+    slug: 'yukselen-milli-surgulu-vana-f4-f5-d-008',
+    stok_kodu: 'D-008',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/yukselen-milli-surgulu-vana-f4-f5-d-008.png"}})
+  },
+  {
+    id: 26,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Bıçak Sürgülü Vana D-012 (Bıçaklı Vana)',
+    slug: 'bicak-surgulu-vana-d-012-bicakli-vana',
+    stok_kodu: 'D-012',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/bicak-surgulu-vana-d-012-bicakli-vana.png"}})
+  },
+  {
+    id: 27,
+    kategori_id: 2,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Flanşlı Kelebek Vana D-113',
+    slug: 'flansli-kelebek-vana-d-113',
+    stok_kodu: 'D-113',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/flansli-kelebek-vana-d-113.png"}})
+  },
+  {
+    id: 28,
+    kategori_id: 2,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Lug Kelebek Vana D-036',
+    slug: 'lug-kelebek-vana-d-036',
+    stok_kodu: 'D-036',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/lug-kelebek-vana-d-036.png"}})
+  },
+  {
+    id: 29,
+    kategori_id: 2,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Wafer Kelebek Vana D-032',
+    slug: 'wafer-kelebek-vana-d-032',
+    stok_kodu: 'D-032',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/wafer-kelebek-vana-d-032.png"}})
+  },
+  {
+    id: 30,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Şamandıralı Vana D-302',
+    slug: 'samandirali-vana-d-302',
+    stok_kodu: 'D-302',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/samandirali-vana-d-302.png"}})
+  },
+  {
+    id: 31,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Diyafram Vana D-085',
+    slug: 'diyafram-vana-d-085',
+    stok_kodu: 'D-085',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/diyafram-vana-d-085.png"}})
+  },
+  {
+    id: 32,
+    kategori_id: 6,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Krepin D-046',
+    slug: 'krepin-d-046',
+    stok_kodu: 'D-046',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/krepin-d-046.png"}})
+  },
+  {
+    id: 33,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: '3 Yollu Vana D-324',
+    slug: '3-yollu-vana-d-324',
+    stok_kodu: 'D-324',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 34,
+    kategori_id: 6,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Pislik Tutucu D-041',
+    slug: 'pislik-tutucu-d-041',
+    stok_kodu: 'D-041',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/pislik-tutucu-d-041.png"}})
+  },
+  {
+    id: 35,
+    kategori_id: 1,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: '3 Parçalı Tam Geçişli Küresel D-056',
+    slug: '3-parcali-tam-gecisli-kuresel-d-056',
+    stok_kodu: 'D-056',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/3-parcali-tam-gecisli-kuresel-d-056.png"}})
+  },
+  {
+    id: 36,
+    kategori_id: 1,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: '2 Parçalı Tam Geçişli Küresel D-061',
+    slug: '2-parcali-tam-gecisli-kuresel-d-061',
+    stok_kodu: 'D-061',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 37,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Çalpara Çekvalf Flanşlı D-026',
+    slug: 'calpara-cekvalf-flansli-d-026',
+    stok_kodu: 'D-026',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 38,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Çift Klapeli Çekvalf D-020',
+    slug: 'cift-klapeli-cekvalf-d-020',
+    stok_kodu: 'D-020',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 39,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Toplu Çekvalf D-030',
+    slug: 'toplu-cekvalf-d-030',
+    stok_kodu: 'D-030',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 40,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Dik Çekvalf D-031',
+    slug: 'dik-cekvalf-d-031',
+    stok_kodu: 'D-031',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 41,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Tilting Çekvalf D-128',
+    slug: 'tilting-cekvalf-d-128',
+    stok_kodu: 'D-128',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 42,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Hidrolik Frenli Tilting Çekvalf D-131',
+    slug: 'hidrolik-frenli-tilting-cekvalf-d-131',
+    stok_kodu: 'D-131',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 43,
+    kategori_id: 2,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Hidrolik Pompalı Çek Kelebek Vana D-133',
+    slug: 'hidrolik-pompali-cek-kelebek-vana-d-133',
+    stok_kodu: 'D-133',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 44,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Class 150-300-600 Sürgülü Vana D-240',
+    slug: 'class-150-300-600-surgulu-vana-d-240',
+    stok_kodu: 'D-240',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 45,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Yaylı Dip Klapesi D-045',
+    slug: 'yayli-dip-klapesi-d-045',
+    stok_kodu: 'D-045',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/yayli-dip-klapesi-d-045.png"}})
+  },
+  {
+    id: 46,
+    kategori_id: 1,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Mono Blok Küresel Vana D-064',
+    slug: 'mono-blok-kuresel-vana-d-064',
+    stok_kodu: 'D-064',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 47,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Tek Küreli Vantuz D-123',
+    slug: 'tek-kureli-vantuz-d-123',
+    stok_kodu: 'D-123',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 48,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Çift Küreli Vantuz D-124',
+    slug: 'cift-kureli-vantuz-d-124',
+    stok_kodu: 'D-124',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 49,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Class 150-300-600 Çalpara Çekvalf D-245',
+    slug: 'class-150-300-600-calpara-cekvalf-d-245',
+    stok_kodu: 'D-245',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 50,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Seviye Göstergeli İndikatörlü Sürgülü Vana (Trafo Vanası) D-323',
+    slug: 'seviye-gostergeli-indikatorlu-surgulu-vana-trafo-vanasi-d-323',
+    stok_kodu: 'D-323',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 51,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'FlapVana-Klapet-Kurbağalık D-388',
+    slug: 'flapvana-klapet-kurbagalik-d-388',
+    stok_kodu: 'D-388',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 52,
+    kategori_id: 3,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Karesel Sürgülü Vana D-011',
+    slug: 'karesel-surgulu-vana-d-011',
+    stok_kodu: 'D-011',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 53,
+    kategori_id: 4,
+    kategori_adi: 'Su Grubu Vanaları',
+    ad: 'Darbesiz Vantuz D-304',
+    slug: 'darbesiz-vantuz-d-304',
+    stok_kodu: 'D-304',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/darbesiz-vantuz-d-304.png"}})
+  },
+  {
+    id: 54,
+    kategori_id: 5,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Glob Vana D-069',
+    slug: 'glob-vana-d-069',
+    stok_kodu: 'D-069',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/glob-vana-d-069.png"}})
+  },
+  {
+    id: 55,
+    kategori_id: 4,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Glob Vana - Kumandalı Çekvalf Köşe Tip D-072',
+    slug: 'glob-vana-kumandali-cekvalf-kose-tip-d-072',
+    stok_kodu: 'D-072',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 56,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Buhar Basınç Düşürücü D-066',
+    slug: 'buhar-basinc-dusurucu-d-066',
+    stok_kodu: 'D-066',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 57,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnomatik Glob Tipi Kontrol Vanası D-067',
+    slug: 'pnomatik-glob-tipi-kontrol-vanasi-d-067',
+    stok_kodu: 'D-067',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 58,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Pistonlu Vana D-076',
+    slug: 'pistonlu-vana-d-076',
+    stok_kodu: 'D-076',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 59,
+    kategori_id: 5,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Metal Körüklü Glob Vana D-073',
+    slug: 'metal-koruklu-glob-vana-d-073',
+    stok_kodu: 'D-073',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/metal-koruklu-glob-vana-d-073.png"}})
+  },
+  {
+    id: 60,
+    kategori_id: 4,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Yaylı Çekvalf D-078',
+    slug: 'yayli-cekvalf-d-078',
+    stok_kodu: 'D-078',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 61,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Yaylı Emniyet Ventili Oransal Kalkışlı D-081',
+    slug: 'yayli-emniyet-ventili-oransal-kalkisli-d-081',
+    stok_kodu: 'D-081',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 62,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Lift Loaded Safety Valve D-082',
+    slug: 'lift-loaded-safety-valve-d-082',
+    stok_kodu: 'D-082',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 63,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Emniyet Ventili Su, Amonyak, Azot',
+    slug: 'emniyet-ventili-su-amonyak-azot',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 64,
+    kategori_id: 4,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Ters Kovalı Kondenstop D-092',
+    slug: 'ters-kovali-kondenstop-d-092',
+    stok_kodu: 'D-092',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 65,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Termostatik Vana D-068',
+    slug: 'termostatik-vana-d-068',
+    stok_kodu: 'D-068',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 66,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Pnömatik Kızgın Yağ Vanası D-141',
+    slug: 'pnomatik-kizgin-yag-vanasi-d-141',
+    stok_kodu: 'D-141',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 67,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Kazan Blöf Vanası D-093',
+    slug: 'kazan-blof-vanasi-d-093',
+    stok_kodu: 'D-093',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 68,
+    kategori_id: 3,
+    kategori_adi: 'Buhar Grubu Vanaları',
+    ad: 'Akış Göstergesi ( Gözetleme Camları )',
+    slug: 'akis-gostergesi-gozetleme-camlari',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/akis-gostergesi-gozetleme-camlari.jpg"}})
+  },
+  {
+    id: 69,
+    kategori_id: 3,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Diyafram Vana D-325',
+    slug: 'pnomatik-diyafram-vana-d-325',
+    stok_kodu: 'D-325',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 70,
+    kategori_id: 5,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Glob Tip 2 Yollu Kontrol Vanası (Tek Yataklı) On-Off - Oransal D-067',
+    slug: 'pnomatik-glob-tip-2-yollu-kontrol-vanasi-tek-yatakli-on-off-oransal-d-067',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 71,
+    kategori_id: 5,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Glob Tip 2 Yollu Kontrol Vanası (Çift Yataklı) On-Off - Oransal D-067',
+    slug: 'pnomatik-glob-tip-2-yollu-kontrol-vanasi-cift-yatakli-on-off-oransal-d-067',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 72,
+    kategori_id: 5,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Glob Tip 3 Yollu Kontrol Vanası On-Off Oransal D-225',
+    slug: 'pnomatik-glob-tip-3-yollu-kontrol-vanasi-on-off-oransal-d-225',
+    stok_kodu: 'D-225',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 73,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Buhar Basınç Düşürücü Kontrol Vanası D-066',
+    slug: 'buhar-basinc-dusurucu-kontrol-vanasi-d-066',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 74,
+    kategori_id: 3,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Termostatik Vana D-068',
+    slug: '58-termostatik-vana-d-068',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 75,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Diyafram Aktüatörlü Kontrol Vanası D-227',
+    slug: 'diyafram-aktuatorlu-kontrol-vanasi-d-227',
+    stok_kodu: 'D-227',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 76,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Piston Aktüatörlü Kontrol Vanası D-228',
+    slug: 'piston-aktuatorlu-kontrol-vanasi-d-228',
+    stok_kodu: 'D-228',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 77,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik On-Off 2 Yollu Pistonlu Kontrol Vanası D-229',
+    slug: 'pnomatik-on-off-2-yollu-pistonlu-kontrol-vanasi-d-229',
+    stok_kodu: 'D-229',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 78,
+    kategori_id: 3,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Kızgın Yağ Vanası D-141',
+    slug: '62-pnomatik-kizgin-yag-vanasi-d-141',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 79,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Basınç Ayar Vanası D-226',
+    slug: 'basinc-ayar-vanasi-d-226',
+    stok_kodu: 'D-226',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 80,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pinch Vana D-320',
+    slug: 'pinch-vana-d-320',
+    stok_kodu: 'D-320',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 81,
+    kategori_id: 7,
+    kategori_adi: 'Kontrol Vanaları',
+    ad: 'Pnömatik Pinch (Çimdik) Vana D-321',
+    slug: 'pnomatik-pinch-cimdik-vana-d-321',
+    stok_kodu: 'D-321',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 82,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Su Basınç Düşürücü Vana - Pilot Tip D-143',
+    slug: 'su-basinc-dusurucu-vana-pilot-tip-d-143',
+    stok_kodu: 'D-143',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 83,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Düz Tip Su Basıç Düşürücü Vana D-143',
+    slug: 'duz-tip-su-basic-dusurucu-vana-d-143',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 84,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Basınç Sabitleme Vanası D-143',
+    slug: 'basinc-sabitleme-vanasi-d-143',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 85,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Su Darbesi Önleme Vanası D-144',
+    slug: 'su-darbesi-onleme-vanasi-d-144',
+    stok_kodu: 'D-144',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 86,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Köşe Tip Mekanik Şamandralı Vana D-302',
+    slug: 'surge-anticipating-control-valve-d-144',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/surge-anticipating-control-valve-d-144.jpg"}})
+  },
+  {
+    id: 87,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Seviye Kontrol Vanası D-145',
+    slug: 'seviye-kontrol-vanasi-d-145',
+    stok_kodu: 'D-145',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 88,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Solenoid Kontrol Vanası D-147',
+    slug: 'solenoid-kontrol-vanasi-d-147',
+    stok_kodu: 'D-147',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 89,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Debi Ayar Vanası D-148',
+    slug: 'debi-ayar-vanasi-d-148',
+    stok_kodu: 'D-148',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 90,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Basınç Tahliye Vanası D-378',
+    slug: 'basinc-tahliye-vanasi-d-378',
+    stok_kodu: 'D-378',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 91,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Elektrik Flatörlü Seviye Kontrol Vanası',
+    slug: 'elektrik-flatorlu-seviye-kontrol-vanasi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 92,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Hidrolik On-Off Kontrol Vanası D-552',
+    slug: 'hidrolik-on-off-kontrol-vanasi-d-552',
+    stok_kodu: 'D-552',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 93,
+    kategori_id: 7,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Pompa Kontrol Vanası D - 598',
+    slug: 'pompa-kontrol-vanasi-d-598',
+    stok_kodu: 'D-598',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 94,
+    kategori_id: 3,
+    kategori_adi: 'Hidrolik Vanalar',
+    ad: 'Düz Tip Şamandralı Vana',
+    slug: 'duz-tip-samandrali-vana',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 95,
+    kategori_id: 7,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Buhar Basınç Düşürücü Kontrol Vanası D-066',
+    slug: '79-buhar-basinc-dusurucu-kontrol-vanasi-d-066',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 96,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su Basınç Düşürücü Vana Y Tipi Çift Diyaframlı D-143',
+    slug: 'su-basinc-dusurucu-vana-y-tipi-cift-diyaframli-d-143',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 97,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su Basınç Düşürücü Vana Y Tipi Tek Diyaframlı D-143',
+    slug: 'su-basinc-dusurucu-vana-y-tipi-tek-diyaframli-d-143',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 98,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su Basınç Düşürücü Vana Düz Tip D-143',
+    slug: 'su-basinc-dusurucu-vana-duz-tip-d-143',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 99,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su Basınç Düşürücü Vana Endustriyel Tip D-146',
+    slug: 'su-basinc-dusurucu-vana-endustriyel-tip-d-146',
+    stok_kodu: 'D-146',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 100,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su,Gaz, Amonyak için Basınç Düşürücü - Regülatörü',
+    slug: 'su-gaz-amonyak-icin-basinc-dusurucu-regulatoru',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 101,
+    kategori_id: 3,
+    kategori_adi: 'Basınç Düşürücü Vanalar',
+    ad: 'Su Pirinç Basınç Düşürücü Vana Dişli D-333',
+    slug: 'su-pirinc-basinc-dusurucu-vana-disli-d-333',
+    stok_kodu: 'D-333',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 102,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yerüstü Yangın Hidrantı D-151',
+    slug: 'yerustu-yangin-hidranti-d-151',
+    stok_kodu: 'D-151',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/yerustu-yangin-hidranti-d-151.png"}})
+  },
+  {
+    id: 103,
+    kategori_id: 4,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yeraltı Yangın Hidrantı (Alttan Klapeli) D-152',
+    slug: 'yeralti-yangin-hidranti-alttan-klapeli-d-152',
+    stok_kodu: 'D-152',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 104,
+    kategori_id: 4,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yeraltı Yangın Hidrantı (Üstten Klapeli) D-152',
+    slug: 'yeralti-yangin-hidranti-ustten-klapeli-d-152',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/yeralti-yangin-hidranti-ustten-klapeli-d-152.png"}})
+  },
+  {
+    id: 105,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yeralti Yangın Hidranti Kurtağzı D-359',
+    slug: 'yeralti-yangin-hidranti-kurtagzi-d-359',
+    stok_kodu: 'D-359',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 106,
+    kategori_id: 2,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Dişli Bronz Kelebek Vana (Yangın Tip) D-232',
+    slug: 'disli-bronz-kelebek-vana-yangin-tip-d-232',
+    stok_kodu: 'D-232',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 107,
+    kategori_id: 2,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'İzlenebilir Kelebek Vana (Yangın Tip) D-230',
+    slug: 'izlenebilir-kelebek-vana-yangin-tip-d-230',
+    stok_kodu: 'D-230',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 108,
+    kategori_id: 2,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yivli Kelebek Vana (Yangın Tip) D-231',
+    slug: 'yivli-kelebek-vana-yangin-tip-d-231',
+    stok_kodu: 'D-231',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 109,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yükselen Milli Sürgülü Vana (Yangın) D-233',
+    slug: 'yukselen-milli-surgulu-vana-yangin-d-233',
+    stok_kodu: 'D-233',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 110,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yangın Hidrantı Kazan D-154',
+    slug: 'yangin-hidranti-kazan-d-154',
+    stok_kodu: 'D-154',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/yangin-hidranti-kazan-d-154.png"}})
+  },
+  {
+    id: 111,
+    kategori_id: 4,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Fire Çekvalf D-234',
+    slug: 'fire-cekvalf-d-234',
+    stok_kodu: 'D-234',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 112,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Sabit Kaplin D-297',
+    slug: 'sabit-kaplin-d-297',
+    stok_kodu: 'D-297',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 113,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Flexible Coupling D-298',
+    slug: 'flexible-coupling-d-298',
+    stok_kodu: 'D-298',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 114,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yangın Vana (İtalyan Tip) D-301',
+    slug: 'yangin-vana-italyan-tip-d-301',
+    stok_kodu: 'D-301',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 115,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Yangın Rekoru(Kaplin)ve Kapağı',
+    slug: 'yangin-rekoru-kaplin-ve-kapagi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 116,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Flanşlı Yangın Vanası',
+    slug: 'flansli-yangin-vanasi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 117,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'Islak Alarm Vanası',
+    slug: 'islak-alarm-vanasi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 118,
+    kategori_id: 3,
+    kategori_adi: 'Yangın Vanaları',
+    ad: 'İzlenebilir Kebelek Vana',
+    slug: 'izlenebilir-kebelek-vana',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 119,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'L Tipi Küresel Vana D-050',
+    slug: 'l-tipi-kuresel-vana-d-050',
+    stok_kodu: 'D-050',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 120,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Paslanmaz Monoblok Küresel Vana D-052',
+    slug: 'paslanmaz-monoblok-kuresel-vana-d-052',
+    stok_kodu: 'D-052',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 121,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: '3 Parçalı Flanşlı Küresel Vana D-054 - D-055',
+    slug: '3-parcali-flansli-kuresel-vana-d-054-d-055',
+    stok_kodu: 'D-054',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 122,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: '3 Parçalı Dişli Küresel Vana D-049',
+    slug: '3-parcali-disli-kuresel-vana-d-049',
+    stok_kodu: 'D-049',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 123,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: '2 Parçalı Dişli Küresel Vana D-047',
+    slug: '2-parcali-disli-kuresel-vana-d-047',
+    stok_kodu: 'D-047',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/2-parcali-disli-kuresel-vana-d-047.png"}})
+  },
+  {
+    id: 124,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: '2 Parçalı Paslanmaz Flanşlı Küresel Vana D-376',
+    slug: '2-parcali-paslanmaz-flansli-kuresel-vana-d-376',
+    stok_kodu: 'D-376',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 125,
+    kategori_id: 4,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Wafer Çekvalf D-021',
+    slug: 'wafer-cekvalf-d-021',
+    stok_kodu: 'D-021',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 126,
+    kategori_id: 4,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Çalpara Çekvalf Dişli AISI 304 - 316 D-025',
+    slug: 'calpara-cekvalf-disli-aisi-304-316-d-025',
+    stok_kodu: 'D-025',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 127,
+    kategori_id: 4,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Disko Çekvalf AISI D-017 AISI D-018',
+    slug: 'disko-cekvalf-aisi-d-017-aisi-d-018',
+    stok_kodu: 'D-017',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 128,
+    kategori_id: 3,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Gıda Vanası D-246',
+    slug: '113-gida-vanasi-d-246',
+    stok_kodu: 'D-246',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 129,
+    kategori_id: 3,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'İğne Vana D-159',
+    slug: 'igne-vana-d-159',
+    stok_kodu: 'D-159',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 130,
+    kategori_id: 2,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'Wafer Kelebek Vana D-032',
+    slug: '115-wafer-kelebek-vana-d-032',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 131,
+    kategori_id: 1,
+    kategori_adi: 'Paslanmaz Vanalar',
+    ad: 'T Tipi Küresel Vana D-051',
+    slug: '117-t-tipi-kuresel-vana-d-051',
+    stok_kodu: 'D-051',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 132,
+    kategori_id: 3,
+    kategori_adi: 'Balans Vanaları',
+    ad: 'Statik Balans Vanası',
+    slug: 'statik-balans-vanasi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/statik-balans-vanasi.png"}})
+  },
+  {
+    id: 133,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Buhar Solenoid Vanalar D-199',
+    slug: 'buhar-solenoid-vanalar-d-199',
+    stok_kodu: 'D-199',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 134,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Grup Solenoid Vanalar',
+    slug: 'grup-solenoid-vanalar',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 135,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Paslanmaz Solenoid Vanalar D-197',
+    slug: 'paslanmaz-solenoid-vanalar-d-197',
+    stok_kodu: 'D-197',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 136,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Solenoid Vana Zaman Rolesi',
+    slug: 'solenoid-vana-zaman-rolesi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 137,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Vakum Solenoid Vanalar',
+    slug: 'vakum-solenoid-vanalar',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 138,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Yakıt Solenoid Vanalar',
+    slug: 'yakit-solenoid-vanalar',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 139,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Tek Etkili Y Tipi Pistonlu Vana D-202',
+    slug: 'tek-etkili-y-tipi-pistonlu-vana-d-202',
+    stok_kodu: 'D-202',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 140,
+    kategori_id: 3,
+    kategori_adi: 'Solenoid Patlaç Pistonlu',
+    ad: 'Bobinli Patlaç Valf',
+    slug: 'bobinli-patlac-valf',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 141,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Döner Flanşlı Kompansatör D-099',
+    slug: 'doner-flansli-kompansator-d-099',
+    stok_kodu: 'D-099',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 142,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Kaynak Boyunlu Kompansatör D-106',
+    slug: 'kaynak-boyunlu-kompansator-d-106',
+    stok_kodu: 'D-106',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 143,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Sabit Flanşlı Kompansatör D-103',
+    slug: 'sabit-flansli-kompansator-d-103',
+    stok_kodu: 'D-103',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 144,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Dıştan Basınçlı Kompansatör D-111',
+    slug: 'distan-basincli-kompansator-d-111',
+    stok_kodu: 'D-111',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 145,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Kauçuk Kompansatör D-096',
+    slug: 'kaucuk-kompansator-d-096',
+    stok_kodu: 'D-096',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 146,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Körük D-271',
+    slug: 'koruk-d-271',
+    stok_kodu: 'D-271',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 147,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'İzoleli Flexible Hortumu D-120',
+    slug: 'izoleli-flexible-hortumu-d-120',
+    stok_kodu: 'D-120',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 148,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'İzolesiz Flexible Hortumu D-299',
+    slug: 'izolesiz-flexible-hortumu-d-299',
+    stok_kodu: 'D-299',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 149,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Örgülü Esnek Metal Hortum D-142',
+    slug: 'orgulu-esnek-metal-hortum-d-142',
+    stok_kodu: 'D-142',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 150,
+    kategori_id: 3,
+    kategori_adi: 'Kompansatörler',
+    ad: 'Örgüsüz Esnek Metal Hortum D-300',
+    slug: 'orgusuz-esnek-metal-hortum-d-300',
+    stok_kodu: 'D-300',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 151,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Düz Flanş D-290',
+    slug: 'duz-flans-d-290',
+    stok_kodu: 'D-290',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 152,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Kaynak Boyunlu Flanş D-291',
+    slug: 'kaynak-boyunlu-flans-d-291',
+    stok_kodu: 'D-291',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 153,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Te D-292',
+    slug: 'te-d-292',
+    stok_kodu: 'D-292',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 154,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Kep D-293',
+    slug: 'kep-d-293',
+    stok_kodu: 'D-293',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 155,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Dirsek D-294',
+    slug: 'dirsek-d-294',
+    stok_kodu: 'D-294',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 156,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Eksantrik Konsantrik Redüksiyonlar D-295',
+    slug: 'eksantrik-konsantrik-reduksiyonlar-d-295',
+    stok_kodu: 'D-295',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 157,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Demontaj Parçası D-135',
+    slug: 'demontaj-parcasi-d-135',
+    stok_kodu: 'D-135',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 158,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Flanş Adaptörü D-296',
+    slug: 'flans-adaptoru-d-296',
+    stok_kodu: 'D-296',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 159,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Sabit Kaplin D-297',
+    slug: '163-sabit-kaplin-d-297',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 160,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Esnek Kaplin D-298',
+    slug: 'esnek-kaplin-d-298',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 161,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'P-T D-351',
+    slug: 'p-t-d-351',
+    stok_kodu: 'D-351',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 162,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-E D-351',
+    slug: 'g-e-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 163,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-F D-351',
+    slug: 'g-f-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 164,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MMA D-351',
+    slug: 'g-mma-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 165,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MMB D-351',
+    slug: 'g-mmb-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 166,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MMG D-351',
+    slug: 'g-mmg-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 167,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MMR D-351',
+    slug: 'g-mmr-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 168,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'FFR D-351',
+    slug: 'ffr-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 169,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-Q D-351',
+    slug: 'g-q-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 170,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'FFQ D-351',
+    slug: 'ffq-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 171,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MG D-351',
+    slug: 'g-mg-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 172,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'X Kör Flanş D-351',
+    slug: 'x-kor-flans-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 173,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'SÜPER KOLYE D-696',
+    slug: 'super-kolye-d-696',
+    stok_kodu: 'D-696',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 174,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'G-MA D-351',
+    slug: 'g-ma-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 175,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'AÇB F D-351',
+    slug: 'acb-f-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 176,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Son Kapama Parçası D-351',
+    slug: 'son-kapama-parcasi-d-351',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 177,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Buşakle Takım D-007',
+    slug: 'busakle-takim-d-007',
+    stok_kodu: 'D-007',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 178,
+    kategori_id: 3,
+    kategori_adi: 'Bağlantı Parçaları',
+    ad: 'Yangın Rekoru(Kaplin)ve Kapağı',
+    slug: '182-yangin-rekoru-kaplin-ve-kapagi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 179,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrikli Aktüatör DE-05',
+    slug: 'rotary-on-off-elektrikli-aktuator-de-05',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 180,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary Oransal Elektrik Aktüatör DE-05P',
+    slug: 'rotary-oransal-elektrik-aktuator-de-05p',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 181,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör DE-10',
+    slug: 'rotary-on-off-elektrik-aktuator-de-10',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 182,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary Oransal Elektrik Aktüatör DE-10P',
+    slug: 'rotary-oransal-elektrik-aktuator-de-10p',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 183,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör DE-20',
+    slug: 'rotary-on-off-elektrik-aktuator-de-20',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 184,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör DE-20P',
+    slug: 'rotary-on-off-elektrik-aktuator-de-20p',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 185,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary Kontrol Üniteli Elektrik Aktüatör DE-20I',
+    slug: 'rotary-kontrol-uniteli-elektrik-aktuator-de-20i',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 186,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Çok turlu aktüatör On-Off',
+    slug: 'cok-turlu-aktuator-on-off',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 187,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary Kontrol Üniteli Elektrikli Aktüatör DE-05P-D-268',
+    slug: 'rotary-kontrol-uniteli-elektrikli-aktuator-de-05p-d-268',
+    stok_kodu: 'D-268',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 188,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: '3 Yollu Vana Motoru DE-10-D-179',
+    slug: '3-yollu-vana-motoru-de-10-d-179',
+    stok_kodu: 'D-179',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 189,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör DE-60',
+    slug: 'rotary-on-off-elektrik-aktuator-de-60',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 190,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör DE-03',
+    slug: 'rotary-on-off-elektrik-aktuator-de-03',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 191,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary On-Off Elektrik Aktüatör',
+    slug: 'rotary-on-off-elektrik-aktuator',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 192,
+    kategori_id: 3,
+    kategori_adi: 'Elektrik Aktüatörler',
+    ad: 'Rotary Oransal Elektrik Aktüatör',
+    slug: 'rotary-oransal-elektrik-aktuator',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 193,
+    kategori_id: 3,
+    kategori_adi: 'Pnömatik Aktüatör',
+    ad: 'Çift Etkili Pnömatik Aktüatör D-161',
+    slug: 'cift-etkili-pnomatik-aktuator-d-161',
+    stok_kodu: 'D-161',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 194,
+    kategori_id: 3,
+    kategori_adi: 'Pnömatik Aktüatör',
+    ad: 'Tek Etkili Pnömatik Aktüatör (10 Yaylı) D-339',
+    slug: 'tek-etkili-pnomatik-aktuator-10-yayli-d-339',
+    stok_kodu: 'D-339',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 195,
+    kategori_id: 2,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü Kelebek Vana (Wafer Tip) D-187',
+    slug: 'elektrik-aktuatorlu-kelebek-vana-wafer-tip-d-187',
+    stok_kodu: 'D-187',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 196,
+    kategori_id: 2,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü Kelebek Vana (Lug Tip) D-188',
+    slug: 'elektrik-aktuatorlu-kelebek-vana-lug-tip-d-188',
+    stok_kodu: 'D-188',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 197,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü Küresel Vana (3 PCS Dişli) D-175',
+    slug: 'elektrik-aktuatorlu-kuresel-vana-3-pcs-disli-d-175',
+    stok_kodu: 'D-175',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 198,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Çift Etkili Pnömatik Aktüatörlü 3 Yollu Küresel Vana L Tipi - T Tipi D-177',
+    slug: 'cift-etkili-pnomatik-aktuatorlu-3-yollu-kuresel-vana-l-tipi-t-tipi-d-177',
+    stok_kodu: 'D-177',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 199,
+    kategori_id: 2,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Çift Etkili Pnömatik Aktüatörlü Kelebek Vana (Wafer Tip) D-169',
+    slug: 'cift-etkili-pnomatik-aktuatorlu-kelebek-vana-wafer-tip-d-169',
+    stok_kodu: 'D-169',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 200,
+    kategori_id: 2,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Çift Etkili Pnömatik Aktüatörlü Kelebek Vana (Lug Tip) D-172',
+    slug: 'cift-etkili-pnomatik-aktuatorlu-kelebek-vana-lug-tip-d-172',
+    stok_kodu: 'D-172',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 201,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü PVC Küresel Vana D-190',
+    slug: 'elektrik-aktuatorlu-pvc-kuresel-vana-d-190',
+    stok_kodu: 'D-190',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 202,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü Pirinç Küresel Vana D-189',
+    slug: 'elektrik-aktuatorlu-pirinc-kuresel-vana-d-189',
+    stok_kodu: 'D-189',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 203,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Mini Elektrik Aktüatörlü Küresel Vana D-194',
+    slug: 'mini-elektrik-aktuatorlu-kuresel-vana-d-194',
+    stok_kodu: 'D-194',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 204,
+    kategori_id: 2,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Aktüatörlü Flanşlı Kelebek Vana D-269',
+    slug: 'aktuatorlu-flansli-kelebek-vana-d-269',
+    stok_kodu: 'D-269',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 205,
+    kategori_id: 3,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Aktüatörlü Sürgülü Vana D-270',
+    slug: 'aktuatorlu-surgulu-vana-d-270',
+    stok_kodu: 'D-270',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 206,
+    kategori_id: 1,
+    kategori_adi: 'Aktüatörlü Vanalar',
+    ad: 'Elektrik Aktüatörlü Küresel Vana D-193',
+    slug: 'elektrik-aktuatorlu-kuresel-vana-d-193',
+    stok_kodu: 'D-193',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 207,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'Linear Pozisyoner D-165',
+    slug: 'linear-pozisyoner-d-165',
+    stok_kodu: 'D-165',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 208,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'Linear Pozisyoner Feedback D-166 ıT',
+    slug: 'linear-pozisyoner-feedback-d-166-it',
+    stok_kodu: 'D-166',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 209,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'Switch Box D-164',
+    slug: 'switch-box-d-164',
+    stok_kodu: 'D-164',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 210,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'Namur Solenoid Yön Valfi (Tek Bobinli) D-162',
+    slug: 'namur-solenoid-yon-valfi-tek-bobinli-d-162',
+    stok_kodu: 'D-162',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 211,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'Namur Solenoid Yön Valfi (Çift Bobinli) D-162',
+    slug: 'namur-solenoid-yon-valfi-cift-bobinli-d-162',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 212,
+    kategori_id: 3,
+    kategori_adi: 'Aksesuarlar',
+    ad: 'I-P Çevirici D-167',
+    slug: 'i-p-cevirici-d-167',
+    stok_kodu: 'D-167',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 213,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Mekanik Woltman Tipi Debimetre D-214',
+    slug: 'mekanik-woltman-tipi-debimetre-d-214',
+    stok_kodu: 'D-214',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 214,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Elektromanyetik Debimetre D-212',
+    slug: 'elektromanyetik-debimetre-d-212',
+    stok_kodu: 'D-212',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/elektromanyetik-debimetre-d-212.png"}})
+  },
+  {
+    id: 215,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Ultrasonik Debimetre D-213',
+    slug: 'ultrasonik-debimetre-d-213',
+    stok_kodu: 'D-213',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 216,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Şamandıralı Debimetre D-210',
+    slug: 'samandirali-debimetre-d-210',
+    stok_kodu: 'D-210',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 217,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Metal Gövdeli Şamandıralı Debimetre D-211',
+    slug: 'metal-govdeli-samandirali-debimetre-d-211',
+    stok_kodu: 'D-211',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 218,
+    kategori_id: 3,
+    kategori_adi: 'Debi (Akış)',
+    ad: 'Pedal Tip Akış Şalterleri D-215',
+    slug: 'pedal-tip-akis-salterleri-d-215',
+    stok_kodu: 'D-215',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 219,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Basınç Sensörü - Transmitteri D-219',
+    slug: 'basinc-sensoru-transmitteri-d-219',
+    stok_kodu: 'D-219',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 220,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Digital ve Analog Manometre D-220',
+    slug: 'digital-ve-analog-manometre-d-220',
+    stok_kodu: 'D-220',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 221,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Kuru Tip Alttan Çıkışlı Manometre',
+    slug: 'kuru-tip-alttan-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/kuru-tip-alttan-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 222,
+    kategori_id: 1,
+    kategori_adi: 'Basınç',
+    ad: 'Mini Elektrik Aktüatörlü Küresel Vana D-194',
+    slug: '225-mini-elektrik-aktuatorlu-kuresel-vana-d-194',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/225-mini-elektrik-aktuatorlu-kuresel-vana-d-194.jpg"}})
+  },
+  {
+    id: 223,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Gliserin Tip Alttan Çıkışlı Manometreler',
+    slug: 'gliserin-tip-alttan-cikisli-manometreler',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/gliserin-tip-alttan-cikisli-manometreler.jpg"}})
+  },
+  {
+    id: 224,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Gliserin Tip Arka Çıkışlı Manometreler',
+    slug: 'gliserin-tip-arka-cikisli-manometreler',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/gliserin-tip-arka-cikisli-manometreler.jpg"}})
+  },
+  {
+    id: 225,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1,6 Alttan Çıkışlı Manometre',
+    slug: 'endustriyel-manometre-c1-1-6-alttan-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/endustriyel-manometre-c1-1-6-alttan-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 226,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1,6 Arka Çıkışlı Manometre',
+    slug: 'endustriyel-manometre-c1-1-6-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/endustriyel-manometre-c1-1-6-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 227,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1 Arka Çıkışlı Manometre',
+    slug: 'endustriyel-manometre-c1-1-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/endustriyel-manometre-c1-1-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 228,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1 Arka Çıkışlı Manometre',
+    slug: '231-endustriyel-manometre-c1-1-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/231-endustriyel-manometre-c1-1-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 229,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1,6 Alttan Çıkışlı Manometre',
+    slug: '232-endustriyel-manometre-c1-1-6-alttan-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/232-endustriyel-manometre-c1-1-6-alttan-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 230,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1,6 Arka Çıkışlı Manometre',
+    slug: '233-endustriyel-manometre-c1-1-6-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/233-endustriyel-manometre-c1-1-6-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 231,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1 Arka Çıkışlı Manometre',
+    slug: '234-endustriyel-manometre-c1-1-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/234-endustriyel-manometre-c1-1-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 232,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Endüstriyel Manometre-C1. 1 Arka Çıkışlı Manometre',
+    slug: '235-endustriyel-manometre-c1-1-arka-cikisli-manometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/235-endustriyel-manometre-c1-1-arka-cikisli-manometre.jpg"}})
+  },
+  {
+    id: 233,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Manometre Bağlantı Sifonu D-570',
+    slug: 'manometre-baglanti-sifonu-d-570',
+    stok_kodu: 'D-570',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/manometre-baglanti-sifonu-d-570.jpg"}})
+  },
+  {
+    id: 234,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Manometre Pano Bağlantı Aparatı',
+    slug: 'manometre-pano-baglanti-aparati',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 235,
+    kategori_id: 3,
+    kategori_adi: 'Basınç',
+    ad: 'Manometre Flanşı',
+    slug: 'manometre-flansi',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 236,
+    kategori_id: 3,
+    kategori_adi: 'Seviye',
+    ad: 'Seviye Şalterleri D-217',
+    slug: 'seviye-salterleri-d-217',
+    stok_kodu: 'D-217',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 237,
+    kategori_id: 3,
+    kategori_adi: 'Seviye',
+    ad: 'Ultrasonik Seviye Sensörü (Göstergeli) D-218',
+    slug: 'ultrasonik-seviye-sensoru-gostergeli-d-218',
+    stok_kodu: 'D-218',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 238,
+    kategori_id: 3,
+    kategori_adi: 'Sıcaklık',
+    ad: 'Hvac Bimetal Thermometre Byk',
+    slug: 'hvac-bimetal-thermometre-byk',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/hvac-bimetal-thermometre-byk.jpg"}})
+  },
+  {
+    id: 239,
+    kategori_id: 3,
+    kategori_adi: 'Sıcaklık',
+    ad: 'Endüstriyel Termometre',
+    slug: 'endustriyel-termometre',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false,"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/endustriyel-termometre.jpg"}})
+  },
+  {
+    id: 240,
+    kategori_id: 3,
+    kategori_adi: 'Proses Kontrol',
+    ad: 'Kontrol Cihazı D-222',
+    slug: 'kontrol-cihazi-d-222',
+    stok_kodu: 'D-222',
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 241,
+    kategori_id: 3,
+    kategori_adi: 'Proses Kontrol',
+    ad: 'Elektro Pnömatik Pozisyoner 4 - 20 mA (LINEAR) D-165',
+    slug: 'elektro-pnomatik-pozisyoner-4-20-ma-linear-d-165',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 242,
+    kategori_id: 3,
+    kategori_adi: 'Proses Kontrol',
+    ad: 'Elektro Pnömatik Pozisyoner FeedBackli 4-20 mA (LINEAR) D-166 ıT',
+    slug: 'elektro-pnomatik-pozisyoner-feedbackli-4-20-ma-linear-d-166-it',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
+  },
+  {
+    id: 243,
+    kategori_id: 3,
+    kategori_adi: 'Proses Kontrol',
+    ad: 'Elektro Pnömatik Pozisyoner 4-20 mA (LINEAR) D-166',
+    slug: 'elektro-pnomatik-pozisyoner-4-20-ma-linear-d-166',
+    stok_kodu: null,
+    teknik_bilgiler: JSON.stringify({"detay_hazir_mi":false})
   }],
   referanslar: {
     sektorler: referansSektorleri,
