@@ -36,10 +36,16 @@
 .iletisim-form-karti__slogan { max-width: 17ch; padding-left: 22px; border-left: 1px solid rgba(255,255,255,.38); color: rgba(255,255,255,.88); font-size: .66rem; font-weight: 600; letter-spacing: .18em; line-height: 1.75; text-transform: uppercase; }
 .iletisim-form-karti form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 24px 20px; }
 .iletisim-form-karti label:not(.iletisim-form__onay) { position: relative; display: block; }
-.iletisim-form-karti label:not(.iletisim-form__onay) > span { position: absolute; z-index: 1; top: 14px; left: 14px; display: flex; align-items: center; gap: 9px; color: color-mix(in srgb, var(--renk-koyu) 66%, var(--renk-beyaz)); font-size: .75rem; font-weight: 550; pointer-events: none; }
-.iletisim-form-karti input:not([type='checkbox']), .iletisim-form-karti textarea { width: 100%; border: 1px solid color-mix(in srgb, var(--renk-cizgi) 75%, var(--renk-ana)); border-radius: 10px; background: rgba(255,255,255,.92); color: var(--renk-koyu); font-size: .82rem; box-shadow: inset 0 1px 2px rgba(7,35,74,.025); transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease; }
+.iletisim-form-karti label:not(.iletisim-form__onay) > span { position: absolute; z-index: 1; top: 14px; left: 14px; display: flex; align-items: center; gap: 9px; color: color-mix(in srgb, var(--renk-koyu) 66%, var(--renk-beyaz)); font-size: .75rem; font-weight: 550; pointer-events: none; transition: opacity 140ms ease; }
+.iletisim-form-karti input:not([type='checkbox']), .iletisim-form-karti textarea { width: 100%; border: 1px solid color-mix(in srgb, var(--renk-cizgi) 75%, var(--renk-ana)); border-radius: 10px; background: rgba(255,255,255,.92); color: var(--renk-koyu); font-size: .82rem; box-shadow: inset 0 1px 2px rgba(7,35,74,.025); transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, padding 140ms ease; }
 .iletisim-form-karti input:not([type='checkbox']) { height: 48px; padding: 24px 13px 6px; }
 .iletisim-form-karti textarea { min-height: 110px; padding: 34px 13px 12px; resize: vertical; }
+/* Alan odaklanınca veya doldurulunca üstteki ikon+etiket kaybolur; yazılan metin etiketin bulunduğu yere,
+   düşey olarak ortalanmış biçimde yerleşir. */
+.iletisim-form-karti input:focus, .iletisim-form-karti input:not(:placeholder-shown) { padding: 6px 13px; }
+.iletisim-form-karti textarea:focus, .iletisim-form-karti textarea:not(:placeholder-shown) { padding: 12px 13px; }
+.iletisim-form-karti input:focus ~ span, .iletisim-form-karti input:not(:placeholder-shown) ~ span,
+.iletisim-form-karti textarea:focus ~ span, .iletisim-form-karti textarea:not(:placeholder-shown) ~ span { opacity: 0; }
 .iletisim-form-karti input:not([type='checkbox']):hover, .iletisim-form-karti textarea:hover { border-color: color-mix(in srgb, var(--renk-ana) 42%, var(--renk-cizgi)); background: var(--renk-beyaz); }
 .iletisim-form-karti input:focus, .iletisim-form-karti textarea:focus { border-color: var(--renk-ana); outline: 0; background: var(--renk-beyaz); box-shadow: 0 0 0 4px color-mix(in srgb, var(--renk-ana) 13%, transparent), 0 7px 18px rgba(8,49,101,.06); }
 .iletisim-form__mesaj, .iletisim-form__onay, .iletisim-form-karti button, .iletisim-form__bildirim { grid-column: 1 / -1; }

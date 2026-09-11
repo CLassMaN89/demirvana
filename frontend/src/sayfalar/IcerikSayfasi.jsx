@@ -153,11 +153,13 @@ export default function IcerikSayfasi({ tur, siteAyarlari = {}, bankaHesaplari =
             <strong className="iletisim-form-karti__slogan">{ayar('iletisim_form_slogani', 'Sanayide güvenilir çözüm ortağınız')}</strong>
           </header>
           <form onSubmit={gonder}>
-            <label><span><FontAwesomeIcon icon={faUser} /> İsim Soyisim</span><input name="ad_soyad" aria-label="İsim Soyisim" autoComplete="name" maxLength="120" required /></label>
-            <label><span><FontAwesomeIcon icon={faEnvelope} /> E-posta</span><input name="eposta" aria-label="E-posta" type="email" autoComplete="email" maxLength="180" required /></label>
-            <label><span><FontAwesomeIcon icon={faPhone} /> Telefon</span><input name="telefon" aria-label="Telefon" type="tel" autoComplete="tel" maxLength="40" required /></label>
-            <label><span><FontAwesomeIcon icon={faBuilding} /> Firma</span><input name="firma" aria-label="Firma" autoComplete="organization" maxLength="180" /></label>
-            <label className="iletisim-form__mesaj"><span><FontAwesomeIcon icon={faMessage} /> Mesajınız</span><textarea name="mesaj" aria-label="Mesajınız" rows="6" maxLength="3000" required /></label>
+            {/* Etiket, alan boşken üstte görünen bir ipucu gibi davranır; yazmaya başlayınca kaybolup yerini
+                yazılan metne bırakır (etiket girdiden sonra gelip CSS ile boşken/odaklanmamışken gösterilir). */}
+            <label><input name="ad_soyad" aria-label="İsim Soyisim" autoComplete="name" maxLength="120" placeholder=" " required /><span><FontAwesomeIcon icon={faUser} /> İsim Soyisim</span></label>
+            <label><input name="eposta" aria-label="E-posta" type="email" autoComplete="email" maxLength="180" placeholder=" " required /><span><FontAwesomeIcon icon={faEnvelope} /> E-posta</span></label>
+            <label><input name="telefon" aria-label="Telefon" type="tel" autoComplete="tel" maxLength="40" placeholder=" " required /><span><FontAwesomeIcon icon={faPhone} /> Telefon</span></label>
+            <label><input name="firma" aria-label="Firma" autoComplete="organization" maxLength="180" placeholder=" " /><span><FontAwesomeIcon icon={faBuilding} /> Firma</span></label>
+            <label className="iletisim-form__mesaj"><textarea name="mesaj" aria-label="Mesajınız" rows="6" maxLength="3000" placeholder=" " required /><span><FontAwesomeIcon icon={faMessage} /> Mesajınız</span></label>
             <input className="iletisim-form__tuzak" name="internet_sitesi" tabIndex="-1" autoComplete="off" aria-hidden="true" />
             <label className="iletisim-form__onay"><input name="veri_onayi" type="checkbox" value="1" required /><span>Kişisel verilerimin iletişim talebimin yanıtlanması amacıyla işlenmesini kabul ediyorum.</span></label>
             <button type="submit" disabled={durum.gonderiliyor}><span><FontAwesomeIcon icon={faPaperPlane} />{durum.gonderiliyor ? 'Gönderiliyor…' : 'Gönder'}</span><FontAwesomeIcon icon={faArrowRight} /></button>
