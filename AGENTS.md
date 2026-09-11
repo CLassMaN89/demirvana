@@ -2,6 +2,17 @@
 
 Bu dosyadaki kurallar, bu dizin ve tüm alt dizinlerindeki çalışmalar için geçerlidir.
 
+## ZORUNLU KURAL — kullanıcı talebiyle sabitlenmiştir
+
+Kullanıcı bu kuralı açıkça zorunlu tutmuştur; aşağıdaki maddelerin herhangi birinin ihlali kapsam dışı, izinsiz bir işlemdir:
+
+1. Yalnızca kullanıcının o anda açıkça söylediği ekleme veya güncellemeyi yap. Kullanıcının söylemediği hiçbir şeyi kendi kararınla ekleme, değiştirme veya "iyileştirme" yapma.
+2. Projeyi veya ilgisiz dosyaları baştan tarama, geniş grep/okuma turları yapma. Yalnızca üzerinde çalışılan alanla doğrudan ilgili dosyaları aç.
+3. Görev, belirli bir bileşen/sayfa/alanla ilgiliyse yalnızca o alana dokun; komşu alanlara, ilgisiz sayfalara veya "madem buradayım" mantığıyla başka yerlere dokunma.
+4. Emin olmadığın veya kullanıcının açıkça istemediği bir genişleme fikrin varsa, uygulamadan önce sor; kendi kafana göre iş yapma.
+
+Bu madde, aşağıdaki "Değişiklik kapsamı" bölümünü geçersiz kılmaz, onu pekiştirir ve önceliklendirir.
+
 ## Oturum başlangıcı
 
 1. Her yeni oturumda önce kök dizindeki `PROJE_DURUMU.md` dosyasını oku.
