@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+// Slayt her döndüğünde bileşen yeniden mount olsa da Sobel çizimi görsel başına
+// yalnız bir kez hesaplanır; aksi halde her geçişte ana thread bloke olup kasma yaratırdı.
+const teknikCizimOnbellegi = new Map();
+
 export default function InkReveal({
   gorselYolu,
   odakX = 50,
@@ -219,10 +223,22 @@ export default function InkReveal({
     window.addEventListener('resize', yenidenBoyutlandir);
 
     // Aynı hero görselinden bir kez teknik çizim üretilir; çizim yalnız fare damgalarında görünür.
+    const onbellektekiCizim = teknikCizimOnbellegi.get(gorselYolu);
+    if (onbellektekiCizim) {
+      teknikCizimRef.current = onbellektekiCizim;
+      yenidenBoyutlandir();
+      return () => {
+        window.removeEventListener('resize', yenidenBoyutlandir);
+        if (animasyonRef.current) cancelAnimationFrame(animasyonRef.current);
+      };
+    }
+
     const gorsel = new Image();
     gorsel.decoding = 'async';
     gorsel.onload = () => {
-      teknikCizimRef.current = teknikCizimOlustur(gorsel);
+      const cizim = teknikCizimOlustur(gorsel);
+      if (cizim) teknikCizimOnbellegi.set(gorselYolu, cizim);
+      teknikCizimRef.current = cizim;
       yenidenBoyutlandir();
     };
     gorsel.src = gorselYolu;
