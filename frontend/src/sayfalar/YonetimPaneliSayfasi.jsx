@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
   BarChart3, Layers, TrendingUp, TrendingDown,
@@ -110,6 +110,20 @@ function ZiyaretciTooltip({ active, payload, label }) {
   );
 }
 
+function IcerikDagilimiTooltip({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const girdi = payload[0];
+  return (
+    <div className="yonetim-panel__grafik-ipucu">
+      <strong>{girdi.payload.kategori}</strong>
+      <div className="yonetim-panel__grafik-ipucu-satir">
+        <span style={{ background: girdi.color }} />
+        {girdi.value} ürün
+      </div>
+    </div>
+  );
+}
+
 const ZIYARETCI_OZET_ORNEK = [
   { ikon: Eye, baslik: 'Toplam Ziyaretçi', deger: '28.532', degisim: '%18' },
   { ikon: Users, baslik: 'Tekil Ziyaretçi', deger: '17.421', degisim: '%14' },
@@ -158,7 +172,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
     return [...sayaç.entries()].sort((a, b) => b[1] - a[1]);
   }, [urunler]);
 
-  const enBuyukDeger = Math.max(1, ...kategoriDagilimi.slice(0, 6).map(([, sayi]) => sayi));
+  const icerikDagilimiRadarVerisi = kategoriDagilimi.slice(0, 6).map(([ad, sayi]) => ({ kategori: ad, adet: sayi }));
 
   const kartlar = [
     { ikon: Package, baslik: 'Toplam Ürün', deger: urunler.length, degisim: { yon: 'yukari', metin: '%12 geçen aya göre' } },
@@ -244,14 +258,15 @@ export default function YonetimPaneliSayfasi({ veri }) {
               <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><ChartColumnDecreasingIkon size={18} /> İçerik Dağılımı</AnimateIcon></h3>
               <span className="yonetim-panel__panel-etiket">Ürün Gruplarına Göre</span>
             </div>
-            <div className="yonetim-panel__cubuk-grafik">
-              {kategoriDagilimi.slice(0, 6).map(([ad, sayi]) => (
-                <div className="yonetim-panel__cubuk" key={ad}>
-                  <span className="yonetim-panel__cubuk-govde" style={{ height: `${(sayi / enBuyukDeger) * 100}%` }} title={`${ad}: ${sayi}`} />
-                  <span className="yonetim-panel__cubuk-deger">{sayi}</span>
-                  <span className="yonetim-panel__cubuk-etiket">{ad}</span>
-                </div>
-              ))}
+            <div className="yonetim-panel__radar-kapsayici">
+              <ResponsiveContainer width="100%" height={260}>
+                <RadarChart data={icerikDagilimiRadarVerisi} outerRadius="72%">
+                  <PolarGrid stroke="#E4E9F2" />
+                  <PolarAngleAxis dataKey="kategori" tick={{ fontSize: 11, fill: '#667085' }} />
+                  <Tooltip content={<IcerikDagilimiTooltip />} />
+                  <Radar dataKey="adet" name="Ürün" stroke="#0052FF" fill="#0052FF" fillOpacity={0.45} />
+                </RadarChart>
+              </ResponsiveContainer>
             </div>
           </section>
 
