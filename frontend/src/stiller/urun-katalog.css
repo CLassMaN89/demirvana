@@ -1,6 +1,9 @@
 .urun-katalog { padding: 24px 0 36px; background: linear-gradient(135deg, #fff 0%, color-mix(in srgb, var(--renk-acik) 48%, #fff) 100%); }
 .urun-katalog__yerlesim { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; gap: 24px; }
 .urun-katalog__yan-menu { position: sticky; top: calc(var(--navbar-yuksekligi) + 18px); display: grid; gap: 12px; }
+/* Açık gruplar toplamı ekran yüksekliğini aştığında menü sabitlenmeyi bırakır ve sayfayla birlikte akar;
+   böylece alt kısımdaki öğeler her zaman erişilebilir kalır, ayrı bir kaydırma alanı gerekmez. */
+.urun-katalog__yan-menu--tasan { position: static; }
 .urun-katalog__yan-menu-icerik { display: grid; gap: 12px; }
 .urun-katalog__mobil-menu { display: none; }
 .urun-katalog__menu-grubu { overflow: hidden; border: 1px solid color-mix(in srgb, var(--renk-ana) 11%, transparent); border-radius: 12px; background: rgba(255,255,255,.92); box-shadow: 0 12px 34px color-mix(in srgb, var(--renk-koyu) 6%, transparent); }
@@ -47,11 +50,13 @@
 .urun-katalog__gorunum button:active { transform: scale(.94); }
 .urun-katalog__gorunum svg { width: 17px; }
 .urun-katalog__urunler { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
-.urun-katalog__sayfalama { display: flex; justify-content: center; gap: 6px; margin-top: 22px; }
-.urun-katalog__sayfalama button { display: grid; min-width: 36px; height: 36px; padding: 0 10px; border: 1px solid var(--renk-cizgi); border-radius: 7px; background: #fff; color: var(--renk-koyu); font-size: .75rem; cursor: pointer; place-items: center; transition: background-color 180ms ease, color 180ms ease; }
-.urun-katalog__sayfalama button.aktif { border-color: var(--renk-ana); background: var(--renk-ana); color: #fff; }
-.urun-katalog__sayfalama button:disabled { opacity: .4; cursor: not-allowed; }
-.urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: auto 1fr auto; padding: 10px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 10px; background: rgba(255,255,255,.96); box-shadow: 0 10px 24px color-mix(in srgb, var(--renk-koyu) 5%, transparent); transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
+.urun-katalog__daha-fazla { display: flex; justify-content: center; margin-top: 26px; }
+.urun-katalog__daha-fazla button { min-height: 44px; padding: 0 28px; border: 1px solid var(--renk-ana); border-radius: 8px; background: #fff; color: var(--renk-ana); font-size: .78rem; font-weight: 700; cursor: pointer; transition: background-color 200ms ease, color 200ms ease, transform 150ms ease; }
+.urun-katalog__daha-fazla button:hover { background: var(--renk-ana); color: #fff; }
+.urun-katalog__daha-fazla button:active { transform: scale(.97); }
+.urun-katalog__kart { position: relative; display: grid; min-width: 0; grid-template-rows: auto 1fr auto; padding: 10px; border: 1px solid color-mix(in srgb, var(--renk-ana) 12%, transparent); border-radius: 10px; background: rgba(255,255,255,.96); box-shadow: 0 10px 24px color-mix(in srgb, var(--renk-koyu) 5%, transparent); opacity: 0; transform: translateY(28px); transition: border-color 220ms ease, box-shadow 220ms ease, transform 480ms cubic-bezier(.22,1,.36,1), opacity 480ms ease; }
+/* Kart ekrana girene kadar görünmez kalır; IntersectionObserver "gorunur" sınıfını eklediğinde yukarı kayarak belirir (scroll-reveal). */
+.urun-katalog__kart--gorunur { opacity: 1; transform: translateY(0); }
 .urun-katalog__kart:hover { border-color: color-mix(in srgb, var(--renk-ana) 40%, transparent); box-shadow: 0 18px 38px color-mix(in srgb, var(--renk-koyu) 10%, transparent); transform: translateY(-3px); }
 /* Fareyle kart kenarında dolaşan, site mavilerini kullanan yumuşak ışık halkası. Açı değişimi tarayıcı tarafından
    doğal biçimde animasyonlanabilsin diye özel özellik açı birimiyle kayıt edilir. */
@@ -130,6 +135,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .urun-katalog__menu-gecis, .urun-katalog__yan-menu-icerik, .urun-katalog__kart, .urun-katalog__gorsel img, .urun-katalog__detay svg { transition: none; }
+  .urun-katalog__kart { opacity: 1; transform: none; }
   .urun-katalog__menu-baslik-ikon, .urun-katalog__menu-ikon, .urun-katalog__menu-grubu > button { transition: none; }
   .urun-katalog__menu-ok { animation: none; }
   .urun-katalog__menu-hover { display: none; }

@@ -34,11 +34,41 @@ function detayHazirMi(urun) {
   }
 }
 
+// Kart ekranda görünür olana kadar "IntersectionObserver" ile bekler; göründüğü anda CSS geçişiyle
+// belirip yukarı doğru kayarak yerine oturur (scroll-reveal / kaydırdıkça beliren animasyon).
+function useGorunurlukAnimasyonu() {
+  const ref = useRef(null);
+  const [gorunur, setGorunur] = useState(false);
+
+  useEffect(() => {
+    const eleman = ref.current;
+    if (!eleman) return undefined;
+    if (typeof IntersectionObserver === 'undefined') {
+      setGorunur(true);
+      return undefined;
+    }
+    const gozlemci = new IntersectionObserver(
+      ([giris]) => {
+        if (giris.isIntersecting) {
+          setGorunur(true);
+          gozlemci.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    gozlemci.observe(eleman);
+    return () => gozlemci.disconnect();
+  }, []);
+
+  return [ref, gorunur];
+}
+
 function UrunKarti({ urun, sira }) {
   const bilgiler = teknikBilgileriOku(urun);
   const hazir = detayHazirMi(urun);
   const detayAdresi = `/urunler/${urun.slug}`;
   const kartRef = useRef(null);
+  const [gorunurRef, gorunur] = useGorunurlukAnimasyonu();
 
   // Fare kart üzerindeyken ışık halkasının açısını günceller; CSS geçişi açı değişimini yumuşak biçimde canlandırır.
   const isikAcisiniGuncelle = (olay) => {
@@ -49,8 +79,18 @@ function UrunKarti({ urun, sira }) {
     kart.style.setProperty('--isik-acisi', `${aci}deg`);
   };
 
+  const birlesikRef = (dugum) => {
+    kartRef.current = dugum;
+    gorunurRef.current = dugum;
+  };
+
   return (
-    <article className="urun-katalog__kart" data-testid="urun-katalog-karti" ref={kartRef} onPointerMove={isikAcisiniGuncelle}>
+    <article
+      className={`urun-katalog__kart${gorunur ? ' urun-katalog__kart--gorunur' : ''}`}
+      data-testid="urun-katalog-karti"
+      ref={birlesikRef}
+      onPointerMove={isikAcisiniGuncelle}
+    >
       <span className="urun-katalog__isik" aria-hidden="true" />
       <span className="urun-katalog__sira">{String(sira).padStart(2, '0')}</span>
       {hazir ? (
@@ -73,8 +113,7 @@ function UrunKarti({ urun, sira }) {
   );
 }
 
-function YanMenuGrubu({ grup, varsayilanAcik, etkinYol }) {
-  const [acik, setAcik] = useState(varsayilanAcik);
+function YanMenuGrubu({ grup, acik, onAcikDegistir, etkinYol }) {
   // Fare menü öğeleri arasında gezinirken tek bir vurgu şeridi konum/yükseklik değiştirerek kayar;
   // her satırın kendi arka planını ayrı ayrı açıp kapatması yerine tek bir öğe animasyon yapar.
   const [hoverKonumu, setHoverKonumu] = useState(null);
@@ -82,7 +121,7 @@ function YanMenuGrubu({ grup, varsayilanAcik, etkinYol }) {
 
   return (
     <section className={`urun-katalog__menu-grubu${acik ? ' urun-katalog__menu-grubu--acik' : ''}`}>
-      <button type="button" aria-expanded={acik} aria-label={`${grup.baslik} menüsünü aç veya kapat`} onClick={() => setAcik((deger) => !deger)}>
+      <button type="button" aria-expanded={acik} aria-label={`${grup.baslik} menüsünü aç veya kapat`} onClick={onAcikDegistir}>
         <span><GrupIkonu className="urun-katalog__menu-baslik-ikon" />{grup.baslik}</span>
         {/* Aç/kapat göstergesi her durum değişiminde yeniden monte olarak kısa bir giriş animasyonu oynatır. */}
         <span className="urun-katalog__menu-ok" key={acik ? 'kapat' : 'ac'}>{acik ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}</span>
@@ -113,7 +152,7 @@ function YanMenuGrubu({ grup, varsayilanAcik, etkinYol }) {
   );
 }
 
-const SAYFA_BASINA_URUN = 15;
+const ADIM_BASINA_URUN = 15;
 
 // Canlı API'de kategori_adi, kategori_id'nin bağlı olduğu 7 genel gruptan gelir (menu_kategori_adi ile aynı olmayabilir);
 // 21 gerçek menü kategorisi menu_kategori_adi alanında tutulur, örnek veri ise doğrudan kategori_adi kullanır.
@@ -125,11 +164,55 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const konum = useLocation();
   const [gorunum, setGorunum] = useState('kart');
   const [mobilMenuAcik, setMobilMenuAcik] = useState(false);
-  const [sayfa, setSayfa] = useState(1);
+  const [gosterilenSayisi, setGosterilenSayisi] = useState(ADIM_BASINA_URUN);
 
-  const sayfaDegistir = (yeniSayfa) => setSayfa(yeniSayfa);
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
+
+  // Etkin kategori değiştiğinde onu içeren grup otomatik açılır; kullanıcının açtığı diğer gruplar kapanmaz.
+  const aktifGrup = useMemo(
+    () => gruplar.find((grup) => grup.baglanti === konum.pathname || (grup.alt_ogeler ?? []).some((alt) => alt.baglanti === konum.pathname)),
+    [gruplar, konum.pathname]
+  );
+  const [acikGruplar, setAcikGruplar] = useState(() => new Set([aktifGrup?.id ?? gruplar[0]?.id].filter(Boolean)));
+  useEffect(() => {
+    const hedef = aktifGrup?.id ?? gruplar[0]?.id;
+    if (!hedef) return;
+    setAcikGruplar((mevcut) => (mevcut.has(hedef) ? mevcut : new Set(mevcut).add(hedef)));
+  }, [aktifGrup, gruplar]);
+  const grupAcikKapatmayiDegistir = (grupId) => {
+    setAcikGruplar((mevcut) => {
+      const yeni = new Set(mevcut);
+      if (yeni.has(grupId)) yeni.delete(grupId); else yeni.add(grupId);
+      return yeni;
+    });
+  };
+
+  // Kenar menüsü normalde kaydırma sırasında sabit (sticky) kalır; ancak kullanıcı birden fazla grubu
+  // açtığında içerik ekran yüksekliğini aşabilir. Bu durumda menü sabitlenmeyi bırakıp sayfayla birlikte
+  // akar; böylece hiçbir öğe erişilemez hâle gelmez ve ayrı bir kaydırma çubuğu eklemeye gerek kalmaz.
+  const yanMenuRef = useRef(null);
+  const [yanMenuTasiyor, setYanMenuTasiyor] = useState(false);
+  useEffect(() => {
+    const eleman = yanMenuRef.current;
+    if (!eleman) return undefined;
+    const olcumYap = () => {
+      const navbarYuksekligi = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-yuksekligi')) || 0;
+      const kullanilabilirAlan = window.innerHeight - navbarYuksekligi - 36;
+      setYanMenuTasiyor(eleman.scrollHeight > kullanilabilirAlan);
+    };
+    olcumYap();
+    window.addEventListener('resize', olcumYap);
+    if (typeof ResizeObserver === 'undefined') {
+      return () => window.removeEventListener('resize', olcumYap);
+    }
+    const gozlemci = new ResizeObserver(olcumYap);
+    gozlemci.observe(eleman);
+    return () => {
+      window.removeEventListener('resize', olcumYap);
+      gozlemci.disconnect();
+    };
+  }, [acikGruplar]);
 
   // Adres yoluna göre etkin grup ve/veya alt kategoriyi bulur; hiçbiri eşleşmezse (örn. /urunler) tüm ürünler gösterilir.
   const { baslik, aciklama, gosterilecekUrunler } = useMemo(() => {
@@ -155,24 +238,34 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
     return { baslik: 'Tüm Ürünler', aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.', gosterilecekUrunler: urunler };
   }, [gruplar, konum.pathname, urunler]);
 
-  const toplamSayfa = Math.max(1, Math.ceil(gosterilecekUrunler.length / SAYFA_BASINA_URUN));
-  const etkinSayfa = Math.min(sayfa, toplamSayfa);
-  const sayfalanmisUrunler = gosterilecekUrunler.slice((etkinSayfa - 1) * SAYFA_BASINA_URUN, etkinSayfa * SAYFA_BASINA_URUN);
+  const gosterilenUrunler = gosterilecekUrunler.slice(0, gosterilenSayisi);
+  const dahaFazlaVar = gosterilenSayisi < gosterilecekUrunler.length;
 
-  // Kategori değiştiğinde sayfa numarası bir önceki kategoriden kalmasın.
+  // Kategori değiştiğinde bir önceki kategoriden kalan "gösterilen ürün sayısı" sıfırlanır.
   useEffect(() => {
-    setSayfa(1);
+    setGosterilenSayisi(ADIM_BASINA_URUN);
   }, [konum.pathname]);
 
   return (
     <main className="urun-katalog">
       <div className="urun-katalog__yerlesim icerik-kapsayici">
-        <aside className={`urun-katalog__yan-menu${mobilMenuAcik ? ' urun-katalog__yan-menu--mobil-acik' : ''}`}>
+        <aside
+          ref={yanMenuRef}
+          className={`urun-katalog__yan-menu${mobilMenuAcik ? ' urun-katalog__yan-menu--mobil-acik' : ''}${yanMenuTasiyor ? ' urun-katalog__yan-menu--tasan' : ''}`}
+        >
           <button className="urun-katalog__mobil-menu" type="button" aria-expanded={mobilMenuAcik} onClick={() => setMobilMenuAcik((deger) => !deger)}>
             <SlidersHorizontal aria-hidden="true" /><span>Ürün grupları</span><ChevronDown aria-hidden="true" />
           </button>
           <div className="urun-katalog__yan-menu-icerik">
-            {gruplar.slice(0, 3).map((grup, indeks) => <YanMenuGrubu grup={grup} varsayilanAcik={indeks === 0} etkinYol={konum.pathname} key={grup.id} />)}
+            {gruplar.slice(0, 3).map((grup) => (
+              <YanMenuGrubu
+                grup={grup}
+                acik={acikGruplar.has(grup.id)}
+                onAcikDegistir={() => grupAcikKapatmayiDegistir(grup.id)}
+                etkinYol={konum.pathname}
+                key={grup.id}
+              />
+            ))}
             <Link className="urun-katalog__teklif" to="/iletisim"><Headphones aria-hidden="true" /><span>Doğru vana çözümü için<br /><strong>size yardımcı olalım.</strong></span><ChevronRight aria-hidden="true" /></Link>
           </div>
         </aside>
@@ -193,24 +286,14 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
             </div>
           </div>
           <div className={`urun-katalog__urunler${gorunum === 'liste' ? ' urun-katalog__urunler--liste' : ''}`} data-testid="urun-katalog-listesi">
-            {sayfalanmisUrunler.map((urun, indeks) => <UrunKarti urun={urun} sira={(etkinSayfa - 1) * SAYFA_BASINA_URUN + indeks + 1} key={urun.id} />)}
+            {gosterilenUrunler.map((urun, indeks) => <UrunKarti urun={urun} sira={indeks + 1} key={urun.id} />)}
           </div>
-          {toplamSayfa > 1 && (
-            <nav className="urun-katalog__sayfalama" aria-label="Sayfalama">
-              <button type="button" disabled={etkinSayfa === 1} onClick={() => sayfaDegistir(Math.max(1, etkinSayfa - 1))}>Önceki</button>
-              {Array.from({ length: toplamSayfa }, (_, i) => i + 1).map((numara) => (
-                <button
-                  type="button"
-                  key={numara}
-                  aria-current={numara === etkinSayfa ? 'page' : undefined}
-                  className={numara === etkinSayfa ? 'aktif' : ''}
-                  onClick={() => sayfaDegistir(numara)}
-                >
-                  {numara}
-                </button>
-              ))}
-              <button type="button" disabled={etkinSayfa === toplamSayfa} onClick={() => sayfaDegistir(Math.min(toplamSayfa, etkinSayfa + 1))}>Sonraki</button>
-            </nav>
+          {dahaFazlaVar && (
+            <div className="urun-katalog__daha-fazla">
+              <button type="button" onClick={() => setGosterilenSayisi((deger) => deger + ADIM_BASINA_URUN)}>
+                Daha Fazla Göster
+              </button>
+            </div>
           )}
         </section>
       </div>
