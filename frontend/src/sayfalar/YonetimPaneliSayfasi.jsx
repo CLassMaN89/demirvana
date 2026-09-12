@@ -114,7 +114,9 @@ export default function YonetimPaneliSayfasi({ veri }) {
     { ikon: ImageIcon, baslik: 'Referans Kaydı', deger: veri.referanslar?.kayitlar?.length ?? 0, degisim: { yon: 'yukari', metin: '%18 bu ay' } }
   ];
 
-  const bugun = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }).format(new Date());
+  const suAn = new Date();
+  const bugun = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }).format(suAn);
+  const saat = new Intl.DateTimeFormat('tr-TR', { hour: '2-digit', minute: '2-digit' }).format(suAn);
 
   return (
     <div className="yonetim-panel">
@@ -126,11 +128,14 @@ export default function YonetimPaneliSayfasi({ veri }) {
       </header>
 
       <div className="yonetim-panel__baslik-satiri">
-        <div>
-          <h2><BarChart3 aria-hidden="true" /> Dashboard</h2>
-          <p>Web sitenizin genel durumu, istatistikler ve son aktiviteler</p>
+        <div className="yonetim-panel__baslik-metin">
+          <span className="yonetim-panel__baslik-ikon"><BarChart3 aria-hidden="true" /></span>
+          <div>
+            <h2>Dashboard</h2>
+            <p>Web sitenizin genel durumu, istatistikler ve son aktiviteler</p>
+          </div>
         </div>
-        <div className="yonetim-panel__tarih"><Calendar aria-hidden="true" /> {bugun}</div>
+        <div className="yonetim-panel__tarih"><Calendar aria-hidden="true" /> {bugun}, {saat}</div>
       </div>
 
       <div className="yonetim-panel__kartlar">
