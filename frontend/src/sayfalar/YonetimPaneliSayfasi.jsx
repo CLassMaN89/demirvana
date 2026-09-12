@@ -259,8 +259,8 @@ export default function YonetimPaneliSayfasi({ veri }) {
               <span className="yonetim-panel__panel-etiket">Ürün Gruplarına Göre</span>
             </div>
             <div className="yonetim-panel__radar-kapsayici">
-              <ResponsiveContainer width="100%" height={260}>
-                <RadarChart data={icerikDagilimiRadarVerisi} outerRadius="72%">
+              <ResponsiveContainer width="100%" height={340}>
+                <RadarChart data={icerikDagilimiRadarVerisi} outerRadius="78%">
                   <PolarGrid stroke="#E4E9F2" />
                   <PolarAngleAxis dataKey="kategori" tick={{ fontSize: 11, fill: '#667085' }} />
                   <Tooltip content={<IcerikDagilimiTooltip />} />
