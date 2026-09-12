@@ -1,9 +1,6 @@
 .urun-katalog { padding: 24px 0 36px; background: linear-gradient(135deg, #fff 0%, color-mix(in srgb, var(--renk-acik) 48%, #fff) 100%); }
 .urun-katalog__yerlesim { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; gap: 24px; }
 .urun-katalog__yan-menu { position: sticky; top: calc(var(--navbar-yuksekligi) + 18px); display: grid; gap: 12px; }
-/* Açık gruplar toplamı ekran yüksekliğini aştığında menü sabitlenmeyi bırakır ve sayfayla birlikte akar;
-   böylece alt kısımdaki öğeler her zaman erişilebilir kalır, ayrı bir kaydırma alanı gerekmez. */
-.urun-katalog__yan-menu--tasan { position: static; }
 .urun-katalog__yan-menu-icerik { display: grid; gap: 12px; }
 .urun-katalog__mobil-menu { display: none; }
 .urun-katalog__menu-grubu { overflow: hidden; border: 1px solid color-mix(in srgb, var(--renk-ana) 11%, transparent); border-radius: 12px; background: rgba(255,255,255,.92); box-shadow: 0 12px 34px color-mix(in srgb, var(--renk-koyu) 6%, transparent); }
@@ -50,7 +47,8 @@
 .urun-katalog__gorunum button:active { transform: scale(.94); }
 .urun-katalog__gorunum svg { width: 17px; }
 .urun-katalog__urunler { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
-.urun-katalog__daha-fazla { display: flex; justify-content: center; margin-top: 26px; }
+.urun-katalog__daha-fazla { display: grid; justify-items: center; gap: 8px; margin-top: 26px; }
+.urun-katalog__daha-fazla > span { color: var(--renk-ikincil); font-size: .68rem; }
 .urun-katalog__daha-fazla button { min-height: 44px; padding: 0 28px; border: 1px solid var(--renk-ana); border-radius: 8px; background: #fff; color: var(--renk-ana); font-size: .78rem; font-weight: 700; cursor: pointer; transition: background-color 200ms ease, color 200ms ease, transform 150ms ease; }
 .urun-katalog__daha-fazla button:hover { background: var(--renk-ana); color: #fff; }
 .urun-katalog__daha-fazla button:active { transform: scale(.97); }

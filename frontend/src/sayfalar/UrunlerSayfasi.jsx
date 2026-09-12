@@ -188,32 +188,6 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
     });
   };
 
-  // Kenar menüsü normalde kaydırma sırasında sabit (sticky) kalır; ancak kullanıcı birden fazla grubu
-  // açtığında içerik ekran yüksekliğini aşabilir. Bu durumda menü sabitlenmeyi bırakıp sayfayla birlikte
-  // akar; böylece hiçbir öğe erişilemez hâle gelmez ve ayrı bir kaydırma çubuğu eklemeye gerek kalmaz.
-  const yanMenuRef = useRef(null);
-  const [yanMenuTasiyor, setYanMenuTasiyor] = useState(false);
-  useEffect(() => {
-    const eleman = yanMenuRef.current;
-    if (!eleman) return undefined;
-    const olcumYap = () => {
-      const navbarYuksekligi = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-yuksekligi')) || 0;
-      const kullanilabilirAlan = window.innerHeight - navbarYuksekligi - 36;
-      setYanMenuTasiyor(eleman.scrollHeight > kullanilabilirAlan);
-    };
-    olcumYap();
-    window.addEventListener('resize', olcumYap);
-    if (typeof ResizeObserver === 'undefined') {
-      return () => window.removeEventListener('resize', olcumYap);
-    }
-    const gozlemci = new ResizeObserver(olcumYap);
-    gozlemci.observe(eleman);
-    return () => {
-      window.removeEventListener('resize', olcumYap);
-      gozlemci.disconnect();
-    };
-  }, [acikGruplar]);
-
   // Adres yoluna göre etkin grup ve/veya alt kategoriyi bulur; hiçbiri eşleşmezse (örn. /urunler) tüm ürünler gösterilir.
   const { baslik, aciklama, gosterilecekUrunler } = useMemo(() => {
     for (const grup of gruplar) {
@@ -240,6 +214,8 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
 
   const gosterilenUrunler = gosterilecekUrunler.slice(0, gosterilenSayisi);
   const dahaFazlaVar = gosterilenSayisi < gosterilecekUrunler.length;
+  const mevcutSayfa = Math.ceil(gosterilenUrunler.length / ADIM_BASINA_URUN);
+  const toplamSayfa = Math.max(1, Math.ceil(gosterilecekUrunler.length / ADIM_BASINA_URUN));
 
   // Kategori değiştiğinde bir önceki kategoriden kalan "gösterilen ürün sayısı" sıfırlanır.
   useEffect(() => {
@@ -249,10 +225,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   return (
     <main className="urun-katalog">
       <div className="urun-katalog__yerlesim icerik-kapsayici">
-        <aside
-          ref={yanMenuRef}
-          className={`urun-katalog__yan-menu${mobilMenuAcik ? ' urun-katalog__yan-menu--mobil-acik' : ''}${yanMenuTasiyor ? ' urun-katalog__yan-menu--tasan' : ''}`}
-        >
+        <aside className={`urun-katalog__yan-menu${mobilMenuAcik ? ' urun-katalog__yan-menu--mobil-acik' : ''}`}>
           <button className="urun-katalog__mobil-menu" type="button" aria-expanded={mobilMenuAcik} onClick={() => setMobilMenuAcik((deger) => !deger)}>
             <SlidersHorizontal aria-hidden="true" /><span>Ürün grupları</span><ChevronDown aria-hidden="true" />
           </button>
@@ -278,7 +251,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
           </header>
           <div className="urun-katalog__bilgi"><Info aria-hidden="true" /><span>Teknik detaylar, sertifikalar ve dokümanlar için lütfen ilgili ürünün detay sayfasını ziyaret ediniz.</span></div>
           <div className="urun-katalog__araclar">
-            <span>{gosterilecekUrunler.length} ürün listeleniyor</span>
+            <span>{gosterilenUrunler.length} / {gosterilecekUrunler.length} ürün gösteriliyor · Sayfa {mevcutSayfa} / {toplamSayfa}</span>
             <label><span className="ekran-okuyucu">Ürün sıralaması</span><select defaultValue="varsayilan"><option value="varsayilan">Varsayılan Sıralama</option><option value="ad">Ürün adına göre</option></select></label>
             <div className="urun-katalog__gorunum" aria-label="Görünüm seçimi">
               <button type="button" aria-label="Kart görünümü" aria-pressed={gorunum === 'kart'} onClick={() => setGorunum('kart')}><Grid2X2 aria-hidden="true" /></button>
@@ -293,6 +266,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
               <button type="button" onClick={() => setGosterilenSayisi((deger) => deger + ADIM_BASINA_URUN)}>
                 Daha Fazla Göster
               </button>
+              <span>{gosterilenUrunler.length} / {gosterilecekUrunler.length} ürün · Sayfa {mevcutSayfa} / {toplamSayfa}</span>
             </div>
           )}
         </section>
