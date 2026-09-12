@@ -62,7 +62,7 @@
 .urun-detay__tablo tbody tr:hover { background: #e7f3fd; }
 .urun-detay__olculer, .urun-detay__dokumanlar { margin-top: 18px; }
 .urun-detay__olculer > .urun-detay__tablo-kaydir { margin: 14px; border-radius: 8px; }
-.urun-detay__olcu-tablo-baslik { margin: 0 0 8px; color: #1C3173; font-size: .78rem; font-weight: 700; }
+.urun-detay__olcu-tablo-baslik { margin: 0 0 8px; padding: 8px 12px; border-radius: 6px; color: #fff; background: var(--renk-ana); font-size: .78rem; font-weight: 700; }
 .urun-detay__tablo--olcu { table-layout: fixed; text-align: center; border: 2px solid var(--renk-ana); background: var(--renk-ana); }
 .urun-detay__tablo--olcu thead { background: var(--renk-ana); }
 .urun-detay__tablo--olcu th, .urun-detay__tablo--olcu td { height: 29px; padding: 4px 7px; text-align: center; white-space: nowrap; border: 1px solid var(--renk-ana); }
