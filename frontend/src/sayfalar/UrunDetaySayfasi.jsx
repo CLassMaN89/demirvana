@@ -1,4 +1,4 @@
-import { ArrowLeft, BarChart3, Download, FileText, Layers3, Maximize2 } from 'lucide-react';
+import { ArrowLeft, BarChart3, Download, FileText, Home, Layers3, Maximize2 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
@@ -29,12 +29,23 @@ function GeriDon({ yedekBaglanti }) {
   };
   return (
     <button type="button" className="urun-detay__geri" onClick={geriGit}>
-      <ArrowLeft aria-hidden="true" /> Geri
+      <ArrowLeft aria-hidden="true" /> Ürünlere Geri Dön
     </button>
   );
 }
 
-export default function UrunDetaySayfasi({ urunler = [] }) {
+// Ürünün menu_kategori_adi/kategori_adi'sine karşılık gelen menü linkini (varsa) menu verisinden bulur.
+function kategoriBaglantisiBul(menu, kategoriAdi) {
+  const urunMenusu = (menu ?? []).find((oge) => oge.baglanti === '/urunler');
+  for (const grup of urunMenusu?.alt_ogeler ?? []) {
+    if (grup.baslik === kategoriAdi) return grup.baglanti;
+    const altOge = (grup.alt_ogeler ?? []).find((alt) => alt.baslik === kategoriAdi);
+    if (altOge) return altOge.baglanti;
+  }
+  return null;
+}
+
+export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
   const { slug } = useParams();
   const urun = urunler.find((kayit) => kayit.slug === slug);
 
@@ -75,12 +86,14 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
     olculer: teknik.olculer || []
   }];
 
+  const kategoriAdi = teknik.grup_adi || urun.kategori_adi;
+  const kategoriBaglantisi = kategoriBaglantisiBul(menu, kategoriAdi);
+
   return (
     <article className="urun-detay">
-      <GeriDon yedekBaglanti="/urunler" />
       <header className="urun-detay__hero">
         <div>
-          <span className="urun-detay__etiket">{teknik.grup_adi || urun.kategori_adi}</span>
+          <span className="urun-detay__etiket">{kategoriAdi}</span>
           <h1>{urun.ad}</h1>
           <p>{urun.kisa_aciklama}</p>
         </div>
@@ -91,6 +104,23 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           </div>
         )}
       </header>
+
+      <div className="urun-detay__yol-bar">
+        <GeriDon yedekBaglanti="/urunler" />
+        <nav className="urun-detay__kirinti" aria-label="Sayfa yolu">
+          <Link to="/"><Home aria-hidden="true" /> Ana Sayfa</Link>
+          <span>/</span>
+          <Link to="/urunler">Ürünler</Link>
+          {kategoriAdi && (
+            <>
+              <span>/</span>
+              {kategoriBaglantisi ? <Link to={kategoriBaglantisi}>{kategoriAdi}</Link> : <span>{kategoriAdi}</span>}
+            </>
+          )}
+          <span>/</span>
+          <strong>{urun.ad}</strong>
+        </nav>
+      </div>
 
       <div className="urun-detay__ust-grid">
         <section className="urun-detay__panel urun-detay__cizim-paneli">

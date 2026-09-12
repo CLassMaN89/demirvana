@@ -42,7 +42,7 @@ function UrunYoluCozucu({ menu, urunler }) {
   if (urunKategoriYoluMu(menu, konum.pathname)) {
     return <UrunlerSayfasi menu={menu} urunler={urunler} />;
   }
-  return <UrunDetaySayfasi urunler={urunler} />;
+  return <UrunDetaySayfasi menu={menu} urunler={urunler} />;
 }
 
 function yolMevcutMu(yol, veri) {
