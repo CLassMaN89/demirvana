@@ -6,7 +6,7 @@
   color: var(--renk-koyu);
 }
 
-.urun-detay__yol-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 16px 0; padding: 10px 16px; border: 1px solid color-mix(in srgb, var(--renk-ana) 14%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--renk-ana) 5%, #fff); }
+.urun-detay__yol-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 16px; margin: 16px 0; padding: 10px 16px; border: 1px solid color-mix(in srgb, var(--renk-ana) 14%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--renk-ana) 5%, #fff); }
 .urun-detay__geri { display: inline-flex; flex: none; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid color-mix(in srgb, var(--renk-ana) 22%, transparent); border-radius: 8px; color: var(--renk-ana); background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .15s ease; }
 .urun-detay__geri:hover { background: color-mix(in srgb, var(--renk-ana) 8%, #fff); }
 .urun-detay__geri svg { width: 15px; }
