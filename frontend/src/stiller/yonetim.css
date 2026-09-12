@@ -96,7 +96,15 @@
 .yonetim-panel__panel-etiket { padding: 5px 10px; border-radius: 7px; background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); font-size: .66rem; font-weight: 600; white-space: nowrap; }
 .yonetim-panel__tumunu-gor { border: 1px solid var(--yonetim-cizgi); background: var(--yonetim-zemin); color: var(--yonetim-mavi); font-size: .72rem; font-weight: 500; padding: 5px 10px; border-radius: 7px; cursor: not-allowed; white-space: nowrap; }
 
-.yonetim-panel__alan-grafik { width: 100%; height: 130px; }
+.yonetim-panel__zaman-secici { padding: 6px 10px; border: 1px solid var(--yonetim-cizgi); border-radius: 7px; background: var(--yonetim-zemin); color: var(--yonetim-metin); font-size: .68rem; font-weight: 600; }
+.yonetim-panel__alan-grafik-kapsayici { width: 100%; margin: 0 -6px; }
+.yonetim-panel__grafik-ipucu { display: grid; gap: 4px; padding: 8px 10px; border: 1px solid var(--yonetim-cizgi); border-radius: 8px; background: #fff; box-shadow: 0 8px 20px color-mix(in srgb, var(--yonetim-lacivert) 12%, transparent); font-size: .68rem; }
+.yonetim-panel__grafik-ipucu strong { color: #1C3173; }
+.yonetim-panel__grafik-ipucu-satir { display: flex; align-items: center; gap: 6px; color: var(--yonetim-metin-ikincil); }
+.yonetim-panel__grafik-ipucu-satir span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.yonetim-panel__grafik-lejant { display: flex; justify-content: center; gap: 16px; margin-top: -4px; }
+.yonetim-panel__grafik-lejant span { display: flex; align-items: center; gap: 6px; color: var(--yonetim-metin-ikincil); font-size: .68rem; font-weight: 600; }
+.yonetim-panel__grafik-lejant i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; font-style: normal; }
 
 .yonetim-panel__ozet-satiri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 8px; }
 .yonetim-panel__ozet { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 10px 12px; border: 1px solid var(--yonetim-cizgi); border-radius: 10px; background: var(--yonetim-zemin); }

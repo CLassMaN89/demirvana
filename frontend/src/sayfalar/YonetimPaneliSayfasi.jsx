@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
   BarChart3, Layers, TrendingUp, TrendingDown,
@@ -66,8 +67,49 @@ function detayHazirlaniyorMu(urun) {
   }
 }
 
-// Ziyaretçi trafiği için henüz bir analitik sistemi yok; tasarımı tamamlamak amacıyla örnek değerler kullanılır.
-const ZIYARETCI_ORNEK_VERISI = [820, 960, 1120, 980, 1340, 1180, 1482];
+// Ziyaretçi trafiği için henüz bir analitik sistemi yok; shadcn'in "Area Chart - Interactive" örneğindeki
+// gibi 90 günlük dalgalı bir örnek veri üretilir. Gerçek analitik entegrasyonu kurulunca bu üretim kaldırılıp
+// yerine API'den gelen günlük ziyaretçi kayıtları konulacak.
+function ziyaretciOrnekVerisiUret() {
+  const bugun = new Date();
+  const gunler = [];
+  for (let i = 89; i >= 0; i--) {
+    const tarih = new Date(bugun);
+    tarih.setDate(tarih.getDate() - i);
+    const dalga = Math.sin(i / 6) * 120 + Math.sin(i / 3) * 40;
+    const masaustu = Math.max(40, Math.round(260 + dalga + ((i * 37) % 53) - 26));
+    const mobil = Math.max(30, Math.round(200 + dalga * 0.8 + ((i * 53) % 47) - 23));
+    gunler.push({ tarih: tarih.toISOString().slice(0, 10), masaustu, mobil });
+  }
+  return gunler;
+}
+
+const ZIYARETCI_ORNEK_VERISI = ziyaretciOrnekVerisiUret();
+const ZAMAN_ARALIGI_SECENEKLERI = [
+  { deger: '90g', etiket: 'Son 3 Ay', gun: 90 },
+  { deger: '30g', etiket: 'Son 30 Gün', gun: 30 },
+  { deger: '7g', etiket: 'Son 7 Gün', gun: 7 }
+];
+
+function gunEtiketiFormatla(deger) {
+  return new Date(deger).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+}
+
+function ZiyaretciTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="yonetim-panel__grafik-ipucu">
+      <strong>{gunEtiketiFormatla(label)}</strong>
+      {payload.map((girdi) => (
+        <div className="yonetim-panel__grafik-ipucu-satir" key={girdi.dataKey}>
+          <span style={{ background: girdi.color }} />
+          {girdi.name}: {girdi.value}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const ZIYARETCI_OZET_ORNEK = [
   { ikon: Eye, baslik: 'Toplam Ziyaretçi', deger: '28.532', degisim: '%18' },
   { ikon: Users, baslik: 'Tekil Ziyaretçi', deger: '17.421', degisim: '%14' },
@@ -95,6 +137,11 @@ const GRUP_BASINA_GOSTERIM = 12;
 
 export default function YonetimPaneliSayfasi({ veri }) {
   const [grupTumu, setGrupTumu] = useState(false);
+  const [zamanAraligi, setZamanAraligi] = useState('90g');
+  const ziyaretciVerisi = useMemo(() => {
+    const gunSayisi = ZAMAN_ARALIGI_SECENEKLERI.find((s) => s.deger === zamanAraligi)?.gun ?? 90;
+    return ZIYARETCI_ORNEK_VERISI.slice(-gunSayisi);
+  }, [zamanAraligi]);
   const urunler = veri.urunler ?? [];
   const urunMenusu = veri.menu?.find((oge) => oge.baglanti === '/urunler');
   const gruplar = urunMenusu?.alt_ogeler ?? [];
@@ -112,7 +159,6 @@ export default function YonetimPaneliSayfasi({ veri }) {
   }, [urunler]);
 
   const enBuyukDeger = Math.max(1, ...kategoriDagilimi.slice(0, 6).map(([, sayi]) => sayi));
-  const enBuyukZiyaretci = Math.max(...ZIYARETCI_ORNEK_VERISI);
 
   const kartlar = [
     { ikon: Package, baslik: 'Toplam Ürün', deger: urunler.length, degisim: { yon: 'yukari', metin: '%12 geçen aya göre' } },
@@ -134,30 +180,48 @@ export default function YonetimPaneliSayfasi({ veri }) {
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
               <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><ChartSplineIkon size={18} /> Site Ziyaretçi İstatistikleri</AnimateIcon></h3>
-              <span className="yonetim-panel__panel-etiket">Son 30 Gün</span>
+              <select
+                className="yonetim-panel__zaman-secici"
+                value={zamanAraligi}
+                onChange={(olay) => setZamanAraligi(olay.target.value)}
+                aria-label="Zaman aralığı seç"
+              >
+                {ZAMAN_ARALIGI_SECENEKLERI.map((secenek) => <option key={secenek.deger} value={secenek.deger}>{secenek.etiket}</option>)}
+              </select>
             </div>
-            <svg className="yonetim-panel__alan-grafik" viewBox="0 0 700 200" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
-              <defs>
-                <linearGradient id="ziyaretciDegrade" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0052FF" stopOpacity="0.28" />
-                  <stop offset="100%" stopColor="#0052FF" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              {(() => {
-                const noktalar = ZIYARETCI_ORNEK_VERISI.map((deger, i) => [
-                  (i / (ZIYARETCI_ORNEK_VERISI.length - 1)) * 700,
-                  180 - (deger / enBuyukZiyaretci) * 160
-                ]);
-                const cizgi = noktalar.map((n) => n.join(',')).join(' ');
-                const alan = `0,200 ${cizgi} 700,200`;
-                return (
-                  <>
-                    <polygon points={alan} fill="url(#ziyaretciDegrade)" />
-                    <polyline points={cizgi} fill="none" stroke="#0052FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                  </>
-                );
-              })()}
-            </svg>
+            <div className="yonetim-panel__alan-grafik-kapsayici">
+              <ResponsiveContainer width="100%" height={220}>
+                <AreaChart data={ziyaretciVerisi}>
+                  <defs>
+                    <linearGradient id="masaustuDegrade" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0052FF" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#0052FF" stopOpacity={0.02} />
+                    </linearGradient>
+                    <linearGradient id="mobilDegrade" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#12B76A" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#12B76A" stopOpacity={0.02} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid vertical={false} stroke="#E4E9F2" />
+                  <XAxis
+                    dataKey="tarih"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    minTickGap={32}
+                    tickFormatter={gunEtiketiFormatla}
+                    tick={{ fontSize: 11, fill: '#667085' }}
+                  />
+                  <Tooltip content={<ZiyaretciTooltip />} />
+                  <Area type="natural" dataKey="mobil" name="Mobil" stroke="#12B76A" strokeWidth={2} fill="url(#mobilDegrade)" stackId="a" />
+                  <Area type="natural" dataKey="masaustu" name="Masaüstü" stroke="#0052FF" strokeWidth={2} fill="url(#masaustuDegrade)" stackId="a" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="yonetim-panel__grafik-lejant">
+              <span><i style={{ background: '#0052FF' }} /> Masaüstü</span>
+              <span><i style={{ background: '#12B76A' }} /> Mobil</span>
+            </div>
             <p className="yonetim-panel__panel-not">Analitik entegrasyonu kurulana kadar örnek veri gösterilir.</p>
             <div className="yonetim-panel__ozet-satiri">
               {ZIYARETCI_OZET_ORNEK.map((ozet) => (

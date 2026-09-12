@@ -23,6 +23,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-router-dom": "latest",
+    "recharts": "^3.10.1",
     "three": "^0.185.1",
     "vite": "latest"
   },
