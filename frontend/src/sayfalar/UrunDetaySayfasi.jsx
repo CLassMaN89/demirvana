@@ -117,7 +117,7 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
             {tablo.baslik && <p className="urun-detay__olcu-tablo-baslik">{tablo.baslik}</p>}
             <table
               className="urun-detay__tablo urun-detay__tablo--olcu"
-              style={{ minWidth: 165 + 48 + 56 * (tablo.olcu_basliklari?.length || 0) }}
+              style={{ minWidth: 165 + 84 + 56 * (tablo.olcu_basliklari?.length || 0) }}
             >
               <colgroup>
                 <col className="urun-detay__olcu-grup" />

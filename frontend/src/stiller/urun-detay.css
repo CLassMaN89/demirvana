@@ -70,10 +70,10 @@
    ilk satırdaki hücrelerden değil <col> tanımlarından aldığı için PN başlığı gibi çok geniş
    colSpan'li hücrelerde arka planın yanlış/eksik hizalanmasını (beyaz zeminde okunmayan yazı) önler. */
 col.urun-detay__olcu-grup { width: 165px; }
-col.urun-detay__olcu-kod { width: 48px; }
+col.urun-detay__olcu-kod { width: 84px; }
 colgroup col:not(.urun-detay__olcu-grup):not(.urun-detay__olcu-kod) { width: 56px; }
 .urun-detay__tablo--olcu .urun-detay__olcu-grup { text-align: left; border-right-color: rgba(255, 255, 255, .72); }
-.urun-detay__tablo--olcu .urun-detay__olcu-kod { text-align: center; border-right-color: #fff; }
+.urun-detay__tablo--olcu .urun-detay__olcu-kod { padding-left: 5px; text-align: center; border-right-color: #fff; }
 .urun-detay__tablo--olcu tbody th { color: #fff; background: var(--renk-ana); }
 .urun-detay__tablo--olcu tbody .urun-detay__olcu-grup { white-space: pre-line; }
 .urun-detay__tablo--olcu tbody th[rowspan] { vertical-align: middle; background: var(--renk-ana); }
