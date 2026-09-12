@@ -15,6 +15,8 @@ import BulunamadiSayfasi from './sayfalar/BulunamadiSayfasi';
 import UrunDetaySayfasi from './sayfalar/UrunDetaySayfasi';
 import UrunlerSayfasi from './sayfalar/UrunlerSayfasi';
 import TemsilciliklerSayfasi from './sayfalar/TemsilciliklerSayfasi';
+import YonetimDuzeni from './bilesenler/YonetimDuzeni';
+import YonetimPaneliSayfasi from './sayfalar/YonetimPaneliSayfasi';
 import { siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
@@ -101,6 +103,19 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   }
 
   const veri = durum.veri;
+
+  // Yönetim paneli, halka açık sitenin navbar/footer iskeletinden bağımsız kendi düzenini kullanır.
+  if (konum.pathname.startsWith('/admin')) {
+    return (
+      <YonetimDuzeni>
+        <Routes>
+          <Route path="/admin" element={<YonetimPaneliSayfasi veri={veri} />} />
+          <Route path="/admin/*" element={<YonetimPaneliSayfasi veri={veri} />} />
+        </Routes>
+      </YonetimDuzeni>
+    );
+  }
+
   const sayfaBulunamadi = !yolMevcutMu(konum.pathname, veri);
 
   // Router tek bir iskelet içinde çalışır; böylece navbar sayfa geçişlerinde yeniden kurulmaz.
