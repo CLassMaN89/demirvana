@@ -52,6 +52,16 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
   const cizimAlternatifMetni = teknik.teknik_cizim_alt
     || `${urun.ad.replace(/\s+F\d+\s+D-\d+$/i, '')} teknik çizimi`;
 
+  // Bazı ürünlerde her basınç sınıfının (PN) DN aralığı farklıdır (ör. Glob Vana D-069'daki
+  // FIG 1401/1430/1560/1570/1580 varyantları) — bu durumda tek ortak tablo yerine
+  // olcu_tablolari dizisindeki her basınç sınıfı kendi ayrı tablosuyla gösterilir.
+  const olcuTablolari = teknik.olcu_tablolari || [{
+    baslik: null,
+    basincGruplari,
+    olcu_basliklari: teknik.olcu_basliklari || [],
+    olculer: teknik.olculer || []
+  }];
+
   return (
     <article className="urun-detay">
       <header className="urun-detay__hero">
@@ -102,25 +112,36 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           <h2><BarChart3 aria-hidden="true" /> Teknik Ölçüler ve Boyutlar</h2>
           {teknik.basinc && <strong>{teknik.basinc}</strong>}
         </div>
-        <div className="urun-detay__tablo-kaydir">
-          <table className="urun-detay__tablo urun-detay__tablo--olcu">
-            <thead>
-              <tr><th className="urun-detay__olcu-grup">Anma Basıncı</th><th className="urun-detay__olcu-kod">PN</th>{basincGruplari.map(({ deger, sutun }) => <th key={deger} colSpan={sutun}>{deger}</th>)}</tr>
-            </thead>
-            <tbody>
-              <tr className="urun-detay__cap-satiri"><th className="urun-detay__olcu-grup" scope="row">Anma Çapı</th><th className="urun-detay__olcu-kod" scope="row">DN</th>{(teknik.olcu_basliklari || []).map((baslik) => <td key={baslik}>{baslik}</td>)}</tr>
-              {(teknik.olculer || []).map((satir, satirIndeksi, satirlar) => (
-                <tr key={`${satir.grup}-${satir.kod}`}>
-                  {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
-                  <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
-                  {satir.gruplu_degerler
-                    ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
-                    : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {olcuTablolari.map((tablo, tabloIndeksi) => (
+          <div className="urun-detay__tablo-kaydir" key={tablo.baslik ?? tabloIndeksi}>
+            {tablo.baslik && <p className="urun-detay__olcu-tablo-baslik">{tablo.baslik}</p>}
+            <table
+              className="urun-detay__tablo urun-detay__tablo--olcu"
+              style={{ minWidth: 165 + 48 + 56 * (tablo.olcu_basliklari?.length || 0) }}
+            >
+              <colgroup>
+                <col className="urun-detay__olcu-grup" />
+                <col className="urun-detay__olcu-kod" />
+                {(tablo.olcu_basliklari || []).map((_, indeks) => <col key={indeks} />)}
+              </colgroup>
+              <thead>
+                <tr><th className="urun-detay__olcu-grup">Anma Basıncı</th><th className="urun-detay__olcu-kod">PN</th>{(tablo.basincGruplari || []).map(({ deger, sutun }) => <th key={deger} colSpan={sutun}>{deger}</th>)}</tr>
+              </thead>
+              <tbody>
+                <tr className="urun-detay__cap-satiri"><th className="urun-detay__olcu-grup" scope="row">Anma Çapı</th><th className="urun-detay__olcu-kod" scope="row">DN</th>{(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}</tr>
+                {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
+                  <tr key={`${satir.grup}-${satir.kod}`}>
+                    {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
+                    <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
+                    {satir.gruplu_degerler
+                      ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
+                      : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </section>
 
       <section className="urun-detay__panel urun-detay__dokumanlar">

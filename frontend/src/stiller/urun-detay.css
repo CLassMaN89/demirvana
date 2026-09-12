@@ -62,11 +62,18 @@
 .urun-detay__tablo tbody tr:hover { background: #e7f3fd; }
 .urun-detay__olculer, .urun-detay__dokumanlar { margin-top: 18px; }
 .urun-detay__olculer > .urun-detay__tablo-kaydir { margin: 14px; border-radius: 8px; }
-.urun-detay__tablo--olcu { min-width: 1250px; table-layout: fixed; text-align: center; border: 2px solid var(--renk-ana); background: var(--renk-ana); }
+.urun-detay__olcu-tablo-baslik { margin: 0 0 8px; color: #1C3173; font-size: .78rem; font-weight: 700; }
+.urun-detay__tablo--olcu { table-layout: fixed; text-align: center; border: 2px solid var(--renk-ana); background: var(--renk-ana); }
 .urun-detay__tablo--olcu thead { background: var(--renk-ana); }
 .urun-detay__tablo--olcu th, .urun-detay__tablo--olcu td { height: 29px; padding: 4px 7px; text-align: center; white-space: nowrap; border: 1px solid var(--renk-ana); }
-.urun-detay__tablo--olcu .urun-detay__olcu-grup { width: 165px; text-align: left; border-right-color: rgba(255, 255, 255, .72); }
-.urun-detay__tablo--olcu .urun-detay__olcu-kod { width: 48px; text-align: center; border-right-color: #fff; }
+/* Sütun genişlikleri <colgroup><col> üzerinden verilir; table-layout:fixed genişlikleri yalnızca
+   ilk satırdaki hücrelerden değil <col> tanımlarından aldığı için PN başlığı gibi çok geniş
+   colSpan'li hücrelerde arka planın yanlış/eksik hizalanmasını (beyaz zeminde okunmayan yazı) önler. */
+col.urun-detay__olcu-grup { width: 165px; }
+col.urun-detay__olcu-kod { width: 48px; }
+colgroup col:not(.urun-detay__olcu-grup):not(.urun-detay__olcu-kod) { width: 56px; }
+.urun-detay__tablo--olcu .urun-detay__olcu-grup { text-align: left; border-right-color: rgba(255, 255, 255, .72); }
+.urun-detay__tablo--olcu .urun-detay__olcu-kod { text-align: center; border-right-color: #fff; }
 .urun-detay__tablo--olcu tbody th { color: #fff; background: var(--renk-ana); }
 .urun-detay__tablo--olcu tbody .urun-detay__olcu-grup { white-space: pre-line; }
 .urun-detay__tablo--olcu tbody th[rowspan] { vertical-align: middle; background: var(--renk-ana); }
