@@ -15,12 +15,21 @@ function teknikBilgileriOku(urun) {
 }
 
 function urunGorseliniBul(urun) {
-  // Gerçek sitede fotoğrafı bulunmayan ürünler yanıltıcı bir kategori görseli yerine nötr placeholder kullanır.
+  // Gerçek sitede fotoğrafı bulunmayan ürünler yanıltıcı bir kategori görseli yerine soluk site logosu (hologram) gösterir.
   try {
     const teknik = typeof urun.teknik_bilgiler === 'string' ? JSON.parse(urun.teknik_bilgiler) : urun.teknik_bilgiler;
-    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/urun-placeholder.svg';
+    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/logo.png';
   } catch {
-    return urun.gorsel_yolu || '/assets/urun-placeholder.svg';
+    return urun.gorsel_yolu || '/assets/logo.png';
+  }
+}
+
+function urunGorseliVarMi(urun) {
+  try {
+    const teknik = typeof urun.teknik_bilgiler === 'string' ? JSON.parse(urun.teknik_bilgiler) : urun.teknik_bilgiler;
+    return Boolean(urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu);
+  } catch {
+    return Boolean(urun.gorsel_yolu);
   }
 }
 
@@ -94,9 +103,9 @@ function UrunKarti({ urun, sira }) {
       <span className="urun-katalog__isik" aria-hidden="true" />
       <span className="urun-katalog__sira">{String(sira).padStart(2, '0')}</span>
       {hazir ? (
-        <Link className="urun-katalog__gorsel" to={detayAdresi} aria-label={`${urun.ad} görselini aç`}><img src={urunGorseliniBul(urun)} alt={`${urun.ad} ürün görseli`} /></Link>
+        <Link className={`urun-katalog__gorsel${urunGorseliVarMi(urun) ? '' : ' urun-katalog__gorsel--bos'}`} to={detayAdresi} aria-label={`${urun.ad} görselini aç`}><img src={urunGorseliniBul(urun)} alt={`${urun.ad} ürün görseli`} /></Link>
       ) : (
-        <div className="urun-katalog__gorsel"><img src={urunGorseliniBul(urun)} alt={`${urun.ad} ürün görseli`} /></div>
+        <div className={`urun-katalog__gorsel${urunGorseliVarMi(urun) ? '' : ' urun-katalog__gorsel--bos'}`}><img src={urunGorseliniBul(urun)} alt={`${urun.ad} ürün görseli`} /></div>
       )}
       <div className="urun-katalog__kart-metin">
         <h2>{urun.ad}</h2>
