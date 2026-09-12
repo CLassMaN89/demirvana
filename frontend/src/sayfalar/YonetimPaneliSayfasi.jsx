@@ -165,9 +165,11 @@ export default function YonetimPaneliSayfasi({ veri }) {
                   <span className="yonetim-panel__ozet-ikon"><ozet.ikon aria-hidden="true" /></span>
                   <span className="yonetim-panel__ozet-metin">
                     <small>{ozet.baslik}</small>
-                    <strong>{ozet.deger}</strong>
+                    <span className="yonetim-panel__ozet-deger-satiri">
+                      <strong>{ozet.deger}</strong>
+                      <span className="yonetim-panel__ozet-degisim"><TrendingUp aria-hidden="true" /> {ozet.degisim}</span>
+                    </span>
                   </span>
-                  <span className="yonetim-panel__ozet-degisim"><TrendingUp aria-hidden="true" /> {ozet.degisim}</span>
                 </div>
               ))}
             </div>
