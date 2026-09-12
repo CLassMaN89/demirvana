@@ -209,7 +209,13 @@ export default function Header({ menu, logoYolu, aramaKaynaklari = {} }) {
                               aria-controls={`ucuncu-menu-${altOge.id}`}
                               aria-label={`${altOge.baslik} alt menüsünü ${altAcik ? 'kapat' : 'aç'}`}
                               onPointerEnter={() => setAcikAltMenuId(altOge.id)}
-                              onClick={() => setAcikAltMenuId(altAcik ? null : altOge.id)}
+                              onClick={() => {
+                                // Masaüstünde fare zaten üzerine gelince paneli açtığı için tıklamak kapatmamalı;
+                                // yalnızca dokunmatik düzende (hover olmadığından) tıklama aç/kapat görevi görür.
+                                const dokunmatikDuzen = window.matchMedia?.('(hover: none)').matches;
+                                if (dokunmatikDuzen && altAcik) setAcikAltMenuId(null);
+                                else setAcikAltMenuId(altOge.id);
+                              }}
                             >
                               <span className="site-header__menu-metin"><AltOgeIkonu className="site-header__menu-ikonu" />{altOge.baslik}</span><span aria-hidden="true">→</span>
                             </button>
