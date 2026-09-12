@@ -1,11 +1,12 @@
 // Bu kayıtlar API çalışmadan arayüz geliştirebilmek içindir; üretimde aynı alanlar MySQL'den gelir.
+// Çift indeksli (1, 3, 5. slaytlar) gerçek başlık/açıklama taşır; tek indeksliler yalnızca görsel gösterir.
 const sliderMetinleri = [
   ['Endüstriyel akışta güvenilir kontrol', 'Üretim hatlarına uygun vana çözümleri.'],
-  ['Her bağlantıda ölçülü mühendislik', 'Projenizin basınç ve akış gereksinimlerine uygun seçim.'],
+  ['', ''],
   ['Üretimden sahaya kesintisiz çözüm', 'Dayanıklı ürünler, açık teknik bilgi ve güçlü destek.'],
-  ['Zorlu çalışma koşullarına hazır', 'Endüstriyel tesisler için güvenilir vana teknolojileri.'],
+  ['', ''],
   ['Doğru vana, kararlı sistem', 'Uygulamaya özel ürün seçeneklerini birlikte belirleyin.'],
-  ['Kaliteyi akışın merkezine koyuyoruz', 'Üretim deneyimini sürdürülebilir performansla buluşturuyoruz.']
+  ['', '']
 ];
 
 const vanaMenuKategorileri = [
@@ -247,11 +248,11 @@ export const ornekVeriler = Object.freeze({
   sliderlar: sliderMetinleri.map(([baslik, aciklama], indeks) => ({
     id: indeks + 1,
     baslik,
-    aciklama,
+    aciklama: aciklama || null,
     gorsel_yolu: `/assets/carousel/${indeks + 1}.png`,
     alternatif_metin: `Demirvana endüstriyel vana çözümü ${indeks + 1}`,
-    buton_metni: indeks % 2 === 0 ? 'Ürünleri incele' : 'Bizimle iletişime geçin',
-    buton_baglantisi: indeks % 2 === 0 ? '/urunler' : '/iletisim',
+    buton_metni: baslik ? 'Ürünleri incele' : null,
+    buton_baglantisi: baslik ? '/urunler' : null,
     animasyon_turu: ['kaydir', 'yaklas', 'metin-maske'][indeks % 3],
     odak_x: 50,
     odak_y: 50

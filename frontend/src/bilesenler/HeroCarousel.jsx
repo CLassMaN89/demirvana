@@ -88,15 +88,19 @@ export default function HeroCarousel({ sliderlar, otomatikGecisMs = 6500 }) {
           odakY={aktifSlider.odak_y}
         />
         <div className="hero-carousel__golge" aria-hidden="true" />
-        <div className="hero-carousel__icerik icerik-kapsayici" aria-live="polite">
-          <div className="hero-carousel__metin">
-            <h1>{aktifSlider.baslik}</h1>
-            <p>{aktifSlider.aciklama}</p>
-            <Link className="hero-carousel__cta" to={aktifSlider.buton_baglantisi}>
-              {aktifSlider.buton_metni}
-            </Link>
+        {aktifSlider.baslik && (
+          <div className="hero-carousel__icerik icerik-kapsayici" aria-live="polite">
+            <div className="hero-carousel__metin">
+              <h1>{aktifSlider.baslik}</h1>
+              {aktifSlider.aciklama && <p>{aktifSlider.aciklama}</p>}
+              {aktifSlider.buton_metni && (
+                <Link className="hero-carousel__cta" to={aktifSlider.buton_baglantisi}>
+                  {aktifSlider.buton_metni}
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {toplam > 1 && (
