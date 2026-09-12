@@ -3,7 +3,7 @@ import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
   BarChart3, PieChart, Zap, ListTree, Layers, Calendar, Plus, TrendingUp, TrendingDown,
   Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
-  Home, Building2, Handshake, FileText, GripVertical, Target, Sparkles
+  Home, Building2, Handshake, FileText, GripVertical
 } from 'lucide-react';
 import { altOgeIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
 import '../stiller/yonetim.css';
@@ -101,16 +101,6 @@ export default function YonetimPaneliSayfasi({ veri }) {
 
   const enBuyukDeger = Math.max(1, ...kategoriDagilimi.slice(0, 6).map(([, sayi]) => sayi));
   const enBuyukZiyaretci = Math.max(...ZIYARETCI_ORNEK_VERISI);
-  const bekleyenSayisi = urunler.filter(detayHazirlaniyorMu).length;
-  const tamamlanmaOrani = urunler.length ? Math.round(((urunler.length - bekleyenSayisi) / urunler.length) * 100) : 0;
-  const enBuyukKategori = kategoriDagilimi[0];
-
-  const kpiSatiri = [
-    { baslik: 'Toplam Ürün', deger: String(urunler.length), degisim: '%12', durum: 'yukari' },
-    { baslik: 'Aktif Sertifika', deger: String(aktifSertifika), degisim: '%6', durum: 'yukari' },
-    { baslik: 'İçerik Tamamlanma', deger: `%${tamamlanmaOrani}`, degisim: '%3', durum: 'yukari' },
-    { baslik: 'Detay Bekleyen', deger: String(bekleyenSayisi), degisim: '%2', durum: 'asagi' }
-  ];
 
   const kartlar = [
     { ikon: Package, baslik: 'Toplam Ürün', deger: urunler.length, degisim: { yon: 'yukari', metin: '%12 geçen aya göre' } },
@@ -144,92 +134,50 @@ export default function YonetimPaneliSayfasi({ veri }) {
         {kartlar.map((kart) => <IstatistikKarti key={kart.baslik} {...kart} />)}
       </div>
 
-      {/* Gelişmiş istatistik bloğu: alan grafiği + hedef/içgörü kartları + KPI satırı. */}
-      <div className="yonetim-panel__gelismis">
-        <section className="yonetim-panel__panel yonetim-panel__panel--koyu-grafik">
-          <div className="yonetim-panel__panel-baslik">
-            <h3><TrendingUp aria-hidden="true" /> Site Ziyaretçi İstatistikleri</h3>
-            <span className="yonetim-panel__panel-etiket">Son 30 Gün</span>
-          </div>
-          <svg className="yonetim-panel__alan-grafik" viewBox="0 0 700 200" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
-            <defs>
-              <linearGradient id="ziyaretciDegrade" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0052FF" stopOpacity="0.28" />
-                <stop offset="100%" stopColor="#0052FF" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            {(() => {
-              const noktalar = ZIYARETCI_ORNEK_VERISI.map((deger, i) => [
-                (i / (ZIYARETCI_ORNEK_VERISI.length - 1)) * 700,
-                180 - (deger / enBuyukZiyaretci) * 160
-              ]);
-              const cizgi = noktalar.map((n) => n.join(',')).join(' ');
-              const alan = `0,200 ${cizgi} 700,200`;
-              return (
-                <>
-                  <polygon points={alan} fill="url(#ziyaretciDegrade)" />
-                  <polyline points={cizgi} fill="none" stroke="#0052FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                </>
-              );
-            })()}
-          </svg>
-          <p className="yonetim-panel__panel-not">Analitik entegrasyonu kurulana kadar örnek veri gösterilir.</p>
-          <div className="yonetim-panel__ozet-satiri">
-            {ZIYARETCI_OZET_ORNEK.map((ozet) => (
-              <div className="yonetim-panel__ozet" key={ozet.baslik}>
-                <span className="yonetim-panel__ozet-ikon"><ozet.ikon aria-hidden="true" /></span>
-                <span className="yonetim-panel__ozet-metin">
-                  <small>{ozet.baslik}</small>
-                  <strong>{ozet.deger}</strong>
-                </span>
-                <span className="yonetim-panel__ozet-degisim"><TrendingUp aria-hidden="true" /> {ozet.degisim}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <div className="yonetim-panel__gelismis-yan">
-          <section className="yonetim-panel__hedef-kart">
-            <div>
-              <p className="yonetim-panel__hedef-etiket"><Target aria-hidden="true" /> Ana Hedef</p>
-              <h4>İçerik Tamamlanma</h4>
-            </div>
-            <div className="yonetim-panel__hedef-ilerleme">
-              <div className="yonetim-panel__hedef-satir">
-                <span>%{tamamlanmaOrani}</span>
-                <small>Hedef: %100</small>
-              </div>
-              <div className="yonetim-panel__hedef-cubuk"><div style={{ width: `${tamamlanmaOrani}%` }} /></div>
-            </div>
-          </section>
-
-          <section className="yonetim-panel__icgoru-kart">
-            <div className="yonetim-panel__icgoru-baslik">
-              <span><Sparkles aria-hidden="true" /></span>
-              <h4>Kategori Kapsamı</h4>
-            </div>
-            <p>
-              {urunler.length} ürün {toplamKategori} kategoriye dağıtılmış; en büyük grup{' '}
-              <strong>{enBuyukKategori?.[0]}</strong> ({enBuyukKategori?.[1]} ürün).
-            </p>
-          </section>
-        </div>
-      </div>
-
-      <div className="yonetim-panel__kpi-satiri">
-        {kpiSatiri.map((kpi) => (
-          <div className={`yonetim-panel__kpi yonetim-panel__kpi--${kpi.durum}`} key={kpi.baslik}>
-            <p>{kpi.baslik}</p>
-            <div>
-              <strong>{kpi.deger}</strong>
-              <span>{kpi.degisim}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
       <div className="yonetim-panel__izgara">
-        <div className="yonetim-panel__cift-sutun">
+        <div className="yonetim-panel__uc-sutun">
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><TrendingUp aria-hidden="true" /> Site Ziyaretçi İstatistikleri</h3>
+              <span className="yonetim-panel__panel-etiket">Son 30 Gün</span>
+            </div>
+            <svg className="yonetim-panel__alan-grafik" viewBox="0 0 700 200" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
+              <defs>
+                <linearGradient id="ziyaretciDegrade" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#0052FF" stopOpacity="0.28" />
+                  <stop offset="100%" stopColor="#0052FF" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              {(() => {
+                const noktalar = ZIYARETCI_ORNEK_VERISI.map((deger, i) => [
+                  (i / (ZIYARETCI_ORNEK_VERISI.length - 1)) * 700,
+                  180 - (deger / enBuyukZiyaretci) * 160
+                ]);
+                const cizgi = noktalar.map((n) => n.join(',')).join(' ');
+                const alan = `0,200 ${cizgi} 700,200`;
+                return (
+                  <>
+                    <polygon points={alan} fill="url(#ziyaretciDegrade)" />
+                    <polyline points={cizgi} fill="none" stroke="#0052FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </>
+                );
+              })()}
+            </svg>
+            <p className="yonetim-panel__panel-not">Analitik entegrasyonu kurulana kadar örnek veri gösterilir.</p>
+            <div className="yonetim-panel__ozet-satiri">
+              {ZIYARETCI_OZET_ORNEK.map((ozet) => (
+                <div className="yonetim-panel__ozet" key={ozet.baslik}>
+                  <span className="yonetim-panel__ozet-ikon"><ozet.ikon aria-hidden="true" /></span>
+                  <span className="yonetim-panel__ozet-metin">
+                    <small>{ozet.baslik}</small>
+                    <strong>{ozet.deger}</strong>
+                  </span>
+                  <span className="yonetim-panel__ozet-degisim"><TrendingUp aria-hidden="true" /> {ozet.degisim}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
               <h3><PieChart aria-hidden="true" /> İçerik Dağılımı</h3>
