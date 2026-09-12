@@ -6,6 +6,10 @@
   color: var(--renk-koyu);
 }
 
+.urun-detay__geri { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; padding: 8px 14px; border: 1px solid color-mix(in srgb, var(--renk-ana) 20%, transparent); border-radius: 8px; color: var(--renk-ana); background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+.urun-detay__geri:hover { background: color-mix(in srgb, var(--renk-ana) 8%, #fff); }
+.urun-detay__geri svg { width: 15px; }
+
 .urun-detay__hero,
 .urun-detay__panel {
   border: 1px solid color-mix(in srgb, var(--renk-ana) 14%, transparent);
@@ -49,9 +53,7 @@
 .urun-detay__panel-baslik p { margin: 0; color: var(--renk-metin); font-size: 12px; }
 .urun-detay__cizim { display: grid; place-items: center; min-height: 410px; padding: 16px; background: linear-gradient(#fff, #f8fbff); }
 .urun-detay__cizim img { display: block; width: 100%; height: 390px; object-fit: contain; }
-.urun-detay__cizim--bos { position: relative; overflow: hidden; }
 .urun-detay__cizim--bos img { width: 62%; height: auto; max-height: 220px; opacity: .12; filter: grayscale(1); }
-.urun-detay__cizim--bos span { position: absolute; inset: auto 24px 28px; text-align: center; color: var(--renk-ana); font-size: 13px; font-weight: 700; letter-spacing: .02em; }
 .urun-detay__not { margin: 0 18px 18px; padding: 10px 12px; border-radius: 8px; color: #31577f; background: #eef7ff; font-size: 11px; }
 .urun-detay__not::before { content: 'i'; display: inline-grid; place-items: center; width: 17px; height: 17px; margin-right: 7px; border-radius: 50%; color: #fff; background: var(--renk-ana); font-weight: 700; }
 

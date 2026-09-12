@@ -1,5 +1,5 @@
-import { BarChart3, Download, FileText, Layers3, Maximize2 } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, BarChart3, Download, FileText, Layers3, Maximize2 } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
 
@@ -19,6 +19,19 @@ function grupSatirSayisi(satirlar, indeks) {
   let satirSayisi = 1;
   while (satirlar[indeks + satirSayisi] && !satirlar[indeks + satirSayisi].grup) satirSayisi += 1;
   return satirSayisi;
+}
+
+function GeriDon({ yedekBaglanti }) {
+  const navigate = useNavigate();
+  const geriGit = () => {
+    if (window.history.state?.idx > 0) navigate(-1);
+    else navigate(yedekBaglanti);
+  };
+  return (
+    <button type="button" className="urun-detay__geri" onClick={geriGit}>
+      <ArrowLeft aria-hidden="true" /> Geri
+    </button>
+  );
 }
 
 export default function UrunDetaySayfasi({ urunler = [] }) {
@@ -64,6 +77,7 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
 
   return (
     <article className="urun-detay">
+      <GeriDon yedekBaglanti="/urunler" />
       <header className="urun-detay__hero">
         <div>
           <span className="urun-detay__etiket">{teknik.grup_adi || urun.kategori_adi}</span>
@@ -91,7 +105,6 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           ) : (
             <div className="urun-detay__cizim urun-detay__cizim--bos">
               <img src="/assets/logo.png" alt="" aria-hidden="true" />
-              <span>Teknik çizim eklenecek</span>
             </div>
           )}
           <p className="urun-detay__not">Teknik resim bilgilendirme amaçlıdır. Ölçüler üretim toleranslarına göre değişiklik gösterebilir.</p>
