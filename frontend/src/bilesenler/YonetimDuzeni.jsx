@@ -91,6 +91,10 @@ export default function YonetimDuzeni({ children }) {
 
       <div className="yonetim__ana">
         <header className="yonetim__ust-bar">
+          <div className="yonetim__karsilama">
+            <strong>Hoş Geldiniz 👋</strong>
+            <span>Demir Vana</span>
+          </div>
           <label className="yonetim__arama">
             <SearchIcon aria-hidden="true" />
             <input type="search" placeholder="Ürün, kategori, sayfa veya içerik ara..." />

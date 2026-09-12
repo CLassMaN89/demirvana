@@ -120,13 +120,6 @@ export default function YonetimPaneliSayfasi({ veri }) {
 
   return (
     <div className="yonetim-panel">
-      <header className="yonetim-panel__karsilama">
-        <div>
-          <h1>Hoş Geldiniz 👋</h1>
-          <p>Demir Vana yönetim paneline hoş geldiniz. Bugün neler yapmak istersiniz?</p>
-        </div>
-      </header>
-
       <div className="yonetim-panel__baslik-satiri">
         <div className="yonetim-panel__baslik-metin">
           <span className="yonetim-panel__baslik-ikon"><BarChart3 aria-hidden="true" /></span>
