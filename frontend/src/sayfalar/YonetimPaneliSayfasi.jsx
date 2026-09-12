@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
-  BarChart3, PieChart, Zap, ListTree, Layers, Calendar, TrendingUp, TrendingDown,
+  BarChart3, PieChart, Zap, ListTree, Layers, TrendingUp, TrendingDown,
   Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
   Home, Building2, Handshake, FileText, GripVertical
 } from 'lucide-react';
@@ -114,23 +114,8 @@ export default function YonetimPaneliSayfasi({ veri }) {
     { ikon: ImageIcon, baslik: 'Referans Kaydı', deger: veri.referanslar?.kayitlar?.length ?? 0, degisim: { yon: 'yukari', metin: '%18 bu ay' } }
   ];
 
-  const suAn = new Date();
-  const bugun = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }).format(suAn);
-  const saat = new Intl.DateTimeFormat('tr-TR', { hour: '2-digit', minute: '2-digit' }).format(suAn);
-
   return (
     <div className="yonetim-panel">
-      <div className="yonetim-panel__baslik-satiri">
-        <div className="yonetim-panel__baslik-metin">
-          <span className="yonetim-panel__baslik-ikon"><BarChart3 aria-hidden="true" /></span>
-          <div>
-            <h2>Dashboard</h2>
-            <p>Web sitenizin genel durumu, istatistikler ve son aktiviteler</p>
-          </div>
-        </div>
-        <div className="yonetim-panel__tarih"><Calendar aria-hidden="true" /> {bugun}, {saat}</div>
-      </div>
-
       <div className="yonetim-panel__kartlar">
         {kartlar.map((kart) => <IstatistikKarti key={kart.baslik} {...kart} />)}
       </div>
