@@ -96,10 +96,24 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           </div>
           <div className="urun-detay__tablo-kaydir">
             <table className="urun-detay__tablo">
-              <thead><tr><th>No</th><th>Parça Adı</th><th>Malzeme</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Parça Adı</th>
+                  {teknik.parca_kolonlari
+                    ? teknik.parca_kolonlari.map((kolon) => <th key={kolon} style={{ whiteSpace: 'pre-line' }}>{kolon}</th>)
+                    : <th>Malzeme</th>}
+                </tr>
+              </thead>
               <tbody>
                 {(teknik.parcalar || []).map((parca, indeks) => (
-                  <tr key={`${parca.no}-${indeks}`}><td>{parca.no}</td><td>{parca.ad}</td><td>{parca.malzeme}</td></tr>
+                  <tr key={`${parca.no}-${indeks}`}>
+                    <td>{parca.no}</td>
+                    <td>{parca.ad}</td>
+                    {parca.malzemeler
+                      ? parca.malzemeler.map((malzeme, kolonIndeksi) => <td key={kolonIndeksi}>{malzeme}</td>)
+                      : <td>{parca.malzeme}</td>}
+                  </tr>
                 ))}
               </tbody>
             </table>
