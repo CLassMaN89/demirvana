@@ -124,7 +124,9 @@
 .yonetim-panel__hizli-liste svg { width: 15px; height: 15px; color: var(--yonetim-mavi); }
 
 .yonetim-panel__menu-listesi { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.yonetim-panel__menu-listesi li { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; background: var(--yonetim-zemin); font-size: .78rem; }
+.yonetim-panel__menu-listesi li { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; background: var(--yonetim-zemin); font-size: .78rem; transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.yonetim-panel__menu-listesi li:hover { background: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--yonetim-lacivert) 10%, transparent); transform: translateX(3px); }
+.yonetim-panel__menu-listesi li:hover .yonetim-panel__menu-tutamak { color: var(--yonetim-mavi); }
 .yonetim-panel__menu-tutamak { width: 14px; height: 14px; flex: 0 0 14px; color: #B0B8C6; cursor: grab; }
 .yonetim-panel__menu-sira { display: grid; width: 18px; height: 18px; flex: 0 0 18px; border-radius: 5px; background: #fff; border: 1px solid var(--yonetim-cizgi); font-size: .62rem; font-weight: 700; color: var(--yonetim-metin-ikincil); place-items: center; }
 .yonetim-panel__rozet--kucuk { width: 26px; height: 26px; flex: 0 0 26px; }
@@ -132,8 +134,9 @@
 .yonetim-panel__menu-ad { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .yonetim-panel__menu-listesi li > svg:last-child { width: 15px; height: 15px; flex: 0 0 15px; color: var(--yonetim-metin-ikincil); }
 
-.yonetim-panel__rozet-listesi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
-.yonetim-panel__rozet-listesi li { display: flex; align-items: center; gap: 9px; min-width: 0; font-size: .76rem; }
+.yonetim-panel__rozet-listesi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.yonetim-panel__rozet-listesi li { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 8px 10px; border-radius: 9px; background: var(--yonetim-zemin); font-size: .76rem; transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.yonetim-panel__rozet-listesi li:hover { background: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--yonetim-lacivert) 10%, transparent); transform: translateX(3px); }
 .yonetim-panel__rozet { display: grid; width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px; place-items: center; }
 .yonetim-panel__rozet svg { width: 16px; height: 16px; }
 .yonetim-panel__rozet-ad { overflow: hidden; flex: 1; min-width: 0; text-overflow: ellipsis; white-space: nowrap; }
@@ -144,11 +147,12 @@
 
 .yonetim-panel__zaman-cizelgesi { position: relative; display: grid; gap: 14px; margin: 0; padding: 0 0 0 15px; list-style: none; }
 .yonetim-panel__zaman-cizelgesi::before { position: absolute; top: 4px; bottom: 4px; left: 29px; width: 2px; background: var(--yonetim-cizgi); content: ''; }
-.yonetim-panel__zaman-cizelgesi li { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 10px; }
+.yonetim-panel__zaman-cizelgesi li { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; }
 .yonetim-panel__zaman-rozet { position: relative; z-index: 1; display: grid; width: 30px; height: 30px; border-radius: 50%; place-items: center; }
 .yonetim-panel__zaman-rozet svg { width: 14px; height: 14px; }
-.yonetim-panel__zaman-metin { display: grid; gap: 1px; min-width: 0; font-size: .74rem; }
+.yonetim-panel__zaman-metin { display: grid; gap: 1px; min-width: 0; padding: 7px 10px; border-radius: 9px; background: var(--yonetim-zemin); font-size: .74rem; transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
 .yonetim-panel__zaman-metin span { overflow: hidden; color: var(--yonetim-metin-ikincil); text-overflow: ellipsis; white-space: nowrap; }
+.yonetim-panel__zaman-cizelgesi li:hover .yonetim-panel__zaman-metin { background: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--yonetim-lacivert) 10%, transparent); transform: translateX(3px); }
 .yonetim-panel__zaman-cizelgesi small { color: #98A2B3; font-size: .64rem; white-space: nowrap; }
 
 .yonetim-panel__medya-izgara { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
