@@ -707,11 +707,11 @@ ON DUPLICATE KEY UPDATE
 INSERT INTO `sliderlar`
     (`baslik`, `aciklama`, `gorsel_yolu`, `alternatif_metin`, `buton_metni`, `buton_baglantisi`, `animasyon_turu`, `odak_x`, `odak_y`, `siralama`)
 VALUES
-    ('Endüstriyel akışta güvenilir kontrol', 'Üretim hatlarına uygun vana çözümleri.', '/assets/carousel/1.png', 'Demirvana endüstriyel vana çözümü 1', 'Ürünleri incele', '/urunler', 'kaydir', 50, 50, 1),
+    ('', NULL, '/assets/carousel/1.png', 'Demirvana endüstriyel vana çözümü 1', NULL, NULL, 'kaydir', 50, 50, 1),
     ('', NULL, '/assets/carousel/2.png', 'Demirvana endüstriyel vana çözümü 2', NULL, NULL, 'yaklas', 50, 50, 2),
-    ('Üretimden sahaya kesintisiz çözüm', 'Dayanıklı ürünler, açık teknik bilgi ve güçlü destek.', '/assets/carousel/3.png', 'Demirvana endüstriyel vana çözümü 3', 'Ürünleri incele', '/urunler', 'metin-maske', 50, 50, 3),
+    ('', NULL, '/assets/carousel/3.png', 'Demirvana endüstriyel vana çözümü 3', NULL, NULL, 'metin-maske', 50, 50, 3),
     ('', NULL, '/assets/carousel/4.png', 'Demirvana endüstriyel vana çözümü 4', NULL, NULL, 'kaydir', 50, 50, 4),
-    ('Doğru vana, kararlı sistem', 'Uygulamaya özel ürün seçeneklerini birlikte belirleyin.', '/assets/carousel/5.png', 'Demirvana endüstriyel vana çözümü 5', 'Ürünleri incele', '/urunler', 'yaklas', 50, 50, 5),
+    ('', NULL, '/assets/carousel/5.png', 'Demirvana endüstriyel vana çözümü 5', NULL, NULL, 'yaklas', 50, 50, 5),
     ('', NULL, '/assets/carousel/6.png', 'Demirvana endüstriyel vana çözümü 6', NULL, NULL, 'metin-maske', 50, 50, 6)
 ON DUPLICATE KEY UPDATE
     `baslik` = VALUES(`baslik`),
