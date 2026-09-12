@@ -126,14 +126,8 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const [gorunum, setGorunum] = useState('kart');
   const [mobilMenuAcik, setMobilMenuAcik] = useState(false);
   const [sayfa, setSayfa] = useState(1);
-  const icerikRef = useRef(null);
 
-  // Sayfa numarası değiştiğinde, önceki sayfanın kaydırma konumunu korumak yerine (kısa/uzun içerikte
-  // sayfa numaralarının ekranda zıplamasına neden olur) sonuç listesinin başına döner.
-  const sayfaDegistir = (yeniSayfa) => {
-    setSayfa(yeniSayfa);
-    icerikRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  };
+  const sayfaDegistir = (yeniSayfa) => setSayfa(yeniSayfa);
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
 
@@ -184,7 +178,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
         </aside>
 
         <section className="urun-katalog__icerik" aria-labelledby="urun-katalog-basligi">
-          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu" ref={icerikRef}><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>{baslik}</span></nav>
+          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu"><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>{baslik}</span></nav>
           <header className="urun-katalog__hero">
             <div><h1 id="urun-katalog-basligi">{baslik}</h1><p>{aciklama}</p></div>
             <p className="urun-katalog__hero-soz">Güvenilir Akış<br />Daha Güçlü Yarınlar</p>
