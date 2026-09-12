@@ -101,9 +101,9 @@ export default function YonetimDuzeni({ children }) {
           </button>
           {/* Kimlik doğrulama sistemi henüz kurulmadığı için kullanıcı bilgisi sabit bir yer tutucudur. */}
           <div className="yonetim__kullanici">
-            <span className="yonetim__kullanici-avatar" aria-hidden="true">AY</span>
+            <span className="yonetim__kullanici-avatar" aria-hidden="true">DV</span>
             <span>
-              <strong>Ahmet Yılmaz</strong>
+              <strong>Demir Vana</strong>
               <small>Yönetici</small>
             </span>
             <ChevronRight aria-hidden="true" />

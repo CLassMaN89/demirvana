@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
-  BarChart3, PieChart, Zap, ListTree, Layers, Calendar, Plus, TrendingUp, TrendingDown,
+  BarChart3, PieChart, Zap, ListTree, Layers, Calendar, TrendingUp, TrendingDown,
   Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
   Home, Building2, Handshake, FileText, GripVertical
 } from 'lucide-react';
@@ -82,7 +82,10 @@ function IstatistikKarti({ ikon: Ikon, baslik, deger, degisim, notu }) {
   );
 }
 
+const GRUP_BASINA_GOSTERIM = 12;
+
 export default function YonetimPaneliSayfasi({ veri }) {
+  const [grupTumu, setGrupTumu] = useState(false);
   const urunler = veri.urunler ?? [];
   const urunMenusu = veri.menu?.find((oge) => oge.baglanti === '/urunler');
   const gruplar = urunMenusu?.alt_ogeler ?? [];
@@ -197,11 +200,22 @@ export default function YonetimPaneliSayfasi({ veri }) {
           <section className="yonetim-panel__panel">
             <h3><Zap aria-hidden="true" /> Hızlı İşlemler</h3>
             <div className="yonetim-panel__hizli-liste">
-              {['Yeni Ürün Ekle', 'Yeni Kategori Ekle', 'Yeni Sertifika Ekle', 'Yeni Referans Ekle', 'Banner Düzenle'].map((etiket) => (
-                <button type="button" key={etiket} disabled title="Bu işlem henüz bağlanmadı">
-                  <Plus aria-hidden="true" /> {etiket}
-                </button>
-              ))}
+              {[
+                { etiket: 'Yeni Ürün Ekle', ikon: Package },
+                { etiket: 'Yeni Kategori Ekle', ikon: Layers },
+                { etiket: 'Yeni Sertifika Ekle', ikon: Award },
+                { etiket: 'Yeni Referans Ekle', ikon: Building2 },
+                { etiket: 'Banner Düzenle', ikon: ImageIcon }
+              ].map(({ etiket, ikon: Ikon }, indeks) => {
+                const renk = ROZET_RENKLERI[indeks % ROZET_RENKLERI.length];
+                return (
+                  <button type="button" key={etiket} disabled title="Bu işlem henüz bağlanmadı">
+                    <span className="yonetim-panel__rozet yonetim-panel__rozet--kucuk" style={{ background: renk.zemin, color: renk.renk }}><Ikon aria-hidden="true" /></span>
+                    <span className="yonetim-panel__hizli-etiket">{etiket}</span>
+                    <ChevronRight aria-hidden="true" />
+                  </button>
+                );
+              })}
             </div>
           </section>
         </div>
@@ -237,7 +251,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
               </button>
             </div>
             <ul className="yonetim-panel__rozet-listesi">
-              {kategoriDagilimi.map(([ad, sayi], indeks) => {
+              {(grupTumu ? kategoriDagilimi : kategoriDagilimi.slice(0, GRUP_BASINA_GOSTERIM)).map(([ad, sayi], indeks) => {
                 const Ikon = altOgeIkonuGetir(ad);
                 const renk = ROZET_RENKLERI[indeks % ROZET_RENKLERI.length];
                 return (
@@ -249,6 +263,11 @@ export default function YonetimPaneliSayfasi({ veri }) {
                 );
               })}
             </ul>
+            {!grupTumu && kategoriDagilimi.length > GRUP_BASINA_GOSTERIM && (
+              <button type="button" className="yonetim-panel__daha-fazla-kucuk" onClick={() => setGrupTumu(true)}>
+                Daha Fazla Göster ({kategoriDagilimi.length - GRUP_BASINA_GOSTERIM})
+              </button>
+            )}
             <button type="button" className="yonetim-panel__toplam" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
               <Layers aria-hidden="true" /> Toplam {urunler.length} ürün, {toplamKategori} kategori <ChevronRight aria-hidden="true" />
             </button>
