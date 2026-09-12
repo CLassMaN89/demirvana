@@ -30,6 +30,7 @@
     "@testing-library/react": "latest",
     "@testing-library/user-event": "latest",
     "jsdom": "latest",
+    "shadcn": "^4.21.0",
     "vitest": "latest"
   }
 }
