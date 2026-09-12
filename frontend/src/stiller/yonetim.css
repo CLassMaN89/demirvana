@@ -75,7 +75,7 @@
 .yonetim-panel__kart { display: grid; gap: 6px; padding: 16px; border-radius: 12px; background: #fff; border: 1px solid var(--yonetim-cizgi); }
 .yonetim-panel__kart-ikon { display: grid; width: 34px; height: 34px; border-radius: 9px; background: color-mix(in srgb, var(--yonetim-mavi) 10%, #fff); color: var(--yonetim-mavi); place-items: center; }
 .yonetim-panel__kart-ikon svg { width: 17px; height: 17px; }
-.yonetim-panel__kart-baslik { color: var(--yonetim-metin-ikincil); font-size: .72rem; }
+.yonetim-panel__kart-baslik { color: var(--yonetim-metin-ikincil); font-size: .72rem; font-weight: 600; }
 .yonetim-panel__kart-deger { font-size: 1.4rem; }
 .yonetim-panel__kart-degisim { display: flex; align-items: center; gap: 4px; font-size: .68rem; font-weight: 600; color: var(--yonetim-yesil); }
 .yonetim-panel__kart-degisim svg { width: 13px; height: 13px; }
@@ -103,7 +103,7 @@
 .yonetim-panel__ozet-ikon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; background: #fff; color: var(--yonetim-mavi); place-items: center; }
 .yonetim-panel__ozet-ikon svg { width: 15px; height: 15px; }
 .yonetim-panel__ozet-metin { display: grid; gap: 2px; min-width: 0; }
-.yonetim-panel__ozet-metin small { overflow: hidden; color: var(--yonetim-metin-ikincil); font-size: .64rem; text-overflow: ellipsis; white-space: nowrap; }
+.yonetim-panel__ozet-metin small { overflow: hidden; color: var(--yonetim-metin-ikincil); font-size: .64rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .yonetim-panel__ozet-deger-satiri { display: flex; align-items: baseline; gap: 6px; }
 .yonetim-panel__ozet-metin strong { font-size: .88rem; }
 .yonetim-panel__ozet-degisim { display: flex; align-items: center; gap: 2px; color: var(--yonetim-yesil); font-size: .64rem; font-weight: 700; }
@@ -113,7 +113,7 @@
 .yonetim-panel__cubuk { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: end; gap: 4px; height: 100%; min-width: 0; }
 .yonetim-panel__cubuk-govde { display: block; width: 60%; min-height: 4px; border-radius: 4px 4px 0 0; background: var(--yonetim-mavi); }
 .yonetim-panel__cubuk-deger { font-size: .68rem; font-weight: 700; }
-.yonetim-panel__cubuk-etiket { overflow: hidden; max-width: 100%; color: var(--yonetim-metin-ikincil); font-size: .58rem; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+.yonetim-panel__cubuk-etiket { overflow: hidden; max-width: 100%; color: var(--yonetim-metin-ikincil); font-size: .58rem; font-weight: 600; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 
 .yonetim-panel__hizli-liste { display: grid; gap: 8px; }
 .yonetim-panel__hizli-liste button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin); font-size: .76rem; font-weight: 500; cursor: not-allowed; transition: background-color 180ms ease; }
@@ -129,7 +129,7 @@
 .yonetim-panel__menu-sira { display: grid; width: 18px; height: 18px; flex: 0 0 18px; border-radius: 5px; background: #fff; border: 1px solid var(--yonetim-cizgi); font-size: .62rem; font-weight: 700; color: var(--yonetim-metin-ikincil); place-items: center; }
 .yonetim-panel__rozet--kucuk { width: 22px; height: 22px; flex: 0 0 22px; border-radius: 7px; }
 .yonetim-panel__rozet--kucuk svg { width: 11px; height: 11px; }
-.yonetim-panel__menu-ad { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yonetim-panel__menu-ad { flex: 1; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .yonetim-panel__menu-listesi li > svg:last-child { width: 15px; height: 15px; flex: 0 0 15px; color: var(--yonetim-metin-ikincil); }
 
 .yonetim-panel__rozet-listesi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
