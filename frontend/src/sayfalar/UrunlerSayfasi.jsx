@@ -126,6 +126,14 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const [gorunum, setGorunum] = useState('kart');
   const [mobilMenuAcik, setMobilMenuAcik] = useState(false);
   const [sayfa, setSayfa] = useState(1);
+  const icerikRef = useRef(null);
+
+  // Sayfa numarası değiştiğinde, önceki sayfanın kaydırma konumunu korumak yerine (kısa/uzun içerikte
+  // sayfa numaralarının ekranda zıplamasına neden olur) sonuç listesinin başına döner.
+  const sayfaDegistir = (yeniSayfa) => {
+    setSayfa(yeniSayfa);
+    icerikRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
 
@@ -176,7 +184,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
         </aside>
 
         <section className="urun-katalog__icerik" aria-labelledby="urun-katalog-basligi">
-          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu"><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>{baslik}</span></nav>
+          <nav className="urun-katalog__kirinti" aria-label="Sayfa yolu" ref={icerikRef}><Link to="/">Anasayfa</Link><span>/</span><Link to="/urunler">Ürünler</Link><span>/</span><span>{baslik}</span></nav>
           <header className="urun-katalog__hero">
             <div><h1 id="urun-katalog-basligi">{baslik}</h1><p>{aciklama}</p></div>
             <p className="urun-katalog__hero-soz">Güvenilir Akış<br />Daha Güçlü Yarınlar</p>
@@ -195,19 +203,19 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
           </div>
           {toplamSayfa > 1 && (
             <nav className="urun-katalog__sayfalama" aria-label="Sayfalama">
-              <button type="button" disabled={etkinSayfa === 1} onClick={() => setSayfa((deger) => Math.max(1, deger - 1))}>Önceki</button>
+              <button type="button" disabled={etkinSayfa === 1} onClick={() => sayfaDegistir(Math.max(1, etkinSayfa - 1))}>Önceki</button>
               {Array.from({ length: toplamSayfa }, (_, i) => i + 1).map((numara) => (
                 <button
                   type="button"
                   key={numara}
                   aria-current={numara === etkinSayfa ? 'page' : undefined}
                   className={numara === etkinSayfa ? 'aktif' : ''}
-                  onClick={() => setSayfa(numara)}
+                  onClick={() => sayfaDegistir(numara)}
                 >
                   {numara}
                 </button>
               ))}
-              <button type="button" disabled={etkinSayfa === toplamSayfa} onClick={() => setSayfa((deger) => Math.min(toplamSayfa, deger + 1))}>Sonraki</button>
+              <button type="button" disabled={etkinSayfa === toplamSayfa} onClick={() => sayfaDegistir(Math.min(toplamSayfa, etkinSayfa + 1))}>Sonraki</button>
             </nav>
           )}
         </section>
