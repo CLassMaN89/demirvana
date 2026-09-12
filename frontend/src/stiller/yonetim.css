@@ -124,8 +124,13 @@
 .yonetim-panel__hizli-liste svg { width: 15px; height: 15px; color: var(--yonetim-mavi); }
 
 .yonetim-panel__menu-listesi { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.yonetim-panel__menu-listesi li { display: flex; align-items: center; gap: 10px; font-size: .78rem; }
-.yonetim-panel__menu-listesi li span { display: grid; width: 20px; height: 20px; border-radius: 5px; background: var(--yonetim-zemin); font-size: .65rem; font-weight: 700; place-items: center; }
+.yonetim-panel__menu-listesi li { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; background: var(--yonetim-zemin); font-size: .78rem; }
+.yonetim-panel__menu-tutamak { width: 14px; height: 14px; flex: 0 0 14px; color: #B0B8C6; cursor: grab; }
+.yonetim-panel__menu-sira { display: grid; width: 18px; height: 18px; flex: 0 0 18px; border-radius: 5px; background: #fff; border: 1px solid var(--yonetim-cizgi); font-size: .62rem; font-weight: 700; color: var(--yonetim-metin-ikincil); place-items: center; }
+.yonetim-panel__rozet--kucuk { width: 26px; height: 26px; flex: 0 0 26px; }
+.yonetim-panel__rozet--kucuk svg { width: 13px; height: 13px; }
+.yonetim-panel__menu-ad { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yonetim-panel__menu-listesi li > svg:last-child { width: 15px; height: 15px; flex: 0 0 15px; color: var(--yonetim-metin-ikincil); }
 
 .yonetim-panel__rozet-listesi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 .yonetim-panel__rozet-listesi li { display: flex; align-items: center; gap: 9px; min-width: 0; font-size: .76rem; }
@@ -138,7 +143,7 @@
 .yonetim-panel__toplam svg:last-child { width: 15px; height: 15px; margin-left: auto; }
 
 .yonetim-panel__zaman-cizelgesi { position: relative; display: grid; gap: 14px; margin: 0; padding: 0 0 0 15px; list-style: none; }
-.yonetim-panel__zaman-cizelgesi::before { position: absolute; top: 4px; bottom: 4px; left: 15px; width: 2px; background: var(--yonetim-cizgi); content: ''; }
+.yonetim-panel__zaman-cizelgesi::before { position: absolute; top: 4px; bottom: 4px; left: 29px; width: 2px; background: var(--yonetim-cizgi); content: ''; }
 .yonetim-panel__zaman-cizelgesi li { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 10px; }
 .yonetim-panel__zaman-rozet { position: relative; z-index: 1; display: grid; width: 30px; height: 30px; border-radius: 50%; place-items: center; }
 .yonetim-panel__zaman-rozet svg { width: 14px; height: 14px; }

@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
   BarChart3, PieChart, Zap, ListTree, Layers, Calendar, Plus, TrendingUp, TrendingDown,
-  Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users
+  Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
+  Home, Building2, Handshake, FileText, GripVertical
 } from 'lucide-react';
 import { altOgeIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
 import '../stiller/yonetim.css';
@@ -29,6 +30,18 @@ const SON_AKTIVITELER_ORNEK = [
   { ikon: FileEdit, renk: ROZET_RENKLERI[7], metin: 'Sayfa güncellendi', detay: 'Teknik Dokümanlar', zaman: '2 gün önce' },
   { ikon: UserPlus, renk: ROZET_RENKLERI[6], metin: 'Yeni kullanıcı eklendi', detay: 'Mehmet Demir (Editör)', zaman: '2 gün önce' }
 ];
+
+// Üst menü öğelerinin ikonu; site menüsündeki tam Türkçe başlıklarla eşleşir.
+const ANA_MENU_IKONLARI = {
+  Anasayfa: Home,
+  Kurumsal: Building2,
+  Ürünler: Package,
+  Temsilcilikler: Handshake,
+  Teknik: FileText,
+  Referanslar: Handshake,
+  Sertifikalar: Award,
+  İletişim: Mail
+};
 
 function urunMenuKategorisi(urun) {
   return urun.menu_kategori_adi ?? urun.kategori_adi;
@@ -177,14 +190,29 @@ export default function YonetimPaneliSayfasi({ veri }) {
           </section>
         </div>
 
-        <section className="yonetim-panel__panel">
-          <h3><ListTree aria-hidden="true" /> Site Menü Yapısı</h3>
-          <ol className="yonetim-panel__menu-listesi">
-            {(veri.menu ?? []).map((oge, indeks) => <li key={oge.id}><span>{indeks + 1}</span>{oge.baslik}</li>)}
-          </ol>
-        </section>
+        <div className="yonetim-panel__uc-sutun">
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><ListTree aria-hidden="true" /> Site Menü Yapısı</h3>
+              <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Menü Yönetimi ekranı henüz eklenmedi">Menüyü Düzenle</button>
+            </div>
+            <ul className="yonetim-panel__menu-listesi">
+              {(veri.menu ?? []).map((oge, indeks) => {
+                const Ikon = ANA_MENU_IKONLARI[oge.baslik] ?? FileText;
+                const renk = ROZET_RENKLERI[indeks % ROZET_RENKLERI.length];
+                return (
+                  <li key={oge.id}>
+                    <GripVertical className="yonetim-panel__menu-tutamak" aria-hidden="true" />
+                    <span className="yonetim-panel__menu-sira">{indeks + 1}</span>
+                    <span className="yonetim-panel__rozet yonetim-panel__rozet--kucuk" style={{ background: renk.zemin, color: renk.renk }}><Ikon aria-hidden="true" /></span>
+                    <span className="yonetim-panel__menu-ad">{oge.baslik}</span>
+                    <ChevronRight aria-hidden="true" />
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
 
-        <div className="yonetim-panel__cift-sutun">
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
               <h3><Layers aria-hidden="true" /> Ürün Grupları</h3>
