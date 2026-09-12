@@ -126,36 +126,60 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
           <h2><BarChart3 aria-hidden="true" /> Teknik Ölçüler ve Boyutlar</h2>
           {teknik.basinc && <strong>{teknik.basinc}</strong>}
         </div>
-        {olcuTablolari.map((tablo, tabloIndeksi) => (
-          <div className="urun-detay__tablo-kaydir" key={tablo.baslik ?? tabloIndeksi}>
-            {tablo.baslik && <p className="urun-detay__olcu-tablo-baslik">{tablo.baslik}</p>}
-            <table
-              className="urun-detay__tablo urun-detay__tablo--olcu"
-              style={{ minWidth: 165 + 84 + 56 * (tablo.olcu_basliklari?.length || 0) }}
-            >
-              <colgroup>
-                <col className="urun-detay__olcu-grup" />
-                <col className="urun-detay__olcu-kod" />
-                {(tablo.olcu_basliklari || []).map((_, indeks) => <col key={indeks} />)}
-              </colgroup>
-              <thead>
-                <tr><th className="urun-detay__olcu-grup">Anma Basıncı</th><th className="urun-detay__olcu-kod">PN</th>{(tablo.basincGruplari || []).map(({ deger, sutun }) => <th key={deger} colSpan={sutun}>{deger}</th>)}</tr>
-              </thead>
-              <tbody>
-                <tr className="urun-detay__cap-satiri"><th className="urun-detay__olcu-grup" scope="row">Anma Çapı</th><th className="urun-detay__olcu-kod" scope="row">DN</th>{(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}</tr>
-                {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
-                  <tr key={`${satir.grup}-${satir.kod}`}>
-                    {grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
-                    <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
-                    {satir.gruplu_degerler
-                      ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
-                      : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
+        {olcuTablolari.map((tablo, tabloIndeksi) => {
+          // Kaynak sayfada her ürünün tablosu aynı değil: bazılarında "Anma Basıncı" satırı
+          // ve "Vana Boyutları" grup sütunu hiç yok (yalnızca "SIZE DN" başlığı var) — bu
+          // satır/sütunlar veri gerçekten varsa gösterilir, yoksa şablon olarak eklenmez.
+          const grupVar = (tablo.olculer || []).some((satir) => satir.grup);
+          const basincSatiriVar = Array.isArray(tablo.basincGruplari) && tablo.basincGruplari.length > 0;
+          const kolonSayisi = 1 + (grupVar ? 1 : 0) + (tablo.olcu_basliklari?.length || 0);
+          return (
+            <div className="urun-detay__tablo-kaydir" key={tablo.baslik ?? tabloIndeksi}>
+              {tablo.baslik && <p className="urun-detay__olcu-tablo-baslik">{tablo.baslik}</p>}
+              <table
+                className="urun-detay__tablo urun-detay__tablo--olcu"
+                style={{ minWidth: (grupVar ? 165 : 0) + 84 + 56 * (tablo.olcu_basliklari?.length || 0) }}
+              >
+                <colgroup>
+                  {grupVar && <col className="urun-detay__olcu-grup" />}
+                  <col className="urun-detay__olcu-kod" />
+                  {(tablo.olcu_basliklari || []).map((_, indeks) => <col key={indeks} />)}
+                </colgroup>
+                <thead>
+                  {basincSatiriVar && (
+                    <tr>
+                      {grupVar && <th className="urun-detay__olcu-grup">Anma Basıncı</th>}
+                      <th className="urun-detay__olcu-kod">PN</th>
+                      {tablo.basincGruplari.map(({ deger, sutun }) => <th key={deger} colSpan={sutun}>{deger}</th>)}
+                    </tr>
+                  )}
+                  {!basincSatiriVar && (
+                    <tr>
+                      {grupVar && <th className="urun-detay__olcu-grup" />}
+                      <th className="urun-detay__olcu-kod" colSpan={kolonSayisi - (grupVar ? 1 : 0)}>SIZE DN</th>
+                    </tr>
+                  )}
+                </thead>
+                <tbody>
+                  <tr className="urun-detay__cap-satiri">
+                    {grupVar && <th className="urun-detay__olcu-grup" scope="row">Anma Çapı</th>}
+                    <th className="urun-detay__olcu-kod" scope="row">DN</th>
+                    {(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                  {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
+                    <tr key={`${satir.grup}-${satir.kod}`}>
+                      {grupVar && grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
+                      <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
+                      {satir.gruplu_degerler
+                        ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
+                        : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        })}
       </section>
 
       <section className="urun-detay__panel urun-detay__dokumanlar">
