@@ -4,6 +4,7 @@ import {
   FileText, Handshake, Award, Building2, Mail, Image, Search as SearchIcon,
   Users, Settings, Bell, ChevronRight, Zap
 } from 'lucide-react';
+import { VanaGrubuIkonu } from './UrunMenuIkonlari';
 import '../stiller/yonetim.css';
 
 // Şu an yalnızca Dashboard gerçek bir sayfa; diğer bağlantılar tasarımı tamamlamak için görünür ama
@@ -27,6 +28,7 @@ const MENU_BOLUMLERI = [
   {
     baslik: 'Ürün Grupları',
     ogeler: [
+      { ad: 'Vana', ikon: VanaGrubuIkonu },
       { ad: 'Aktüatörler', ikon: Cog },
       { ad: 'Otomasyon', ikon: Sliders }
     ]
