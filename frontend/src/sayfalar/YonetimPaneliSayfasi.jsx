@@ -1,11 +1,20 @@
 import { useMemo, useState } from 'react';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
-  BarChart3, PieChart, Zap, ListTree, Layers, TrendingUp, TrendingDown,
-  Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
+  BarChart3, Layers, TrendingUp, TrendingDown,
+  Mail, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users,
   Home, Building2, Handshake, FileText, GripVertical
 } from 'lucide-react';
 import { altOgeIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
+import Clock4Ikon from '../bilesenler/ikonlar/Clock4Ikon';
+import ListIkon from '../bilesenler/ikonlar/ListIkon';
+import ChartSplineIkon from '../bilesenler/ikonlar/ChartSplineIkon';
+import ChartColumnDecreasingIkon from '../bilesenler/ikonlar/ChartColumnDecreasingIkon';
+import RouteIkon from '../bilesenler/ikonlar/RouteIkon';
+import LayersIkon from '../bilesenler/ikonlar/LayersIkon';
+import MessageSquareTextIkon from '../bilesenler/ikonlar/MessageSquareTextIkon';
+import GalleryHorizontalIkon from '../bilesenler/ikonlar/GalleryHorizontalIkon';
+import { AnimateIcon } from '../bilesenler/ikonlar/animateIconTemel';
 import '../stiller/yonetim.css';
 
 // Kategori rozetleri sırayla bu renk paletinden döner; belirli bir kategoriye sabit renk atamak yerine
@@ -124,7 +133,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
         <div className="yonetim-panel__uc-sutun">
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
-              <h3><TrendingUp aria-hidden="true" /> Site Ziyaretçi İstatistikleri</h3>
+              <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><ChartSplineIkon size={18} /> Site Ziyaretçi İstatistikleri</AnimateIcon></h3>
               <span className="yonetim-panel__panel-etiket">Son 30 Gün</span>
             </div>
             <svg className="yonetim-panel__alan-grafik" viewBox="0 0 700 200" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
@@ -166,7 +175,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
 
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
-              <h3><PieChart aria-hidden="true" /> İçerik Dağılımı</h3>
+              <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><ChartColumnDecreasingIkon size={18} /> İçerik Dağılımı</AnimateIcon></h3>
               <span className="yonetim-panel__panel-etiket">Ürün Gruplarına Göre</span>
             </div>
             <div className="yonetim-panel__cubuk-grafik">
@@ -181,7 +190,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
           </section>
 
           <section className="yonetim-panel__panel">
-            <h3><Zap aria-hidden="true" /> Hızlı İşlemler</h3>
+            <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><RouteIkon size={18} /> Hızlı İşlemler</AnimateIcon></h3>
             <div className="yonetim-panel__hizli-liste">
               {[
                 { etiket: 'Yeni Ürün Ekle', ikon: Package },
@@ -206,7 +215,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
         <div className="yonetim-panel__uc-sutun">
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
-              <h3><ListTree aria-hidden="true" /> Site Menü Yapısı</h3>
+              <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><ListIkon size={18} /> Site Menü Yapısı</AnimateIcon></h3>
               <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Menü Yönetimi ekranı henüz eklenmedi">Menüyü Düzenle</button>
             </div>
             <ul className="yonetim-panel__menu-listesi">
@@ -228,7 +237,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
 
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
-              <h3><Layers aria-hidden="true" /> Ürün Grupları</h3>
+              <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><LayersIkon size={18} /> Ürün Grupları</AnimateIcon></h3>
               <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
                 Tüm Kategorileri Gör
               </button>
@@ -258,7 +267,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
 
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
-              <h3><Clock aria-hidden="true" /> Son Aktiviteler</h3>
+              <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><Clock4Ikon size={18} /> Son Aktiviteler</AnimateIcon></h3>
               <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Aktivite günlüğü henüz eklenmedi">Tümünü Gör</button>
             </div>
             <ul className="yonetim-panel__zaman-cizelgesi">
@@ -280,12 +289,12 @@ export default function YonetimPaneliSayfasi({ veri }) {
         </div>
 
         <section className="yonetim-panel__panel">
-          <h3><Mail aria-hidden="true" /> Son Gelen İletişim Formları</h3>
+          <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><MessageSquareTextIkon size={18} /> Son Gelen İletişim Formları</AnimateIcon></h3>
           <p className="yonetim-panel__panel-not">Formlar sunucuya kaydediliyor; panelden listelenmesi için okuma uç noktası eklenmesi gerekiyor.</p>
         </section>
 
         <section className="yonetim-panel__panel">
-          <h3><Images aria-hidden="true" /> Son Eklenen Medya</h3>
+          <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><GalleryHorizontalIkon size={18} /> Son Eklenen Medya</AnimateIcon></h3>
           <div className="yonetim-panel__medya-izgara">
             {urunler.slice(0, 5).map((urun) => {
               let gorsel = '/assets/urun-placeholder.svg';
