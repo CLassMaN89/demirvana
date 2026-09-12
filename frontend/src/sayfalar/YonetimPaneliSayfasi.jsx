@@ -2,9 +2,33 @@ import { useMemo } from 'react';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
   BarChart3, PieChart, Zap, ListTree, Layers, Calendar, Plus, TrendingUp, TrendingDown,
-  Clock, Mail, Images
+  Clock, Mail, Images, ChevronRight, PackagePlus, RefreshCw, UserPlus, FileEdit, Eye, Users
 } from 'lucide-react';
+import { altOgeIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
 import '../stiller/yonetim.css';
+
+// Kategori rozetleri sırayla bu renk paletinden döner; belirli bir kategoriye sabit renk atamak yerine
+// görsel çeşitlilik sağlar.
+const ROZET_RENKLERI = [
+  { zemin: '#EAF2FF', renk: '#2F6FED' },
+  { zemin: '#F3EAFE', renk: '#8B3FE8' },
+  { zemin: '#FCEAEA', renk: '#E5484D' },
+  { zemin: '#FFF4E5', renk: '#F79009' },
+  { zemin: '#E6F9F0', renk: '#12B76A' },
+  { zemin: '#FFF9E5', renk: '#B98900' },
+  { zemin: '#E8F7FA', renk: '#06AED4' },
+  { zemin: '#F1F2F6', renk: '#667085' }
+];
+
+const SON_AKTIVITELER_ORNEK = [
+  { ikon: PackagePlus, renk: ROZET_RENKLERI[0], metin: 'Yeni ürün eklendi', detay: 'Metal Sitli Sürgülü Vana F4 D-001', zaman: '2 saat önce' },
+  { ikon: RefreshCw, renk: ROZET_RENKLERI[4], metin: 'Ürün güncellendi', detay: 'Çamur Sandığı Köşe Tip D-205', zaman: '3 saat önce' },
+  { ikon: Mail, renk: ROZET_RENKLERI[2], metin: 'Yeni iletişim formu', detay: 'Ahmet Kaya · ornek@firma.com', zaman: '5 saat önce' },
+  { ikon: Award, renk: ROZET_RENKLERI[1], metin: 'Sertifika eklendi', detay: 'ISO 9001:2015', zaman: '1 gün önce' },
+  { ikon: ImageIcon, renk: ROZET_RENKLERI[3], metin: 'Medya dosyası yüklendi', detay: 'vana-d-001.jpg', zaman: '1 gün önce' },
+  { ikon: FileEdit, renk: ROZET_RENKLERI[7], metin: 'Sayfa güncellendi', detay: 'Teknik Dokümanlar', zaman: '2 gün önce' },
+  { ikon: UserPlus, renk: ROZET_RENKLERI[6], metin: 'Yeni kullanıcı eklendi', detay: 'Mehmet Demir (Editör)', zaman: '2 gün önce' }
+];
 
 function urunMenuKategorisi(urun) {
   return urun.menu_kategori_adi ?? urun.kategori_adi;
@@ -20,14 +44,12 @@ function detayHazirlaniyorMu(urun) {
   }
 }
 
-// Ziyaretçi trafiği ve "son aktiviteler" gibi alanlar için henüz bir analitik/aktivite kaydı sistemi yok;
-// bu bölüm kurulana kadar tasarımı tamamlamak amacıyla örnek değerler kullanılır.
+// Ziyaretçi trafiği için henüz bir analitik sistemi yok; tasarımı tamamlamak amacıyla örnek değerler kullanılır.
 const ZIYARETCI_ORNEK_VERISI = [820, 960, 1120, 980, 1340, 1180, 1482];
-const SON_AKTIVITELER_ORNEK = [
-  { metin: 'Yeni ürün eklendi', detay: 'Metal Sitli Sürgülü Vana F4 D-001', zaman: '2 saat önce' },
-  { metin: 'Ürün güncellendi', detay: 'Çamur Sandığı Köşe Tip D-205', zaman: '3 saat önce' },
-  { metin: 'Yeni iletişim formu', detay: 'ornek@firma.com', zaman: '1 gün önce' },
-  { metin: 'Sayfa güncellendi', detay: 'Teknik Dokümanlar', zaman: '2 gün önce' }
+const ZIYARETCI_OZET_ORNEK = [
+  { ikon: Eye, baslik: 'Toplam Ziyaretçi', deger: '28.532', degisim: '%18' },
+  { ikon: Users, baslik: 'Tekil Ziyaretçi', deger: '17.421', degisim: '%14' },
+  { ikon: BarChart3, baslik: 'Sayfa Görüntüleme', deger: '64.320', degisim: '%22' }
 ];
 
 function IstatistikKarti({ ikon: Ikon, baslik, deger, degisim, notu }) {
@@ -100,41 +122,60 @@ export default function YonetimPaneliSayfasi({ veri }) {
       </div>
 
       <div className="yonetim-panel__izgara">
-        <section className="yonetim-panel__panel yonetim-panel__panel--genis">
-          <h3><TrendingUp aria-hidden="true" /> Site Ziyaretçi İstatistikleri</h3>
-          <p className="yonetim-panel__panel-not">Analitik entegrasyonu kurulana kadar örnek veri gösterilir.</p>
-          <svg className="yonetim-panel__cizgi-grafik" viewBox="0 0 700 180" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
-            <polyline
-              points={ZIYARETCI_ORNEK_VERISI.map((deger, i) => `${(i / (ZIYARETCI_ORNEK_VERISI.length - 1)) * 700},${180 - (deger / enBuyukZiyaretci) * 160}`).join(' ')}
-              fill="none" stroke="#0052FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
-            />
-          </svg>
-        </section>
+        <div className="yonetim-panel__uc-sutun">
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><TrendingUp aria-hidden="true" /> Site Ziyaretçi İstatistikleri</h3>
+              <span className="yonetim-panel__panel-etiket">Son 30 Gün</span>
+            </div>
+            <svg className="yonetim-panel__cizgi-grafik" viewBox="0 0 700 180" preserveAspectRatio="none" role="img" aria-label="Ziyaretçi trendi">
+              <polyline
+                points={ZIYARETCI_ORNEK_VERISI.map((deger, i) => `${(i / (ZIYARETCI_ORNEK_VERISI.length - 1)) * 700},${180 - (deger / enBuyukZiyaretci) * 160}`).join(' ')}
+                fill="none" stroke="#0052FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+              />
+            </svg>
+            <p className="yonetim-panel__panel-not">Analitik entegrasyonu kurulana kadar örnek veri gösterilir.</p>
+            <div className="yonetim-panel__ozet-satiri">
+              {ZIYARETCI_OZET_ORNEK.map((ozet) => (
+                <div className="yonetim-panel__ozet" key={ozet.baslik}>
+                  <span className="yonetim-panel__ozet-ikon"><ozet.ikon aria-hidden="true" /></span>
+                  <span className="yonetim-panel__ozet-metin">
+                    <small>{ozet.baslik}</small>
+                    <strong>{ozet.deger}</strong>
+                  </span>
+                  <span className="yonetim-panel__ozet-degisim"><TrendingUp aria-hidden="true" /> {ozet.degisim}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        <section className="yonetim-panel__panel">
-          <h3><PieChart aria-hidden="true" /> İçerik Dağılımı</h3>
-          <p className="yonetim-panel__panel-not">Ürün gruplarına göre</p>
-          <div className="yonetim-panel__cubuk-grafik">
-            {kategoriDagilimi.slice(0, 6).map(([ad, sayi]) => (
-              <div className="yonetim-panel__cubuk" key={ad}>
-                <span className="yonetim-panel__cubuk-govde" style={{ height: `${(sayi / enBuyukDeger) * 100}%` }} title={`${ad}: ${sayi}`} />
-                <span className="yonetim-panel__cubuk-deger">{sayi}</span>
-                <span className="yonetim-panel__cubuk-etiket">{ad}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><PieChart aria-hidden="true" /> İçerik Dağılımı</h3>
+              <span className="yonetim-panel__panel-etiket">Ürün Gruplarına Göre</span>
+            </div>
+            <div className="yonetim-panel__cubuk-grafik">
+              {kategoriDagilimi.slice(0, 6).map(([ad, sayi]) => (
+                <div className="yonetim-panel__cubuk" key={ad}>
+                  <span className="yonetim-panel__cubuk-govde" style={{ height: `${(sayi / enBuyukDeger) * 100}%` }} title={`${ad}: ${sayi}`} />
+                  <span className="yonetim-panel__cubuk-deger">{sayi}</span>
+                  <span className="yonetim-panel__cubuk-etiket">{ad}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        <section className="yonetim-panel__panel">
-          <h3><Zap aria-hidden="true" /> Hızlı İşlemler</h3>
-          <div className="yonetim-panel__hizli-liste">
-            {['Yeni Ürün Ekle', 'Yeni Kategori Ekle', 'Yeni Sertifika Ekle', 'Yeni Referans Ekle', 'Banner Düzenle'].map((etiket) => (
-              <button type="button" key={etiket} disabled title="Bu işlem henüz bağlanmadı">
-                <Plus aria-hidden="true" /> {etiket}
-              </button>
-            ))}
-          </div>
-        </section>
+          <section className="yonetim-panel__panel">
+            <h3><Zap aria-hidden="true" /> Hızlı İşlemler</h3>
+            <div className="yonetim-panel__hizli-liste">
+              {['Yeni Ürün Ekle', 'Yeni Kategori Ekle', 'Yeni Sertifika Ekle', 'Yeni Referans Ekle', 'Banner Düzenle'].map((etiket) => (
+                <button type="button" key={etiket} disabled title="Bu işlem henüz bağlanmadı">
+                  <Plus aria-hidden="true" /> {etiket}
+                </button>
+              ))}
+            </div>
+          </section>
+        </div>
 
         <section className="yonetim-panel__panel">
           <h3><ListTree aria-hidden="true" /> Site Menü Yapısı</h3>
@@ -143,22 +184,54 @@ export default function YonetimPaneliSayfasi({ veri }) {
           </ol>
         </section>
 
-        <section className="yonetim-panel__panel">
-          <h3><Layers aria-hidden="true" /> Ürün Grupları</h3>
-          <ul className="yonetim-panel__grup-listesi">
-            {kategoriDagilimi.map(([ad, sayi]) => <li key={ad}><span>{ad}</span><strong>{sayi}</strong></li>)}
-          </ul>
-          <p className="yonetim-panel__toplam">Toplam {urunler.length} ürün, {toplamKategori} kategori</p>
-        </section>
+        <div className="yonetim-panel__cift-sutun">
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><Layers aria-hidden="true" /> Ürün Grupları</h3>
+              <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
+                Tüm Kategorileri Gör
+              </button>
+            </div>
+            <ul className="yonetim-panel__rozet-listesi">
+              {kategoriDagilimi.map(([ad, sayi], indeks) => {
+                const Ikon = altOgeIkonuGetir(ad);
+                const renk = ROZET_RENKLERI[indeks % ROZET_RENKLERI.length];
+                return (
+                  <li key={ad}>
+                    <span className="yonetim-panel__rozet" style={{ background: renk.zemin, color: renk.renk }}><Ikon aria-hidden="true" /></span>
+                    <span className="yonetim-panel__rozet-ad">{ad}</span>
+                    <strong>{sayi}</strong>
+                  </li>
+                );
+              })}
+            </ul>
+            <button type="button" className="yonetim-panel__toplam" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
+              <Layers aria-hidden="true" /> Toplam {urunler.length} ürün, {toplamKategori} kategori <ChevronRight aria-hidden="true" />
+            </button>
+          </section>
 
-        <section className="yonetim-panel__panel">
-          <h3><Clock aria-hidden="true" /> Son Aktiviteler</h3>
-          <ul className="yonetim-panel__aktivite-listesi">
-            {SON_AKTIVITELER_ORNEK.map((olay) => (
-              <li key={olay.detay}><strong>{olay.metin}</strong><span>{olay.detay}</span><small>{olay.zaman}</small></li>
-            ))}
-          </ul>
-        </section>
+          <section className="yonetim-panel__panel">
+            <div className="yonetim-panel__panel-baslik">
+              <h3><Clock aria-hidden="true" /> Son Aktiviteler</h3>
+              <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Aktivite günlüğü henüz eklenmedi">Tümünü Gör</button>
+            </div>
+            <ul className="yonetim-panel__zaman-cizelgesi">
+              {SON_AKTIVITELER_ORNEK.map((olay) => {
+                const Ikon = olay.ikon;
+                return (
+                  <li key={olay.detay}>
+                    <span className="yonetim-panel__zaman-rozet" style={{ background: olay.renk.zemin, color: olay.renk.renk }}><Ikon aria-hidden="true" /></span>
+                    <span className="yonetim-panel__zaman-metin">
+                      <strong>{olay.metin}</strong>
+                      <span>{olay.detay}</span>
+                    </span>
+                    <small>{olay.zaman}</small>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </div>
 
         <section className="yonetim-panel__panel">
           <h3><Mail aria-hidden="true" /> Son Gelen İletişim Formları</h3>
