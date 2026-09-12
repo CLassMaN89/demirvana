@@ -79,18 +79,20 @@ export default function UrunDetaySayfasi({ urunler = [] }) {
       </header>
 
       <div className="urun-detay__ust-grid">
-        <section className="urun-detay__panel urun-detay__cizim-paneli">
-          <div className="urun-detay__panel-baslik">
-            <h2><Layers3 aria-hidden="true" /> Teknik Çizim</h2>
-            <Maximize2 aria-hidden="true" />
-          </div>
-          <div className="urun-detay__cizim">
-            <img src={teknik.teknik_cizim_yolu} alt={cizimAlternatifMetni} />
-          </div>
-          <p className="urun-detay__not">Teknik resim bilgilendirme amaçlıdır. Ölçüler üretim toleranslarına göre değişiklik gösterebilir.</p>
-        </section>
+        {teknik.teknik_cizim_yolu && (
+          <section className="urun-detay__panel urun-detay__cizim-paneli">
+            <div className="urun-detay__panel-baslik">
+              <h2><Layers3 aria-hidden="true" /> Teknik Çizim</h2>
+              <Maximize2 aria-hidden="true" />
+            </div>
+            <div className="urun-detay__cizim">
+              <img src={teknik.teknik_cizim_yolu} alt={cizimAlternatifMetni} />
+            </div>
+            <p className="urun-detay__not">Teknik resim bilgilendirme amaçlıdır. Ölçüler üretim toleranslarına göre değişiklik gösterebilir.</p>
+          </section>
+        )}
 
-        <section className="urun-detay__panel">
+        <section className={`urun-detay__panel${teknik.teknik_cizim_yolu ? '' : ' urun-detay__panel--tam'}`}>
           <div className="urun-detay__panel-baslik">
             <h2><Layers3 aria-hidden="true" /> Parça Listesi ve Malzeme Yapısı</h2>
           </div>

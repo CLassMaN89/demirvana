@@ -41,6 +41,7 @@
 .urun-detay__teknik-tanim span { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--renk-ana) 25%, transparent); white-space: pre-line; line-height: 1.45; }
 
 .urun-detay__ust-grid { display: grid; grid-template-columns: minmax(420px, .9fr) minmax(520px, 1.1fr); gap: 18px; }
+.urun-detay__panel--tam { grid-column: 1 / -1; }
 .urun-detay__panel { overflow: hidden; }
 .urun-detay__panel-baslik { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 58px; padding: 14px 20px; border-bottom: 1px solid color-mix(in srgb, var(--renk-ana) 18%, transparent); background: linear-gradient(105deg, color-mix(in srgb, var(--renk-koyu) 8%, #fff), color-mix(in srgb, var(--renk-ana) 13%, #fff)); }
 .urun-detay__panel-baslik h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 17px; }
