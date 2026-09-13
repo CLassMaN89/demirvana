@@ -1,5 +1,5 @@
 import { ArrowLeft, BarChart3, Download, ExternalLink, FileText, Home, Layers3, Maximize2, X } from 'lucide-react';
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
@@ -262,15 +262,26 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                     {(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}
                   </tr>
                   {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
-                    <tr key={`${satir.grup}-${satir.kod}`}>
-                      {grupVar && (grupSatirSayisi(satirlar, satirIndeksi) > 0
-                        ? <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>
-                        : !grupSatiriKapsiyorMu(satirlar, satirIndeksi) && <th className="urun-detay__olcu-grup" aria-hidden="true" />)}
-                      <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
-                      {satir.gruplu_degerler
-                        ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
-                        : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
-                    </tr>
+                    <Fragment key={`${satir.grup}-${satir.kod}`}>
+                      {satir.bolucu && (
+                        <tr className="urun-detay__olcu-bolucu-satiri">
+                          <td colSpan={(grupVar ? 1 : 0) + 1 + (tablo.olcu_basliklari?.length || 0)}>{satir.bolucu}</td>
+                        </tr>
+                      )}
+                      <tr>
+                        {satir.birlesikKod
+                          ? <th className="urun-detay__olcu-kod" scope="row" colSpan={grupVar ? 2 : 1}>{satir.kod}</th>
+                          : (<>
+                              {grupVar && (grupSatirSayisi(satirlar, satirIndeksi) > 0
+                                ? <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>
+                                : !grupSatiriKapsiyorMu(satirlar, satirIndeksi) && <th className="urun-detay__olcu-grup" aria-hidden="true" />)}
+                              <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
+                            </>)}
+                        {satir.gruplu_degerler
+                          ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
+                          : satir.degerler.map((deger, indeks) => <td key={`${satir.kod}-${indeks}`}>{deger}</td>)}
+                      </tr>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>

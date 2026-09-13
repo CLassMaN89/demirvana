@@ -92,6 +92,7 @@ colgroup col:not(.urun-detay__olcu-grup):not(.urun-detay__olcu-kod) { width: 56p
 .urun-detay__tablo--olcu tbody td { color: var(--renk-koyu); background: #fff; }
 .urun-detay__tablo--olcu tbody tr:nth-child(even),
 .urun-detay__tablo--olcu tbody tr:hover { background: transparent; }
+.urun-detay__olcu-bolucu-satiri td { padding: 6px 8px; background: var(--renk-ana); color: #fff; font-weight: 700; text-align: center; }
 .urun-detay__tablo--olcu thead th,
 .urun-detay__tablo--olcu thead tr:first-child th,
 .urun-detay__tablo--olcu thead tr:last-child th {
