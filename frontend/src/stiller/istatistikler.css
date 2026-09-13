@@ -4,9 +4,16 @@
 .istatistik-kart__baslik h3 { margin: 0; color: var(--yonetim-metin); font-size: .92rem; }
 .istatistik-kart__not { flex-basis: 100%; margin: 4px 0 0; color: var(--yonetim-metin-ikincil); font-size: .72rem; line-height: 1.4; }
 
-.istatistik-tablo th, .istatistik-tablo td { text-align: left; white-space: nowrap; width: 1%; }
+/* Varsayılan: tüm sütunlar ortalı ve tek satır; yalnızca Sayfa ve Geldiği Yer sütunları
+   (.istatistik-tablo__sol-hucre) sola yaslı kalır — ikisi de URL yolu taşıyan, en uzun/en
+   önemli okunacak değerlerdir. */
+.istatistik-tablo th, .istatistik-tablo td { text-align: center; white-space: nowrap; width: 1%; }
+/* Başlık metinleri (ör. "Sayfa Görüntüle") dar sütunlarda kesilmesin diye sarılabilir; başlık
+   satırının kendi yüksekliği içeriğe göre esner (sabit 33px yalnızca gövde satırlarına uygulanır). */
+.istatistik-tablo th { white-space: normal; line-height: 1.3; vertical-align: middle; }
+.istatistik-tablo .istatistik-tablo__sol-hucre { text-align: left; }
 
-/* Sayfa sütunundan hemen önceki göz ikonu: tıklanınca ilgili sayfayı web sitesinde (yeni
+/* Sayfa sütunundan hemen sonraki göz ikonu: tıklanınca ilgili sayfayı web sitesinde (yeni
    sekmede) açar. */
 .sayfa-goruntule-linki {
   display: inline-flex;
@@ -19,13 +26,13 @@
   transition: background-color 150ms ease, color 150ms ease;
 }
 .sayfa-goruntule-linki:hover { background: color-mix(in srgb, var(--yonetim-mavi) 12%, transparent); color: var(--yonetim-mavi); }
-.istatistik-tablo td[title] { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.istatistik-tablo td[title] { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
 /* .yonetim-tablo td:first-child kuralı (yonetim-kategori.css) ilk sütunu white-space:normal'a
-   çeviriyor; bu tablolarda satır satır metin uzunluğu farklı olduğu için o sarma, sayfa
-   değiştikçe/açılıp kapandıkça satır yüksekliğinin (dolayısıyla tüm kartın) oynamasına yol
-   açıyordu. Buradaki seçici daha yüksek özgüllükle nowrap'i geri kazandırıp satırı sabitler. */
-.istatistik-tablo tbody td:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.istatistik-tablo th, .istatistik-tablo td { height: 33px; box-sizing: border-box; }
+   çeviriyor; Sayfa artık her tabloda ilk sütun olmadığı için bu, class tabanlı hedeflemeyle
+   (.istatistik-tablo__sol-hucre) değiştirildi — hangi sütunda olursa olsun doğru hücreyi bulur
+   ve satır yüksekliğinin sayfa değiştikçe/açılıp kapandıkça oynamasını önler. */
+.istatistik-tablo tbody .istatistik-tablo__sol-hucre { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.istatistik-tablo tbody th, .istatistik-tablo tbody td { height: 33px; box-sizing: border-box; }
 
 /* Sayfalanmış dökümlerde son sayfada az kayıt kalınca alan küçülmeyip zıplamasın diye eklenen
    dolgu satırları görünmez ve etkileşimsizdir. */
@@ -39,14 +46,14 @@
    .istatistik-kart__govde'nin kendi iç kaydırma çubuğunda büyür/küçülür, bu yüzden ne bu kart ne
    de yanındaki kart, ne de sayfanın geri kalanı hiçbir zaman aşağı kaymaz. */
 .istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
-/* Yükseklik, tek bir IP satırı açıkken (başlık + IP satırı + 9 satırlık döküm + sayfalama) hiç
-   kaydırma gerekmeden sığacak kadar cömert seçildi; yalnızca birden fazla IP aynı anda açıldığında
-   kart kendi içinde kayar. */
-.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 580px; }
+/* Yükseklik, tek bir IP satırı açıkken (başlık + IP satırı + 9 satırlık döküm + sayfalama) VEYA
+   En Çok Görüntülenen Sayfalar'ın 12 satırlık tam sayfası hiç kaydırma gerekmeden sığacak kadar
+   cömert seçildi; yalnızca birden fazla IP aynı anda açıldığında kart kendi içinde kayar. */
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 590px; }
 .istatistik-kart__govde { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
-  .istatistik-yan-yana > .istatistik-kart { height: 540px; }
+  .istatistik-yan-yana > .istatistik-kart { height: 640px; }
 }
 
 .sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; }

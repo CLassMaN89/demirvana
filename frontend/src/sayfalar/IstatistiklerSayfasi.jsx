@@ -219,6 +219,17 @@ export default function IstatistiklerSayfasi() {
     gecerliIpSayfaNo * IP_SAYFA_BOYUTU
   );
 
+  // Son Ziyaretler: bir günün içindeki kayıt listesi kalabalık olabildiği için kendi içinde
+  // ayrıca sayfalanır; her günün sayfa numarası ayrı tutulur (IP dökümündeki desenin aynısı).
+  const SON_ZIYARET_SAYFA_BOYUTU = 30;
+  const [gunKayitSayfaNo, setGunKayitSayfaNo] = useState({});
+
+  // En Çok Görüntülenen Sayfalar: backend en fazla 15 kayıt döndürüyor; kart hiç kaydırma
+  // gerektirmesin diye (kullanıcı isteği: "scroll olmasın hiçbir şekilde") liste burada da
+  // sayfalanıyor.
+  const EN_COK_SAYFA_BOYUTU = 12;
+  const [enCokSayfaNo, setEnCokSayfaNo] = useState(1);
+
   useEffect(() => {
     setIpSayfaNo(1);
   }, [ipArama]);
@@ -244,6 +255,12 @@ export default function IstatistiklerSayfasi() {
   if (hata) return <div className="yonetim-kategori yonetim-kategori__durum yonetim-kategori__durum--hata">{hata}</div>;
 
   const { istatistikler } = veri;
+  const enCokSayfaSayisi = Math.max(1, Math.ceil(istatistikler.en_cok_goruntulenen_sayfalar.length / EN_COK_SAYFA_BOYUTU));
+  const enCokGecerliSayfaNo = Math.min(enCokSayfaNo, enCokSayfaSayisi);
+  const sayfalanmisEnCok = istatistikler.en_cok_goruntulenen_sayfalar.slice(
+    (enCokGecerliSayfaNo - 1) * EN_COK_SAYFA_BOYUTU,
+    enCokGecerliSayfaNo * EN_COK_SAYFA_BOYUTU
+  );
 
   return (
     <div className="yonetim-kategori">
@@ -261,22 +278,42 @@ export default function IstatistiklerSayfasi() {
           </div>
           <div className="istatistik-kart__govde">
             <div className="yonetim-tablo-kaydir">
-              <table className="yonetim-tablo">
-                <thead><tr><th></th><th>Sayfa</th><th>Görüntüleme</th></tr></thead>
+              <table className="yonetim-tablo istatistik-tablo">
+                <thead><tr><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Görüntüleme</th></tr></thead>
                 <tbody>
-                  {istatistikler.en_cok_goruntulenen_sayfalar.map((satir) => (
+                  {sayfalanmisEnCok.map((satir) => (
                     <tr key={satir.yol}>
+                      <td className="istatistik-tablo__sol-hucre">{satir.yol}</td>
                       <td><SayfaGoruntuleLinki yol={satir.yol} /></td>
-                      <td>{satir.yol}</td>
                       <td>{satir.adet}</td>
                     </tr>
                   ))}
                   {istatistikler.en_cok_goruntulenen_sayfalar.length === 0 && (
                     <tr><td colSpan={3} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
                   )}
+                  {/* Sayfalar arası geçişte (özellikle son sayfada) alan kısalıp büyümesin diye
+                      dolgu satırları eklenir. */}
+                  {istatistikler.en_cok_goruntulenen_sayfalar.length > 0 && Array.from(
+                    { length: Math.max(0, EN_COK_SAYFA_BOYUTU - sayfalanmisEnCok.length) }
+                  ).map((_, i) => (
+                    <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
+                      <td colSpan={3}>&nbsp;</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
+            {enCokSayfaSayisi > 1 && (
+              <div className="sayfalama">
+                <button type="button" disabled={enCokGecerliSayfaNo <= 1} onClick={() => setEnCokSayfaNo((n) => n - 1)}>
+                  Önceki
+                </button>
+                <span>{enCokGecerliSayfaNo} / {enCokSayfaSayisi}</span>
+                <button type="button" disabled={enCokGecerliSayfaNo >= enCokSayfaSayisi} onClick={() => setEnCokSayfaNo((n) => n + 1)}>
+                  Sonraki
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -330,13 +367,13 @@ export default function IstatistiklerSayfasi() {
                       <div className="yonetim-tablo-kaydir">
                         <table className="yonetim-tablo istatistik-tablo">
                           <colgroup>
-                            <col style={{ width: '5%' }} />
                             <col style={{ width: '50%' }} />
+                            <col style={{ width: '5%' }} />
                             <col style={{ width: '15%' }} />
                             <col style={{ width: '15%' }} />
                             <col style={{ width: '15%' }} />
                           </colgroup>
-                          <thead><tr><th></th><th>Sayfa</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
+                          <thead><tr><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
                           <tbody>
                             {sayfaDurumu?.yukleniyor && (
                               <tr><td colSpan={5} className="yonetim-tablo__bos">Yükleniyor…</td></tr>
@@ -346,8 +383,8 @@ export default function IstatistiklerSayfasi() {
                             )}
                             {sayfalanmisSayfalar.map((sayfa) => (
                               <tr key={sayfa.yol}>
+                                <td className="istatistik-tablo__sol-hucre" title={sayfa.yol}>{sayfa.yol}</td>
                                 <td><SayfaGoruntuleLinki yol={sayfa.yol} /></td>
-                                <td title={sayfa.yol}>{sayfa.yol}</td>
                                 <td>{sayfa.adet}</td>
                                 <td>{kalmaSuresiniFormatla(Number(sayfa.toplam_saniye))}</td>
                                 <td>{tarihiFormatla(sayfa.son_ziyaret)}</td>
@@ -422,6 +459,12 @@ export default function IstatistiklerSayfasi() {
         </div>
         {gunlereGoreGruplu.map((gun) => {
           const acik = acikGunler.has(gun.etiket);
+          const gunSayfaSayisi = Math.max(1, Math.ceil(gun.kayitlar.length / SON_ZIYARET_SAYFA_BOYUTU));
+          const gunGecerliSayfaNo = Math.min(gunKayitSayfaNo[gun.etiket] ?? 1, gunSayfaSayisi);
+          const gunGosterilenKayitlar = gun.kayitlar.slice(
+            (gunGecerliSayfaNo - 1) * SON_ZIYARET_SAYFA_BOYUTU,
+            gunGecerliSayfaNo * SON_ZIYARET_SAYFA_BOYUTU
+          );
           return (
             <div className="ziyaret-grubu" key={gun.etiket}>
               <button
@@ -451,21 +494,34 @@ export default function IstatistiklerSayfasi() {
                   >
                     <div className="yonetim-tablo-kaydir">
                       <table className="yonetim-tablo istatistik-tablo istatistik-tablo--sola-yasli">
+                        <colgroup>
+                          <col style={{ width: '6%' }} />
+                          <col style={{ width: '8%' }} />
+                          <col style={{ width: '16%' }} />
+                          <col style={{ width: '16%' }} />
+                          <col style={{ width: '6%' }} />
+                          <col style={{ width: '10%' }} />
+                          <col style={{ width: '8%' }} />
+                          <col style={{ width: '5%' }} />
+                          <col style={{ width: '8%' }} />
+                          <col style={{ width: '9%' }} />
+                          <col style={{ width: '8%' }} />
+                        </colgroup>
                         <thead>
                           <tr>
-                            <th>Saat</th><th>IP Adresi</th><th>Geldiği Yer</th><th></th><th>Sayfa</th>
+                            <th>Saat</th><th>IP Adresi</th><th>Geldiği Yer</th><th>Sayfa</th><th>Sayfa Görüntüle</th>
                             <th>Tarayıcı</th><th>Cihaz</th><th>Dil</th><th>Ekran</th><th>Saat Dilimi</th>
                             <th>Kalma Süresi</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {gun.kayitlar.map((kayit) => (
+                          {gunGosterilenKayitlar.map((kayit) => (
                             <tr key={kayit.id}>
                               <td>{tarihiFormatla(kayit.olusturulma_tarihi).split(' ').pop()}</td>
                               <td><IpRozeti ip={kayit.ip_adresi} /></td>
-                              <td title={kayit.referans || ''}>{kayit.referans || '—'}</td>
+                              <td className="istatistik-tablo__sol-hucre" title={kayit.referans || ''}>{kayit.referans || '—'}</td>
+                              <td className="istatistik-tablo__sol-hucre" title={kayit.yol}>{kayit.yol}</td>
                               <td><SayfaGoruntuleLinki yol={kayit.yol} /></td>
-                              <td title={kayit.yol}>{kayit.yol}</td>
                               <td>{tarayiciOzetle(kayit.kullanici_ajani)}</td>
                               <td><CihazRozeti ajan={kayit.kullanici_ajani} /></td>
                               <td>{kayit.dil || '—'}</td>
@@ -474,9 +530,37 @@ export default function IstatistiklerSayfasi() {
                               <td>{kalmaSuresiniFormatla(kayit.kalma_suresi_sn)}</td>
                             </tr>
                           ))}
+                          {/* Sayfa değiştikçe (özellikle son sayfada) satır sayısı değişip
+                              altındaki sayfalama yukarı/aşağı kaymasın diye dolgu satırı eklenir. */}
+                          {Array.from(
+                            { length: Math.max(0, SON_ZIYARET_SAYFA_BOYUTU - gunGosterilenKayitlar.length) }
+                          ).map((_, i) => (
+                            <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
+                              <td colSpan={11}>&nbsp;</td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
+                    {gunSayfaSayisi > 1 && (
+                      <div className="sayfalama">
+                        <button
+                          type="button"
+                          disabled={gunGecerliSayfaNo <= 1}
+                          onClick={() => setGunKayitSayfaNo((mevcut) => ({ ...mevcut, [gun.etiket]: gunGecerliSayfaNo - 1 }))}
+                        >
+                          Önceki
+                        </button>
+                        <span>{gunGecerliSayfaNo} / {gunSayfaSayisi}</span>
+                        <button
+                          type="button"
+                          disabled={gunGecerliSayfaNo >= gunSayfaSayisi}
+                          onClick={() => setGunKayitSayfaNo((mevcut) => ({ ...mevcut, [gun.etiket]: gunGecerliSayfaNo + 1 }))}
+                        >
+                          Sonraki
+                        </button>
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
