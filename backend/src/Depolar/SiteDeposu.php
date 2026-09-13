@@ -662,7 +662,7 @@ final class SiteDeposu
 
         $enCokGorulenler = $this->baglanti->query(
             'SELECT yol, COUNT(*) AS adet FROM ziyaret_kayitlari
-             GROUP BY yol ORDER BY adet DESC LIMIT 10'
+             GROUP BY yol ORDER BY adet DESC LIMIT 15'
         )->fetchAll();
 
         // Bir IP'nin sitede toplam ne kadar kaldığı: o IP'ye ait tüm sayfa görüntülemelerinin
