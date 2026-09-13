@@ -258,7 +258,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                           {grupVar && <th className="urun-detay__olcu-grup" scope="row">Anma Çapı</th>}
                           <th className="urun-detay__olcu-kod" scope="row">DN</th>
                         </>)
-                      : <th className="urun-detay__olcu-kod" scope="row" colSpan={grupVar ? 2 : 1}>SIZE DN</th>}
+                      : <th className="urun-detay__olcu-kod" scope="row" colSpan={grupVar ? 2 : 1}>DN</th>}
                     {(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}
                   </tr>
                   {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (

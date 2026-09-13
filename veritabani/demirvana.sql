@@ -2897,3 +2897,8 @@ UPDATE `urunler` SET `teknik_bilgiler` = JSON_SET(`teknik_bilgiler`, '$.katalog_
 -- birakiyordu (bkz. D-333). Frontend'de duzeltildi (grupSatiriKapsiyorMu). Ayrica D-333'un
 -- "S" satirinda canli sitede var olan "Basınç Düşürücü" grup etiketi eksikti, eklendi.
 UPDATE `urunler` SET `teknik_bilgiler` = JSON_SET(`teknik_bilgiler`, '$.olcu_tablolari[0].olculer[0].grup', 'Basınç Düşürücü') WHERE `slug` = 'su-pirinc-basinc-dusurucu-vana-disli-d-333';
+
+-- 2026-09-13: "SIZE DN" hardcoded/uydurma basligi canli sitedeki gercek "DN" metniyle
+-- degistirildi (UrunDetaySayfasi.jsx). id=69 parca_kolonlari[2] gecici olarak yanlislikla
+-- "MALZEME 3" yapilmisti; canli sayfa kaynaginda gercekten "MALZEME 2" tekrar ediyor
+-- (sitenin kendi hatasi), orijinal degerine geri alindi.
