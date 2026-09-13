@@ -188,6 +188,11 @@ export default function IstatistiklerSayfasi() {
     return veri.istatistikler.ip_toplam_sureleri.filter((satir) => satir.ip_adresi.toLowerCase().includes(terim));
   }, [veri, ipArama]);
 
+  // Bir IP genişletildiğinde altında açılan "hangi sayfalara girmiş" dökümü de kalabalık
+  // olabildiği için kendi içinde ayrıca sayfalanır; her IP'nin sayfa numarası ayrı tutulur.
+  const SAYFA_DOKUM_BOYUTU = 8;
+  const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
+
   const IP_SAYFA_BOYUTU = 8;
   const [ipSayfaNo, setIpSayfaNo] = useState(1);
   const ipSayfaSayisi = Math.max(1, Math.ceil(filtrelenmisIpToplamlari.length / IP_SAYFA_BOYUTU));
@@ -266,6 +271,13 @@ export default function IstatistiklerSayfasi() {
           {sayfalanmisIpToplamlari.map((satir) => {
             const acik = acikIpler.has(satir.ip_adresi);
             const sayfaDurumu = ipSayfalari[satir.ip_adresi];
+            const tumSayfalar = sayfaDurumu?.veri ?? [];
+            const dokumSayfaSayisi = Math.max(1, Math.ceil(tumSayfalar.length / SAYFA_DOKUM_BOYUTU));
+            const gecerliDokumSayfaNo = Math.min(ipSayfaDokumSayfaNo[satir.ip_adresi] ?? 1, dokumSayfaSayisi);
+            const sayfalanmisSayfalar = tumSayfalar.slice(
+              (gecerliDokumSayfaNo - 1) * SAYFA_DOKUM_BOYUTU,
+              gecerliDokumSayfaNo * SAYFA_DOKUM_BOYUTU
+            );
             return (
               <div className="ziyaret-grubu" key={satir.ip_adresi}>
                 <button
@@ -301,7 +313,7 @@ export default function IstatistiklerSayfasi() {
                             {sayfaDurumu?.hata && (
                               <tr><td colSpan={4} className="yonetim-tablo__bos">{sayfaDurumu.hata}</td></tr>
                             )}
-                            {sayfaDurumu?.veri?.map((sayfa) => (
+                            {sayfalanmisSayfalar.map((sayfa) => (
                               <tr key={sayfa.yol}>
                                 <td title={sayfa.yol}>{sayfa.yol}</td>
                                 <td>{sayfa.adet}</td>
@@ -312,6 +324,25 @@ export default function IstatistiklerSayfasi() {
                           </tbody>
                         </table>
                       </div>
+                      {dokumSayfaSayisi > 1 && (
+                        <div className="sayfalama">
+                          <button
+                            type="button"
+                            disabled={gecerliDokumSayfaNo <= 1}
+                            onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo - 1 }))}
+                          >
+                            Önceki
+                          </button>
+                          <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
+                          <button
+                            type="button"
+                            disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi}
+                            onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo + 1 }))}
+                          >
+                            Sonraki
+                          </button>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
