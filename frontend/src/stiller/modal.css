@@ -1,5 +1,18 @@
 .modal { position: fixed; z-index: 300; inset: 0; display: grid; padding: clamp(14px, 4vw, 40px); place-items: center; }
-.modal__zemin { position: absolute; inset: 0; border: 0; background: color-mix(in srgb, #001B44 70%, transparent); cursor: zoom-out; }
+.modal__zemin {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, #001B44 60%, transparent);
+  backdrop-filter: blur(3px);
+  cursor: zoom-out;
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+.modal--kapaniyor .modal__zemin { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .modal__zemin { transition: none; }
+}
 .modal__icerik {
   position: relative;
   width: min(100%, 520px);
@@ -8,9 +21,16 @@
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 26px 80px rgba(0, 0, 0, .28);
+  transform-style: preserve-3d;
 }
-.modal__baslik { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #E4E9F2; }
-.modal__baslik h2 { margin: 0; color: #1D2939; font-size: 1.05rem; }
-.modal__kapat { display: grid; width: 34px; height: 34px; flex: 0 0 34px; border: 0; border-radius: 9px; background: #F4F7FC; color: #1D2939; cursor: pointer; place-items: center; }
+/* "Kategoriyi Sil" gibi kısa onay diyalogları için dar varyant (Base UI AlertDialog'daki
+   size="sm" karşılığı). */
+.modal__icerik--kucuk { width: min(100%, 380px); }
+
+.modal__baslik { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 20px 16px; }
+.modal__baslik-metin { display: grid; gap: 4px; }
+.modal__baslik h2 { margin: 0; color: #1D2939; font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; }
+.modal__aciklama { margin: 0; color: #667085; font-size: .82rem; line-height: 1.45; }
+.modal__kapat { display: grid; width: 34px; height: 34px; flex: 0 0 34px; border: 0; border-radius: 9px; background: #F4F7FC; color: #1D2939; cursor: pointer; place-items: center; transition: background-color 150ms ease, color 150ms ease; }
 .modal__kapat:hover { background: #0052FF; color: #fff; }
-.modal__govde { padding: 20px; }
+.modal__govde { padding: 0 20px 20px; }

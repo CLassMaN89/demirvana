@@ -173,7 +173,23 @@
 .yonetim-form__alan input:focus { border-color: var(--yonetim-mavi); outline: none; }
 .yonetim-form__onay { display: flex; align-items: center; gap: 8px; color: var(--yonetim-metin-ikincil); font-size: .82rem; font-weight: 500; }
 .yonetim-form__hata { padding: 10px 12px; border-radius: 8px; background: color-mix(in srgb, var(--yonetim-kirmizi) 10%, transparent); color: var(--yonetim-kirmizi); font-size: .82rem; }
-.yonetim-form__eylemler { display: flex; justify-content: flex-end; gap: 10px; }
+/* Base UI AlertDialogFooter ile aynı görünüm: hafif tonlu arka plan, üst kenarlık, kartın alt
+   köşe yuvarlaklığını devralır (Modal__govde'nin 20px yatay/alt padding'ini negatif margin ile
+   iptal edip kenara yapışır); dar ekranda dikey ters sıra (birincil eylem üstte), geniş ekranda
+   yatay ve sağa yaslı. */
+.yonetim-form__eylemler {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  margin: 20px -20px -20px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--yonetim-cizgi);
+  border-radius: 0 0 16px 16px;
+  background: var(--yonetim-zemin);
+}
+@media (min-width: 480px) {
+  .yonetim-form__eylemler { flex-direction: row; justify-content: flex-end; }
+}
 .yonetim-form__iptal, .yonetim-form__kaydet, .yonetim-form__sil {
   padding: 9px 16px;
   border: 0;
@@ -182,7 +198,7 @@
   font-size: .84rem;
   font-weight: 600;
 }
-.yonetim-form__iptal { background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); }
+.yonetim-form__iptal { background: #fff; border: 1px solid var(--yonetim-cizgi); color: var(--yonetim-metin-ikincil); }
 .yonetim-form__iptal:hover { background: var(--yonetim-cizgi); }
 .yonetim-form__kaydet { background: var(--yonetim-mavi); color: #fff; }
 .yonetim-form__kaydet:disabled { opacity: .6; cursor: not-allowed; }

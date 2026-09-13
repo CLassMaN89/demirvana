@@ -63,34 +63,49 @@ function KategoriFormu({ baslangicDegeri, gonderiliyorMu, hata, onIptal, onKayde
       </label>
       {hata && <p className="yonetim-form__hata">{hata}</p>}
       <div className="yonetim-form__eylemler">
-        <button type="button" className="yonetim-form__iptal" onClick={onIptal} disabled={gonderiliyorMu}>
+        <ModalButonu tur="iptal" onClick={onIptal} disabled={gonderiliyorMu}>
           Vazgeç
-        </button>
-        <button type="submit" className="yonetim-form__kaydet" disabled={gonderiliyorMu || baslik.trim().length < 2}>
+        </ModalButonu>
+        <ModalButonu tur="kaydet" type="submit" disabled={gonderiliyorMu || baslik.trim().length < 2}>
           {gonderiliyorMu ? 'Kaydediliyor…' : 'Kaydet'}
-        </button>
+        </ModalButonu>
       </div>
     </form>
   );
 }
 
-function SilmeOnayi({ kategori, gonderiliyorMu, hata, onIptal, onOnayla }) {
+// Kalıcı silme onayı artık başlığın altındaki kısa `aciklama` (bkz. Modal çağrısı) ile
+// veriliyor; burada yalnızca olası hata ve eylemler kalıyor.
+function SilmeOnayi({ gonderiliyorMu, hata, onIptal, onOnayla }) {
   return (
     <div className="yonetim-form">
-      <p>
-        <strong>{kategori.baslik}</strong> kategorisini kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri
-        alınamaz.
-      </p>
       {hata && <p className="yonetim-form__hata">{hata}</p>}
       <div className="yonetim-form__eylemler">
-        <button type="button" className="yonetim-form__iptal" onClick={onIptal} disabled={gonderiliyorMu}>
+        <ModalButonu tur="iptal" onClick={onIptal} disabled={gonderiliyorMu}>
           Vazgeç
-        </button>
-        <button type="button" className="yonetim-form__sil" onClick={onOnayla} disabled={gonderiliyorMu}>
+        </ModalButonu>
+        <ModalButonu tur="sil" onClick={onOnayla} disabled={gonderiliyorMu}>
           {gonderiliyorMu ? 'Siliniyor…' : 'Evet, Sil'}
-        </button>
+        </ModalButonu>
       </div>
     </div>
+  );
+}
+
+// Base UI AlertDialog referansındaki whileHover/whileTap scale davranışı; disabled iken
+// (gönderiliyorken) animasyon oynamaz.
+function ModalButonu({ tur, disabled, children, ...digerProps }) {
+  return (
+    <motion.button
+      type="button"
+      className={`yonetim-form__${tur}`}
+      disabled={disabled}
+      whileHover={disabled ? undefined : { scale: 1.03 }}
+      whileTap={disabled ? undefined : { scale: 0.97 }}
+      {...digerProps}
+    >
+      {children}
+    </motion.button>
   );
 }
 
@@ -412,25 +427,33 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
 
       {form && (
         <Modal baslik={form.mod === 'ekle' ? 'Yeni Kategori Ekle' : 'Kategoriyi Düzenle'} onKapat={() => setForm(null)}>
-          <KategoriFormu
-            baslangicDegeri={form.kategori}
-            gonderiliyorMu={gonderiliyorMu}
-            hata={hata}
-            onIptal={() => setForm(null)}
-            onKaydet={formuGonder}
-          />
+          {(kapat) => (
+            <KategoriFormu
+              baslangicDegeri={form.kategori}
+              gonderiliyorMu={gonderiliyorMu}
+              hata={hata}
+              onIptal={kapat}
+              onKaydet={formuGonder}
+            />
+          )}
         </Modal>
       )}
 
       {silinecek && (
-        <Modal baslik="Kategoriyi Sil" onKapat={() => setSilinecek(null)}>
-          <SilmeOnayi
-            kategori={silinecek}
-            gonderiliyorMu={gonderiliyorMu}
-            hata={hata}
-            onIptal={() => setSilinecek(null)}
-            onOnayla={silmeyiOnayla}
-          />
+        <Modal
+          baslik="Kategoriyi Sil"
+          boyut="kucuk"
+          aciklama={`"${silinecek.baslik}" kategorisini kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`}
+          onKapat={() => setSilinecek(null)}
+        >
+          {(kapat) => (
+            <SilmeOnayi
+              gonderiliyorMu={gonderiliyorMu}
+              hata={hata}
+              onIptal={kapat}
+              onOnayla={silmeyiOnayla}
+            />
+          )}
         </Modal>
       )}
     </div>
