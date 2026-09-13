@@ -77,7 +77,7 @@
   text-align: left;
   text-transform: uppercase;
 }
-.yonetim-tablo td { padding: 3px 12px; border-bottom: 1px solid var(--yonetim-cizgi); color: var(--yonetim-metin); }
+.yonetim-tablo td { padding: 7px 12px; border-bottom: 1px solid var(--yonetim-cizgi); color: var(--yonetim-metin); }
 .yonetim-tablo tbody tr:last-child td { border-bottom: 0; }
 .yonetim-tablo tbody tr:hover { background: var(--yonetim-zemin); }
 
