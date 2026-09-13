@@ -89,6 +89,70 @@
 .yonetim__bildirim { position: relative; display: grid; width: 38px; height: 38px; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: #fff; color: var(--yonetim-metin-ikincil); cursor: pointer; place-items: center; }
 .yonetim__bildirim svg { width: 17px; height: 17px; }
 .yonetim__bildirim span { position: absolute; top: -4px; right: -4px; display: grid; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: var(--yonetim-kirmizi); color: #fff; font-size: .58rem; font-weight: 700; place-items: center; }
+/* Üst bardaki canlı flip-clock saat; pqina.nl/flip örneğindeki gerçek "split-flap" kart
+   animasyonu ve renk paleti (koyu antrasit kartlar, beyaz rakamlar, turuncu ayraç). */
+.flip-saat { display: inline-flex; align-items: center; gap: 12px; flex: 0 0 auto; perspective: 260px; }
+.flip-saat__grup { display: inline-flex; gap: 3px; }
+
+.flip-kart {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 36px;
+  border-radius: 5px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+.flip-kart__icerik {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 36px;
+  line-height: 36px;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+/* Üst yarı yalnızca karakterin üst yarısını, alt yarı da alt yarısını gösterir: her ikisi de
+   AYNI tam-yükseklikteki içeriği taşır, biri 0'da diğeri -yarım yükseklik kadar yukarı kaydırılmış
+   halde, üstündeki yarım-yükseklik kutu overflow:hidden ile geri kalanı kırpar. */
+.flip-kart__yari, .flip-kart__yaprak {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+/* pqina.nl/flip'te üst yarı hafifçe daha açık tonda görünür (parlaklık hissi verir). */
+.flip-kart__yari--ust, .flip-kart__yaprak--ust { top: 0; border-radius: 4px 4px 0 0; background: #262626; }
+.flip-kart__yari--alt, .flip-kart__yaprak--alt { bottom: 0; border-radius: 0 0 4px 4px; }
+.flip-kart__yari--alt .flip-kart__icerik, .flip-kart__yaprak--alt .flip-kart__icerik { top: -18px; }
+
+/* Yapraklar: menteşe orta çizgide, üstteki eski rakamı taşıyan yaprak yukarı katlanarak
+   kaybolur, ardından alttaki yeni rakamı taşıyan yaprak yukarıdan katlanarak yerine oturur. */
+.flip-kart__yaprak { z-index: 2; backface-visibility: hidden; box-shadow: 0 1px 1px rgba(0, 0, 0, .2); }
+.flip-kart__yaprak--ust {
+  transform-origin: bottom;
+  animation: flip-kart-ust-ac .3s ease-in both;
+}
+.flip-kart__yaprak--alt {
+  transform-origin: top;
+  animation: flip-kart-alt-kapan .3s ease-out .3s both;
+  z-index: 1;
+}
+@keyframes flip-kart-ust-ac {
+  0% { transform: rotateX(0deg); }
+  100% { transform: rotateX(-90deg); }
+}
+@keyframes flip-kart-alt-kapan {
+  0% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
 .yonetim__kullanici { display: flex; align-items: center; gap: 9px; margin-left: auto; padding: 4px 8px 4px 4px; border-radius: 9px; cursor: pointer; }
 .yonetim__kullanici:hover { background: var(--yonetim-zemin); }
 .yonetim__kullanici-avatar { display: grid; width: 32px; height: 32px; border-radius: 50%; background: var(--yonetim-mavi); color: #fff; font-size: .68rem; font-weight: 700; place-items: center; }

@@ -6,16 +6,30 @@
 
 .istatistik-tablo th, .istatistik-tablo td { text-align: left; white-space: nowrap; width: 1%; }
 .istatistik-tablo td[title] { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+/* .yonetim-tablo td:first-child kuralı (yonetim-kategori.css) ilk sütunu white-space:normal'a
+   çeviriyor; bu tablolarda satır satır metin uzunluğu farklı olduğu için o sarma, sayfa
+   değiştikçe/açılıp kapandıkça satır yüksekliğinin (dolayısıyla tüm kartın) oynamasına yol
+   açıyordu. Buradaki seçici daha yüksek özgüllükle nowrap'i geri kazandırıp satırı sabitler. */
+.istatistik-tablo tbody td:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.istatistik-tablo th, .istatistik-tablo td { height: 33px; box-sizing: border-box; }
+
+/* Sayfalanmış dökümlerde son sayfada az kayıt kalınca alan küçülmeyip zıplamasın diye eklenen
+   dolgu satırları görünmez ve etkileşimsizdir. */
+.istatistik-tablo__dolgu-satir { pointer-events: none; }
+.istatistik-tablo__dolgu-satir td { border-bottom-color: transparent; }
+.yonetim-tablo tbody tr.istatistik-tablo__dolgu-satir:hover { background: none; }
 
 /* En Çok Görüntülenen Sayfalar ve IP Bazında Toplam Kalma Süresi kartları alt alta değil yan
-   yana; dar ekranda (tablet/mobil) tek sütuna düşer. */
-.istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
-.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; }
+   yana; dar ekranda (tablet/mobil) tek sütuna düşer. Bilerek align-items: stretch KULLANILMAZ —
+   biri (IP akordiyonu) açılıp kapandıkça veya sayfalandıkça diğerinin de boyu değişip
+   kaymasına yol açıyordu; sabit bir min-height ile ikisi de birbirinden bağımsız kalır. */
+.istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; margin-bottom: 16px; }
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; min-height: 320px; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
 }
 
-.sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; margin-top: auto; }
+.sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; }
 .sayfalama button {
   padding: 5px 12px;
   border: 1px solid var(--yonetim-cizgi);

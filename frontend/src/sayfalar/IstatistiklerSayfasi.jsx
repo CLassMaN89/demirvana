@@ -193,6 +193,17 @@ export default function IstatistiklerSayfasi() {
   const SAYFA_DOKUM_BOYUTU = 8;
   const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
 
+  // Bir IP satırı açılırken framer-motion'a "height: auto" vermek, gerçek yükseklik
+  // ölçülene kadar tarayıcının reflow yapmasına ve tablonun/altındaki içeriğin ilk anda aşağı
+  // "sıçramasına" yol açıyordu. Satır sayısı zaten sabit (SAYFA_DOKUM_BOYUTU + dolgu satırları)
+  // ve satır/sayfalama yükseklikleri CSS'te sabitlendiği için gerçek yükseklik açılmadan önce
+  // hesaplanabilir; animasyon bu sabit değere gider, hiç "auto" ölçüm anı yaşanmaz.
+  const SAYFA_DOKUM_SATIR_YUKSEKLIGI = 33; // .istatistik-tablo th/td { height: 33px }
+  const SAYFA_DOKUM_SAYFALAMA_YUKSEKLIGI = 45; // .sayfalama dolgusu + buton yüksekliği
+  // Başlık satırı + her zaman tam SAYFA_DOKUM_BOYUTU kadar satır (gerçek veri + dolgu) + sayfalama
+  // (her zaman render edilir, tek sayfa olsa bile) = değişmeyen, önceden bilinen toplam yükseklik.
+  const IP_DOKUM_ACIK_YUKSEKLIGI = SAYFA_DOKUM_SATIR_YUKSEKLIGI * (SAYFA_DOKUM_BOYUTU + 1) + SAYFA_DOKUM_SAYFALAMA_YUKSEKLIGI;
+
   const IP_SAYFA_BOYUTU = 8;
   const [ipSayfaNo, setIpSayfaNo] = useState(1);
   const ipSayfaSayisi = Math.max(1, Math.ceil(filtrelenmisIpToplamlari.length / IP_SAYFA_BOYUTU));
@@ -298,13 +309,19 @@ export default function IstatistiklerSayfasi() {
                   {acik && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
+                      animate={{ height: IP_DOKUM_ACIK_YUKSEKLIGI, opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: .2, ease: 'easeInOut' }}
                       style={{ overflow: 'hidden' }}
                     >
                       <div className="yonetim-tablo-kaydir">
                         <table className="yonetim-tablo istatistik-tablo">
+                          <colgroup>
+                            <col style={{ width: '55%' }} />
+                            <col style={{ width: '15%' }} />
+                            <col style={{ width: '15%' }} />
+                            <col style={{ width: '15%' }} />
+                          </colgroup>
                           <thead><tr><th>Sayfa</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
                           <tbody>
                             {sayfaDurumu?.yukleniyor && (
@@ -321,28 +338,38 @@ export default function IstatistiklerSayfasi() {
                                 <td>{tarihiFormatla(sayfa.son_ziyaret)}</td>
                               </tr>
                             ))}
+                            {/* Son sayfada az kayıt kalınca alan küçülmesin diye boş satırlarla
+                                yükseklik sabit tutulur. */}
+                            {!sayfaDurumu?.yukleniyor && !sayfaDurumu?.hata && Array.from(
+                              { length: Math.max(0, SAYFA_DOKUM_BOYUTU - sayfalanmisSayfalar.length) }
+                            ).map((_, i) => (
+                              <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
+                                <td colSpan={4}>&nbsp;</td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
-                      {dokumSayfaSayisi > 1 && (
-                        <div className="sayfalama">
-                          <button
-                            type="button"
-                            disabled={gecerliDokumSayfaNo <= 1}
-                            onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo - 1 }))}
-                          >
-                            Önceki
-                          </button>
-                          <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
-                          <button
-                            type="button"
-                            disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi}
-                            onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo + 1 }))}
-                          >
-                            Sonraki
-                          </button>
-                        </div>
-                      )}
+                      {/* Yükseklik önceden hesaplanan sabit bir değere animasyonla gittiği için
+                          (bkz. IP_DOKUM_ACIK_YUKSEKLIGI) bu alan tek sayfa olsa bile HER ZAMAN
+                          render edilir; aksi halde tek sayfalık IP'lerde alan aniden kısalırdı. */}
+                      <div className="sayfalama">
+                        <button
+                          type="button"
+                          disabled={gecerliDokumSayfaNo <= 1}
+                          onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo - 1 }))}
+                        >
+                          Önceki
+                        </button>
+                        <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
+                        <button
+                          type="button"
+                          disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi}
+                          onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo + 1 }))}
+                        >
+                          Sonraki
+                        </button>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

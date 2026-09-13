@@ -5,6 +5,7 @@ import {
   Users, Settings, Bell, ChevronRight, Zap, BarChart3, ScrollText
 } from 'lucide-react';
 import { VanaGrubuIkonu } from './UrunMenuIkonlari';
+import FlipSaat from './FlipSaat';
 import '../stiller/yonetim.css';
 
 // "yol" alanı olan öğeler gerçek bir sayfaya gider; olmayanlar dürüstçe "Yakında" rozetiyle işaretlenir
@@ -158,6 +159,7 @@ export default function YonetimDuzeni({ children }) {
           <button className="yonetim__bildirim" type="button" aria-label="Bildirimler">
             <Bell aria-hidden="true" /><span>3</span>
           </button>
+          <FlipSaat />
           {/* Kimlik doğrulama sistemi henüz kurulmadığı için kullanıcı bilgisi sabit bir yer tutucudur. */}
           <div className="yonetim__kullanici">
             <span className="yonetim__kullanici-avatar" aria-hidden="true">DV</span>
