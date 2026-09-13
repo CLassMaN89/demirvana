@@ -83,20 +83,15 @@
 .rozet--cihaz-mobil { background: color-mix(in srgb, var(--yonetim-turuncu) 12%, transparent); color: var(--yonetim-turuncu); }
 .rozet--cihaz-tablet { background: color-mix(in srgb, #7C3AED 12%, transparent); color: #7C3AED; }
 
-.geri-sayim { display: inline-flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
+.geri-sayim { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Çöp Kutusu geri sayımı: gün flip-kartı (mavi) + saat/dakika/saniye flip-kartları (siyah,
+   FlipKart varsayılan rengi) küçük boy (.flip-kart--kucuk, bkz. yonetim.css) kullanır. */
+.sayac-birim { display: inline-flex; align-items: center; gap: 4px; }
+.sayac-birim small { color: var(--yonetim-metin-ikincil); font-size: .68rem; font-weight: 600; }
 .geri-sayim--doldu { color: var(--yonetim-metin-ikincil); font-weight: 600; }
 
-.sayac-birim { display: inline-flex; align-items: center; gap: 3px; color: var(--sayac-renk, var(--yonetim-metin)); font-size: .85rem; font-weight: 700; }
-.sayac-birim small { font-size: .68rem; font-weight: 600; opacity: .85; }
-
-/* Saat:dakika:saniye tek renkte, etiketsiz, klasik dijital saat gibi ":" ile ayrılmış — daha az yer kaplar. */
-.sayac-saat { display: inline-flex; align-items: center; color: var(--sayac-renk, var(--yonetim-kirmizi)); font-size: .85rem; font-weight: 700; }
-.sayac-saat__nokta { margin: 0 1px; opacity: .7; }
-
-/* Değişen rakam hafifçe kayarak belirir; sabit yükseklik/overflow:hidden kasıtlı olarak
-   kullanılmaz (rakamın kesilmesine yol açıyordu). display:inline-block satırdan çıkmadan
-   transform ile animasyon yapılabilmesi için gerekli. */
-.akan-rakam { display: inline-block; min-width: 1ch; text-align: center; }
+.flip-kart-grup--saat { gap: 6px; }
 
 /* Son Ziyaretler: her gün tek bir satır olarak özetlenir (tarih, etiket, kayıt sayısı, saat
    aralığı, en çok görüntülenen sayfa), tıklanınca altında ayrıntı tablosu açılır. */

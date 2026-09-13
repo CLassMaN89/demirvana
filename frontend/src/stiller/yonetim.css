@@ -57,14 +57,28 @@
   background: var(--yonetim-lacivert);
   color: #C7D2E8;
 }
-.yonetim__logo { display: flex; align-items: baseline; gap: 6px; margin-bottom: 26px; padding: 0 8px; color: #fff; text-decoration: none; }
+.yonetim__yan-menu-ust { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+.yonetim__logo { display: flex; align-items: baseline; gap: 6px; padding: 0 8px; color: #fff; text-decoration: none; }
 .yonetim__logo-metin { font-size: 1.05rem; font-weight: 800; }
 .yonetim__logo-etiketi { font-size: .68rem; font-weight: 600; color: #7C96D6; }
 
+/* Menüyü aç/kapat düğmeleri ve karartma perdesi yalnızca dar ekranda (bkz. @media aşağıda)
+   görünür; masaüstünde sol menü zaten her zaman açık olduğu için gizlenir. */
+.yonetim__menu-ac, .yonetim__menu-kapat {
+  display: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  place-items: center;
+}
+.yonetim__menu-kapat { color: #C7D2E8; }
+.yonetim__menu-kapat svg, .yonetim__menu-ac svg { width: 20px; height: 20px; }
+.yonetim__menu-perde { display: none; }
+
 .yonetim__nav { display: flex; flex-direction: column; gap: 18px; flex: 1; }
 .yonetim__nav-bolumu { display: grid; gap: 3px; }
-.yonetim__nav-baslik { padding: 8px 12px 4px; color: #5F7AB8; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-.yonetim__nav-baglanti { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; color: #B7C4E4; font-size: .8rem; font-weight: 500; text-decoration: none; transition: background-color 150ms ease, color 150ms ease; }
+.yonetim__nav-baslik { padding: 8px 12px 4px; color: #5F7AB8; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-align: right; text-transform: uppercase; }
+.yonetim__nav-baglanti { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 9px 12px; border-radius: 8px; color: #B7C4E4; font-size: .8rem; font-weight: 500; text-decoration: none; transition: background-color 150ms ease, color 150ms ease; }
 .yonetim__nav-baglanti svg { width: 17px; height: 17px; flex: 0 0 17px; }
 .yonetim__nav-baglanti:hover { background: rgba(255,255,255,.06); color: #fff; }
 .yonetim__nav-baglanti--aktif { background: var(--yonetim-mavi); color: #fff; }
@@ -79,7 +93,8 @@
 .yonetim__ana { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
 .yonetim__ust-bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 16px; height: 66px; padding: 0 26px; border-bottom: 1px solid var(--yonetim-cizgi); background: #fff; }
-.yonetim__karsilama { display: flex; align-items: baseline; gap: 8px; margin-right: auto; white-space: nowrap; }
+.yonetim__karsilama { display: flex; align-items: baseline; gap: 8px; margin-right: auto; min-width: 0; overflow: hidden; white-space: nowrap; }
+.yonetim__karsilama strong { overflow: hidden; text-overflow: ellipsis; }
 .yonetim__karsilama strong { color: #1C3173; font-size: 1rem; font-weight: 700; }
 .yonetim__karsilama span { color: var(--yonetim-metin-ikincil); font-size: .8rem; }
 .yonetim__arama { position: relative; display: flex; flex: 1; max-width: 420px; align-items: center; gap: 8px; padding: 0 12px; height: 38px; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); }
@@ -90,11 +105,14 @@
 .yonetim__bildirim svg { width: 17px; height: 17px; }
 .yonetim__bildirim span { position: absolute; top: -4px; right: -4px; display: grid; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: var(--yonetim-kirmizi); color: #fff; font-size: .58rem; font-weight: 700; place-items: center; }
 /* Üst bardaki canlı flip-clock saat; pqina.nl/flip örneğindeki gerçek "split-flap" kart
-   animasyonu ve renk paleti (koyu antrasit kartlar, beyaz rakamlar, turuncu ayraç). */
+   animasyonu ve renk paleti (koyu antrasit kartlar, beyaz rakamlar). Aynı .flip-kart bileşeni
+   Çöp Kutusu geri sayımında da kullanılır (bkz. istatistikler.css'teki .geri-sayim kullanımı);
+   renk --flip-kart-renk değişkeniyle (varsayılan koyu antrasit) özelleştirilebilir. */
 .flip-saat { display: inline-flex; align-items: center; gap: 12px; flex: 0 0 auto; perspective: 260px; }
-.flip-saat__grup { display: inline-flex; gap: 3px; }
+.flip-kart-grup { display: inline-flex; gap: 3px; }
 
 .flip-kart {
+  --flip-kart-renk: #1a1a1a;
   position: relative;
   display: inline-block;
   width: 26px;
@@ -125,12 +143,17 @@
   right: 0;
   height: 50%;
   overflow: hidden;
-  background: #1a1a1a;
+  background: var(--flip-kart-renk);
 }
-/* pqina.nl/flip'te üst yarı hafifçe daha açık tonda görünür (parlaklık hissi verir). */
-.flip-kart__yari--ust, .flip-kart__yaprak--ust { top: 0; border-radius: 4px 4px 0 0; background: #262626; }
+/* Üst yarı hafifçe daha açık tonda görünür (parlaklık hissi verir). */
+.flip-kart__yari--ust, .flip-kart__yaprak--ust { top: 0; border-radius: 4px 4px 0 0; background: color-mix(in srgb, var(--flip-kart-renk) 80%, white 20%); }
 .flip-kart__yari--alt, .flip-kart__yaprak--alt { bottom: 0; border-radius: 0 0 4px 4px; }
 .flip-kart__yari--alt .flip-kart__icerik, .flip-kart__yaprak--alt .flip-kart__icerik { top: -18px; }
+
+/* Küçük boy: Çöp Kutusu tablosu gibi dar hücrelere sığması gereken yerler için. */
+.flip-kart--kucuk { width: 15px; height: 20px; border-radius: 3px; }
+.flip-kart--kucuk .flip-kart__icerik { height: 20px; line-height: 20px; font-size: .82rem; }
+.flip-kart--kucuk .flip-kart__yari--alt .flip-kart__icerik, .flip-kart--kucuk .flip-kart__yaprak--alt .flip-kart__icerik { top: -10px; }
 
 /* Yapraklar: menteşe orta çizgide, üstteki eski rakamı taşıyan yaprak yukarı katlanarak
    kaybolur, ardından alttaki yeni rakamı taşıyan yaprak yukarıdan katlanarak yerine oturur. */
@@ -269,7 +292,30 @@
   .yonetim-panel__uc-sutun { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 860px) {
-  .yonetim__yan-menu { display: none; }
+  /* Sol menü artık gizlenmiyor: sabit konumlu bir çekmeceye (drawer) dönüşüp ekran dışına
+     kaydırılıyor, hamburger düğmesiyle üstüne kayarak açılıyor. Öncesinde "display:none" ile
+     tamamen kayboluyordu ve geri açacak hiçbir düğme yoktu — mobilde menüye erişimin tek yolu
+     tarayıcı geçmişiydi. */
+  .yonetim__yan-menu {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, .25);
+  }
+  .yonetim__yan-menu--acik { transform: translateX(0); }
+  .yonetim__menu-kapat { display: grid; }
+  .yonetim__menu-ac { display: grid; }
+  .yonetim__menu-perde {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    border: 0;
+    background: rgba(0, 27, 68, .45);
+    cursor: pointer;
+  }
   .yonetim-panel__kartlar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .yonetim-panel__izgara { grid-template-columns: 1fr; }
   .yonetim-panel__panel--genis { grid-column: span 1; }
@@ -277,4 +323,16 @@
   .yonetim-panel__ozet-satiri, .yonetim-panel__rozet-listesi { grid-template-columns: 1fr; }
   .yonetim-panel__gelismis { grid-template-columns: 1fr; }
   .yonetim-panel__kpi-satiri { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  /* Üst bar dar ekranda ikincil öğeleri (arama, saat, kullanıcı adı/rozet) gizleyerek
+     taşmayı/yatay kaydırmayı önler; yalnızca hamburger, sayfa başlığı, bildirim ve avatar kalır. */
+  .yonetim__ust-bar { padding: 0 14px; gap: 10px; }
+  .yonetim__arama { display: none; }
+  .flip-saat { display: none; }
+  .yonetim__karsilama span { display: none; }
+  .yonetim__kullanici span:nth-child(2) { display: none; }
+  .yonetim__kullanici > svg { display: none; }
+  .yonetim__icerik { padding: 16px; }
 }

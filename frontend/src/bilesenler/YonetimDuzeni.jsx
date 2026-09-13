@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Monitor, ListTree, FolderTree, Package, Cog, Sliders,
   FileText, Handshake, Award, Building2, Mail, Image, Search as SearchIcon,
-  Users, Settings, Bell, ChevronRight, Zap, BarChart3, ScrollText
+  Users, Settings, Bell, ChevronRight, Zap, BarChart3, ScrollText, Menu, X
 } from 'lucide-react';
 import { VanaGrubuIkonu } from './UrunMenuIkonlari';
 import FlipSaat from './FlipSaat';
@@ -91,14 +92,32 @@ function sayfaBilgisiniBul(pathname) {
 export default function YonetimDuzeni({ children }) {
   const konum = useLocation();
   const sayfaBilgisi = konum.pathname === '/admin' ? null : sayfaBilgisiniBul(konum.pathname);
+  // Dar ekranlarda sol menü sabit bir çekmece (drawer) olarak açılıp kapanır; masaüstünde bu
+  // durumun hiçbir etkisi yok (CSS yalnızca mobil media query içinde transform uyguluyor).
+  const [menuAcikMi, setMenuAcikMi] = useState(false);
+
+  // Bir bağlantıya tıklanıp sayfa değiştiğinde açık kalan mobil menü otomatik kapanır.
+  useEffect(() => {
+    setMenuAcikMi(false);
+  }, [konum.pathname]);
 
   return (
     <div className="yonetim">
-      <aside className="yonetim__yan-menu">
-        <Link className="yonetim__logo" to="/admin">
-          <span className="yonetim__logo-metin">DemirVana</span>
-          <span className="yonetim__logo-etiketi">Admin</span>
-        </Link>
+      <aside className={`yonetim__yan-menu${menuAcikMi ? ' yonetim__yan-menu--acik' : ''}`}>
+        <div className="yonetim__yan-menu-ust">
+          <Link className="yonetim__logo" to="/admin">
+            <span className="yonetim__logo-metin">DemirVana</span>
+            <span className="yonetim__logo-etiketi">Admin</span>
+          </Link>
+          <button
+            type="button"
+            className="yonetim__menu-kapat"
+            aria-label="Menüyü kapat"
+            onClick={() => setMenuAcikMi(false)}
+          >
+            <X aria-hidden="true" />
+          </button>
+        </div>
 
         <nav className="yonetim__nav">
           {MENU_BOLUMLERI.map((bolum, indeks) => (
@@ -144,8 +163,19 @@ export default function YonetimDuzeni({ children }) {
         </div>
       </aside>
 
+      {/* Mobilde menü açıkken arkadaki içeriği karartan ve dışarı tıklanınca menüyü kapatan perde. */}
+      {menuAcikMi && <button type="button" className="yonetim__menu-perde" aria-label="Menüyü kapat" onClick={() => setMenuAcikMi(false)} />}
+
       <div className="yonetim__ana">
         <header className="yonetim__ust-bar">
+          <button
+            type="button"
+            className="yonetim__menu-ac"
+            aria-label="Menüyü aç"
+            onClick={() => setMenuAcikMi(true)}
+          >
+            <Menu aria-hidden="true" />
+          </button>
           <div className="yonetim__karsilama">
             {sayfaBilgisi
               ? (<><strong>{sayfaBilgisi.ad}</strong>{sayfaBilgisi.aciklama && <span>{sayfaBilgisi.aciklama}</span>}</>)

@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
+import { FlipIkiHane, FlipKart } from '../bilesenler/FlipKart';
 import { islemYonetimVerisiniGetir, kategoriGeriAl, silinenKategorileriGetir } from '../servisler/api';
 import '../stiller/yonetim-kategori.css';
 import '../stiller/istatistikler.css';
+import '../stiller/yonetim.css';
 
 const EYLEM_META = {
   kategori_ekle: { etiket: 'Kategori eklendi', ikon: FilePlus2, sinif: 'log-eylem--ekle' },
@@ -40,51 +42,9 @@ function yoluUret(kategori) {
 
 const GUN_MS = 24 * 60 * 60 * 1000;
 
-// Klasik "flip clock" efekti: rakam değişince 3B eksende (rotateX) öne doğru çevrilerek yerine
-// oturur. Bilerek AnimatePresence/popLayout KULLANILMAZ (eskisi zaten React tarafından anında
-// kaldırılır) ve sabit yükseklikli/overflow:hidden bir kutuya da gerek yok — yalnızca key
-// değişince yeniden monte edilen elemanın kendi initial→animate geçişi oynar, konum/layout'a hiç
-// dokunulmaz; bu yüzden önceki denemelerdeki kesilme/yanlış konuma taşınma riski taşımaz.
-function AkanRakam({ deger }) {
-  return (
-    <motion.span
-      key={deger}
-      className="akan-rakam"
-      initial={{ rotateX: -90, opacity: 0 }}
-      animate={{ rotateX: 0, opacity: 1 }}
-      transition={{ duration: .32, ease: 'easeOut' }}
-      style={{ transformPerspective: 240 }}
-    >
-      {deger}
-    </motion.span>
-  );
-}
-
-// İki haneli bir sayının HER hanesi kendi bağımsız AkanRakam'ıdır; böylece örn. 58→59 olduğunda
-// yalnızca değişen "9" hanesi döner, "5" hanesi hiç kıpırdamaz.
-function IkiHaneliRakam({ deger }) {
-  const metin = String(deger).padStart(2, '0');
-  return (
-    <>
-      <AkanRakam deger={metin[0]} />
-      <AkanRakam deger={metin[1]} />
-    </>
-  );
-}
-
-// Gün sayısı 7'nin altında kaldığı için hiçbir zaman iki haneye çıkmaz; "06" gibi başına sıfır
-// eklenmeden tek haneli akan rakam olarak gösterilir.
-function SayacBirimi({ deger, etiket, renk }) {
-  return (
-    <span className="sayac-birim" style={{ '--sayac-renk': renk }}>
-      <AkanRakam deger={String(deger)} />
-      <small>{etiket}</small>
-    </span>
-  );
-}
-
-// 7 günlük kalıcı silme süresine kalan zamanı gün/saat/dk/sn olarak her saniye güncelleyen canlı sayaç;
-// her birim kendi renginde ve değişen rakamlar akarak (odometre tarzı) güncellenir.
+// 7 günlük kalıcı silme süresine kalan zamanı gün/saat/dk/sn olarak her saniye güncelleyen canlı
+// sayaç; saat/dakika/saniye üst bardaki saatle aynı (siyah/antrasit) flip-kartlarla, gün ise
+// ayırt edilmesi için ayrı (mavi) renkte gösterilir — bkz. FlipKart.jsx.
 function GeriSayim({ silinmeTarihi }) {
   const bitisZamani = new Date(silinmeTarihi.replace(' ', 'T')).getTime() + 7 * GUN_MS;
   const [kalanMs, setKalanMs] = useState(() => bitisZamani - Date.now());
@@ -104,13 +64,14 @@ function GeriSayim({ silinmeTarihi }) {
 
   return (
     <span className="geri-sayim">
-      <SayacBirimi deger={gun} etiket="gün" renk="var(--yonetim-mavi)" />
-      <span className="sayac-saat" style={{ '--sayac-renk': 'var(--yonetim-kirmizi)' }}>
-        <IkiHaneliRakam deger={saat} />
-        <span className="sayac-saat__nokta">:</span>
-        <IkiHaneliRakam deger={dakika} />
-        <span className="sayac-saat__nokta">:</span>
-        <IkiHaneliRakam deger={saniye} />
+      <span className="sayac-birim">
+        <FlipKart deger={String(gun)} renk="var(--yonetim-mavi)" kucuk />
+        <small>gün</small>
+      </span>
+      <span className="flip-kart-grup flip-kart-grup--saat">
+        <FlipIkiHane deger={saat} kucuk />
+        <FlipIkiHane deger={dakika} kucuk />
+        <FlipIkiHane deger={saniye} kucuk />
       </span>
     </span>
   );
