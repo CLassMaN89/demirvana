@@ -193,17 +193,6 @@ export default function IstatistiklerSayfasi() {
   const SAYFA_DOKUM_BOYUTU = 8;
   const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
 
-  // Bir IP satırı açılırken framer-motion'a "height: auto" vermek, gerçek yükseklik
-  // ölçülene kadar tarayıcının reflow yapmasına ve tablonun/altındaki içeriğin ilk anda aşağı
-  // "sıçramasına" yol açıyordu. Satır sayısı zaten sabit (SAYFA_DOKUM_BOYUTU + dolgu satırları)
-  // ve satır/sayfalama yükseklikleri CSS'te sabitlendiği için gerçek yükseklik açılmadan önce
-  // hesaplanabilir; animasyon bu sabit değere gider, hiç "auto" ölçüm anı yaşanmaz.
-  const SAYFA_DOKUM_SATIR_YUKSEKLIGI = 33; // .istatistik-tablo th/td { height: 33px }
-  const SAYFA_DOKUM_SAYFALAMA_YUKSEKLIGI = 45; // .sayfalama dolgusu + buton yüksekliği
-  // Başlık satırı + her zaman tam SAYFA_DOKUM_BOYUTU kadar satır (gerçek veri + dolgu) + sayfalama
-  // (her zaman render edilir, tek sayfa olsa bile) = değişmeyen, önceden bilinen toplam yükseklik.
-  const IP_DOKUM_ACIK_YUKSEKLIGI = SAYFA_DOKUM_SATIR_YUKSEKLIGI * (SAYFA_DOKUM_BOYUTU + 1) + SAYFA_DOKUM_SAYFALAMA_YUKSEKLIGI;
-
   const IP_SAYFA_BOYUTU = 8;
   const [ipSayfaNo, setIpSayfaNo] = useState(1);
   const ipSayfaSayisi = Math.max(1, Math.ceil(filtrelenmisIpToplamlari.length / IP_SAYFA_BOYUTU));
@@ -253,18 +242,20 @@ export default function IstatistiklerSayfasi() {
             <Globe aria-hidden="true" size={16} />
             <h3>En Çok Görüntülenen Sayfalar</h3>
           </div>
-          <div className="yonetim-tablo-kaydir">
-            <table className="yonetim-tablo">
-              <thead><tr><th>Sayfa</th><th>Görüntüleme</th></tr></thead>
-              <tbody>
-                {istatistikler.en_cok_goruntulenen_sayfalar.map((satir) => (
-                  <tr key={satir.yol}><td>{satir.yol}</td><td>{satir.adet}</td></tr>
-                ))}
-                {istatistikler.en_cok_goruntulenen_sayfalar.length === 0 && (
-                  <tr><td colSpan={2} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
-                )}
-              </tbody>
-            </table>
+          <div className="istatistik-kart__govde">
+            <div className="yonetim-tablo-kaydir">
+              <table className="yonetim-tablo">
+                <thead><tr><th>Sayfa</th><th>Görüntüleme</th></tr></thead>
+                <tbody>
+                  {istatistikler.en_cok_goruntulenen_sayfalar.map((satir) => (
+                    <tr key={satir.yol}><td>{satir.yol}</td><td>{satir.adet}</td></tr>
+                  ))}
+                  {istatistikler.en_cok_goruntulenen_sayfalar.length === 0 && (
+                    <tr><td colSpan={2} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -279,6 +270,7 @@ export default function IstatistiklerSayfasi() {
               eder). Bir satıra tıklayınca o IP'nin hangi sayfalara girdiğini görebilirsiniz.
             </p>
           </div>
+          <div className="istatistik-kart__govde">
           {sayfalanmisIpToplamlari.map((satir) => {
             const acik = acikIpler.has(satir.ip_adresi);
             const sayfaDurumu = ipSayfalari[satir.ip_adresi];
@@ -309,7 +301,7 @@ export default function IstatistiklerSayfasi() {
                   {acik && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: IP_DOKUM_ACIK_YUKSEKLIGI, opacity: 1 }}
+                      animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: .2, ease: 'easeInOut' }}
                       style={{ overflow: 'hidden' }}
@@ -350,9 +342,10 @@ export default function IstatistiklerSayfasi() {
                           </tbody>
                         </table>
                       </div>
-                      {/* Yükseklik önceden hesaplanan sabit bir değere animasyonla gittiği için
-                          (bkz. IP_DOKUM_ACIK_YUKSEKLIGI) bu alan tek sayfa olsa bile HER ZAMAN
-                          render edilir; aksi halde tek sayfalık IP'lerde alan aniden kısalırdı. */}
+                      {/* Bu alan tek sayfa olsa bile HER ZAMAN render edilir; aksi halde tek
+                          sayfalık IP'lerde alan aniden kısalırdı. Kart artık kendi içinde
+                          kaydırılan sabit yükseklikte olduğu için (bkz. .istatistik-kart__govde)
+                          buradaki büyüme/küçülme sayfanın geri kalanını hiçbir zaman etkilemez. */}
                       <div className="sayfalama">
                         <button
                           type="button"
@@ -390,6 +383,7 @@ export default function IstatistiklerSayfasi() {
               </button>
             </div>
           )}
+          </div>
         </div>
       </div>
 
