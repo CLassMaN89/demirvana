@@ -1,7 +1,12 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { vi, describe, expect, it } from 'vitest';
 import UrunDetaySayfasi from './UrunDetaySayfasi';
+
+vi.mock('../bilesenler/PdfGoruntuleyici', () => ({
+  default: ({ dokuman }) => <div data-testid="pdf-goruntuleyici">{dokuman.baslik} açık</div>
+}));
 
 const urun = {
   id: 1,
@@ -28,7 +33,8 @@ const urun = {
 };
 
 describe('UrunDetaySayfasi', () => {
-  it('ürünün teknik çizimini, tablolarını ve yerel dokümanını gösterir', () => {
+  it('ürünün teknik çizimini, tablolarını ve yerel dokümanını gösterir', async () => {
+    const kullanici = userEvent.setup();
     render(
       <MemoryRouter initialEntries={[`/urunler/${urun.slug}`]}>
         <Routes>
@@ -46,8 +52,11 @@ describe('UrunDetaySayfasi', () => {
     expect(screen.getByRole('rowheader', { name: 'Vana Boyutları' })).toHaveAttribute('rowspan', '3');
     expect(screen.getByRole('rowheader', { name: 'H' })).toHaveClass('urun-detay__olcu-kod');
     expect(screen.getByRole('cell', { name: '160' })).toHaveAttribute('colspan', '2');
-    expect(screen.getByRole('link', { name: /Birim Fiyat Excel/i })).toHaveAttribute('href', expect.stringContaining('Birim Fiyat.xlsx'));
-    expect(screen.getByRole('link', { name: /Ürün PDF/i })).toHaveAttribute('href', expect.stringContaining('Metal Sitli Sürgülü Vana F4 D-001.pdf'));
+    await kullanici.click(screen.getByRole('button', { name: /Birim Fiyat Excel/i }));
+    expect(screen.getByRole('link', { name: /Yeni Sekmede Aç/i })).toHaveAttribute('href', expect.stringContaining('Birim Fiyat.xlsx'));
+
+    await kullanici.click(screen.getByRole('button', { name: /Ürün PDF/i }));
+    expect(await screen.findByTestId('pdf-goruntuleyici')).toHaveTextContent('Ürün PDF açık');
   });
 
   it('teknik içeriği henüz doğrulanmamış ürün için eksik tablo üretmez', () => {

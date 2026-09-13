@@ -1,6 +1,5 @@
 import { ArrowLeft, BarChart3, Download, ExternalLink, FileText, Home, Layers3, Maximize2, X } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
@@ -24,6 +23,15 @@ function grupSatirSayisi(satirlar, indeks) {
   let satirSayisi = 1;
   while (satirlar[indeks + satirSayisi] && !satirlar[indeks + satirSayisi].grup) satirSayisi += 1;
   return satirSayisi;
+}
+
+// Bir önceki grup satırının rowSpan'ı bu satırı kapsamıyorsa (örn. tablonun kendi grubu olmayan ilk satırı),
+// grup hücresi hiç basılmaz ve tablo bir sütun kayar; bu durumda boş bir hücreyle sütun sayısı korunur.
+function grupSatiriKapsiyorMu(satirlar, indeks) {
+  for (let i = indeks - 1; i >= 0; i -= 1) {
+    if (satirlar[i]?.grup) return i + grupSatirSayisi(satirlar, i) > indeks;
+  }
+  return false;
 }
 
 function GeriDon({ yedekBaglanti }) {
@@ -54,22 +62,14 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
   const { slug } = useParams();
   const urun = urunler.find((kayit) => kayit.slug === slug);
   const [acikBelge, setAcikBelge] = useState(null);
-  const kapatmaDugmesiRef = useRef(null);
-  const oncekiOdakRef = useRef(null);
+  const goruntuleyiciRef = useRef(null);
 
+  // TeknikSayfasi.jsx'teki desenle aynı: seçili belge popup değil, listenin altında sayfa akışı
+  // içinde açılır; görünüme girdiğinde yumuşak kaydırmayla ona odaklanılır.
   useEffect(() => {
-    if (!acikBelge) return undefined;
-    oncekiOdakRef.current = document.activeElement;
-    const oncekiTasima = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    kapatmaDugmesiRef.current?.focus();
-    const klavyeDinle = (olay) => { if (olay.key === 'Escape') setAcikBelge(null); };
-    document.addEventListener('keydown', klavyeDinle);
-    return () => {
-      document.body.style.overflow = oncekiTasima;
-      document.removeEventListener('keydown', klavyeDinle);
-      oncekiOdakRef.current?.focus?.();
-    };
+    if (!acikBelge || !goruntuleyiciRef.current) return;
+    const hareketAz = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    goruntuleyiciRef.current.scrollIntoView?.({ behavior: hareketAz ? 'auto' : 'smooth', block: 'start' });
   }, [acikBelge]);
 
   if (!urun) {
@@ -263,7 +263,9 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                   </tr>
                   {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
                     <tr key={`${satir.grup}-${satir.kod}`}>
-                      {grupVar && grupSatirSayisi(satirlar, satirIndeksi) > 0 && <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>}
+                      {grupVar && (grupSatirSayisi(satirlar, satirIndeksi) > 0
+                        ? <th className="urun-detay__olcu-grup" scope="rowgroup" rowSpan={grupSatirSayisi(satirlar, satirIndeksi)}>{satir.grup}</th>
+                        : !grupSatiriKapsiyorMu(satirlar, satirIndeksi) && <th className="urun-detay__olcu-grup" aria-hidden="true" />)}
                       <th className="urun-detay__olcu-kod" scope="row">{satir.kod}</th>
                       {satir.gruplu_degerler
                         ? satir.gruplu_degerler.map(({ deger, sutun }, indeks) => <td key={`${satir.kod}-${indeks}`} colSpan={sutun}>{deger}</td>)
@@ -303,47 +305,42 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
               </button>
             ))}
           </div>
-        </section>
-      )}
 
-      {acikBelge && createPortal(
-        // Sayfa geçiş sarmalayıcısındaki transform, position:fixed'in viewport yerine ona göre
-        // konumlanmasına neden oluyor (sayfa kaydırılmışken modal ekran dışına kayar); bu yüzden
-        // modal document.body'ye portal ile taşınır.
-        <div className="urun-detay__belge-modal" role="dialog" aria-modal="true" aria-label={acikBelge.baslik}>
-          <button className="urun-detay__belge-modal-zemin" type="button" onClick={() => setAcikBelge(null)} aria-label="Kapat" />
-          {acikBelge.belge_turu === 'excel' ? (
-            <div className="urun-detay__belge-modal-icerik urun-detay__belge-modal-icerik--kucuk">
-              <button ref={kapatmaDugmesiRef} className="urun-detay__belge-modal-kapat" type="button" onClick={() => setAcikBelge(null)} aria-label="Kapat">
-                <X aria-hidden="true" />
-              </button>
-              <img src="/assets/ikonlar/excel-ikonu-karti.png" alt="" aria-hidden="true" className="urun-detay__belge-modal-ikon" />
-              <h2>{acikBelge.baslik}</h2>
-              <p>Excel dosyaları tarayıcı içinde önizlenemiyor; dosyayı yeni sekmede açabilir veya indirebilirsiniz.</p>
-              <div className="urun-detay__belge-modal-eylemler">
-                <a href={acikBelge.dosya_yolu} target="_blank" rel="noopener noreferrer"><ExternalLink aria-hidden="true" /> Yeni Sekmede Aç</a>
-                <a href={acikBelge.dosya_yolu} download><Download aria-hidden="true" /> İndir</a>
-              </div>
-            </div>
-          ) : (
-            <div className="urun-detay__belge-modal-icerik">
-              <Suspense fallback={<p className="pdf-goruntuleyici__durum" aria-live="polite">PDF yükleniyor…</p>}>
-                <PdfGoruntuleyici
-                  dokuman={{
-                    baslik: acikBelge.baslik,
-                    dosya_adresi: acikBelge.dosya_yolu,
-                    orijinal_dosya_adi: acikBelge.dosya_yolu.split('/').pop(),
-                    dosya_boyutu: 0,
-                    indirmeye_izin_var_mi: 1,
-                    yeni_sekmede_acmaya_izin_var_mi: 1
-                  }}
-                  onKapat={() => setAcikBelge(null)}
-                />
-              </Suspense>
+          {/* TeknikSayfasi.jsx'teki desenle aynı: seçili belge popup/modal değil, sayfa akışı içinde
+              listenin hemen altında açılır ve yumuşak kaydırmayla görünüme getirilir. */}
+          {acikBelge && (
+            <div className="urun-detay__belge-goruntuleyici" ref={goruntuleyiciRef}>
+              {acikBelge.belge_turu === 'excel' ? (
+                <div className="urun-detay__belge-excel-karti">
+                  <button className="urun-detay__belge-kapat" type="button" onClick={() => setAcikBelge(null)} aria-label="Kapat">
+                    <X aria-hidden="true" />
+                  </button>
+                  <img src="/assets/ikonlar/excel-ikonu-karti.png" alt="" aria-hidden="true" className="urun-detay__belge-excel-ikon" />
+                  <h3>{acikBelge.baslik}</h3>
+                  <p>Excel dosyaları tarayıcı içinde önizlenemiyor; dosyayı yeni sekmede açabilir veya indirebilirsiniz.</p>
+                  <div className="urun-detay__belge-excel-eylemler">
+                    <a href={acikBelge.dosya_yolu} target="_blank" rel="noopener noreferrer"><ExternalLink aria-hidden="true" /> Yeni Sekmede Aç</a>
+                    <a href={acikBelge.dosya_yolu} download><Download aria-hidden="true" /> İndir</a>
+                  </div>
+                </div>
+              ) : (
+                <Suspense fallback={<p className="pdf-goruntuleyici__durum" aria-live="polite">PDF yükleniyor…</p>}>
+                  <PdfGoruntuleyici
+                    dokuman={{
+                      baslik: acikBelge.baslik,
+                      dosya_adresi: acikBelge.dosya_yolu,
+                      orijinal_dosya_adi: acikBelge.dosya_yolu.split('/').pop(),
+                      dosya_boyutu: 0,
+                      indirmeye_izin_var_mi: 1,
+                      yeni_sekmede_acmaya_izin_var_mi: 1
+                    }}
+                    onKapat={() => setAcikBelge(null)}
+                  />
+                </Suspense>
+              )}
             </div>
           )}
-        </div>,
-        document.body
+        </section>
       )}
     </article>
   );
