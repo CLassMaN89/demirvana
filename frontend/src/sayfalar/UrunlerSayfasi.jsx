@@ -178,15 +178,17 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
 
-  // Admin > Kategori Yönetimi'ndeki "Görüntüle" linki gibi doğrudan bir sayfa rotası olmayan yerlerden
-  // gelen kategori seçimleri için ?kategori=<başlık> sorgu parametresi desteklenir.
-  const kategoriParametresi = new URLSearchParams(konum.search).get('kategori');
+  // Admin > Kategori Yönetimi'ndeki "Görüntüle"/"Tümünü Gör" linkleri gibi doğrudan bir sayfa rotası
+  // olmayan yerlerden gelen seçimler için ?kategori=<başlık> ve ?grup=<başlık> sorgu parametreleri desteklenir.
+  const sorguParametreleri = new URLSearchParams(konum.search);
+  const kategoriParametresi = sorguParametreleri.get('kategori');
+  const grupParametresi = sorguParametreleri.get('grup');
 
   // Etkin kategori değiştiğinde onu içeren grup otomatik açılır; kullanıcının açtığı diğer gruplar kapanmaz.
   const aktifGrup = useMemo(
-    () => gruplar.find((grup) => grup.baglanti === konum.pathname
+    () => gruplar.find((grup) => grup.baglanti === konum.pathname || grup.baslik === grupParametresi
       || (grup.alt_ogeler ?? []).some((alt) => alt.baglanti === konum.pathname || alt.baslik === kategoriParametresi)),
-    [gruplar, konum.pathname, kategoriParametresi]
+    [gruplar, konum.pathname, kategoriParametresi, grupParametresi]
   );
   const [acikGruplar, setAcikGruplar] = useState(() => new Set([aktifGrup?.id ?? gruplar[0]?.id].filter(Boolean)));
   useEffect(() => {
@@ -211,6 +213,17 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
         gosterilecekUrunler: urunler.filter((urun) => urunMenuKategorisi(urun) === kategoriParametresi),
       };
     }
+    if (konum.pathname === '/urunler' && grupParametresi) {
+      const grup = gruplar.find((g) => g.baslik === grupParametresi);
+      if (grup) {
+        const altBasliklar = new Set((grup.alt_ogeler ?? []).map((alt) => alt.baslik));
+        return {
+          baslik: grup.baslik,
+          aciklama: `${grup.baslik} kategorisindeki tüm ürünler.`,
+          gosterilecekUrunler: urunler.filter((urun) => altBasliklar.has(urunMenuKategorisi(urun))),
+        };
+      }
+    }
     for (const grup of gruplar) {
       if (grup.baglanti === konum.pathname) {
         const altBasliklar = new Set((grup.alt_ogeler ?? []).map((alt) => alt.baslik));
@@ -231,7 +244,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
       }
     }
     return { baslik: 'Tüm Ürünler', aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.', gosterilecekUrunler: urunler };
-  }, [gruplar, konum.pathname, kategoriParametresi, urunler]);
+  }, [gruplar, konum.pathname, kategoriParametresi, grupParametresi, urunler]);
 
   const gosterilenUrunler = gosterilecekUrunler.slice(0, gosterilenSayisi);
   const dahaFazlaVar = gosterilenSayisi < gosterilecekUrunler.length;
@@ -241,7 +254,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   // Kategori değiştiğinde bir önceki kategoriden kalan "gösterilen ürün sayısı" sıfırlanır.
   useEffect(() => {
     setGosterilenSayisi(ADIM_BASINA_URUN);
-  }, [konum.pathname, kategoriParametresi]);
+  }, [konum.pathname, kategoriParametresi, grupParametresi]);
 
   return (
     <main className="urun-katalog">
