@@ -211,7 +211,7 @@ export default function LogYonetimiSayfasi() {
       <div className="yonetim-kategori__kart istatistik-kart">
         <div className="istatistik-kart__baslik">
           <ScrollText aria-hidden="true" size={16} />
-          <h3>Admin İşlem Kayıtları</h3>
+          <h3>Admin İşlem Logları</h3>
           <p className="istatistik-kart__not">
             Henüz bir giriş/oturum sistemi olmadığı için işlemler bir kullanıcı adına değil, yalnızca isteğin
             geldiği IP adresine bağlanır.
