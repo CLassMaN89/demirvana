@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `site_ayarlari` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `anahtar` VARCHAR(100) NOT NULL,
     `deger` TEXT NULL,
-    `deger_turu` ENUM('metin', 'gorsel', 'baglanti', 'eposta', 'telefon', 'sayi') NOT NULL DEFAULT 'metin',
+    `deger_turu` ENUM('metin', 'gorsel', 'baglanti', 'eposta', 'telefon', 'sayi', 'renk') NOT NULL DEFAULT 'metin',
     `aciklama` VARCHAR(255) NULL,
     `aktif_mi` TINYINT(1) NOT NULL DEFAULT 1,
     `olusturulma_tarihi` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
