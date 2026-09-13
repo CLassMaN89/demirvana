@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronRight, FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
+import { ChevronRight, Eye, FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
 import { FlipIkiHane, FlipKart } from '../bilesenler/FlipKart';
 import { islemYonetimVerisiniGetir, kategoriGeriAl, silinenKategorileriGetir } from '../servisler/api';
@@ -38,6 +38,25 @@ function yoluUret(kategori) {
   return kategori.grup_baslik
     ? `Kategori Yönetimi > ${kategori.grup_baslik} > ${kategori.baslik}`
     : `Kategori Yönetimi > ${kategori.baslik}`;
+}
+
+// Kategori kalıcı olarak silinmişse (Çöp Kutusu'ndaki 7 günlük süre de dolmuşsa) backend bu
+// alanı NULL döndürür; o durumda gösterilecek gerçek bir sayfa olmadığı için ikon render edilmez.
+function KategoriGoruntuleLinki({ baglanti }) {
+  if (!baglanti) return <span className="istatistik-tablo__bos-ikon" aria-hidden="true">—</span>;
+  const yol = `/urunler/${baglanti}`;
+  return (
+    <a
+      className="sayfa-goruntule-linki"
+      href={yol}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${yol} kategorisini web sitesinde aç`}
+      title="Kategoriyi web sitesinde aç"
+    >
+      <Eye aria-hidden="true" size={15} />
+    </a>
+  );
 }
 
 const GUN_MS = 24 * 60 * 60 * 1000;
@@ -248,7 +267,7 @@ export default function LogYonetimiSayfasi() {
                     <div className="yonetim-tablo-kaydir">
                       <table className="yonetim-tablo istatistik-tablo">
                         <thead>
-                          <tr><th>Tarih</th><th>IP Adresi</th><th>Eylem</th><th>Detay</th></tr>
+                          <tr><th>Tarih</th><th>IP Adresi</th><th>Eylem</th><th>Detay</th><th>Kategoriyi Görüntüle</th></tr>
                         </thead>
                         <tbody>
                           {gun.kayitlar.map((kayit) => {
@@ -263,7 +282,8 @@ export default function LogYonetimiSayfasi() {
                                     <Ikon aria-hidden="true" size={13} /> {meta.etiket}
                                   </span>
                                 </td>
-                                <td title={kayit.detay || ''}>{kayit.detay || '—'}</td>
+                                <td className="istatistik-tablo__sol-hucre" title={kayit.detay || ''}>{kayit.detay || '—'}</td>
+                                <td><KategoriGoruntuleLinki baglanti={kayit.kategori_baglantisi} /></td>
                               </tr>
                             );
                           })}

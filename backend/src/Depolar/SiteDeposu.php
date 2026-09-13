@@ -698,11 +698,18 @@ final class SiteDeposu
         ]);
     }
 
+    /**
+     * "Kategoriyi Görüntüle" göz ikonu için: hedef kategori hâlâ varsa (kalıcı silinmemişse)
+     * gerçek yolu (menu_alt_ogeleri.baglanti) da döndürülür; yoksa NULL kalır ve link gizlenir.
+     */
     public function islemleriGetir(int $limit, int $offset): array
     {
         $sorgu = $this->baglanti->prepare(
-            'SELECT id, ip_adresi, eylem, hedef_turu, hedef_id, detay, olusturulma_tarihi
-             FROM admin_islem_kayitlari ORDER BY olusturulma_tarihi DESC LIMIT :limit OFFSET :offset'
+            "SELECT aik.id, aik.ip_adresi, aik.eylem, aik.hedef_turu, aik.hedef_id, aik.detay, aik.olusturulma_tarihi,
+                    mao.baglanti AS kategori_baglantisi
+             FROM admin_islem_kayitlari aik
+             LEFT JOIN menu_alt_ogeleri mao ON mao.id = aik.hedef_id AND aik.hedef_turu = 'kategori'
+             ORDER BY aik.olusturulma_tarihi DESC LIMIT :limit OFFSET :offset"
         );
         $sorgu->bindValue('limit', $limit, PDO::PARAM_INT);
         $sorgu->bindValue('offset', $offset, PDO::PARAM_INT);
