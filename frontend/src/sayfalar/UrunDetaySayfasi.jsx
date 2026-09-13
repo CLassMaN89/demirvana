@@ -1,7 +1,12 @@
-import { ArrowLeft, BarChart3, Download, FileText, Home, Layers3, Maximize2 } from 'lucide-react';
+import { ArrowLeft, BarChart3, Download, ExternalLink, FileText, Home, Layers3, Maximize2, X } from 'lucide-react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DurumMesaji from '../bilesenler/DurumMesaji';
 import '../stiller/urun-detay.css';
+
+// Ağır PDF.js paketi yalnız ziyaretçi bir belge açtığında indirilir.
+const PdfGoruntuleyici = lazy(() => import('../bilesenler/PdfGoruntuleyici'));
 
 function teknikBilgileriOku(deger) {
   if (!deger) return {};
@@ -48,6 +53,24 @@ function kategoriBaglantisiBul(menu, kategoriAdi) {
 export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
   const { slug } = useParams();
   const urun = urunler.find((kayit) => kayit.slug === slug);
+  const [acikBelge, setAcikBelge] = useState(null);
+  const kapatmaDugmesiRef = useRef(null);
+  const oncekiOdakRef = useRef(null);
+
+  useEffect(() => {
+    if (!acikBelge) return undefined;
+    oncekiOdakRef.current = document.activeElement;
+    const oncekiTasima = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    kapatmaDugmesiRef.current?.focus();
+    const klavyeDinle = (olay) => { if (olay.key === 'Escape') setAcikBelge(null); };
+    document.addEventListener('keydown', klavyeDinle);
+    return () => {
+      document.body.style.overflow = oncekiTasima;
+      document.removeEventListener('keydown', klavyeDinle);
+      oncekiOdakRef.current?.focus?.();
+    };
+  }, [acikBelge]);
 
   if (!urun) {
     return (
@@ -84,7 +107,10 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
       ? [{ baslik: null, basincGruplari, olcu_basliklari: teknik.olcu_basliklari || [], olculer: teknik.olculer || [] }]
       : []);
 
-  const kategoriAdi = teknik.grup_adi || urun.kategori_adi;
+  // Ürünler menüde/kategori sayfalarında menu_kategori_adi (gerçek 21 kategori) ile filtrelenir;
+  // kategori_adi eski/görünmez bir taksonomidir (ör. "Globe Vanalar") ve menüde tıklanabilir bir
+  // karşılığı yoktur. Aynı önceliklendirme UrunlerSayfasi.jsx'teki urunMenuKategorisi ile tutarlı olmalı.
+  const kategoriAdi = teknik.grup_adi || urun.menu_kategori_adi || urun.kategori_adi;
   const kategoriBaglantisi = kategoriBaglantisiBul(menu, kategoriAdi);
 
   return (
@@ -256,11 +282,11 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
         <section className="urun-detay__panel urun-detay__dokumanlar">
           <div className="urun-detay__panel-baslik">
             <h2><FileText aria-hidden="true" /> Teknik Dokümanlar</h2>
-            <p>Ürünle ilgili teknik dokümanları buradan indirebilirsiniz.</p>
+            <p>Ürünle ilgili teknik dokümanları buradan görüntüleyebilirsiniz.</p>
           </div>
           <div className="urun-detay__dokuman-grid">
             {teknik.dokumanlar.map((dokuman) => (
-              <a key={dokuman.baslik} href={dokuman.dosya_yolu} target="_blank" rel="noopener noreferrer" className="urun-detay__dokuman">
+              <button key={dokuman.baslik} type="button" onClick={() => setAcikBelge(dokuman)} className="urun-detay__dokuman">
                 <span className="urun-detay__dokuman-ikon">
                   <img
                     src={dokuman.belge_turu === 'excel' ? '/assets/ikonlar/excel-ikonu-karti.png' : '/assets/ikonlar/pdf-ikonu-karti.png'}
@@ -273,11 +299,51 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                   </span>
                 </span>
                 <span><strong>{dokuman.baslik}</strong><small>{dokuman.aciklama || 'Teknik ürün dokümanı'}</small><em>{dokuman.tur || 'PDF'}</em></span>
-                <span className="urun-detay__indir"><Download aria-hidden="true" /> İndir</span>
-              </a>
+                <span className="urun-detay__indir"><Maximize2 aria-hidden="true" /> Görüntüle</span>
+              </button>
             ))}
           </div>
         </section>
+      )}
+
+      {acikBelge && createPortal(
+        // Sayfa geçiş sarmalayıcısındaki transform, position:fixed'in viewport yerine ona göre
+        // konumlanmasına neden oluyor (sayfa kaydırılmışken modal ekran dışına kayar); bu yüzden
+        // modal document.body'ye portal ile taşınır.
+        <div className="urun-detay__belge-modal" role="dialog" aria-modal="true" aria-label={acikBelge.baslik}>
+          <button className="urun-detay__belge-modal-zemin" type="button" onClick={() => setAcikBelge(null)} aria-label="Kapat" />
+          {acikBelge.belge_turu === 'excel' ? (
+            <div className="urun-detay__belge-modal-icerik urun-detay__belge-modal-icerik--kucuk">
+              <button ref={kapatmaDugmesiRef} className="urun-detay__belge-modal-kapat" type="button" onClick={() => setAcikBelge(null)} aria-label="Kapat">
+                <X aria-hidden="true" />
+              </button>
+              <img src="/assets/ikonlar/excel-ikonu-karti.png" alt="" aria-hidden="true" className="urun-detay__belge-modal-ikon" />
+              <h2>{acikBelge.baslik}</h2>
+              <p>Excel dosyaları tarayıcı içinde önizlenemiyor; dosyayı yeni sekmede açabilir veya indirebilirsiniz.</p>
+              <div className="urun-detay__belge-modal-eylemler">
+                <a href={acikBelge.dosya_yolu} target="_blank" rel="noopener noreferrer"><ExternalLink aria-hidden="true" /> Yeni Sekmede Aç</a>
+                <a href={acikBelge.dosya_yolu} download><Download aria-hidden="true" /> İndir</a>
+              </div>
+            </div>
+          ) : (
+            <div className="urun-detay__belge-modal-icerik">
+              <Suspense fallback={<p className="pdf-goruntuleyici__durum" aria-live="polite">PDF yükleniyor…</p>}>
+                <PdfGoruntuleyici
+                  dokuman={{
+                    baslik: acikBelge.baslik,
+                    dosya_adresi: acikBelge.dosya_yolu,
+                    orijinal_dosya_adi: acikBelge.dosya_yolu.split('/').pop(),
+                    dosya_boyutu: 0,
+                    indirmeye_izin_var_mi: 1,
+                    yeni_sekmede_acmaya_izin_var_mi: 1
+                  }}
+                  onKapat={() => setAcikBelge(null)}
+                />
+              </Suspense>
+            </div>
+          )}
+        </div>,
+        document.body
       )}
     </article>
   );
