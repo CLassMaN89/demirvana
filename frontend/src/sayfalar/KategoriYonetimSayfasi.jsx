@@ -94,7 +94,7 @@ function IstatistikKarti({ ikon: Ikon, renk, etiket, deger }) {
   );
 }
 
-export default function KategoriYonetimSayfasi() {
+export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
   const [gruplar, setGruplar] = useState([]);
   const [yukleniyorMu, setYukleniyorMu] = useState(true);
   const [yuklemeHatasi, setYuklemeHatasi] = useState(null);
@@ -163,6 +163,7 @@ export default function KategoriYonetimSayfasi() {
       }
       setForm(null);
       await veriyiYukle();
+      veriYenile?.();
     } catch (istisna) {
       setHata(istisna.message || 'İşlem tamamlanamadı.');
     } finally {
@@ -177,6 +178,7 @@ export default function KategoriYonetimSayfasi() {
       await kategoriSil(silinecek.id);
       setSilinecek(null);
       await veriyiYukle();
+      veriYenile?.();
     } catch (istisna) {
       setHata(istisna.message || 'Kategori pasif hale getirilemedi.');
     } finally {
@@ -313,9 +315,11 @@ export default function KategoriYonetimSayfasi() {
                             exit={{ opacity: 0, x: -40 }}
                             transition={{ duration: .25 }}
                           >
-                            <td className="yonetim-tablo__ad-hucre">
-                              <span className="yonetim-tablo__ikon"><Ikon aria-hidden="true" /></span>
-                              {kategori.baslik}
+                            <td>
+                              <div className="yonetim-tablo__ad-hucre">
+                                <span className="yonetim-tablo__ikon"><Ikon aria-hidden="true" /></span>
+                                {kategori.baslik}
+                              </div>
                             </td>
                             <td>{kategori.urun_sayisi}</td>
                             <td>{tarihiFormatla(kategori.guncellenme_tarihi)}</td>
@@ -324,24 +328,26 @@ export default function KategoriYonetimSayfasi() {
                                 <span className="yonetim-kategori__durum-noktasi" aria-hidden="true" /> {pasif ? 'Pasif' : 'Aktif'}
                               </span>
                             </td>
-                            <td className="yonetim-tablo__eylemler">
-                              <Link className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--goruntule" to={`/urunler?kategori=${encodeURIComponent(kategori.baslik)}`} target="_blank" rel="noopener noreferrer">
-                                <Eye aria-hidden="true" size={13} /> Görüntüle
-                              </Link>
-                              <button
-                                type="button"
-                                className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--duzenle"
-                                onClick={() => { setHata(null); setForm({ mod: 'duzenle', kategori }); }}
-                              >
-                                <Pencil aria-hidden="true" size={13} /> Düzenle
-                              </button>
-                              <button
-                                type="button"
-                                className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--sil"
-                                onClick={() => { setHata(null); setSilinecek(kategori); }}
-                              >
-                                <Trash2 aria-hidden="true" size={13} /> Sil
-                              </button>
+                            <td>
+                              <div className="yonetim-tablo__eylemler">
+                                <Link className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--goruntule" to={`/urunler?kategori=${encodeURIComponent(kategori.baslik)}`} target="_blank" rel="noopener noreferrer">
+                                  <Eye aria-hidden="true" size={13} /> Görüntüle
+                                </Link>
+                                <button
+                                  type="button"
+                                  className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--duzenle"
+                                  onClick={() => { setHata(null); setForm({ mod: 'duzenle', kategori }); }}
+                                >
+                                  <Pencil aria-hidden="true" size={13} /> Düzenle
+                                </button>
+                                <button
+                                  type="button"
+                                  className="yonetim-tablo__eylem-buton yonetim-tablo__eylem-buton--sil"
+                                  onClick={() => { setHata(null); setSilinecek(kategori); }}
+                                >
+                                  <Trash2 aria-hidden="true" size={13} /> Sil
+                                </button>
+                              </div>
                             </td>
                           </motion.tr>
                         );

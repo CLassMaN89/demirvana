@@ -104,6 +104,9 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   }
 
   const veri = durum.veri;
+  // Kategori Yönetimi'nde bir kategori eklenip/düzenlenip/pasif yapıldığında, halka açık sayfaların
+  // kullandığı bu veri (menu, urunler) da tazelenir; yoksa sitede sayfa yenilenene kadar eski hal görünür.
+  const veriYenile = () => setYenileme((deger) => deger + 1);
 
   // Yönetim paneli, halka açık sitenin navbar/footer iskeletinden bağımsız kendi düzenini kullanır.
   if (konum.pathname.startsWith('/admin')) {
@@ -111,7 +114,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
       <YonetimDuzeni>
         <Routes>
           <Route path="/admin" element={<YonetimPaneliSayfasi veri={veri} />} />
-          <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi />} />
+          <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi veriYenile={veriYenile} />} />
           <Route path="/admin/*" element={<YonetimPaneliSayfasi veri={veri} />} />
         </Routes>
       </YonetimDuzeni>

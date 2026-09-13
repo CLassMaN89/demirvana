@@ -303,7 +303,14 @@ final class SiteDeposu
 
     public function urunler(?string $kategori = null, ?string $arama = null): array
     {
-        $kosullar = ['u.aktif_mi = 1', 'k.aktif_mi = 1'];
+        // u.menu_kategori_adi, urunun gercekten filtrelendigi 21 kategoriden birinin (menu_alt_ogeleri.baslik)
+        // metin karsiligidir. Bu kategori admin panelinden pasife alinirsa, urun eski (legacy) kategoriler
+        // tablosunda hala aktif gorunse bile artik hicbir yerde (Tum Urunler dahil) gosterilmemelidir.
+        $kosullar = [
+            'u.aktif_mi = 1',
+            'k.aktif_mi = 1',
+            '(u.menu_kategori_adi IS NULL OR u.menu_kategori_adi NOT IN (SELECT baslik FROM menu_alt_ogeleri WHERE aktif_mi = 0))'
+        ];
         $parametreler = [];
 
         if ($kategori !== null && $kategori !== '') {
