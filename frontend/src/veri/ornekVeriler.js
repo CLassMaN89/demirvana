@@ -1124,7 +1124,7 @@ export const ornekVeriler = Object.freeze({
     ad: 'Su Basınç Düşürücü Vana Düz Tip D-143',
     slug: 'su-basinc-dusurucu-vana-duz-tip-d-143',
     stok_kodu: null,
-    teknik_bilgiler: JSON.stringify({"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/su-basinc-dusurucu-vana-duz-tip-d-143.jpg"},"dokumanlar":[{"baslik":"Ürün PDF","aciklama":"Ürün kataloğu ve teknik bilgiler","tur":"PDF","dosya_yolu":"/assets/urunler/su-basinc-dusurucu-vana-duz-tip-d-143/Su Basınç Düşürücü Vana Düz Tip D-143 PDF.pdf"}]})
+    teknik_bilgiler: JSON.stringify({"dokumanlar":[{"baslik":"Ürün PDF","aciklama":"Ürün kataloğu ve teknik bilgiler","tur":"PDF","dosya_yolu":"/assets/urunler/su-basinc-dusurucu-vana-duz-tip-d-143/Su Basınç Düşürücü Vana Düz Tip D-143 PDF.pdf"}]})
   },
   {
     id: 99,

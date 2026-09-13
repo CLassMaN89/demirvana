@@ -2611,3 +2611,6 @@ UPDATE `urunler` SET `teknik_bilgiler` = '{"katalog_bilgileri":{"gorsel_yolu":"/
 UPDATE `urunler` SET `teknik_bilgiler` = '{"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/manometre-baglanti-sifonu-d-570.jpg"},"teknik_cizim_yolu":"/assets/urunler/manometre-baglanti-sifonu-d-570/teknik-cizim.jpg","dokumanlar":[{"baslik":"Ürün PDF","aciklama":"Ürün kataloğu ve teknik bilgiler","tur":"PDF","dosya_yolu":"/assets/urunler/manometre-baglanti-sifonu-d-570/Manometre Bağlantı Sifonu D-570 PDF.pdf"}]}' WHERE `slug` = 'manometre-baglanti-sifonu-d-570';
 UPDATE `urunler` SET `teknik_bilgiler` = '{"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/hvac-bimetal-thermometre-byk.jpg"},"teknik_cizim_yolu":"/assets/urunler/hvac-bimetal-thermometre-byk/teknik-cizim.jpg"}' WHERE `slug` = 'hvac-bimetal-thermometre-byk';
 UPDATE `urunler` SET `teknik_bilgiler` = '{"katalog_bilgileri":{"gorsel_yolu":"/assets/urunler/genel/endustriyel-termometre.jpg"},"teknik_cizim_yolu":"/assets/urunler/endustriyel-termometre/teknik-cizim.jpg"}' WHERE `slug` = 'endustriyel-termometre';
+
+-- Su Basinc Dusurucu Vana Duz Tip D-143: bozuk gorsel_yolu kaldirildi (kaynakta yok.jpg, indirilemedi), 2026-09-13.
+UPDATE `urunler` SET `teknik_bilgiler` = JSON_REMOVE(`teknik_bilgiler`, '$.katalog_bilgileri.gorsel_yolu') WHERE `slug` = 'su-basinc-dusurucu-vana-duz-tip-d-143';

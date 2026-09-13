@@ -18,9 +18,9 @@ function urunGorseliniBul(urun) {
   // Gerçek sitede fotoğrafı bulunmayan ürünler yanıltıcı bir kategori görseli yerine soluk site logosu (hologram) gösterir.
   try {
     const teknik = typeof urun.teknik_bilgiler === 'string' ? JSON.parse(urun.teknik_bilgiler) : urun.teknik_bilgiler;
-    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/logo.png';
+    return urun.gorsel_yolu || teknik?.katalog_bilgileri?.gorsel_yolu || '/assets/vana-placeholder-ikon.svg';
   } catch {
-    return urun.gorsel_yolu || '/assets/logo.png';
+    return urun.gorsel_yolu || '/assets/vana-placeholder-ikon.svg';
   }
 }
 

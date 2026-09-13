@@ -126,7 +126,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
             </div>
           ) : (
             <div className="urun-detay__cizim urun-detay__cizim--bos">
-              <img src="/assets/logo.png" alt="" aria-hidden="true" />
+              <img src="/assets/vana-placeholder-ikon.svg" alt="" aria-hidden="true" />
             </div>
           )}
           <p className="urun-detay__not">Teknik resim bilgilendirme amaçlıdır. Ölçüler üretim toleranslarına göre değişiklik gösterebilir.</p>
