@@ -77,13 +77,33 @@
 
 .yonetim__nav { display: flex; flex-direction: column; gap: 18px; flex: 1; }
 .yonetim__nav-bolumu { display: grid; gap: 3px; }
-.yonetim__nav-baslik { padding: 8px 12px 4px; color: #5F7AB8; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-align: right; text-transform: uppercase; }
-.yonetim__nav-baglanti { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 9px 12px; border-radius: 8px; color: #B7C4E4; font-size: .8rem; font-weight: 500; text-decoration: none; transition: background-color 150ms ease, color 150ms ease; }
-.yonetim__nav-baglanti svg { width: 17px; height: 17px; flex: 0 0 17px; }
+.yonetim__nav-baslik { padding: 8px 12px 4px; color: #5F7AB8; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-align: left; text-transform: uppercase; }
+
+/* Halka açık sitedeki /urunler sayfasının sol filtre menüsüyle (urun-katalog.css'teki
+   .urun-katalog__menu-gecis a) aynı düzen/davranış: sola yaslı ikon+metin, hover'da ikon
+   büyümesi, aktif öğede sol kenarlıklı vurgu — yalnızca renkler admin paletine (koyu lacivert
+   zemin, mavi vurgu) çevrildi. */
+.yonetim__nav-baglanti {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  border-left: 3px solid transparent;
+  border-radius: 5px;
+  color: #B7C4E4;
+  font-size: .8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.yonetim__nav-baglanti svg { width: 17px; height: 17px; flex: 0 0 17px; transition: transform 220ms cubic-bezier(.22,1,.36,1); }
 .yonetim__nav-baglanti:hover { background: rgba(255,255,255,.06); color: #fff; }
-.yonetim__nav-baglanti--aktif { background: var(--yonetim-mavi); color: #fff; }
+.yonetim__nav-baglanti:hover svg { transform: scale(1.1); }
+.yonetim__nav-baglanti--aktif { background: color-mix(in srgb, var(--yonetim-mavi) 22%, transparent); border-left-color: var(--yonetim-mavi); color: #fff; }
 .yonetim__nav-baglanti--yakinda { justify-content: space-between; cursor: not-allowed; opacity: .6; }
 .yonetim__nav-baglanti--yakinda:hover { background: none; color: #B7C4E4; }
+.yonetim__nav-baglanti--yakinda:hover svg { transform: none; }
 .yonetim__nav-yakinda { padding: 2px 7px; border-radius: 20px; background: rgba(255,255,255,.08); color: #7C96D6; font-size: .6rem; font-weight: 700; text-transform: uppercase; }
 
 .yonetim__tanitim { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #072763, #001B44); font-size: .72rem; line-height: 1.4; }
