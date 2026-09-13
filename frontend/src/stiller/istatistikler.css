@@ -25,14 +25,14 @@
    .istatistik-kart__govde'nin kendi iç kaydırma çubuğunda büyür/küçülür, bu yüzden ne bu kart ne
    de yanındaki kart, ne de sayfanın geri kalanı hiçbir zaman aşağı kaymaz. */
 .istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
-/* Yükseklik, tek bir IP satırı açıkken (başlık + IP satırı + 8 satırlık döküm + sayfalama) hiç
+/* Yükseklik, tek bir IP satırı açıkken (başlık + IP satırı + 9 satırlık döküm + sayfalama) hiç
    kaydırma gerekmeden sığacak kadar cömert seçildi; yalnızca birden fazla IP aynı anda açıldığında
    kart kendi içinde kayar. */
-.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 520px; }
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 650px; }
 .istatistik-kart__govde { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
-  .istatistik-yan-yana > .istatistik-kart { height: 480px; }
+  .istatistik-yan-yana > .istatistik-kart { height: 610px; }
 }
 
 .sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; }

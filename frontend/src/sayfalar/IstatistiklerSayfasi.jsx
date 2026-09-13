@@ -190,7 +190,7 @@ export default function IstatistiklerSayfasi() {
 
   // Bir IP genişletildiğinde altında açılan "hangi sayfalara girmiş" dökümü de kalabalık
   // olabildiği için kendi içinde ayrıca sayfalanır; her IP'nin sayfa numarası ayrı tutulur.
-  const SAYFA_DOKUM_BOYUTU = 5;
+  const SAYFA_DOKUM_BOYUTU = 9;
   const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
 
   const IP_SAYFA_BOYUTU = 9;
