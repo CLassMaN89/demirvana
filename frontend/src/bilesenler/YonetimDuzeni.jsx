@@ -54,8 +54,20 @@ const MENU_BOLUMLERI = [
   }
 ];
 
+// Üst çubuktaki "Hoş Geldiniz" karşılaması yalnızca Dashboard'a özeldir; diğer tüm admin
+// sayfalarında ziyaretçiye o an hangi ekranda olduğunu söyleyen sayfa adı gösterilir.
+function sayfaBasliginiBul(pathname) {
+  for (const bolum of MENU_BOLUMLERI) {
+    for (const oge of bolum.ogeler) {
+      if (oge.yol === pathname) return oge.ad;
+    }
+  }
+  return null;
+}
+
 export default function YonetimDuzeni({ children }) {
   const konum = useLocation();
+  const sayfaBasligi = konum.pathname === '/admin' ? null : sayfaBasliginiBul(konum.pathname);
 
   return (
     <div className="yonetim">
@@ -112,8 +124,7 @@ export default function YonetimDuzeni({ children }) {
       <div className="yonetim__ana">
         <header className="yonetim__ust-bar">
           <div className="yonetim__karsilama">
-            <strong>Hoş Geldiniz 👋</strong>
-            <span>Demir Vana</span>
+            {sayfaBasligi ? <strong>{sayfaBasligi}</strong> : (<><strong>Hoş Geldiniz 👋</strong><span>Demir Vana</span></>)}
           </div>
           <label className="yonetim__arama">
             <SearchIcon aria-hidden="true" />

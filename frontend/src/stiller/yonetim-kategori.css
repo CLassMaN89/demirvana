@@ -1,32 +1,9 @@
 .yonetim-kategori__durum { padding: 40px; color: var(--yonetim-metin-ikincil); font-size: .9rem; text-align: center; }
 .yonetim-kategori__durum--hata { color: var(--yonetim-kirmizi); }
 
-.yonetim-kategori__ust-satir { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.yonetim-kategori__baslik { margin-bottom: 20px; }
 .yonetim-kategori__baslik h1 { margin: 0 0 6px; color: var(--yonetim-metin); font-size: 1.3rem; }
 .yonetim-kategori__baslik p { margin: 0; color: var(--yonetim-metin-ikincil); font-size: .85rem; }
-.yonetim-kategori__ust-sag { display: grid; flex: 0 0 auto; justify-items: end; gap: 10px; }
-
-.yonetim-kategori__yol-izi { display: flex; align-items: center; gap: 6px; color: var(--yonetim-metin-ikincil); font-size: .78rem; }
-.yonetim-kategori__yol-izi a { display: inline-flex; align-items: center; gap: 5px; color: var(--yonetim-metin-ikincil); text-decoration: none; }
-.yonetim-kategori__yol-izi a:hover { color: var(--yonetim-mavi); }
-
-.yonetim-kategori__ekle-buton {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--yonetim-mavi);
-  color: #fff;
-  cursor: pointer;
-  font-size: .84rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.yonetim-kategori__ekle-buton:hover { background: color-mix(in srgb, var(--yonetim-mavi) 85%, black); }
-.yonetim-kategori__ekle-buton:disabled { opacity: .6; cursor: not-allowed; }
 
 .yonetim-kategori__istatistikler { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
 .yonetim-kategori__istatistik { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--yonetim-cizgi); border-radius: 12px; background: #fff; }
@@ -207,8 +184,6 @@
 }
 @media (max-width: 900px) {
   .yonetim-kategori__istatistikler { grid-template-columns: repeat(3, 1fr); }
-  .yonetim-kategori__ust-satir { flex-direction: column; }
-  .yonetim-kategori__ust-sag { justify-items: start; }
 }
 @media (max-width: 640px) {
   .yonetim-kategori__kartlar { grid-template-columns: 1fr; }

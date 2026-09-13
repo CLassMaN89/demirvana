@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  Boxes, ChevronRight, Eye, FolderTree, Home, LayoutGrid, MoreVertical,
+  Boxes, ChevronRight, Eye, FolderTree, LayoutGrid, MoreVertical,
   Pencil, Plus, Search, Trash2
 } from 'lucide-react';
 import { altOgeIkonuGetir, grupIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
@@ -248,16 +248,37 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
   const [hata, setHata] = useState(null);
 
   useEffect(() => {
-    (async () => {
+    let etkin = true;
+
+    async function ilkYukleme() {
       try {
         const sonuc = await kategoriYonetimVerisiniGetir();
-        setGruplar(sonuc ?? []);
+        if (etkin) setGruplar(sonuc ?? []);
       } catch (istisna) {
-        setYuklemeHatasi(istisna.message || 'Kategoriler yüklenemedi.');
+        if (etkin) setYuklemeHatasi(istisna.message || 'Kategoriler yüklenemedi.');
       } finally {
-        setYukleniyorMu(false);
+        if (etkin) setYukleniyorMu(false);
       }
-    })();
+    }
+
+    // İlk yüklemeden sonra, başka bir sekmede/kullanıcıda yapılan değişiklikleri de yansıtmak için
+    // liste sessizce arka planda periyodik tazelenir; "yukleniyor" durumuna dönülmediğinden
+    // kullanıcı hiçbir yenileme/flaş hissetmez, sayfayı elle yenilemesi gerekmez.
+    async function arkaPlandaTazele() {
+      try {
+        const sonuc = await kategoriYonetimVerisiniGetir();
+        if (etkin) setGruplar(sonuc ?? []);
+      } catch {
+        // Ağ hatası sessizce yok sayılır; bir sonraki denemede tekrar toparlanır.
+      }
+    }
+
+    ilkYukleme();
+    const zamanlayici = setInterval(arkaPlandaTazele, 15000);
+    return () => {
+      etkin = false;
+      clearInterval(zamanlayici);
+    };
   }, []);
 
   const istatistikler = useMemo(() => {
@@ -347,26 +368,9 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
 
   return (
     <div className="yonetim-kategori">
-      <div className="yonetim-kategori__ust-satir">
-        <div className="yonetim-kategori__baslik">
-          <h1>Kategori Yönetimi</h1>
-          <p>Tüm ürün kategorilerinizi yönetin, düzenleyin ve yeni kategoriler ekleyin.</p>
-        </div>
-        <div className="yonetim-kategori__ust-sag">
-          <nav className="yonetim-kategori__yol-izi" aria-label="Sayfa yolu">
-            <Link to="/admin"><Home aria-hidden="true" size={13} /> Anasayfa</Link>
-            <span>›</span>
-            <span>Kategoriler</span>
-          </nav>
-          <button
-            type="button"
-            className="yonetim-kategori__ekle-buton"
-            onClick={() => { setHata(null); setForm({ mod: 'ekle', grupId: gruplar[0]?.id }); }}
-            disabled={!gruplar[0]}
-          >
-            <Plus aria-hidden="true" size={16} /> Yeni Kategori Ekle
-          </button>
-        </div>
+      <div className="yonetim-kategori__baslik">
+        <h1>Kategori Yönetimi</h1>
+        <p>Tüm ürün kategorilerinizi yönetin, düzenleyin ve yeni kategoriler ekleyin.</p>
       </div>
 
       <div className="yonetim-kategori__istatistikler">
