@@ -104,9 +104,6 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   }
 
   const veri = durum.veri;
-  // Admin panelinde bir kayıt eklenip/silindiğinde Dashboard ve liste sayfalarının anında güncel veri
-  // göstermesi için mevcut "Tekrar Dene" yenileme tetikleyicisi yeniden kullanılır.
-  const veriYenile = () => setYenileme((deger) => deger + 1);
 
   // Yönetim paneli, halka açık sitenin navbar/footer iskeletinden bağımsız kendi düzenini kullanır.
   if (konum.pathname.startsWith('/admin')) {
@@ -114,7 +111,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
       <YonetimDuzeni>
         <Routes>
           <Route path="/admin" element={<YonetimPaneliSayfasi veri={veri} />} />
-          <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi veri={veri} veriYenile={veriYenile} />} />
+          <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi />} />
           <Route path="/admin/*" element={<YonetimPaneliSayfasi veri={veri} />} />
         </Routes>
       </YonetimDuzeni>

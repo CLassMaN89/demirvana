@@ -42,6 +42,10 @@ try {
 
     // Kategori Yönetimi ekranı: menu_alt_ogeleri (ürünlerin gerçekten filtrelendiği menü yaprakları) üzerinde CRUD.
     if (str_starts_with($yol, '/api/admin/kategoriler')) {
+        if ($yontem === 'GET' && $yol === '/api/admin/kategoriler') {
+            JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->kategoriYonetimVerisi()));
+        }
+
         if ($yontem === 'POST' && $yol === '/api/admin/kategoriler') {
             $girdi = json_decode((string) file_get_contents('php://input'), true);
             try {

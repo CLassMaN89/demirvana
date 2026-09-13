@@ -76,6 +76,12 @@ async function adminIstegiGonder(yol, { yontem, govde, fetchFn = globalThis.fetc
   return govdeYaniti.veri;
 }
 
+// Kategori Yönetimi sayfası pasif kategorileri de görmesi gerektiği için genel /api/baslangic menüsü yerine
+// bu admin ucunu kullanır (guncellenme_tarihi ve urun_sayisi de yalnızca burada gelir).
+export async function kategoriYonetimVerisiniGetir(secenekler = {}) {
+  return adminIstegiGonder('/admin/kategoriler', { ...secenekler, yontem: 'GET' });
+}
+
 export async function kategoriEkle(ustAltOgeId, veriler, secenekler = {}) {
   return adminIstegiGonder('/admin/kategoriler', {
     ...secenekler,

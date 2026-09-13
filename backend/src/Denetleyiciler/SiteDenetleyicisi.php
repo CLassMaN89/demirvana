@@ -65,6 +65,7 @@ final class SiteDenetleyicisi
     public function iletisimMesajiKaydet(array $girdi): int { return $this->depo->iletisimMesajiKaydet(self::iletisimMesajiDogrula($girdi)); }
 
     public function kategoriBul(int $id): ?array { return $this->depo->kategoriBul($id); }
+    public function kategoriYonetimVerisi(): array { return $this->depo->kategoriYonetimVerisi(); }
 
     private static function metinUzunlugu(string $deger): int
     {

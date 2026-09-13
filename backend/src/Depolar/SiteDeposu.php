@@ -328,6 +328,51 @@ final class SiteDeposu
         return $sorgu->fetchAll();
     }
 
+    /**
+     * Kategori Yönetimi sayfasının veri kaynağı: genel /api/baslangic menüsünün aksine
+     * pasif (aktif_mi=0) kategorileri de, ürün sayısını ve son güncelleme tarihini de döner.
+     */
+    public function kategoriYonetimVerisi(): array
+    {
+        $ustMenu = $this->baglanti->query(
+            "SELECT id FROM menu_ogeleri WHERE baglanti = '/urunler' AND aktif_mi = 1 LIMIT 1"
+        )->fetch();
+        if (!$ustMenu) {
+            return [];
+        }
+
+        $gruplarSorgusu = $this->baglanti->prepare(
+            'SELECT id, baslik, baglanti, siralama, aktif_mi
+             FROM menu_alt_ogeleri
+             WHERE menu_ogesi_id = :menu_ogesi_id AND ust_alt_oge_id IS NULL
+             ORDER BY siralama, id'
+        );
+        $gruplarSorgusu->execute(['menu_ogesi_id' => $ustMenu['id']]);
+        $gruplar = $gruplarSorgusu->fetchAll();
+
+        $kategorilerSorgusu = $this->baglanti->prepare(
+            'SELECT mao.id, mao.ust_alt_oge_id, mao.baslik, mao.baglanti, mao.siralama, mao.aktif_mi,
+                    mao.guncellenme_tarihi,
+                    (SELECT COUNT(*) FROM urunler u WHERE u.aktif_mi = 1 AND u.menu_kategori_adi = mao.baslik) AS urun_sayisi
+             FROM menu_alt_ogeleri mao
+             WHERE mao.menu_ogesi_id = :menu_ogesi_id AND mao.ust_alt_oge_id IS NOT NULL
+             ORDER BY mao.siralama, mao.id'
+        );
+        $kategorilerSorgusu->execute(['menu_ogesi_id' => $ustMenu['id']]);
+        $kategoriler = $kategorilerSorgusu->fetchAll();
+
+        $gruplandirilmis = [];
+        foreach ($kategoriler as $kategori) {
+            $kategori['urun_sayisi'] = (int) $kategori['urun_sayisi'];
+            $gruplandirilmis[(string) $kategori['ust_alt_oge_id']][] = $kategori;
+        }
+
+        return array_map(static function (array $grup) use ($gruplandirilmis): array {
+            $grup['alt_ogeler'] = $gruplandirilmis[(string) $grup['id']] ?? [];
+            return $grup;
+        }, $gruplar);
+    }
+
     /** Admin panelindeki kategori kartlarının kaynağı; ürün filtrelemesinde kullanılan asıl menü yaprakları budur. */
     public function kategoriBul(int $id): ?array
     {

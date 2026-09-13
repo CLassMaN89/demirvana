@@ -170,7 +170,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                     <th>No</th>
                     <th>Parça Adı</th>
                     {teknik.parca_kolonlari
-                      ? teknik.parca_kolonlari.map((kolon) => <th key={kolon} style={{ whiteSpace: 'pre-line' }}>{kolon}</th>)
+                      ? teknik.parca_kolonlari.map((kolon, indeks) => <th key={indeks} style={{ whiteSpace: 'pre-line' }}>{kolon}</th>)
                       : <th>Malzeme</th>}
                   </tr>
                 </thead>
@@ -262,7 +262,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
                     {(tablo.olcu_basliklari || []).map((baslik, indeks) => <td key={`${baslik}-${indeks}`}>{baslik}</td>)}
                   </tr>
                   {(tablo.olculer || []).map((satir, satirIndeksi, satirlar) => (
-                    <Fragment key={`${satir.grup}-${satir.kod}`}>
+                    <Fragment key={`${satirIndeksi}-${satir.grup}-${satir.kod}`}>
                       {satir.bolucu && (
                         <tr className="urun-detay__olcu-bolucu-satiri">
                           <td colSpan={(grupVar ? 1 : 0) + 1 + (tablo.olcu_basliklari?.length || 0)}>{satir.bolucu}</td>

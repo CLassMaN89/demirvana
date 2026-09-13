@@ -178,10 +178,15 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   const urunMenusu = useMemo(() => menu.find((oge) => oge.baglanti === '/urunler'), [menu]);
   const gruplar = urunMenusu?.alt_ogeler ?? [];
 
+  // Admin > Kategori Yönetimi'ndeki "Görüntüle" linki gibi doğrudan bir sayfa rotası olmayan yerlerden
+  // gelen kategori seçimleri için ?kategori=<başlık> sorgu parametresi desteklenir.
+  const kategoriParametresi = new URLSearchParams(konum.search).get('kategori');
+
   // Etkin kategori değiştiğinde onu içeren grup otomatik açılır; kullanıcının açtığı diğer gruplar kapanmaz.
   const aktifGrup = useMemo(
-    () => gruplar.find((grup) => grup.baglanti === konum.pathname || (grup.alt_ogeler ?? []).some((alt) => alt.baglanti === konum.pathname)),
-    [gruplar, konum.pathname]
+    () => gruplar.find((grup) => grup.baglanti === konum.pathname
+      || (grup.alt_ogeler ?? []).some((alt) => alt.baglanti === konum.pathname || alt.baslik === kategoriParametresi)),
+    [gruplar, konum.pathname, kategoriParametresi]
   );
   const [acikGruplar, setAcikGruplar] = useState(() => new Set([aktifGrup?.id ?? gruplar[0]?.id].filter(Boolean)));
   useEffect(() => {
@@ -199,6 +204,13 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
 
   // Adres yoluna göre etkin grup ve/veya alt kategoriyi bulur; hiçbiri eşleşmezse (örn. /urunler) tüm ürünler gösterilir.
   const { baslik, aciklama, gosterilecekUrunler } = useMemo(() => {
+    if (konum.pathname === '/urunler' && kategoriParametresi) {
+      return {
+        baslik: kategoriParametresi,
+        aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.',
+        gosterilecekUrunler: urunler.filter((urun) => urunMenuKategorisi(urun) === kategoriParametresi),
+      };
+    }
     for (const grup of gruplar) {
       if (grup.baglanti === konum.pathname) {
         const altBasliklar = new Set((grup.alt_ogeler ?? []).map((alt) => alt.baslik));
@@ -219,7 +231,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
       }
     }
     return { baslik: 'Tüm Ürünler', aciklama: 'Endüstriyel vana sistemleri için yüksek performanslı çözümler.', gosterilecekUrunler: urunler };
-  }, [gruplar, konum.pathname, urunler]);
+  }, [gruplar, konum.pathname, kategoriParametresi, urunler]);
 
   const gosterilenUrunler = gosterilecekUrunler.slice(0, gosterilenSayisi);
   const dahaFazlaVar = gosterilenSayisi < gosterilecekUrunler.length;
@@ -229,7 +241,7 @@ export default function UrunlerSayfasi({ menu = [], urunler = [] }) {
   // Kategori değiştiğinde bir önceki kategoriden kalan "gösterilen ürün sayısı" sıfırlanır.
   useEffect(() => {
     setGosterilenSayisi(ADIM_BASINA_URUN);
-  }, [konum.pathname]);
+  }, [konum.pathname, kategoriParametresi]);
 
   return (
     <main className="urun-katalog">
