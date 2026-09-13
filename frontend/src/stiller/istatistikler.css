@@ -28,11 +28,11 @@
 /* Yükseklik, tek bir IP satırı açıkken (başlık + IP satırı + 8 satırlık döküm + sayfalama) hiç
    kaydırma gerekmeden sığacak kadar cömert seçildi; yalnızca birden fazla IP aynı anda açıldığında
    kart kendi içinde kayar. */
-.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 720px; }
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 520px; }
 .istatistik-kart__govde { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
-  .istatistik-yan-yana > .istatistik-kart { height: 660px; }
+  .istatistik-yan-yana > .istatistik-kart { height: 480px; }
 }
 
 .sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; }
