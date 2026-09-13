@@ -193,7 +193,7 @@ export default function IstatistiklerSayfasi() {
   const SAYFA_DOKUM_BOYUTU = 5;
   const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
 
-  const IP_SAYFA_BOYUTU = 8;
+  const IP_SAYFA_BOYUTU = 9;
   const [ipSayfaNo, setIpSayfaNo] = useState(1);
   const ipSayfaSayisi = Math.max(1, Math.ceil(filtrelenmisIpToplamlari.length / IP_SAYFA_BOYUTU));
   const gecerliIpSayfaNo = Math.min(ipSayfaNo, ipSayfaSayisi);
