@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
 import { islemYonetimVerisiniGetir, kategoriGeriAl, silinenKategorileriGetir } from '../servisler/api';
@@ -27,7 +28,37 @@ function yoluUret(kategori) {
 
 const GUN_MS = 24 * 60 * 60 * 1000;
 
-// 7 günlük kalıcı silme süresine kalan zamanı gün/saat/dk/sn olarak her saniye güncelleyen canlı sayaç.
+// Değişen sayı her tikte eskisini yukarı doğru itip yeni değeri alttan kaydırarak girer (odometre efekti).
+function AkanRakam({ deger }) {
+  return (
+    <span className="akan-rakam">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={deger}
+          className="akan-rakam__deger"
+          initial={{ y: 14, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -14, opacity: 0 }}
+          transition={{ duration: .28, ease: 'easeOut' }}
+        >
+          {deger}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+function SayacBirimi({ deger, etiket, renk }) {
+  return (
+    <span className="sayac-birim" style={{ '--sayac-renk': renk }}>
+      <AkanRakam deger={String(deger).padStart(2, '0')} />
+      <small>{etiket}</small>
+    </span>
+  );
+}
+
+// 7 günlük kalıcı silme süresine kalan zamanı gün/saat/dk/sn olarak her saniye güncelleyen canlı sayaç;
+// her birim kendi renginde ve değişen rakamlar akarak (odometre tarzı) güncellenir.
 function GeriSayim({ silinmeTarihi }) {
   const bitisZamani = new Date(silinmeTarihi.replace(' ', 'T')).getTime() + 7 * GUN_MS;
   const [kalanMs, setKalanMs] = useState(() => bitisZamani - Date.now());
@@ -47,7 +78,14 @@ function GeriSayim({ silinmeTarihi }) {
 
   return (
     <span className="geri-sayim">
-      {gun} gün {String(saat).padStart(2, '0')} sa {String(dakika).padStart(2, '0')} dk {String(saniye).padStart(2, '0')} sn
+      <SayacBirimi deger={gun} etiket="gün" renk="var(--yonetim-mavi)" />
+      <span className="sayac-saat" style={{ '--sayac-renk': 'var(--yonetim-kirmizi)' }}>
+        <AkanRakam deger={String(saat).padStart(2, '0')} />
+        <span className="sayac-saat__nokta">:</span>
+        <AkanRakam deger={String(dakika).padStart(2, '0')} />
+        <span className="sayac-saat__nokta">:</span>
+        <AkanRakam deger={String(saniye).padStart(2, '0')} />
+      </span>
     </span>
   );
 }

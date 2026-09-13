@@ -12,5 +12,17 @@
 .log-eylem--guncelle { background: color-mix(in srgb, var(--yonetim-turuncu) 12%, transparent); color: var(--yonetim-turuncu); }
 .log-eylem--sil { background: color-mix(in srgb, var(--yonetim-kirmizi) 12%, transparent); color: var(--yonetim-kirmizi); }
 
-.geri-sayim { color: var(--yonetim-kirmizi); font-weight: 700; font-variant-numeric: tabular-nums; }
+.geri-sayim { display: inline-flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
 .geri-sayim--doldu { color: var(--yonetim-metin-ikincil); font-weight: 600; }
+
+.sayac-birim { display: inline-flex; align-items: center; gap: 3px; color: var(--sayac-renk, var(--yonetim-metin)); font-size: .85rem; font-weight: 700; }
+.sayac-birim small { font-size: .68rem; font-weight: 600; opacity: .85; }
+
+/* Saat:dakika:saniye tek renkte, etiketsiz, klasik dijital saat gibi ":" ile ayrılmış — daha az yer kaplar. */
+.sayac-saat { display: inline-flex; align-items: center; color: var(--sayac-renk, var(--yonetim-kirmizi)); font-size: .85rem; font-weight: 700; }
+.sayac-saat__nokta { margin: 0 1px; opacity: .7; }
+
+/* Odometre efekti: sabit yükseklikli, taşanı gizleyen bir kutu içinde eski rakam yukarı çıkıp
+   kaybolurken yenisi alttan kayarak girer. */
+.akan-rakam { position: relative; display: inline-block; overflow: hidden; height: 1.3em; width: 1.8ch; vertical-align: middle; }
+.akan-rakam__deger { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; line-height: 1; }

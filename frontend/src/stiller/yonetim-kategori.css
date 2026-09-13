@@ -107,18 +107,6 @@
 .yonetim-tablo tbody tr:last-child td { border-bottom: 0; }
 .yonetim-tablo tbody tr:hover { background: var(--yonetim-zemin); }
 
-/* motion.tr her satıra inline opacity uyguladığı için her satır kendi stacking context'ini
-   oluşturuyor; bu da bir satırın tooltip'inin üstündeki (daha önce boyanan) satırın arkasında
-   kalmasına yol açıyordu. :has() ile içinde tooltip açık bir buton olan satır tüm kardeşlerinin
-   önüne çıkarılır. */
-.yonetim-tablo tbody tr:has(.yonetim-tablo__eylem-ikon:hover),
-.yonetim-tablo tbody tr:has(.yonetim-tablo__eylem-ikon:focus-visible),
-.yonetim-tablo tbody tr:has(.yonetim-durum-hucre:hover),
-.yonetim-tablo tbody tr:has(.yonetim-durum-hucre:focus-visible) {
-  position: relative;
-  z-index: 60;
-}
-
 /* Kategori Adı hariç tüm sütunlar (Ürün, Güncelleme, Durum, İşlemler) ortalanır. */
 /* Bu ortalama yalnızca Kategori Yönetimi kartlarındaki mini tabloya özeldir (Ürün/Güncelleme/
    Durum/İşlemler); Log ve İstatistik sayfalarındaki tablolar aynı temel .yonetim-tablo sınıfını
@@ -162,61 +150,12 @@
   transition: background-color 150ms ease, color 150ms ease;
 }
 .yonetim-tablo__eylem-ikon svg { display: block; }
-.yonetim-tablo__eylem-ikon--goruntule { --ipucu-renk: var(--yonetim-mavi); color: var(--yonetim-mavi); }
+.yonetim-tablo__eylem-ikon--goruntule { color: var(--yonetim-mavi); }
 .yonetim-tablo__eylem-ikon--goruntule:hover { background: var(--yonetim-mavi); color: #fff; }
-.yonetim-tablo__eylem-ikon--duzenle { --ipucu-renk: var(--yonetim-metin); color: var(--yonetim-metin); }
+.yonetim-tablo__eylem-ikon--duzenle { color: var(--yonetim-metin); }
 .yonetim-tablo__eylem-ikon--duzenle:hover { background: var(--yonetim-metin); color: #fff; }
-.yonetim-tablo__eylem-ikon--sil { --ipucu-renk: var(--yonetim-kirmizi); color: var(--yonetim-kirmizi); }
+.yonetim-tablo__eylem-ikon--sil { color: var(--yonetim-kirmizi); }
 .yonetim-tablo__eylem-ikon--sil:hover { background: var(--yonetim-kirmizi); color: #fff; }
-
-/* İşlem ikon butonlarının üzerine gelince aria-label metnini koyu, animasyonlu bir balon
-   içinde gösteren genel amaçlı tooltip; ekstra bir metin/data alanı gerektirmez. */
-/* kart-kebab zaten position:absolute (köşede konumlanmak için); burada relative'e ZORLANMAZ,
-   aksi halde köşe konumu bozulur. Tooltip için "positioned" olması yeterli, absolute de sayılır. */
-.yonetim-tablo__eylem-ikon, .yonetim-durum-hucre { position: relative; }
-.yonetim-tablo__eylem-ikon::before, .yonetim-kategori__kart-kebab::before, .yonetim-durum-hucre::before,
-.yonetim-tablo__eylem-ikon::after, .yonetim-kategori__kart-kebab::after, .yonetim-durum-hucre::after {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms ease, transform 160ms ease;
-  z-index: 999;
-}
-.yonetim-tablo__eylem-ikon::before, .yonetim-kategori__kart-kebab::before, .yonetim-durum-hucre::before {
-  content: attr(aria-label);
-  padding: 5px 10px;
-  border-radius: 6px;
-  background: var(--ipucu-renk, #17171c);
-  color: #fff;
-  font-size: .68rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transform: translate(-50%, 4px);
-}
-.yonetim-tablo__eylem-ikon::after, .yonetim-kategori__kart-kebab::after, .yonetim-durum-hucre::after {
-  content: '';
-  bottom: calc(100% + 2px);
-  border: 4px solid transparent;
-  border-top-color: var(--ipucu-renk, #17171c);
-  transform: translate(-50%, 4px);
-}
-.yonetim-tablo__eylem-ikon:hover::before, .yonetim-tablo__eylem-ikon:focus-visible::before,
-.yonetim-tablo__eylem-ikon:hover::after, .yonetim-tablo__eylem-ikon:focus-visible::after,
-.yonetim-kategori__kart-kebab:hover::before, .yonetim-kategori__kart-kebab:focus-visible::before,
-.yonetim-kategori__kart-kebab:hover::after, .yonetim-kategori__kart-kebab:focus-visible::after,
-.yonetim-durum-hucre:hover::before, .yonetim-durum-hucre:focus-visible::before,
-.yonetim-durum-hucre:hover::after, .yonetim-durum-hucre:focus-visible::after {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .yonetim-tablo__eylem-ikon::before, .yonetim-tablo__eylem-ikon::after,
-  .yonetim-kategori__kart-kebab::before, .yonetim-kategori__kart-kebab::after,
-  .yonetim-durum-hucre::before, .yonetim-durum-hucre::after { transition: none; }
-}
-
 
 
 /* Kategori formu ve silme onayı modal içeriği; Modal.jsx bileşeni tarafından genel bir kapsayıcıya yerleştirilir. */
