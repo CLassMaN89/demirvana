@@ -25,4 +25,34 @@
 /* Değişen rakam hafifçe kayarak belirir; sabit yükseklik/overflow:hidden kasıtlı olarak
    kullanılmaz (rakamın kesilmesine yol açıyordu). display:inline-block satırdan çıkmadan
    transform ile animasyon yapılabilmesi için gerekli. */
-.akan-rakam { display: inline-block; min-width: 1.8ch; text-align: center; }
+.akan-rakam { display: inline-block; min-width: 1ch; text-align: center; }
+
+/* Son Ziyaretler: her gün tek bir satır olarak özetlenir (tarih, etiket, kayıt sayısı, saat
+   aralığı, en çok görüntülenen sayfa), tıklanınca altında ayrıntı tablosu açılır. */
+.ziyaret-grubu { border-bottom: 1px solid var(--yonetim-cizgi); }
+.ziyaret-grubu:last-child { border-bottom: 0; }
+.ziyaret-satiri {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+.ziyaret-satiri:hover { background: var(--yonetim-zemin); }
+.ziyaret-satiri__ok { display: grid; flex: 0 0 auto; color: var(--yonetim-metin-ikincil); place-items: center; }
+.ziyaret-satiri__tarih { flex: 0 0 auto; color: var(--yonetim-metin); font-weight: 700; font-size: .82rem; white-space: nowrap; }
+.ziyaret-satiri__etiket { flex: 0 0 auto; padding: 3px 10px; border-radius: 999px; background: color-mix(in srgb, var(--yonetim-mavi) 12%, transparent); color: var(--yonetim-mavi); font-size: .68rem; font-weight: 700; }
+.ziyaret-satiri__bilgi { flex: 0 0 auto; color: var(--yonetim-metin-ikincil); font-size: .76rem; white-space: nowrap; }
+.ziyaret-satiri__bilgi strong { color: var(--yonetim-metin); font-weight: 600; }
+.ziyaret-satiri__aksiyon { flex: 1; color: var(--yonetim-mavi); font-size: .74rem; font-style: italic; text-align: right; white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .ziyaret-satiri { flex-wrap: wrap; }
+  .ziyaret-satiri__aksiyon { flex-basis: 100%; text-align: left; }
+}

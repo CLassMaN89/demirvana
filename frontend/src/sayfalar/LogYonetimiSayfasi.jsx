@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
-import { FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ChevronRight, FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
 import { islemYonetimVerisiniGetir, kategoriGeriAl, silinenKategorileriGetir } from '../servisler/api';
 import '../stiller/yonetim-kategori.css';
@@ -20,6 +20,18 @@ function tarihiFormatla(deger) {
   return tarih.toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 }
 
+function gunEtiketiUret(tarihMetni) {
+  const tarih = new Date(tarihMetni.replace(' ', 'T'));
+  if (Number.isNaN(tarih.getTime())) return 'Bilinmeyen tarih';
+  const bugun = new Date();
+  const dun = new Date(bugun);
+  dun.setDate(dun.getDate() - 1);
+  const gunEsit = (a, b) => a.toDateString() === b.toDateString();
+  if (gunEsit(tarih, bugun)) return 'Bugün';
+  if (gunEsit(tarih, dun)) return 'Dün';
+  return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
 function yoluUret(kategori) {
   return kategori.grup_baslik
     ? `Kategori Yönetimi > ${kategori.grup_baslik} > ${kategori.baslik}`
@@ -28,28 +40,44 @@ function yoluUret(kategori) {
 
 const GUN_MS = 24 * 60 * 60 * 1000;
 
-// Değişen rakamda kısa bir "belirme" efekti oynar. Bilerek AnimatePresence/popLayout KULLANILMAZ:
-// çıkan elemanı mutlak konumlandırıp taşıyan o yaklaşım, sayfa saniyede bir yeniden akışa
-// girdiğinde rakamın yanlış yere "uçmasına" yol açıyordu. Burada sadece key değişince yeniden
-// monte edilen elemanın kendi initial→animate geçişi oynar; konum/layout'a hiç dokunulmaz.
+// Klasik "flip clock" efekti: rakam değişince 3B eksende (rotateX) öne doğru çevrilerek yerine
+// oturur. Bilerek AnimatePresence/popLayout KULLANILMAZ (eskisi zaten React tarafından anında
+// kaldırılır) ve sabit yükseklikli/overflow:hidden bir kutuya da gerek yok — yalnızca key
+// değişince yeniden monte edilen elemanın kendi initial→animate geçişi oynar, konum/layout'a hiç
+// dokunulmaz; bu yüzden önceki denemelerdeki kesilme/yanlış konuma taşınma riski taşımaz.
 function AkanRakam({ deger }) {
   return (
     <motion.span
       key={deger}
       className="akan-rakam"
-      initial={{ opacity: .3, scale: .8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: .22, ease: 'easeOut' }}
+      initial={{ rotateX: -90, opacity: 0 }}
+      animate={{ rotateX: 0, opacity: 1 }}
+      transition={{ duration: .32, ease: 'easeOut' }}
+      style={{ transformPerspective: 240 }}
     >
       {deger}
     </motion.span>
   );
 }
 
+// İki haneli bir sayının HER hanesi kendi bağımsız AkanRakam'ıdır; böylece örn. 58→59 olduğunda
+// yalnızca değişen "9" hanesi döner, "5" hanesi hiç kıpırdamaz.
+function IkiHaneliRakam({ deger }) {
+  const metin = String(deger).padStart(2, '0');
+  return (
+    <>
+      <AkanRakam deger={metin[0]} />
+      <AkanRakam deger={metin[1]} />
+    </>
+  );
+}
+
+// Gün sayısı 7'nin altında kaldığı için hiçbir zaman iki haneye çıkmaz; "06" gibi başına sıfır
+// eklenmeden tek haneli akan rakam olarak gösterilir.
 function SayacBirimi({ deger, etiket, renk }) {
   return (
     <span className="sayac-birim" style={{ '--sayac-renk': renk }}>
-      <AkanRakam deger={String(deger).padStart(2, '0')} />
+      <AkanRakam deger={String(deger)} />
       <small>{etiket}</small>
     </span>
   );
@@ -78,11 +106,11 @@ function GeriSayim({ silinmeTarihi }) {
     <span className="geri-sayim">
       <SayacBirimi deger={gun} etiket="gün" renk="var(--yonetim-mavi)" />
       <span className="sayac-saat" style={{ '--sayac-renk': 'var(--yonetim-kirmizi)' }}>
-        <AkanRakam deger={String(saat).padStart(2, '0')} />
+        <IkiHaneliRakam deger={saat} />
         <span className="sayac-saat__nokta">:</span>
-        <AkanRakam deger={String(dakika).padStart(2, '0')} />
+        <IkiHaneliRakam deger={dakika} />
         <span className="sayac-saat__nokta">:</span>
-        <AkanRakam deger={String(saniye).padStart(2, '0')} />
+        <IkiHaneliRakam deger={saniye} />
       </span>
     </span>
   );
@@ -95,6 +123,37 @@ export default function LogYonetimiSayfasi() {
   const [hata, setHata] = useState(null);
   const [gonderiliyorId, setGonderiliyorId] = useState(null);
   const [bildirimler, setBildirimler] = useState([]);
+  const [acikGunler, setAcikGunler] = useState(() => new Set());
+
+  const gunlereGoreGruplu = useMemo(() => {
+    const gruplar = new Map();
+    for (const kayit of kayitlar) {
+      const etiket = gunEtiketiUret(kayit.olusturulma_tarihi);
+      if (!gruplar.has(etiket)) gruplar.set(etiket, []);
+      gruplar.get(etiket).push(kayit);
+    }
+    return [...gruplar.entries()].map(([etiket, gununKayitlari]) => {
+      const eylemSayaci = new Map();
+      for (const kayit of gununKayitlari) eylemSayaci.set(kayit.eylem, (eylemSayaci.get(kayit.eylem) ?? 0) + 1);
+      const [enCokEylem, enCokAdet] = [...eylemSayaci.entries()].sort((a, b) => b[1] - a[1])[0] ?? [null, 0];
+      const enCokMeta = EYLEM_META[enCokEylem] ?? { etiket: enCokEylem ?? '—' };
+      return { etiket, kayitlar: gununKayitlari, enCokEtiket: enCokMeta.etiket, enCokAdet };
+    });
+  }, [kayitlar]);
+
+  useEffect(() => {
+    if (gunlereGoreGruplu.length > 0) {
+      setAcikGunler((mevcut) => (mevcut.size > 0 ? mevcut : new Set([gunlereGoreGruplu[0].etiket])));
+    }
+  }, [gunlereGoreGruplu]);
+
+  function gunAcikKapatmayiDegistir(etiket) {
+    setAcikGunler((mevcut) => {
+      const yeni = new Set(mevcut);
+      if (yeni.has(etiket)) yeni.delete(etiket); else yeni.add(etiket);
+      return yeni;
+    });
+  }
 
   function bildirimEkle(tur, baslik, mesaj) {
     const id = `${Date.now()}-${Math.random()}`;
@@ -197,34 +256,66 @@ export default function LogYonetimiSayfasi() {
             geldiği IP adresine bağlanır.
           </p>
         </div>
-        <div className="yonetim-tablo-kaydir">
-          <table className="yonetim-tablo istatistik-tablo">
-            <thead>
-              <tr><th>Tarih</th><th>IP Adresi</th><th>Eylem</th><th>Detay</th></tr>
-            </thead>
-            <tbody>
-              {kayitlar.map((kayit) => {
-                const meta = EYLEM_META[kayit.eylem] ?? { etiket: kayit.eylem, ikon: ScrollText, sinif: '' };
-                const Ikon = meta.ikon;
-                return (
-                  <tr key={kayit.id}>
-                    <td>{tarihiFormatla(kayit.olusturulma_tarihi)}</td>
-                    <td>{kayit.ip_adresi}</td>
-                    <td>
-                      <span className={`log-eylem ${meta.sinif}`}>
-                        <Ikon aria-hidden="true" size={13} /> {meta.etiket}
-                      </span>
-                    </td>
-                    <td title={kayit.detay || ''}>{kayit.detay || '—'}</td>
-                  </tr>
-                );
-              })}
-              {kayitlar.length === 0 && (
-                <tr><td colSpan={4} className="yonetim-tablo__bos">Henüz işlem kaydı yok.</td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        {gunlereGoreGruplu.map((gun) => {
+          const acik = acikGunler.has(gun.etiket);
+          return (
+            <div className="ziyaret-grubu" key={gun.etiket}>
+              <button
+                type="button"
+                className="ziyaret-satiri"
+                onClick={() => gunAcikKapatmayiDegistir(gun.etiket)}
+                aria-expanded={acik}
+              >
+                <motion.span className="ziyaret-satiri__ok" animate={{ rotate: acik ? 90 : 0 }} transition={{ duration: .18 }}>
+                  <ChevronRight aria-hidden="true" size={15} />
+                </motion.span>
+                <span className="ziyaret-satiri__tarih">{gun.etiket}</span>
+                <span className="ziyaret-satiri__etiket">İşlem</span>
+                <span className="ziyaret-satiri__bilgi">{gun.kayitlar.length} kayıt</span>
+                <span className="ziyaret-satiri__bilgi"><strong>En çok:</strong> {gun.enCokEtiket} ({gun.enCokAdet})</span>
+                <span className="ziyaret-satiri__aksiyon">{acik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
+              </button>
+              <AnimatePresence initial={false}>
+                {acik && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: .2, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="yonetim-tablo-kaydir">
+                      <table className="yonetim-tablo istatistik-tablo">
+                        <thead>
+                          <tr><th>Tarih</th><th>IP Adresi</th><th>Eylem</th><th>Detay</th></tr>
+                        </thead>
+                        <tbody>
+                          {gun.kayitlar.map((kayit) => {
+                            const meta = EYLEM_META[kayit.eylem] ?? { etiket: kayit.eylem, ikon: ScrollText, sinif: '' };
+                            const Ikon = meta.ikon;
+                            return (
+                              <tr key={kayit.id}>
+                                <td>{tarihiFormatla(kayit.olusturulma_tarihi)}</td>
+                                <td>{kayit.ip_adresi}</td>
+                                <td>
+                                  <span className={`log-eylem ${meta.sinif}`}>
+                                    <Ikon aria-hidden="true" size={13} /> {meta.etiket}
+                                  </span>
+                                </td>
+                                <td title={kayit.detay || ''}>{kayit.detay || '—'}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+        {gunlereGoreGruplu.length === 0 && <p className="yonetim-tablo__bos">Henüz işlem kaydı yok.</p>}
       </div>
     </div>
   );

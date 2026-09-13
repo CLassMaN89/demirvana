@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronDown, Eye, Fingerprint, Globe, TrendingUp } from 'lucide-react';
+import { ChevronRight, Eye, Fingerprint, Globe, TrendingUp } from 'lucide-react';
 import { ziyaretYonetimVerisiniGetir } from '../servisler/api';
 import '../stiller/yonetim-kategori.css';
 import '../stiller/istatistikler.css';
@@ -71,12 +71,26 @@ export default function IstatistiklerSayfasi() {
       if (!gruplar.has(etiket)) gruplar.set(etiket, []);
       gruplar.get(etiket).push(kayit);
     }
-    return [...gruplar.entries()];
+    // Her gün için özet çıkarılır: saat aralığı ve en çok görüntülenen sayfa.
+    return [...gruplar.entries()].map(([etiket, gununKayitlari]) => {
+      const saatler = gununKayitlari.map((k) => tarihiFormatla(k.olusturulma_tarihi).split(' ').pop());
+      const sayfaSayaci = new Map();
+      for (const kayit of gununKayitlari) sayfaSayaci.set(kayit.yol, (sayfaSayaci.get(kayit.yol) ?? 0) + 1);
+      const [enCokYol, enCokAdet] = [...sayfaSayaci.entries()].sort((a, b) => b[1] - a[1])[0] ?? ['—', 0];
+      return {
+        etiket,
+        kayitlar: gununKayitlari,
+        ilkSaat: saatler[saatler.length - 1],
+        sonSaat: saatler[0],
+        enCokYol,
+        enCokAdet
+      };
+    });
   }, [veri]);
 
   useEffect(() => {
     if (gunlereGoreGruplu.length > 0) {
-      setAcikGunler((mevcut) => (mevcut.size > 0 ? mevcut : new Set([gunlereGoreGruplu[0][0]])));
+      setAcikGunler((mevcut) => (mevcut.size > 0 ? mevcut : new Set([gunlereGoreGruplu[0].etiket])));
     }
   }, [gunlereGoreGruplu]);
 
@@ -147,21 +161,25 @@ export default function IstatistiklerSayfasi() {
             adresi, tarayıcı bilgisi ve gezinme kaydı tutulur.
           </p>
         </div>
-        {gunlereGoreGruplu.map(([etiket, gununKayitlari]) => {
-          const acik = acikGunler.has(etiket);
+        {gunlereGoreGruplu.map((gun) => {
+          const acik = acikGunler.has(gun.etiket);
           return (
-            <div className="istatistik-akordiyon" key={etiket}>
+            <div className="ziyaret-grubu" key={gun.etiket}>
               <button
                 type="button"
-                className="istatistik-akordiyon__baslik"
-                onClick={() => gunAcikKapatmayiDegistir(etiket)}
+                className="ziyaret-satiri"
+                onClick={() => gunAcikKapatmayiDegistir(gun.etiket)}
                 aria-expanded={acik}
               >
-                <motion.span className="istatistik-akordiyon__ok" animate={{ rotate: acik ? 0 : -90 }} transition={{ duration: .18 }}>
-                  <ChevronDown aria-hidden="true" size={15} />
+                <motion.span className="ziyaret-satiri__ok" animate={{ rotate: acik ? 90 : 0 }} transition={{ duration: .18 }}>
+                  <ChevronRight aria-hidden="true" size={15} />
                 </motion.span>
-                <strong>{etiket}</strong>
-                <span className="istatistik-akordiyon__sayi">{gununKayitlari.length} ziyaret</span>
+                <span className="ziyaret-satiri__tarih">{gun.etiket}</span>
+                <span className="ziyaret-satiri__etiket">Ziyaret</span>
+                <span className="ziyaret-satiri__bilgi">{gun.kayitlar.length} kayıt</span>
+                <span className="ziyaret-satiri__bilgi"><strong>Saat aralığı:</strong> {gun.ilkSaat} – {gun.sonSaat}</span>
+                <span className="ziyaret-satiri__bilgi"><strong>En çok:</strong> {gun.enCokYol} ({gun.enCokAdet})</span>
+                <span className="ziyaret-satiri__aksiyon">{acik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
               </button>
               <AnimatePresence initial={false}>
                 {acik && (
@@ -178,7 +196,7 @@ export default function IstatistiklerSayfasi() {
                           <tr><th>Saat</th><th>IP Adresi</th><th>Sayfa</th><th>Geldiği Yer</th><th>Tarayıcı</th></tr>
                         </thead>
                         <tbody>
-                          {gununKayitlari.map((kayit) => (
+                          {gun.kayitlar.map((kayit) => (
                             <tr key={kayit.id}>
                               <td>{tarihiFormatla(kayit.olusturulma_tarihi).split(' ').pop()}</td>
                               <td>{kayit.ip_adresi}</td>
