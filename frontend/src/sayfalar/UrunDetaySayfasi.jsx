@@ -260,7 +260,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
           </div>
           <div className="urun-detay__dokuman-grid">
             {teknik.dokumanlar.map((dokuman) => (
-              <a key={dokuman.baslik} href={dokuman.dosya_yolu} download className="urun-detay__dokuman">
+              <a key={dokuman.baslik} href={dokuman.dosya_yolu} target="_blank" rel="noopener noreferrer" className="urun-detay__dokuman">
                 <span className="urun-detay__dokuman-ikon">
                   <img
                     src={dokuman.belge_turu === 'excel' ? '/assets/ikonlar/excel-ikonu-karti.png' : '/assets/ikonlar/pdf-ikonu-karti.png'}
