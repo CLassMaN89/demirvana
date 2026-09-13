@@ -18,7 +18,9 @@ import TemsilciliklerSayfasi from './sayfalar/TemsilciliklerSayfasi';
 import YonetimDuzeni from './bilesenler/YonetimDuzeni';
 import YonetimPaneliSayfasi from './sayfalar/YonetimPaneliSayfasi';
 import KategoriYonetimSayfasi from './sayfalar/KategoriYonetimSayfasi';
-import { siteVerileriniGetir } from './servisler/api';
+import IstatistiklerSayfasi from './sayfalar/IstatistiklerSayfasi';
+import LogYonetimiSayfasi from './sayfalar/LogYonetimiSayfasi';
+import { sayfaGoruntulemeKaydet, siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
 
@@ -86,6 +88,15 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
     };
   }, [veriKaynagi, yenileme]);
 
+  // Halka açık site ziyaretlerini (admin paneli hariç) sunucuya bildirir; İstatistikler sayfasının
+  // "hangi sayfalar görüntülendi" verisinin kaynağı budur.
+  const oncekiYolRef = useRef(null);
+  useEffect(() => {
+    if (konum.pathname.startsWith('/admin')) return;
+    sayfaGoruntulemeKaydet(konum.pathname, oncekiYolRef.current);
+    oncekiYolRef.current = konum.pathname;
+  }, [konum.pathname]);
+
   if (durum.yukleniyor) {
     return (
       <SayfaIskeleti menu={[]}>
@@ -122,6 +133,8 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
         <Routes>
           <Route path="/admin" element={<YonetimPaneliSayfasi veri={veri} />} />
           <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi veriYenile={veriYenile} />} />
+          <Route path="/admin/istatistikler" element={<IstatistiklerSayfasi />} />
+          <Route path="/admin/loglar" element={<LogYonetimiSayfasi />} />
           <Route path="/admin/*" element={<YonetimPaneliSayfasi veri={veri} />} />
         </Routes>
       </YonetimDuzeni>

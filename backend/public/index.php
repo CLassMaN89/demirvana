@@ -15,12 +15,26 @@ $yol = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $yol = '/' . trim($yol, '/');
 $yontem = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-// Genel API salt okunurdur; ziyaretçi iletişim formu kaydı ve /api/admin/* altındaki admin panel uçları istisnadır.
+// Genel API salt okunurdur; ziyaretçi iletişim formu kaydı, sayfa görüntüleme analitiği ve
+// /api/admin/* altındaki admin panel uçları istisnadır.
 // NOT: Admin panelinde henüz bir giriş/oturum sistemi yok (bilinçli, geçici karar) — bu uçlar korumasızdır.
 if ($yontem !== 'GET'
     && !($yontem === 'POST' && $yol === '/api/iletisim-mesajlari')
+    && !($yontem === 'POST' && $yol === '/api/analitik/goruntuleme')
     && !str_starts_with($yol, '/api/admin/')) {
     JsonYanit::gonder(JsonYanit::olustur(false, null, 'Bu yöntem desteklenmiyor.'), 405);
+}
+
+// Proxy arkasında çalışıyorsa X-Forwarded-For'un ilk (gerçek istemci) adresi alınır; MAC adresi
+// hiçbir tarayıcı tarafından web sunucusuna gönderilmediği için (donanım katmanı, HTTP dışı) burada
+// hiçbir şekilde elde edilemez — yalnızca IP adresi kaydedilebilir.
+function istekIp(): string
+{
+    $ileriIcin = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
+    if ($ileriIcin !== '') {
+        return trim(explode(',', $ileriIcin)[0]);
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? 'bilinmiyor';
 }
 
 try {
@@ -40,8 +54,29 @@ try {
         }
     }
 
+    // Her admin isteğinde, 7 günlük geri alma süresi dolmuş "çöp kutusu" kategorileri kalıcı olarak
+    // süpürülür. Gerçek bir cron/zamanlanmış görev altyapısı olmadığı için en pratik ve güvenilir
+    // yöntem budur; hacim düşük olduğundan performans etkisi ihmal edilebilir.
+    if (str_starts_with($yol, '/api/admin/')) {
+        $denetleyici->supurSilinenleri();
+    }
+
     // Kategori Yönetimi ekranı: menu_alt_ogeleri (ürünlerin gerçekten filtrelendiği menü yaprakları) üzerinde CRUD.
     if (str_starts_with($yol, '/api/admin/kategoriler')) {
+        if ($yontem === 'GET' && $yol === '/api/admin/kategoriler/silinenler') {
+            JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->silinmisKategorileriGetir()));
+        }
+
+        if ($yontem === 'POST' && preg_match('#^/api/admin/kategoriler/(\d+)/geri-al$#', $yol, $eslesme) === 1) {
+            try {
+                $kategori = $denetleyici->kategoriGeriAl((int) $eslesme[1]);
+                $denetleyici->islemKaydet(istekIp(), 'kategori_geri_al', 'kategori', (int) $eslesme[1], $denetleyici->islemDetayiUret($kategori));
+                JsonYanit::gonder(JsonYanit::olustur(true, $kategori, 'Kategori geri alındı.'));
+            } catch (RuntimeException $hata) {
+                JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+            }
+        }
+
         if ($yontem === 'GET' && $yol === '/api/admin/kategoriler') {
             JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->kategoriYonetimVerisi()));
         }
@@ -50,6 +85,7 @@ try {
             $girdi = json_decode((string) file_get_contents('php://input'), true);
             try {
                 $kategori = $denetleyici->kategoriEkle(is_array($girdi) ? $girdi : []);
+                $denetleyici->islemKaydet(istekIp(), 'kategori_ekle', 'kategori', (int) $kategori['id'], $denetleyici->islemDetayiUret($kategori));
                 JsonYanit::gonder(JsonYanit::olustur(true, $kategori, 'Kategori eklendi.'), 201);
             } catch (InvalidArgumentException $hata) {
                 JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
@@ -63,6 +99,7 @@ try {
                 $girdi = json_decode((string) file_get_contents('php://input'), true);
                 try {
                     $kategori = $denetleyici->kategoriGuncelle($id, is_array($girdi) ? $girdi : []);
+                    $denetleyici->islemKaydet(istekIp(), 'kategori_guncelle', 'kategori', $id, $denetleyici->islemDetayiUret($kategori));
                     JsonYanit::gonder(JsonYanit::olustur(true, $kategori, 'Kategori güncellendi.'));
                 } catch (InvalidArgumentException $hata) {
                     JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
@@ -73,13 +110,43 @@ try {
 
             if ($yontem === 'DELETE') {
                 try {
+                    $mevcut = $denetleyici->kategoriBul($id);
                     $denetleyici->kategoriSil($id);
+                    $denetleyici->islemKaydet(istekIp(), 'kategori_sil', 'kategori', $id, $mevcut !== null ? $denetleyici->islemDetayiUret($mevcut) : null);
                     JsonYanit::gonder(JsonYanit::olustur(true, null, 'Kategori silindi.'));
                 } catch (RuntimeException $hata) {
                     JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
                 }
             }
         }
+    }
+
+    // Ziyaretci sayfa goruntuleme analitigi: SPA istemci tarafinda yonlendigi icin her rota
+    // degisiminde bu uca kucuk bir istek atar; IP burada (yalnizca sunucu tarafinda guvenilir
+    // sekilde) okunur.
+    if ($yontem === 'POST' && $yol === '/api/analitik/goruntuleme') {
+        $girdi = json_decode((string) file_get_contents('php://input'), true);
+        try {
+            $denetleyici->ziyaretKaydet(
+                istekIp(),
+                isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : null,
+                (string) ($girdi['yol'] ?? ''),
+                isset($girdi['referans']) && $girdi['referans'] !== '' ? (string) $girdi['referans'] : null
+            );
+            JsonYanit::gonder(JsonYanit::olustur(true, null), 201);
+        } catch (InvalidArgumentException $hata) {
+            JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+        }
+    }
+
+    if ($yontem === 'GET' && $yol === '/api/admin/ziyaretler') {
+        $sayfa = isset($_GET['sayfa']) ? (int) $_GET['sayfa'] : 1;
+        JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->ziyaretYonetimVerisi($sayfa)));
+    }
+
+    if ($yontem === 'GET' && $yol === '/api/admin/loglar') {
+        $sayfa = isset($_GET['sayfa']) ? (int) $_GET['sayfa'] : 1;
+        JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->islemYonetimVerisi($sayfa)));
     }
 
     if ($yol === '/robots.txt') {

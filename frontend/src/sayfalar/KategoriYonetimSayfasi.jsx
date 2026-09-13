@@ -141,10 +141,10 @@ function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzen
 
   return (
     <article className="yonetim-kategori__kart">
+      <button type="button" className="yonetim-kategori__kart-kebab" aria-label={`${grup.baslik} grubunu düzenle`} onClick={() => onGrupDuzenle(grup)}>
+        <MoreVertical aria-hidden="true" size={16} />
+      </button>
       <div className="yonetim-kategori__kart-gorsel" style={{ background: meta.arkaplan }}>
-        <button type="button" className="yonetim-kategori__kart-kebab" aria-label={`${grup.baslik} grubunu düzenle`} onClick={() => onGrupDuzenle(grup)}>
-          <MoreVertical aria-hidden="true" size={16} />
-        </button>
         {meta.gorsel && <img src={meta.gorsel} alt="" />}
         <div className="yonetim-kategori__kart-bilgi">
           <span className="yonetim-kategori__kart-ikon"><GrupIkonu aria-hidden="true" /></span>
@@ -164,7 +164,7 @@ function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzen
       </label>
 
       <div className="yonetim-tablo-kaydir">
-        <table className="yonetim-tablo">
+        <table className="yonetim-tablo yonetim-tablo--kategori">
           <colgroup>
             <col style={{ width: '27%' }} />
             <col style={{ width: '9%' }} />

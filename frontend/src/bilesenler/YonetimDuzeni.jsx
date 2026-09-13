@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Monitor, ListTree, FolderTree, Package, Cog, Sliders,
   FileText, Handshake, Award, Building2, Mail, Image, Search as SearchIcon,
-  Users, Settings, Bell, ChevronRight, Zap
+  Users, Settings, Bell, ChevronRight, Zap, BarChart3, ScrollText
 } from 'lucide-react';
 import { VanaGrubuIkonu } from './UrunMenuIkonlari';
 import '../stiller/yonetim.css';
@@ -48,6 +48,23 @@ const MENU_BOLUMLERI = [
       { ad: 'İletişim Formları', ikon: Mail },
       { ad: 'Medya Kütüphanesi', ikon: Image },
       { ad: 'SEO Ayarları', ikon: SearchIcon }
+    ]
+  },
+  {
+    baslik: 'Log ve İstatistik',
+    ogeler: [
+      {
+        ad: 'Ziyaretçi İstatistikleri',
+        ikon: BarChart3,
+        yol: '/admin/istatistikler',
+        aciklama: 'Site ziyaretlerini, en çok görüntülenen sayfaları ve ziyaretçi bilgilerini görüntüleyin.'
+      },
+      {
+        ad: 'İşlem Logları',
+        ikon: ScrollText,
+        yol: '/admin/loglar',
+        aciklama: 'Admin panelinde yapılan ekleme, düzenleme ve silme işlemlerinin kaydı.'
+      }
     ]
   },
   {

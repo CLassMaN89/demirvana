@@ -97,3 +97,36 @@ export async function kategoriGuncelle(id, veriler, secenekler = {}) {
 export async function kategoriSil(id, secenekler = {}) {
   return adminIstegiGonder(`/admin/kategoriler/${id}`, { ...secenekler, yontem: 'DELETE' });
 }
+
+// Silinen kategoriler kalıcı silinmeden önce 7 gün "çöp kutusunda" bekler; bu iki uç o listeyi
+// gösterir ve süresi geçmemiş bir kaydı geri alır.
+export async function silinenKategorileriGetir(secenekler = {}) {
+  return adminIstegiGonder('/admin/kategoriler/silinenler', { ...secenekler, yontem: 'GET' });
+}
+
+export async function kategoriGeriAl(id, secenekler = {}) {
+  return adminIstegiGonder(`/admin/kategoriler/${id}/geri-al`, { ...secenekler, yontem: 'POST' });
+}
+
+// SPA istemci tarafında yönlendiği için her sayfa geçişinde bu uca küçük bir "fire and forget"
+// isteği atılır; IP adresi güvenilir şekilde yalnızca sunucu tarafında okunabildiği için buradan
+// hiçbir kimlik bilgisi gönderilmez, yalnızca ziyaret edilen yol ve geldiği sayfa.
+export async function sayfaGoruntulemeKaydet(yol, referans, { fetchFn = globalThis.fetch } = {}) {
+  try {
+    await fetchFn(`${API_TABANI}/analitik/goruntuleme`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ yol, referans: referans || null })
+    });
+  } catch {
+    // Analitik kaydı başarısız olsa da ziyaretçi deneyimini etkilememeli.
+  }
+}
+
+export async function ziyaretYonetimVerisiniGetir(sayfa = 1, secenekler = {}) {
+  return adminIstegiGonder(`/admin/ziyaretler?sayfa=${sayfa}`, { ...secenekler, yontem: 'GET' });
+}
+
+export async function islemYonetimVerisiniGetir(sayfa = 1, secenekler = {}) {
+  return adminIstegiGonder(`/admin/loglar?sayfa=${sayfa}`, { ...secenekler, yontem: 'GET' });
+}

@@ -52,7 +52,7 @@ final class SiteDeposu
             'SELECT mao.id, mao.menu_ogesi_id, mao.ust_alt_oge_id, mao.baslik, mao.baglanti, mao.siralama
              FROM menu_alt_ogeleri mao
              INNER JOIN menu_ogeleri mo ON mo.id = mao.menu_ogesi_id
-             WHERE mao.aktif_mi = 1 AND mo.aktif_mi = 1
+             WHERE mao.aktif_mi = 1 AND mao.silinme_tarihi IS NULL AND mo.aktif_mi = 1
              ORDER BY mao.siralama, mao.id'
         )->fetchAll();
 
@@ -351,7 +351,7 @@ final class SiteDeposu
         $gruplarSorgusu = $this->baglanti->prepare(
             'SELECT id, baslik, baglanti, siralama, aktif_mi
              FROM menu_alt_ogeleri
-             WHERE menu_ogesi_id = :menu_ogesi_id AND ust_alt_oge_id IS NULL
+             WHERE menu_ogesi_id = :menu_ogesi_id AND ust_alt_oge_id IS NULL AND silinme_tarihi IS NULL
              ORDER BY siralama, id'
         );
         $gruplarSorgusu->execute(['menu_ogesi_id' => $ustMenu['id']]);
@@ -362,7 +362,7 @@ final class SiteDeposu
                     mao.guncellenme_tarihi,
                     (SELECT COUNT(*) FROM urunler u WHERE u.aktif_mi = 1 AND u.menu_kategori_adi = mao.baslik) AS urun_sayisi
              FROM menu_alt_ogeleri mao
-             WHERE mao.menu_ogesi_id = :menu_ogesi_id AND mao.ust_alt_oge_id IS NOT NULL
+             WHERE mao.menu_ogesi_id = :menu_ogesi_id AND mao.ust_alt_oge_id IS NOT NULL AND mao.silinme_tarihi IS NULL
              ORDER BY mao.siralama, mao.id'
         );
         $kategorilerSorgusu->execute(['menu_ogesi_id' => $ustMenu['id']]);
@@ -393,10 +393,20 @@ final class SiteDeposu
         return $satir ?: null;
     }
 
+    /** Log kayıtlarında "hangi ana grup altında" bilgisini göstermek için kullanılır. */
+    public function altOgeBasligiBul(int $id): ?string
+    {
+        $sorgu = $this->baglanti->prepare('SELECT baslik FROM menu_alt_ogeleri WHERE id = :id LIMIT 1');
+        $sorgu->execute(['id' => $id]);
+        $baslik = $sorgu->fetchColumn();
+
+        return $baslik !== false ? (string) $baslik : null;
+    }
+
     public function kategoriEkle(int $ustAltOgeId, string $baslik, ?string $baglantiDegeri, int $siralama): array
     {
         $ustSorgusu = $this->baglanti->prepare(
-            'SELECT menu_ogesi_id FROM menu_alt_ogeleri WHERE id = :id AND aktif_mi = 1 LIMIT 1'
+            'SELECT menu_ogesi_id FROM menu_alt_ogeleri WHERE id = :id AND aktif_mi = 1 AND silinme_tarihi IS NULL LIMIT 1'
         );
         $ustSorgusu->execute(['id' => $ustAltOgeId]);
         $ust = $ustSorgusu->fetch();
@@ -465,11 +475,48 @@ final class SiteDeposu
         }
     }
 
-    /** Fiziksel silme yerine mevcut aktif_mi deseni izlenir; menü ve ürün eşleşmeleri geriye dönük bozulmaz. */
-    /** Kalici silme: kategoriyeBagliUrunSayisi kontrolu urun bagliysa denetleyicide zaten reddediyor. */
+    /**
+     * "Çöp kutusu" silme: satır hemen kalıcı silinmez, silinme_tarihi damgalanır. Kategori bu anda
+     * hem admin listesinden hem herkese açık siteden kaybolur (diğer sorgular silinme_tarihi IS NULL
+     * arar) ama 7 gün boyunca Loglar sayfasından geri alınabilir; süre dolunca supurSilinenleri()
+     * kalıcı olarak siler. kategoriyeBagliUrunSayisi kontrolü ürün bağlıysa denetleyicide zaten reddediyor.
+     */
     public function kategoriSil(int $id): void
     {
-        $this->baglanti->prepare('DELETE FROM menu_alt_ogeleri WHERE id = :id')->execute(['id' => $id]);
+        $this->baglanti->prepare('UPDATE menu_alt_ogeleri SET silinme_tarihi = NOW() WHERE id = :id')->execute(['id' => $id]);
+    }
+
+    public function kategoriGeriAl(int $id): bool
+    {
+        $sorgu = $this->baglanti->prepare(
+            'UPDATE menu_alt_ogeleri SET silinme_tarihi = NULL
+             WHERE id = :id AND silinme_tarihi IS NOT NULL AND silinme_tarihi > (NOW() - INTERVAL 7 DAY)'
+        );
+        $sorgu->execute(['id' => $id]);
+
+        return $sorgu->rowCount() > 0;
+    }
+
+    /** grup_baslik NULL ise silinen kaydın kendisi bir ana grup demektir (Vana/Aktüatör/Otomasyon). */
+    public function silinmisKategorileriGetir(): array
+    {
+        return $this->baglanti->query(
+            "SELECT mao.id, mao.baslik, mao.ust_alt_oge_id, mao.silinme_tarihi,
+                    ust.baslik AS grup_baslik,
+                    DATEDIFF(mao.silinme_tarihi + INTERVAL 7 DAY, NOW()) AS kalan_gun
+             FROM menu_alt_ogeleri mao
+             LEFT JOIN menu_alt_ogeleri ust ON ust.id = mao.ust_alt_oge_id
+             WHERE mao.silinme_tarihi IS NOT NULL AND mao.silinme_tarihi > (NOW() - INTERVAL 7 DAY)
+             ORDER BY mao.silinme_tarihi DESC"
+        )->fetchAll();
+    }
+
+    /** 7 günlük geri alma süresi dolan kategorileri kalıcı olarak siler; her admin isteğinde çağrılır. */
+    public function supurSilinenleri(): void
+    {
+        $this->baglanti->exec(
+            'DELETE FROM menu_alt_ogeleri WHERE silinme_tarihi IS NOT NULL AND silinme_tarihi <= (NOW() - INTERVAL 7 DAY)'
+        );
     }
 
     public function kategoriyeBagliUrunSayisi(string $baslik): int
@@ -532,5 +579,86 @@ final class SiteDeposu
         $urun['gorseller'] = $gorselSorgusu->fetchAll();
 
         return $urun;
+    }
+
+    /**
+     * Kimlik dogrulama sistemi olmadigi icin ziyaretci/admin islemleri bir kullaniciya degil yalnizca
+     * IP adresine baglanir. MAC adresi hicbir tarayici tarafindan web sitelerine verilmedigi icin
+     * (guvenlik/gizlilik kisitlamasi) burada da tutulmuyor.
+     */
+    public function ziyaretKaydet(string $ipAdresi, ?string $kullaniciAjani, string $yol, ?string $referans): void
+    {
+        $sorgu = $this->baglanti->prepare(
+            'INSERT INTO ziyaret_kayitlari (ip_adresi, kullanici_ajani, yol, referans)
+             VALUES (:ip, :ajan, :yol, :referans)'
+        );
+        $sorgu->execute([
+            'ip' => $ipAdresi,
+            'ajan' => $kullaniciAjani !== null ? substr($kullaniciAjani, 0, 255) : null,
+            'yol' => substr($yol, 0, 255),
+            'referans' => $referans !== null ? substr($referans, 0, 255) : null,
+        ]);
+    }
+
+    public function ziyaretleriGetir(int $limit, int $offset): array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT id, ip_adresi, kullanici_ajani, yol, referans, olusturulma_tarihi
+             FROM ziyaret_kayitlari ORDER BY olusturulma_tarihi DESC LIMIT :limit OFFSET :offset'
+        );
+        $sorgu->bindValue('limit', $limit, PDO::PARAM_INT);
+        $sorgu->bindValue('offset', $offset, PDO::PARAM_INT);
+        $sorgu->execute();
+
+        return $sorgu->fetchAll();
+    }
+
+    public function ziyaretIstatistikleri(): array
+    {
+        $toplam = (int) $this->baglanti->query('SELECT COUNT(*) FROM ziyaret_kayitlari')->fetchColumn();
+        $benzersizIp = (int) $this->baglanti->query('SELECT COUNT(DISTINCT ip_adresi) FROM ziyaret_kayitlari')->fetchColumn();
+        $bugun = (int) $this->baglanti->query(
+            'SELECT COUNT(*) FROM ziyaret_kayitlari WHERE DATE(olusturulma_tarihi) = CURDATE()'
+        )->fetchColumn();
+
+        $enCokGorulenler = $this->baglanti->query(
+            'SELECT yol, COUNT(*) AS adet FROM ziyaret_kayitlari
+             GROUP BY yol ORDER BY adet DESC LIMIT 10'
+        )->fetchAll();
+
+        return [
+            'toplam_goruntuleme' => $toplam,
+            'benzersiz_ip_sayisi' => $benzersizIp,
+            'bugunku_goruntuleme' => $bugun,
+            'en_cok_goruntulenen_sayfalar' => $enCokGorulenler,
+        ];
+    }
+
+    public function islemKaydet(string $ipAdresi, string $eylem, string $hedefTuru, ?int $hedefId, ?string $detay): void
+    {
+        $sorgu = $this->baglanti->prepare(
+            'INSERT INTO admin_islem_kayitlari (ip_adresi, eylem, hedef_turu, hedef_id, detay)
+             VALUES (:ip, :eylem, :hedef_turu, :hedef_id, :detay)'
+        );
+        $sorgu->execute([
+            'ip' => $ipAdresi,
+            'eylem' => $eylem,
+            'hedef_turu' => $hedefTuru,
+            'hedef_id' => $hedefId,
+            'detay' => $detay !== null ? substr($detay, 0, 255) : null,
+        ]);
+    }
+
+    public function islemleriGetir(int $limit, int $offset): array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT id, ip_adresi, eylem, hedef_turu, hedef_id, detay, olusturulma_tarihi
+             FROM admin_islem_kayitlari ORDER BY olusturulma_tarihi DESC LIMIT :limit OFFSET :offset'
+        );
+        $sorgu->bindValue('limit', $limit, PDO::PARAM_INT);
+        $sorgu->bindValue('offset', $offset, PDO::PARAM_INT);
+        $sorgu->execute();
+
+        return $sorgu->fetchAll();
     }
 }

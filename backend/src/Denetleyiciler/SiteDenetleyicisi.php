@@ -65,6 +65,21 @@ final class SiteDenetleyicisi
     public function iletisimMesajiKaydet(array $girdi): int { return $this->depo->iletisimMesajiKaydet(self::iletisimMesajiDogrula($girdi)); }
 
     public function kategoriBul(int $id): ?array { return $this->depo->kategoriBul($id); }
+    public function altOgeBasligiBul(int $id): ?string { return $this->depo->altOgeBasligiBul($id); }
+
+    /** Log kaydı için "X — Y grubu altında" biçiminde okunabilir bir açıklama üretir. */
+    /** Log tablosunda "Kategori Yönetimi > Vana > Su Grubu Vanaları" biçiminde okunabilir bir iz üretir. */
+    public function islemDetayiUret(array $kategori): string
+    {
+        if ($kategori['ust_alt_oge_id'] === null) {
+            return "Kategori Yönetimi > {$kategori['baslik']}";
+        }
+        $grupAdi = $this->altOgeBasligiBul((int) $kategori['ust_alt_oge_id']);
+
+        return $grupAdi !== null
+            ? "Kategori Yönetimi > {$grupAdi} > {$kategori['baslik']}"
+            : "Kategori Yönetimi > {$kategori['baslik']}";
+    }
     public function kategoriYonetimVerisi(): array { return $this->depo->kategoriYonetimVerisi(); }
 
     private static function metinUzunlugu(string $deger): int
@@ -134,5 +149,62 @@ final class SiteDenetleyicisi
         }
 
         $this->depo->kategoriSil($id);
+    }
+
+    public function kategoriGeriAl(int $id): array
+    {
+        $geriAlindiMi = $this->depo->kategoriGeriAl($id);
+        if (!$geriAlindiMi) {
+            throw new RuntimeException('Kategori geri alınamadı; süresi dolmuş veya zaten aktif olabilir.', 404);
+        }
+
+        return $this->depo->kategoriBul($id) ?? [];
+    }
+
+    public function silinmisKategorileriGetir(): array
+    {
+        return $this->depo->silinmisKategorileriGetir();
+    }
+
+    public function supurSilinenleri(): void
+    {
+        $this->depo->supurSilinenleri();
+    }
+
+    public function ziyaretKaydet(string $ipAdresi, ?string $kullaniciAjani, string $yol, ?string $referans): void
+    {
+        $yol = trim($yol);
+        if ($yol === '' || self::metinUzunlugu($yol) > 255) {
+            throw new InvalidArgumentException('Geçersiz sayfa yolu.');
+        }
+        $this->depo->ziyaretKaydet($ipAdresi, $kullaniciAjani, $yol, $referans);
+    }
+
+    public function ziyaretYonetimVerisi(int $sayfa): array
+    {
+        $sayfa = max(1, $sayfa);
+        $sayfaBasi = 50;
+
+        return [
+            'istatistikler' => $this->depo->ziyaretIstatistikleri(),
+            'kayitlar' => $this->depo->ziyaretleriGetir($sayfaBasi, ($sayfa - 1) * $sayfaBasi),
+            'sayfa' => $sayfa,
+        ];
+    }
+
+    public function islemKaydet(string $ipAdresi, string $eylem, string $hedefTuru, ?int $hedefId, ?string $detay): void
+    {
+        $this->depo->islemKaydet($ipAdresi, $eylem, $hedefTuru, $hedefId, $detay);
+    }
+
+    public function islemYonetimVerisi(int $sayfa): array
+    {
+        $sayfa = max(1, $sayfa);
+        $sayfaBasi = 50;
+
+        return [
+            'kayitlar' => $this->depo->islemleriGetir($sayfaBasi, ($sayfa - 1) * $sayfaBasi),
+            'sayfa' => $sayfa,
+        ];
     }
 }
