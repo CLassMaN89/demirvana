@@ -16,6 +16,29 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* Admin paneli kendi koyu/mavi paletini kullandığından kaydırma çubukları da bu palete göre ezilir. */
+.yonetim, .yonetim * {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--yonetim-mavi) 60%, transparent) transparent;
+}
+.yonetim ::-webkit-scrollbar { width: 10px; height: 10px; }
+.yonetim ::-webkit-scrollbar-track { background: transparent; }
+.yonetim ::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--yonetim-mavi) 60%, transparent);
+}
+.yonetim ::-webkit-scrollbar-thumb:hover { background-color: var(--yonetim-mavi); }
+
+.yonetim__yan-menu {
+  scrollbar-color: color-mix(in srgb, #C7D2E8 45%, transparent) transparent;
+}
+.yonetim__yan-menu::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, #C7D2E8 45%, transparent);
+}
+.yonetim__yan-menu::-webkit-scrollbar-thumb:hover { background-color: #C7D2E8; }
+
 .yonetim__yan-menu {
   display: flex;
   flex-direction: column;

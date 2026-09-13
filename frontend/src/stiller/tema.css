@@ -19,3 +19,28 @@
 @media (max-width: 900px) {
   :root { --navbar-yuksekligi: 60px; }
 }
+
+/* Tüm siteде kaydırma çubukları tema rengiyle eşleşsin (sol menü, tablolar, popup/görüntüleyiciler dahil). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--renk-ana) 55%, transparent) var(--renk-acik);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--renk-acik);
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid var(--renk-acik);
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--renk-ana) 55%, transparent);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--renk-ana);
+}

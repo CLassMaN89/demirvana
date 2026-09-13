@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Area, AreaChart, CartesianGrid, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import {
   Package, FolderTree, FileClock, MessageCircle, Award, Image as ImageIcon,
@@ -150,6 +151,7 @@ function IstatistikKarti({ ikon: Ikon, baslik, deger, degisim, notu }) {
 const GRUP_BASINA_GOSTERIM = 12;
 
 export default function YonetimPaneliSayfasi({ veri }) {
+  const navigate = useNavigate();
   const [grupTumu, setGrupTumu] = useState(false);
   const [zamanAraligi, setZamanAraligi] = useState('90g');
   const ziyaretciVerisi = useMemo(() => {
@@ -319,7 +321,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
               <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><LayersIkon size={18} /> Ürün Grupları</AnimateIcon></h3>
-              <button type="button" className="yonetim-panel__tumunu-gor" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
+              <button type="button" className="yonetim-panel__tumunu-gor" onClick={() => navigate('/urunler')}>
                 Tüm Kategorileri Gör
               </button>
             </div>
@@ -341,7 +343,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
                 Daha Fazla Göster ({kategoriDagilimi.length - GRUP_BASINA_GOSTERIM})
               </button>
             )}
-            <button type="button" className="yonetim-panel__toplam" disabled title="Kategori Yönetimi ekranı henüz eklenmedi">
+            <button type="button" className="yonetim-panel__toplam" onClick={() => navigate('/urunler')}>
               <Layers aria-hidden="true" /> Toplam {urunler.length} ürün, {toplamKategori} kategori <ChevronRight aria-hidden="true" />
             </button>
           </section>
