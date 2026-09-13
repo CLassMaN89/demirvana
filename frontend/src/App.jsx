@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import DurumMesaji from './bilesenler/DurumMesaji';
 import SayfaGecisi from './bilesenler/SayfaGecisi';
@@ -57,20 +57,27 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   const konum = useLocation();
   const [durum, setDurum] = useState({ yukleniyor: true, veri: null, hata: null });
   const [yenileme, setYenileme] = useState(0);
+  const ilkYuklemeYapildi = useRef(false);
 
   useEffect(() => {
     let etkin = true;
 
-    setDurum({ yukleniyor: true, veri: null, hata: null });
+    // Admin panelinde bir kayıt eklenip/düzenlenip/silindiğinde veriYenile bu efekti tekrar
+    // tetikler; ilk yüklemeden sonraki bu tazelemelerde "yukleniyor" ekranına dönülmez, aksi halde
+    // her işlemde sanki sayfa yenileniyormuş gibi anlık bir tam ekran flaşı hissedilirdi.
+    if (!ilkYuklemeYapildi.current) setDurum({ yukleniyor: true, veri: null, hata: null });
+
     // Veri kaynağını prop olarak alabilmek, üretimde gerçek API'yi; testte dış ağa çıkmayan sabit veriyi kullanmamızı sağlar.
     veriKaynagi()
       .then((veri) => {
         if (!etkin) return;
+        ilkYuklemeYapildi.current = true;
         temaUygula(veri.tema);
         setDurum({ yukleniyor: false, veri, hata: null });
       })
       .catch((hata) => {
-        if (etkin) setDurum({ yukleniyor: false, veri: null, hata });
+        if (!etkin) return;
+        if (!ilkYuklemeYapildi.current) setDurum({ yukleniyor: false, veri: null, hata });
       });
 
     // Yavaş istek sayfa değiştikten sonra tamamlanırsa eski bileşenin state'ini güncellemesini önleriz.

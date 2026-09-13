@@ -466,9 +466,10 @@ final class SiteDeposu
     }
 
     /** Fiziksel silme yerine mevcut aktif_mi deseni izlenir; menü ve ürün eşleşmeleri geriye dönük bozulmaz. */
+    /** Kalici silme: kategoriyeBagliUrunSayisi kontrolu urun bagliysa denetleyicide zaten reddediyor. */
     public function kategoriSil(int $id): void
     {
-        $this->baglanti->prepare('UPDATE menu_alt_ogeleri SET aktif_mi = 0 WHERE id = :id')->execute(['id' => $id]);
+        $this->baglanti->prepare('DELETE FROM menu_alt_ogeleri WHERE id = :id')->execute(['id' => $id]);
     }
 
     public function kategoriyeBagliUrunSayisi(string $baslik): int

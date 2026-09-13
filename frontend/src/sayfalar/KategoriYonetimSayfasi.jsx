@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  Boxes, Eye, FolderTree, Home, LayoutGrid, MoreVertical,
+  Boxes, ChevronRight, Eye, FolderTree, Home, LayoutGrid, MoreVertical,
   Pencil, Plus, Search, Trash2
 } from 'lucide-react';
 import { altOgeIkonuGetir, grupIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
@@ -16,17 +16,17 @@ const GRUP_META = {
   Vana: {
     aciklama: 'Su, buhar, gaz ve endüstriyel akışkanlar için vana çözümleri',
     arkaplan: '#ecf3fd',
-    gorsel: '/assets/kategori-yonetimi/vana.png'
+    gorsel: '/assets/kategori21.png'
   },
   Aktüatör: {
     aciklama: 'Pnömatik ve elektrikli aktüatör çözümleri',
     arkaplan: '#fdf6ef',
-    gorsel: '/assets/kategori-yonetimi/aktuator.png'
+    gorsel: '/assets/kategori-1.png'
   },
   Otomasyon: {
     aciklama: 'Vana otomasyon ve kontrol sistemleri',
     arkaplan: '#f2fbf7',
-    gorsel: '/assets/kategori-yonetimi/otomasyon.png'
+    gorsel: '/assets/kategori3.png'
   }
 };
 
@@ -34,19 +34,18 @@ function tarihiFormatla(deger) {
   if (!deger) return '—';
   const tarih = new Date(deger.replace(' ', 'T'));
   if (Number.isNaN(tarih.getTime())) return '—';
-  return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+  return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' });
 }
 
 function KategoriFormu({ baslangicDegeri, gonderiliyorMu, hata, onIptal, onKaydet }) {
   const [baslik, setBaslik] = useState(baslangicDegeri?.baslik ?? '');
-  const [aktifMi, setAktifMi] = useState(baslangicDegeri ? baslangicDegeri.aktif_mi !== 0 : true);
 
   return (
     <form
       className="yonetim-form"
       onSubmit={(olay) => {
         olay.preventDefault();
-        onKaydet({ baslik: baslik.trim(), aktif_mi: aktifMi ? 1 : 0 });
+        onKaydet({ baslik: baslik.trim() });
       }}
     >
       <label className="yonetim-form__alan">
@@ -61,12 +60,6 @@ function KategoriFormu({ baslangicDegeri, gonderiliyorMu, hata, onIptal, onKayde
           minLength={2}
         />
       </label>
-      {baslangicDegeri && (
-        <label className="yonetim-form__onay">
-          <input type="checkbox" checked={aktifMi} onChange={(olay) => setAktifMi(olay.target.checked)} />
-          <span>Aktif (pasif kategoriler sitede ve filtrelerde görünmez)</span>
-        </label>
-      )}
       {hata && <p className="yonetim-form__hata">{hata}</p>}
       <div className="yonetim-form__eylemler">
         <button type="button" className="yonetim-form__iptal" onClick={onIptal} disabled={gonderiliyorMu}>
@@ -84,8 +77,8 @@ function SilmeOnayi({ kategori, gonderiliyorMu, hata, onIptal, onOnayla }) {
   return (
     <div className="yonetim-form">
       <p>
-        <strong>{kategori.baslik}</strong> kategorisini pasif hale getirmek istediğinize emin misiniz? Kategori sitede
-        ve ürün filtrelerinde görünmemeye başlar; daha sonra düzenle ekranından tekrar aktif edebilirsiniz.
+        <strong>{kategori.baslik}</strong> kategorisini kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri
+        alınamaz.
       </p>
       {hata && <p className="yonetim-form__hata">{hata}</p>}
       <div className="yonetim-form__eylemler">
@@ -93,7 +86,7 @@ function SilmeOnayi({ kategori, gonderiliyorMu, hata, onIptal, onOnayla }) {
           Vazgeç
         </button>
         <button type="button" className="yonetim-form__sil" onClick={onOnayla} disabled={gonderiliyorMu}>
-          {gonderiliyorMu ? 'Siliniyor…' : 'Evet, Pasif Yap'}
+          {gonderiliyorMu ? 'Siliniyor…' : 'Evet, Sil'}
         </button>
       </div>
     </div>
@@ -114,7 +107,26 @@ function IstatistikKarti({ ikon: Ikon, renk, etiket, deger }) {
   );
 }
 
-function GrupKarti({ grup, onDuzenle, onEkle, onSil, onGrupDuzenle }) {
+function DurumDugmesi({ pasif, gonderiliyorMu, onDegistir }) {
+  return (
+    <button
+      type="button"
+      className="yonetim-durum-hucre"
+      onClick={onDegistir}
+      disabled={gonderiliyorMu}
+      role="switch"
+      aria-checked={!pasif}
+      aria-label={pasif ? 'Pasif — aktif yapmak için tıklayın' : 'Aktif — pasif yapmak için tıklayın'}
+    >
+      <span className={`yonetim-toggle${pasif ? '' : ' yonetim-toggle--acik'}`}>
+        <motion.span className="yonetim-toggle__topuz" layout transition={{ type: 'spring', stiffness: 500, damping: 32 }} />
+      </span>
+      <span className={`yonetim-durum-etiket${pasif ? ' yonetim-durum-etiket--pasif' : ''}`}>{pasif ? 'Pasif' : 'Aktif'}</span>
+    </button>
+  );
+}
+
+function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzenle, onDurumDegistir }) {
   const [arama, setArama] = useState('');
   const meta = GRUP_META[grup.baslik] ?? { aciklama: '', arkaplan: '#f4f7fc', gorsel: null };
   const GrupIkonu = grupIkonuGetir(grup.baslik);
@@ -133,15 +145,15 @@ function GrupKarti({ grup, onDuzenle, onEkle, onSil, onGrupDuzenle }) {
           <MoreVertical aria-hidden="true" size={16} />
         </button>
         {meta.gorsel && <img src={meta.gorsel} alt="" />}
-      </div>
-      <div className="yonetim-kategori__kart-bilgi">
-        <span className="yonetim-kategori__kart-ikon"><GrupIkonu aria-hidden="true" /></span>
-        <div className="yonetim-kategori__kart-metin">
-          <h3>{grup.baslik}</h3>
-          <p>{meta.aciklama}</p>
-          <Link to={`/urunler?grup=${encodeURIComponent(grup.baslik)}`} target="_blank" rel="noopener noreferrer" className="yonetim-kategori__kart-ozet">
-            {kategoriler.length} kategori • {urunToplami} ürün
-          </Link>
+        <div className="yonetim-kategori__kart-bilgi">
+          <span className="yonetim-kategori__kart-ikon"><GrupIkonu aria-hidden="true" /></span>
+          <div className="yonetim-kategori__kart-metin">
+            <h3>{grup.baslik}</h3>
+            <p>{meta.aciklama}</p>
+            <Link to={`/urunler?grup=${encodeURIComponent(grup.baslik)}`} target="_blank" rel="noopener noreferrer" className="yonetim-kategori__kart-ozet">
+              <ChevronRight aria-hidden="true" size={12} /> {kategoriler.length} kategori • {urunToplami} ürün
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -152,11 +164,18 @@ function GrupKarti({ grup, onDuzenle, onEkle, onSil, onGrupDuzenle }) {
 
       <div className="yonetim-tablo-kaydir">
         <table className="yonetim-tablo">
+          <colgroup>
+            <col style={{ width: '33%' }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '13%' }} />
+            <col style={{ width: '21%' }} />
+            <col style={{ width: '24%' }} />
+          </colgroup>
           <thead>
             <tr>
               <th>Kategori Adı</th>
               <th>Ürün</th>
-              <th>Son Güncelleme</th>
+              <th>Güncelleme</th>
               <th>Durum</th>
               <th>İşlemler</th>
             </tr>
@@ -169,28 +188,26 @@ function GrupKarti({ grup, onDuzenle, onEkle, onSil, onGrupDuzenle }) {
                 return (
                   <motion.tr key={kategori.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: .25 }}>
                     <td>
-                      <div className="yonetim-tablo__ad-hucre">
+                      <div className="yonetim-tablo__ad-hucre" title={kategori.baslik}>
                         <span className="yonetim-tablo__ikon"><Ikon aria-hidden="true" /></span>
-                        {kategori.baslik}
+                        <span className="yonetim-tablo__ad-metin">{kategori.baslik}</span>
                       </div>
                     </td>
                     <td>{kategori.urun_sayisi}</td>
                     <td>{tarihiFormatla(kategori.guncellenme_tarihi)}</td>
                     <td>
-                      <span className={`yonetim-kategori__durum-rozeti${pasif ? ' yonetim-kategori__durum-rozeti--pasif' : ''}`}>
-                        <span className="yonetim-kategori__durum-noktasi" aria-hidden="true" /> {pasif ? 'Pasif' : 'Aktif'}
-                      </span>
+                      <DurumDugmesi pasif={pasif} gonderiliyorMu={gonderiliyorMu} onDegistir={() => onDurumDegistir(kategori)} />
                     </td>
                     <td>
                       <div className="yonetim-tablo__eylemler">
                         <Link className="yonetim-tablo__eylem-ikon yonetim-tablo__eylem-ikon--goruntule" to={`/urunler?kategori=${encodeURIComponent(kategori.baslik)}`} target="_blank" rel="noopener noreferrer" aria-label="Görüntüle">
-                          <Eye aria-hidden="true" size={14} />
+                          <Eye aria-hidden="true" size={13} />
                         </Link>
                         <button type="button" className="yonetim-tablo__eylem-ikon yonetim-tablo__eylem-ikon--duzenle" onClick={() => onDuzenle(kategori)} aria-label="Düzenle">
-                          <Pencil aria-hidden="true" size={14} />
+                          <Pencil aria-hidden="true" size={13} />
                         </button>
                         <button type="button" className="yonetim-tablo__eylem-ikon yonetim-tablo__eylem-ikon--sil" onClick={() => onSil(kategori)} aria-label="Sil">
-                          <Trash2 aria-hidden="true" size={14} />
+                          <Trash2 aria-hidden="true" size={13} />
                         </button>
                       </div>
                     </td>
@@ -210,11 +227,11 @@ function GrupKarti({ grup, onDuzenle, onEkle, onSil, onGrupDuzenle }) {
       </div>
 
       <div className="yonetim-kategori__kart-alt">
-        <Link to={`/urunler?grup=${encodeURIComponent(grup.baslik)}`} target="_blank" rel="noopener noreferrer" className="yonetim-kategori__kart-tumunu-gor">
-          Tümünü Gör →
+        <Link to={`/urunler?grup=${encodeURIComponent(grup.baslik)}`} target="_blank" rel="noopener noreferrer" className="yonetim-pill-buton">
+          <span>Tümünü Gör</span><ChevronRight aria-hidden="true" />
         </Link>
-        <button type="button" className="yonetim-kategori__kart-ekle" onClick={() => onEkle(grup.id)}>
-          <Plus aria-hidden="true" size={14} /> Alt Kategori Ekle
+        <button type="button" className="yonetim-pill-buton" onClick={() => onEkle(grup.id)}>
+          <span>Alt Kategori Ekle</span><Plus aria-hidden="true" />
         </button>
       </div>
     </article>
@@ -230,20 +247,17 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
   const [gonderiliyorMu, setGonderiliyorMu] = useState(false);
   const [hata, setHata] = useState(null);
 
-  async function veriyiYukle() {
-    setYuklemeHatasi(null);
-    try {
-      const sonuc = await kategoriYonetimVerisiniGetir();
-      setGruplar(sonuc ?? []);
-    } catch (istisna) {
-      setYuklemeHatasi(istisna.message || 'Kategoriler yüklenemedi.');
-    } finally {
-      setYukleniyorMu(false);
-    }
-  }
-
   useEffect(() => {
-    veriyiYukle();
+    (async () => {
+      try {
+        const sonuc = await kategoriYonetimVerisiniGetir();
+        setGruplar(sonuc ?? []);
+      } catch (istisna) {
+        setYuklemeHatasi(istisna.message || 'Kategoriler yüklenemedi.');
+      } finally {
+        setYukleniyorMu(false);
+      }
+    })();
   }, []);
 
   const istatistikler = useMemo(() => {
@@ -255,20 +269,51 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
     };
   }, [gruplar]);
 
+  // Bir mutasyondan sonra TÜM kategori ağacını tekrar çekmek yerine (sayfanın "yenilenmiş" hissi
+  // vermesine yol açar), yalnızca ilgili grup/kategoriyi yerel state içinde güncelleriz. Halka açık
+  // sayfaların kullandığı App.jsx'teki veri ise arka planda veriYenile ile ayrıca tazelenir.
+  function grupGuncelle(grupId, donusturucu) {
+    setGruplar((mevcut) => mevcut.map((grup) => (grup.id === grupId ? donusturucu(grup) : grup)));
+  }
+
   async function formuGonder(alanlar) {
     setGonderiliyorMu(true);
     setHata(null);
     try {
       if (form.mod === 'ekle') {
-        await kategoriEkle(form.grupId, { baslik: alanlar.baslik });
+        const yeniKategori = await kategoriEkle(form.grupId, alanlar);
+        grupGuncelle(form.grupId, (grup) => ({ ...grup, alt_ogeler: [...(grup.alt_ogeler ?? []), yeniKategori] }));
+      } else if (form.kategori.ust_alt_oge_id == null) {
+        // Kebab menüsünden grubun kendi başlığı düzenleniyor.
+        const guncellenenGrup = await kategoriGuncelle(form.kategori.id, alanlar);
+        setGruplar((mevcut) => mevcut.map((grup) => (grup.id === form.kategori.id ? { ...grup, ...guncellenenGrup, alt_ogeler: grup.alt_ogeler } : grup)));
       } else {
-        await kategoriGuncelle(form.kategori.id, alanlar);
+        const guncellenenKategori = await kategoriGuncelle(form.kategori.id, alanlar);
+        grupGuncelle(form.kategori.ust_alt_oge_id, (grup) => ({
+          ...grup,
+          alt_ogeler: (grup.alt_ogeler ?? []).map((kategori) => (kategori.id === guncellenenKategori.id ? guncellenenKategori : kategori))
+        }));
       }
       setForm(null);
-      await veriyiYukle();
       veriYenile?.();
     } catch (istisna) {
       setHata(istisna.message || 'İşlem tamamlanamadı.');
+    } finally {
+      setGonderiliyorMu(false);
+    }
+  }
+
+  async function durumuDegistir(kategori) {
+    setGonderiliyorMu(true);
+    try {
+      const guncellenen = await kategoriGuncelle(kategori.id, { aktif_mi: kategori.aktif_mi === 0 ? 1 : 0 });
+      grupGuncelle(kategori.ust_alt_oge_id, (grup) => ({
+        ...grup,
+        alt_ogeler: (grup.alt_ogeler ?? []).map((k) => (k.id === guncellenen.id ? guncellenen : k))
+      }));
+      veriYenile?.();
+    } catch (istisna) {
+      setHata(istisna.message || 'Durum değiştirilemedi.');
     } finally {
       setGonderiliyorMu(false);
     }
@@ -279,11 +324,14 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
     setHata(null);
     try {
       await kategoriSil(silinecek.id);
+      grupGuncelle(silinecek.ust_alt_oge_id, (grup) => ({
+        ...grup,
+        alt_ogeler: (grup.alt_ogeler ?? []).filter((kategori) => kategori.id !== silinecek.id)
+      }));
       setSilinecek(null);
-      await veriyiYukle();
       veriYenile?.();
     } catch (istisna) {
-      setHata(istisna.message || 'Kategori pasif hale getirilemedi.');
+      setHata(istisna.message || 'Kategori silinemedi.');
     } finally {
       setGonderiliyorMu(false);
     }
@@ -332,10 +380,12 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
           <GrupKarti
             key={grup.id}
             grup={grup}
+            gonderiliyorMu={gonderiliyorMu}
             onDuzenle={(kategori) => { setHata(null); setForm({ mod: 'duzenle', kategori }); }}
             onEkle={(grupId) => { setHata(null); setForm({ mod: 'ekle', grupId }); }}
             onSil={(kategori) => { setHata(null); setSilinecek(kategori); }}
             onGrupDuzenle={(grup) => { setHata(null); setForm({ mod: 'duzenle', kategori: grup }); }}
+            onDurumDegistir={durumuDegistir}
           />
         ))}
       </div>
@@ -353,7 +403,7 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
       )}
 
       {silinecek && (
-        <Modal baslik="Kategoriyi Pasif Yap" onKapat={() => setSilinecek(null)}>
+        <Modal baslik="Kategoriyi Sil" onKapat={() => setSilinecek(null)}>
           <SilmeOnayi
             kategori={silinecek}
             gonderiliyorMu={gonderiliyorMu}
