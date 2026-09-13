@@ -387,8 +387,30 @@ final class SiteDeposu
             return;
         }
 
-        $sql = 'UPDATE menu_alt_ogeleri SET ' . implode(', ', $atamalar) . ' WHERE id = :id';
-        $this->baglanti->prepare($sql)->execute($parametreler);
+        // Ürünler kategoriye id ile değil, menu_kategori_adi metniyle bağlı; başlık değişirse ürünler
+        // eski isme takılı kalıp "kaybolmasın" diye aynı işlemde onlar da yeni başlığa taşınır.
+        $eskiBaslik = null;
+        if (array_key_exists('baslik', $alanlar)) {
+            $mevcut = $this->kategoriBul($id);
+            $eskiBaslik = $mevcut['baslik'] ?? null;
+        }
+
+        $this->baglanti->beginTransaction();
+        try {
+            $sql = 'UPDATE menu_alt_ogeleri SET ' . implode(', ', $atamalar) . ' WHERE id = :id';
+            $this->baglanti->prepare($sql)->execute($parametreler);
+
+            if ($eskiBaslik !== null && $eskiBaslik !== $alanlar['baslik']) {
+                $this->baglanti->prepare(
+                    'UPDATE urunler SET menu_kategori_adi = :yeni WHERE menu_kategori_adi = :eski'
+                )->execute(['yeni' => $alanlar['baslik'], 'eski' => $eskiBaslik]);
+            }
+
+            $this->baglanti->commit();
+        } catch (Throwable $hata) {
+            $this->baglanti->rollBack();
+            throw $hata;
+        }
     }
 
     /** Fiziksel silme yerine mevcut aktif_mi deseni izlenir; menü ve ürün eşleşmeleri geriye dönük bozulmaz. */
