@@ -140,6 +140,7 @@ export default function ReferanslarSayfasi({ referanslar = { kayitlar: [], gorse
   return (
     <section className="referans-sayfasi">
       <header className="referans-hero">
+        <img className="referans-hero__dunya-hologram" src="/assets/world.png" alt="" aria-hidden="true" />
         <div className="icerik-kapsayici referans-hero__icerik">
           <div className="referans-hero__metin">
             <p className="referans-hero__yol">{siteAyarlari.referans_hero_yol_metni ?? 'Anasayfa / Referanslar'}</p>
@@ -191,6 +192,7 @@ export default function ReferanslarSayfasi({ referanslar = { kayitlar: [], gorse
 
       {yurtdisiKayitlar.length > 0 && (
         <section className="referans-yurtdisi" aria-labelledby="referans-yurtdisi-basligi">
+          <img className="referans-yurtdisi__dunya-hologram" src="/assets/world.png" alt="" aria-hidden="true" />
           <div className="icerik-kapsayici referans-yurtdisi__icerik">
             <div className="referans-yurtdisi__baslik"><span>{siteAyarlari.referans_yurtdisi_etiketi ?? 'Global projeler'}</span><h2 id="referans-yurtdisi-basligi">{siteAyarlari.referans_yurtdisi_basligi ?? 'Yurtdışı Referanslarımız'}</h2><p>{siteAyarlari.referans_yurtdisi_aciklamasi ?? 'Sınırları aşan kalite, dünyada da tercih ediliyor.'}</p></div>
             <div className="referans-yurtdisi__liste">
