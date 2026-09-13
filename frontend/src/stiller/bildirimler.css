@@ -1,0 +1,48 @@
+.bildirim-yigini {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 500;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 40px));
+}
+
+.bildirim {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid #2a2a33;
+  border-radius: 12px;
+  background: #17171c;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .35);
+}
+
+.bildirim__ikon { display: grid; flex: 0 0 auto; place-items: center; margin-top: 1px; }
+.bildirim--basari .bildirim__ikon { color: #3ddc84; }
+.bildirim--hata .bildirim__ikon, .bildirim--silme .bildirim__ikon { color: #ff5c5c; }
+.bildirim--uyari .bildirim__ikon { color: #f5b100; }
+.bildirim--bilgi .bildirim__ikon { color: #6fa8ff; }
+
+.bildirim__metin { display: grid; flex: 1; min-width: 0; gap: 3px; }
+.bildirim__metin strong { color: #fff; font-size: .86rem; font-weight: 700; }
+.bildirim__metin p { margin: 0; color: #9a9aa5; font-size: .78rem; line-height: 1.4; }
+
+.bildirim__kapat {
+  display: grid;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b6b76;
+  cursor: pointer;
+  place-items: center;
+}
+.bildirim__kapat:hover { background: #24242c; color: #fff; }
+
+@media (max-width: 480px) {
+  .bildirim-yigini { right: 10px; bottom: 10px; left: 10px; width: auto; }
+}

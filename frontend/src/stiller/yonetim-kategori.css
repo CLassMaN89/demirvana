@@ -1,9 +1,6 @@
 .yonetim-kategori__durum { padding: 40px; color: var(--yonetim-metin-ikincil); font-size: .9rem; text-align: center; }
 .yonetim-kategori__durum--hata { color: var(--yonetim-kirmizi); }
 
-.yonetim-kategori__baslik { margin-bottom: 20px; }
-.yonetim-kategori__baslik h1 { margin: 0 0 6px; color: var(--yonetim-metin); font-size: 1.3rem; }
-.yonetim-kategori__baslik p { margin: 0; color: var(--yonetim-metin-ikincil); font-size: .85rem; }
 
 .yonetim-kategori__istatistikler { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
 .yonetim-kategori__istatistik { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--yonetim-cizgi); border-radius: 12px; background: #fff; }
@@ -106,13 +103,13 @@
 
 /* Apple tarzı aç/kapa anahtarı: küçük bir track + kayan topuz, yanında Aktif/Pasif metni.
    Tüm buton tek tıklanabilir alan olarak durumu tersine çevirir. */
-.yonetim-durum-hucre { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; cursor: pointer; font: inherit; }
+.yonetim-durum-hucre { display: inline-flex; align-items: center; gap: 3px; border: 0; background: none; cursor: pointer; font: inherit; }
 .yonetim-durum-hucre:disabled { cursor: not-allowed; opacity: .6; }
-.yonetim-toggle { position: relative; display: inline-flex; align-items: center; width: 26px; height: 15px; flex: 0 0 26px; border-radius: 999px; background: var(--yonetim-kirmizi); padding: 2px; transition: background-color 200ms ease; }
+.yonetim-toggle { position: relative; display: inline-flex; align-items: center; width: 22px; height: 13px; flex: 0 0 22px; border-radius: 999px; background: var(--yonetim-kirmizi); padding: 2px; transition: background-color 200ms ease; }
 .yonetim-toggle--acik { background: var(--yonetim-yesil); }
-.yonetim-toggle__topuz { width: 11px; height: 11px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
-.yonetim-toggle--acik .yonetim-toggle__topuz { margin-left: 11px; }
-.yonetim-durum-etiket { color: var(--yonetim-yesil); font-size: .7rem; font-weight: 700; transition: color 200ms ease; }
+.yonetim-toggle__topuz { width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.yonetim-toggle--acik .yonetim-toggle__topuz { margin-left: 9px; }
+.yonetim-durum-etiket { color: var(--yonetim-yesil); font-size: .66rem; font-weight: 700; transition: color 200ms ease; }
 .yonetim-durum-etiket--pasif { color: var(--yonetim-kirmizi); }
 
 /* Kategori adı hiçbir zaman kısaltılmaz; sığmazsa satır sarar (hücre yüksekliği buna göre büyür). */

@@ -6,6 +6,7 @@ import {
   Pencil, Plus, Search, Trash2
 } from 'lucide-react';
 import { altOgeIkonuGetir, grupIkonuGetir } from '../bilesenler/UrunMenuIkonlari';
+import Bildirimler from '../bilesenler/Bildirimler';
 import Modal from '../bilesenler/Modal';
 import { kategoriEkle, kategoriGuncelle, kategoriSil, kategoriYonetimVerisiniGetir } from '../servisler/api';
 import '../stiller/yonetim-kategori.css';
@@ -165,10 +166,10 @@ function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzen
       <div className="yonetim-tablo-kaydir">
         <table className="yonetim-tablo">
           <colgroup>
-            <col style={{ width: '33%' }} />
+            <col style={{ width: '27%' }} />
             <col style={{ width: '9%' }} />
-            <col style={{ width: '13%' }} />
-            <col style={{ width: '21%' }} />
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '25%' }} />
             <col style={{ width: '24%' }} />
           </colgroup>
           <thead>
@@ -246,6 +247,16 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
   const [silinecek, setSilinecek] = useState(null);
   const [gonderiliyorMu, setGonderiliyorMu] = useState(false);
   const [hata, setHata] = useState(null);
+  const [bildirimler, setBildirimler] = useState([]);
+
+  function bildirimEkle(tur, baslik, mesaj) {
+    const id = `${Date.now()}-${Math.random()}`;
+    setBildirimler((mevcut) => [...mevcut, { id, tur, baslik, mesaj }]);
+    setTimeout(() => setBildirimler((mevcut) => mevcut.filter((b) => b.id !== id)), 4000);
+  }
+  function bildirimKapat(id) {
+    setBildirimler((mevcut) => mevcut.filter((b) => b.id !== id));
+  }
 
   useEffect(() => {
     let etkin = true;
@@ -304,21 +315,26 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
       if (form.mod === 'ekle') {
         const yeniKategori = await kategoriEkle(form.grupId, alanlar);
         grupGuncelle(form.grupId, (grup) => ({ ...grup, alt_ogeler: [...(grup.alt_ogeler ?? []), yeniKategori] }));
+        bildirimEkle('basari', 'Kategori eklendi', `"${yeniKategori.baslik}" listeye eklendi.`);
       } else if (form.kategori.ust_alt_oge_id == null) {
         // Kebab menüsünden grubun kendi başlığı düzenleniyor.
         const guncellenenGrup = await kategoriGuncelle(form.kategori.id, alanlar);
         setGruplar((mevcut) => mevcut.map((grup) => (grup.id === form.kategori.id ? { ...grup, ...guncellenenGrup, alt_ogeler: grup.alt_ogeler } : grup)));
+        bildirimEkle('uyari', 'Değişiklikler kaydedildi', `"${guncellenenGrup.baslik}" grubu güncellendi.`);
       } else {
         const guncellenenKategori = await kategoriGuncelle(form.kategori.id, alanlar);
         grupGuncelle(form.kategori.ust_alt_oge_id, (grup) => ({
           ...grup,
           alt_ogeler: (grup.alt_ogeler ?? []).map((kategori) => (kategori.id === guncellenenKategori.id ? guncellenenKategori : kategori))
         }));
+        bildirimEkle('uyari', 'Değişiklikler kaydedildi', `"${guncellenenKategori.baslik}" başarıyla güncellendi.`);
       }
       setForm(null);
       veriYenile?.();
     } catch (istisna) {
-      setHata(istisna.message || 'İşlem tamamlanamadı.');
+      const mesaj = istisna.message || 'İşlem tamamlanamadı.';
+      setHata(mesaj);
+      bildirimEkle('hata', 'İşlem başarısız', mesaj);
     } finally {
       setGonderiliyorMu(false);
     }
@@ -349,10 +365,13 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
         ...grup,
         alt_ogeler: (grup.alt_ogeler ?? []).filter((kategori) => kategori.id !== silinecek.id)
       }));
+      bildirimEkle('silme', 'Kategori silindi', `"${silinecek.baslik}" kalıcı olarak silindi.`);
       setSilinecek(null);
       veriYenile?.();
     } catch (istisna) {
-      setHata(istisna.message || 'Kategori silinemedi.');
+      const mesaj = istisna.message || 'Kategori silinemedi.';
+      setHata(mesaj);
+      bildirimEkle('hata', 'Silme başarısız', mesaj);
     } finally {
       setGonderiliyorMu(false);
     }
@@ -368,10 +387,7 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
 
   return (
     <div className="yonetim-kategori">
-      <div className="yonetim-kategori__baslik">
-        <h1>Kategori Yönetimi</h1>
-        <p>Tüm ürün kategorilerinizi yönetin, düzenleyin ve yeni kategoriler ekleyin.</p>
-      </div>
+      <Bildirimler bildirimler={bildirimler} onKapat={bildirimKapat} />
 
       <div className="yonetim-kategori__istatistikler">
         <IstatistikKarti ikon={LayoutGrid} renk="var(--yonetim-mavi)" etiket="Ana Kategori" deger={istatistikler.anaKategori} />

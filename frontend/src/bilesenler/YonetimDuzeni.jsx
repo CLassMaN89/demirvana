@@ -21,7 +21,12 @@ const MENU_BOLUMLERI = [
     baslik: 'İçerik Yönetimi',
     ogeler: [
       { ad: 'Menü Yönetimi', ikon: ListTree },
-      { ad: 'Kategori Yönetimi', ikon: FolderTree, yol: '/admin/kategoriler' },
+      {
+        ad: 'Kategori Yönetimi',
+        ikon: FolderTree,
+        yol: '/admin/kategoriler',
+        aciklama: 'Tüm ürün kategorilerinizi yönetin, düzenleyin ve yeni kategoriler ekleyin.'
+      },
       { ad: 'Ürün Yönetimi', ikon: Package }
     ]
   },
@@ -56,10 +61,10 @@ const MENU_BOLUMLERI = [
 
 // Üst çubuktaki "Hoş Geldiniz" karşılaması yalnızca Dashboard'a özeldir; diğer tüm admin
 // sayfalarında ziyaretçiye o an hangi ekranda olduğunu söyleyen sayfa adı gösterilir.
-function sayfaBasliginiBul(pathname) {
+function sayfaBilgisiniBul(pathname) {
   for (const bolum of MENU_BOLUMLERI) {
     for (const oge of bolum.ogeler) {
-      if (oge.yol === pathname) return oge.ad;
+      if (oge.yol === pathname) return oge;
     }
   }
   return null;
@@ -67,7 +72,7 @@ function sayfaBasliginiBul(pathname) {
 
 export default function YonetimDuzeni({ children }) {
   const konum = useLocation();
-  const sayfaBasligi = konum.pathname === '/admin' ? null : sayfaBasliginiBul(konum.pathname);
+  const sayfaBilgisi = konum.pathname === '/admin' ? null : sayfaBilgisiniBul(konum.pathname);
 
   return (
     <div className="yonetim">
@@ -124,7 +129,9 @@ export default function YonetimDuzeni({ children }) {
       <div className="yonetim__ana">
         <header className="yonetim__ust-bar">
           <div className="yonetim__karsilama">
-            {sayfaBasligi ? <strong>{sayfaBasligi}</strong> : (<><strong>Hoş Geldiniz 👋</strong><span>Demir Vana</span></>)}
+            {sayfaBilgisi
+              ? (<><strong>{sayfaBilgisi.ad}</strong>{sayfaBilgisi.aciklama && <span>{sayfaBilgisi.aciklama}</span>}</>)
+              : (<><strong>Hoş Geldiniz 👋</strong><span>Demir Vana</span></>)}
           </div>
           <label className="yonetim__arama">
             <SearchIcon aria-hidden="true" />
