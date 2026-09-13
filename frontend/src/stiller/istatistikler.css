@@ -22,7 +22,7 @@
 .sayac-saat { display: inline-flex; align-items: center; color: var(--sayac-renk, var(--yonetim-kirmizi)); font-size: .85rem; font-weight: 700; }
 .sayac-saat__nokta { margin: 0 1px; opacity: .7; }
 
-/* Odometre efekti: sabit yükseklikli, taşanı gizleyen bir kutu içinde eski rakam yukarı çıkıp
-   kaybolurken yenisi alttan kayarak girer. */
-.akan-rakam { position: relative; display: inline-block; overflow: hidden; height: 1.3em; width: 1.8ch; vertical-align: middle; }
-.akan-rakam__deger { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; line-height: 1; }
+/* Değişen rakam hafifçe kayarak belirir; sabit yükseklik/overflow:hidden kasıtlı olarak
+   kullanılmaz (rakamın kesilmesine yol açıyordu). display:inline-block satırdan çıkmadan
+   transform ile animasyon yapılabilmesi için gerekli. */
+.akan-rakam { display: inline-block; min-width: 1.8ch; text-align: center; }

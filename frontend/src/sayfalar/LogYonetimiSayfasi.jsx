@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
 import { islemYonetimVerisiniGetir, kategoriGeriAl, silinenKategorileriGetir } from '../servisler/api';
@@ -28,23 +28,21 @@ function yoluUret(kategori) {
 
 const GUN_MS = 24 * 60 * 60 * 1000;
 
-// Değişen sayı her tikte eskisini yukarı doğru itip yeni değeri alttan kaydırarak girer (odometre efekti).
+// Değişen rakamda kısa bir "belirme" efekti oynar. Bilerek AnimatePresence/popLayout KULLANILMAZ:
+// çıkan elemanı mutlak konumlandırıp taşıyan o yaklaşım, sayfa saniyede bir yeniden akışa
+// girdiğinde rakamın yanlış yere "uçmasına" yol açıyordu. Burada sadece key değişince yeniden
+// monte edilen elemanın kendi initial→animate geçişi oynar; konum/layout'a hiç dokunulmaz.
 function AkanRakam({ deger }) {
   return (
-    <span className="akan-rakam">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
-          key={deger}
-          className="akan-rakam__deger"
-          initial={{ y: 14, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -14, opacity: 0 }}
-          transition={{ duration: .28, ease: 'easeOut' }}
-        >
-          {deger}
-        </motion.span>
-      </AnimatePresence>
-    </span>
+    <motion.span
+      key={deger}
+      className="akan-rakam"
+      initial={{ opacity: .3, scale: .8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: .22, ease: 'easeOut' }}
+    >
+      {deger}
+    </motion.span>
   );
 }
 
