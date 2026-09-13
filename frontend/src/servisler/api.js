@@ -110,16 +110,43 @@ export async function kategoriGeriAl(id, secenekler = {}) {
 
 // SPA istemci tarafında yönlendiği için her sayfa geçişinde bu uca küçük bir "fire and forget"
 // isteği atılır; IP adresi güvenilir şekilde yalnızca sunucu tarafında okunabildiği için buradan
-// hiçbir kimlik bilgisi gönderilmez, yalnızca ziyaret edilen yol ve geldiği sayfa.
+// hiçbir kimlik bilgisi gönderilmez, yalnızca ziyaret edilen yol, geldiği sayfa ve sunucudan asla
+// okunamayan ekran çözünürlüğü / saat dilimi gibi tarayıcı bilgileri. Dönen kayıt id'si, ziyaretçi
+// sayfadan ayrılınca kalma süresini geriye dönük doldurabilmek için kullanılır.
 export async function sayfaGoruntulemeKaydet(yol, referans, { fetchFn = globalThis.fetch } = {}) {
   try {
-    await fetchFn(`${API_TABANI}/analitik/goruntuleme`, {
+    const yanit = await fetchFn(`${API_TABANI}/analitik/goruntuleme`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ yol, referans: referans || null })
+      body: JSON.stringify({
+        yol,
+        referans: referans || null,
+        ekran_cozunurlugu: typeof screen !== 'undefined' ? `${screen.width}x${screen.height}` : null,
+        saat_dilimi: Intl.DateTimeFormat().resolvedOptions().timeZone || null
+      })
     });
+    const govde = await yanit.json();
+    return govde?.veri?.id ?? null;
   } catch {
     // Analitik kaydı başarısız olsa da ziyaretçi deneyimini etkilememeli.
+    return null;
+  }
+}
+
+// Ziyaretçi sayfadan ayrılırken (rota değişimi veya sekme kapanışı) çağrılır; sayfada geçirilen
+// süreyi az önce oluşturulan ziyaret kaydına geriye dönük işler. sendBeacon, sayfa kapanırken bile
+// isteğin tamamlanmasını garanti eder — normal fetch bu anda kesilebilir.
+export function kalmaSuresiKaydet(id, saniye) {
+  if (!id) return;
+  const veri = JSON.stringify({ id, saniye });
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(`${API_TABANI}/analitik/kalma-suresi`, new Blob([veri], { type: 'application/json' }));
+    } else {
+      fetch(`${API_TABANI}/analitik/kalma-suresi`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: veri, keepalive: true }).catch(() => {});
+    }
+  } catch {
+    // Kalma süresi ikincil bir metrik; başarısız olması ziyaretçi deneyimini etkilememeli.
   }
 }
 

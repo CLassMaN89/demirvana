@@ -20,7 +20,7 @@ import YonetimPaneliSayfasi from './sayfalar/YonetimPaneliSayfasi';
 import KategoriYonetimSayfasi from './sayfalar/KategoriYonetimSayfasi';
 import IstatistiklerSayfasi from './sayfalar/IstatistiklerSayfasi';
 import LogYonetimiSayfasi from './sayfalar/LogYonetimiSayfasi';
-import { sayfaGoruntulemeKaydet, siteVerileriniGetir } from './servisler/api';
+import { kalmaSuresiKaydet, sayfaGoruntulemeKaydet, siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
 
@@ -91,11 +91,47 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   // Halka açık site ziyaretlerini (admin paneli hariç) sunucuya bildirir; İstatistikler sayfasının
   // "hangi sayfalar görüntülendi" verisinin kaynağı budur.
   const oncekiYolRef = useRef(null);
+  // O an açık olan sayfanın ziyaret kaydı id'si ve ne zaman açıldığı; sayfa değişince veya
+  // ziyaretçi siteden ayrılınca geçen süreyi geriye dönük doldurmak için kullanılır.
+  const guncelZiyaretRef = useRef(null);
+
+  function acikSayfadaGecenSureyiKaydet() {
+    if (!guncelZiyaretRef.current) return;
+    const { id, girisZamani } = guncelZiyaretRef.current;
+    kalmaSuresiKaydet(id, Math.round((Date.now() - girisZamani) / 1000));
+    guncelZiyaretRef.current = null;
+  }
+
   useEffect(() => {
     if (konum.pathname.startsWith('/admin')) return;
-    sayfaGoruntulemeKaydet(konum.pathname, oncekiYolRef.current);
+    acikSayfadaGecenSureyiKaydet();
+
+    let etkin = true;
+    sayfaGoruntulemeKaydet(konum.pathname, oncekiYolRef.current).then((id) => {
+      if (etkin) guncelZiyaretRef.current = { id, girisZamani: Date.now() };
+    });
     oncekiYolRef.current = konum.pathname;
+
+    return () => {
+      etkin = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [konum.pathname]);
+
+  // Sekme kapatılırken/arka plana alınırken normal bir istek yarıda kesilebilir; sendBeacon
+  // tabanlı kalmaSuresiKaydet bu durumlarda bile isteğin gönderilmesini garanti eder.
+  useEffect(() => {
+    function sekmeGizlendi() {
+      if (document.visibilityState === 'hidden') acikSayfadaGecenSureyiKaydet();
+    }
+    document.addEventListener('visibilitychange', sekmeGizlendi);
+    window.addEventListener('pagehide', acikSayfadaGecenSureyiKaydet);
+    return () => {
+      document.removeEventListener('visibilitychange', sekmeGizlendi);
+      window.removeEventListener('pagehide', acikSayfadaGecenSureyiKaydet);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (durum.yukleniyor) {
     return (

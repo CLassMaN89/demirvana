@@ -21,6 +21,7 @@ $yontem = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 if ($yontem !== 'GET'
     && !($yontem === 'POST' && $yol === '/api/iletisim-mesajlari')
     && !($yontem === 'POST' && $yol === '/api/analitik/goruntuleme')
+    && !($yontem === 'POST' && $yol === '/api/analitik/kalma-suresi')
     && !str_starts_with($yol, '/api/admin/')) {
     JsonYanit::gonder(JsonYanit::olustur(false, null, 'Bu yöntem desteklenmiyor.'), 405);
 }
@@ -127,16 +128,37 @@ try {
     if ($yontem === 'POST' && $yol === '/api/analitik/goruntuleme') {
         $girdi = json_decode((string) file_get_contents('php://input'), true);
         try {
-            $denetleyici->ziyaretKaydet(
+            // Dil, Accept-Language header'indan (sunucu tarafinda guvenilir) alinir; ekran
+            // cozunurlugu ve saat dilimi ise yalnizca tarayicidan (JS ile) bilinebildigi icin
+            // istek govdesinden okunur.
+            $dil = isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])
+                ? trim(explode(',', (string) $_SERVER['HTTP_ACCEPT_LANGUAGE'])[0])
+                : null;
+            $id = $denetleyici->ziyaretKaydet(
                 istekIp(),
                 isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : null,
                 (string) ($girdi['yol'] ?? ''),
-                isset($girdi['referans']) && $girdi['referans'] !== '' ? (string) $girdi['referans'] : null
+                isset($girdi['referans']) && $girdi['referans'] !== '' ? (string) $girdi['referans'] : null,
+                $dil !== '' ? $dil : null,
+                isset($girdi['ekran_cozunurlugu']) && $girdi['ekran_cozunurlugu'] !== '' ? (string) $girdi['ekran_cozunurlugu'] : null,
+                isset($girdi['saat_dilimi']) && $girdi['saat_dilimi'] !== '' ? (string) $girdi['saat_dilimi'] : null
             );
-            JsonYanit::gonder(JsonYanit::olustur(true, null), 201);
+            JsonYanit::gonder(JsonYanit::olustur(true, ['id' => $id]), 201);
         } catch (InvalidArgumentException $hata) {
             JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
         }
+    }
+
+    // Kalma suresi, sayfa gorunumu kaydedildikten SONRA (ziyaretci sayfadan ayrilirken) belli
+    // olur; bu yuzden ayri ve kucuk bir PATCH benzeri istekle geriye donuk doldurulur.
+    if ($yontem === 'POST' && $yol === '/api/analitik/kalma-suresi') {
+        $girdi = json_decode((string) file_get_contents('php://input'), true);
+        $id = isset($girdi['id']) ? (int) $girdi['id'] : 0;
+        $saniye = isset($girdi['saniye']) ? (int) $girdi['saniye'] : -1;
+        if ($id > 0 && $saniye >= 0) {
+            $denetleyici->kalmaSuresiGuncelle($id, $saniye);
+        }
+        JsonYanit::gonder(JsonYanit::olustur(true, null), 200);
     }
 
     if ($yontem === 'GET' && $yol === '/api/admin/ziyaretler') {

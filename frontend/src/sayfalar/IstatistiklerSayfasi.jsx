@@ -24,23 +24,42 @@ function tarihiFormatla(deger) {
   return tarih.toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 }
 
-// Kısa, kaba bir user-agent özetleyici: tam dizeyi tabloya sığdırmak yerine tarayıcı/işletim
-// sistemi adını çıkarır. Kesin cihaz tespiti hedeflenmez, yalnızca okunabilir bir özet sunar.
+// Kısa, kaba bir user-agent özetleyici: tam dizeyi tabloya sığdırmak yerine tarayıcı adı+sürümü
+// ve işletim sistemini çıkarır. Kesin cihaz tespiti hedeflenmez, yalnızca okunabilir bir özet sunar.
 function tarayiciOzetle(ajan) {
   if (!ajan) return 'Bilinmiyor';
   if (/curl|postman|python-requests/i.test(ajan)) return 'Otomasyon/Araç';
-  const tarayici = /Edg\//.test(ajan) ? 'Edge'
-    : /Chrome\//.test(ajan) ? 'Chrome'
-    : /Firefox\//.test(ajan) ? 'Firefox'
-    : /Safari\//.test(ajan) ? 'Safari'
-    : 'Diğer';
+  const surumBul = (desen) => ajan.match(desen)?.[1] ?? '';
+  const [tarayici, surum] = /Edg\/([\d.]+)/.test(ajan) ? ['Edge', surumBul(/Edg\/([\d.]+)/)]
+    : /Chrome\/([\d.]+)/.test(ajan) ? ['Chrome', surumBul(/Chrome\/([\d.]+)/)]
+    : /Firefox\/([\d.]+)/.test(ajan) ? ['Firefox', surumBul(/Firefox\/([\d.]+)/)]
+    : /Version\/([\d.]+).*Safari/.test(ajan) ? ['Safari', surumBul(/Version\/([\d.]+)/)]
+    : ['Diğer', ''];
   const sistem = /Windows/.test(ajan) ? 'Windows'
     : /Android/.test(ajan) ? 'Android'
     : /iPhone|iPad/.test(ajan) ? 'iOS'
     : /Mac OS/.test(ajan) ? 'macOS'
     : /Linux/.test(ajan) ? 'Linux'
     : '';
-  return sistem ? `${tarayici} · ${sistem}` : tarayici;
+  const adSurum = surum ? `${tarayici} ${surum.split('.').slice(0, 2).join('.')}` : tarayici;
+  return sistem ? `${adSurum} · ${sistem}` : adSurum;
+}
+
+// Cihaz tipi: Tablet önce kontrol edilir çünkü iPad/Android tablet UA'ları genelde "Mobile"
+// dizesini de içermeyebilir/içerebilir, bu yüzden ayrım "Tablet" ipuçlarına öncelik verir.
+function cihazTipiBelirle(ajan) {
+  if (!ajan) return 'Bilinmiyor';
+  if (/iPad|Tablet(?!.*Mobile)/i.test(ajan)) return 'Tablet';
+  if (/Mobi|Android|iPhone/i.test(ajan)) return 'Mobil';
+  return 'Masaüstü';
+}
+
+function kalmaSuresiniFormatla(saniye) {
+  if (saniye === null || saniye === undefined) return '—';
+  if (saniye < 60) return `${saniye} sn`;
+  const dakika = Math.floor(saniye / 60);
+  const kalanSaniye = saniye % 60;
+  return `${dakika} dk ${kalanSaniye} sn`;
 }
 
 function IstatistikKarti({ ikon: Ikon, renk, etiket, deger }) {
@@ -193,7 +212,11 @@ export default function IstatistiklerSayfasi() {
                     <div className="yonetim-tablo-kaydir">
                       <table className="yonetim-tablo istatistik-tablo istatistik-tablo--sola-yasli">
                         <thead>
-                          <tr><th>Saat</th><th>IP Adresi</th><th>Sayfa</th><th>Geldiği Yer</th><th>Tarayıcı</th></tr>
+                          <tr>
+                            <th>Saat</th><th>IP Adresi</th><th>Sayfa</th><th>Geldiği Yer</th>
+                            <th>Tarayıcı</th><th>Cihaz</th><th>Dil</th><th>Ekran</th><th>Saat Dilimi</th>
+                            <th>Kalma Süresi</th>
+                          </tr>
                         </thead>
                         <tbody>
                           {gun.kayitlar.map((kayit) => (
@@ -203,6 +226,11 @@ export default function IstatistiklerSayfasi() {
                               <td title={kayit.yol}>{kayit.yol}</td>
                               <td title={kayit.referans || ''}>{kayit.referans || '—'}</td>
                               <td>{tarayiciOzetle(kayit.kullanici_ajani)}</td>
+                              <td>{cihazTipiBelirle(kayit.kullanici_ajani)}</td>
+                              <td>{kayit.dil || '—'}</td>
+                              <td>{kayit.ekran_cozunurlugu || '—'}</td>
+                              <td>{kayit.saat_dilimi || '—'}</td>
+                              <td>{kalmaSuresiniFormatla(kayit.kalma_suresi_sn)}</td>
                             </tr>
                           ))}
                         </tbody>

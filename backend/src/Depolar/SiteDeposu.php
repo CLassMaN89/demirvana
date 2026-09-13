@@ -586,24 +586,50 @@ final class SiteDeposu
      * IP adresine baglanir. MAC adresi hicbir tarayici tarafindan web sitelerine verilmedigi icin
      * (guvenlik/gizlilik kisitlamasi) burada da tutulmuyor.
      */
-    public function ziyaretKaydet(string $ipAdresi, ?string $kullaniciAjani, string $yol, ?string $referans): void
-    {
+    public function ziyaretKaydet(
+        string $ipAdresi,
+        ?string $kullaniciAjani,
+        string $yol,
+        ?string $referans,
+        ?string $dil,
+        ?string $ekranCozunurlugu,
+        ?string $saatDilimi
+    ): int {
         $sorgu = $this->baglanti->prepare(
-            'INSERT INTO ziyaret_kayitlari (ip_adresi, kullanici_ajani, yol, referans)
-             VALUES (:ip, :ajan, :yol, :referans)'
+            'INSERT INTO ziyaret_kayitlari (ip_adresi, kullanici_ajani, yol, referans, dil, ekran_cozunurlugu, saat_dilimi)
+             VALUES (:ip, :ajan, :yol, :referans, :dil, :ekran, :saat_dilimi)'
         );
         $sorgu->execute([
             'ip' => $ipAdresi,
             'ajan' => $kullaniciAjani !== null ? substr($kullaniciAjani, 0, 255) : null,
             'yol' => substr($yol, 0, 255),
             'referans' => $referans !== null ? substr($referans, 0, 255) : null,
+            'dil' => $dil !== null ? substr($dil, 0, 20) : null,
+            'ekran' => $ekranCozunurlugu !== null ? substr($ekranCozunurlugu, 0, 20) : null,
+            'saat_dilimi' => $saatDilimi !== null ? substr($saatDilimi, 0, 64) : null,
         ]);
+
+        return (int) $this->baglanti->lastInsertId();
+    }
+
+    /**
+     * Kalma süresi, sayfa görüntüleme kaydedildiği anda bilinmez (ziyaretçi henüz sayfada);
+     * bu yüzden ziyaretçi bir sonraki sayfaya geçtiğinde ya da siteden ayrıldığında ayrı bir
+     * istekle (sendBeacon) geriye dönük olarak doldurulur.
+     */
+    public function kalmaSuresiGuncelle(int $id, int $saniye): void
+    {
+        $sorgu = $this->baglanti->prepare(
+            'UPDATE ziyaret_kayitlari SET kalma_suresi_sn = :saniye WHERE id = :id'
+        );
+        $sorgu->execute(['saniye' => max(0, $saniye), 'id' => $id]);
     }
 
     public function ziyaretleriGetir(int $limit, int $offset): array
     {
         $sorgu = $this->baglanti->prepare(
-            'SELECT id, ip_adresi, kullanici_ajani, yol, referans, olusturulma_tarihi
+            'SELECT id, ip_adresi, kullanici_ajani, yol, referans, dil, ekran_cozunurlugu, saat_dilimi,
+                    kalma_suresi_sn, olusturulma_tarihi
              FROM ziyaret_kayitlari ORDER BY olusturulma_tarihi DESC LIMIT :limit OFFSET :offset'
         );
         $sorgu->bindValue('limit', $limit, PDO::PARAM_INT);

@@ -171,13 +171,25 @@ final class SiteDenetleyicisi
         $this->depo->supurSilinenleri();
     }
 
-    public function ziyaretKaydet(string $ipAdresi, ?string $kullaniciAjani, string $yol, ?string $referans): void
-    {
+    public function ziyaretKaydet(
+        string $ipAdresi,
+        ?string $kullaniciAjani,
+        string $yol,
+        ?string $referans,
+        ?string $dil = null,
+        ?string $ekranCozunurlugu = null,
+        ?string $saatDilimi = null
+    ): int {
         $yol = trim($yol);
         if ($yol === '' || self::metinUzunlugu($yol) > 255) {
             throw new InvalidArgumentException('Geçersiz sayfa yolu.');
         }
-        $this->depo->ziyaretKaydet($ipAdresi, $kullaniciAjani, $yol, $referans);
+        return $this->depo->ziyaretKaydet($ipAdresi, $kullaniciAjani, $yol, $referans, $dil, $ekranCozunurlugu, $saatDilimi);
+    }
+
+    public function kalmaSuresiGuncelle(int $id, int $saniye): void
+    {
+        $this->depo->kalmaSuresiGuncelle($id, $saniye);
     }
 
     public function ziyaretYonetimVerisi(int $sayfa): array

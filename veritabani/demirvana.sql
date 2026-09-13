@@ -2955,3 +2955,15 @@ CREATE TABLE IF NOT EXISTS `admin_islem_kayitlari` (
 ALTER TABLE `menu_alt_ogeleri`
     ADD COLUMN `silinme_tarihi` TIMESTAMP NULL DEFAULT NULL AFTER `aktif_mi`,
     ADD KEY `menu_alt_oge_silinme` (`silinme_tarihi`);
+
+-- 2026-09-13: Istatistikler sayfasindaki "Son Ziyaretler" icin ek tarayici/cihaz bilgileri.
+-- dil: Accept-Language header'indan (sunucu tarafinda, guvenilir); ekran_cozunurlugu ve
+-- saat_dilimi: istemci JS'i tarafindan gonderilir (sunucudan hicbir sekilde okunamaz).
+-- kalma_suresi_sn: sayfa gorunumu kaydedildikten sonra, ziyaretci sonraki sayfaya
+-- gectiginde/siteden ayrildiginda ayri bir istekle (sendBeacon) doldurulur; bu yuzden NULL
+-- olabilir (henuz olculmedi ya da olculemedi).
+ALTER TABLE `ziyaret_kayitlari`
+    ADD COLUMN `dil` VARCHAR(20) NULL AFTER `referans`,
+    ADD COLUMN `ekran_cozunurlugu` VARCHAR(20) NULL AFTER `dil`,
+    ADD COLUMN `saat_dilimi` VARCHAR(64) NULL AFTER `ekran_cozunurlugu`,
+    ADD COLUMN `kalma_suresi_sn` INT UNSIGNED NULL AFTER `saat_dilimi`;
