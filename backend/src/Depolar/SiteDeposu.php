@@ -639,6 +639,19 @@ final class SiteDeposu
         return $sorgu->fetchAll();
     }
 
+    /** Bir IP'nin hangi sayfalara girdiğini, kaç kez ve toplam ne kadar kaldığını gösterir. */
+    public function ipSayfalariniGetir(string $ipAdresi): array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT yol, COUNT(*) AS adet, SUM(kalma_suresi_sn) AS toplam_saniye, MAX(olusturulma_tarihi) AS son_ziyaret
+             FROM ziyaret_kayitlari WHERE ip_adresi = :ip
+             GROUP BY yol ORDER BY son_ziyaret DESC'
+        );
+        $sorgu->execute(['ip' => $ipAdresi]);
+
+        return $sorgu->fetchAll();
+    }
+
     public function ziyaretIstatistikleri(): array
     {
         $toplam = (int) $this->baglanti->query('SELECT COUNT(*) FROM ziyaret_kayitlari')->fetchColumn();
@@ -652,11 +665,21 @@ final class SiteDeposu
              GROUP BY yol ORDER BY adet DESC LIMIT 10'
         )->fetchAll();
 
+        // Bir IP'nin sitede toplam ne kadar kaldığı: o IP'ye ait tüm sayfa görüntülemelerinin
+        // kalma süresi toplanır (her satır ayrı bir sayfanın süresidir, IP'nin tüm gezinme
+        // geçmişi boyunca toplamı verir).
+        $ipToplamSureleri = $this->baglanti->query(
+            "SELECT ip_adresi, SUM(kalma_suresi_sn) AS toplam_saniye, COUNT(*) AS goruntuleme_sayisi
+             FROM ziyaret_kayitlari WHERE kalma_suresi_sn IS NOT NULL
+             GROUP BY ip_adresi ORDER BY toplam_saniye DESC LIMIT 200"
+        )->fetchAll();
+
         return [
             'toplam_goruntuleme' => $toplam,
             'benzersiz_ip_sayisi' => $benzersizIp,
             'bugunku_goruntuleme' => $bugun,
             'en_cok_goruntulenen_sayfalar' => $enCokGorulenler,
+            'ip_toplam_sureleri' => $ipToplamSureleri,
         ];
     }
 

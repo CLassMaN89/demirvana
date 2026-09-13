@@ -285,7 +285,7 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
     }
 
     ilkYukleme();
-    const zamanlayici = setInterval(arkaPlandaTazele, 15000);
+    const zamanlayici = setInterval(arkaPlandaTazele, 3000);
     return () => {
       etkin = false;
       clearInterval(zamanlayici);

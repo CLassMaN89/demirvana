@@ -181,7 +181,7 @@ export default function LogYonetimiSayfasi() {
 
   useEffect(() => {
     yukle();
-    const zamanlayici = setInterval(yukle, 20000);
+    const zamanlayici = setInterval(yukle, 3000);
     return () => clearInterval(zamanlayici);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -91,20 +91,23 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
   // Halka açık site ziyaretlerini (admin paneli hariç) sunucuya bildirir; İstatistikler sayfasının
   // "hangi sayfalar görüntülendi" verisinin kaynağı budur.
   const oncekiYolRef = useRef(null);
-  // O an açık olan sayfanın ziyaret kaydı id'si ve ne zaman açıldığı; sayfa değişince veya
-  // ziyaretçi siteden ayrılınca geçen süreyi geriye dönük doldurmak için kullanılır.
+  // O an açık olan sayfanın ziyaret kaydı id'si ve İLK açıldığı an; kontrol noktası her
+  // tetiklendiğinde bu ilk andan itibaren geçen TOPLAM süre gönderilir (girisZamani hiç
+  // sıfırlanmaz) — böylece sekme başka bir sekmeye geçilse/arka plana alınsa bile o süre de
+  // toplama dahil olur, yalnızca gerçekten farklı bir sayfaya geçildiğinde (route değişince)
+  // veya sekme kapatılınca (pagehide) sayaç durdurulup sıfırlanır.
   const guncelZiyaretRef = useRef(null);
 
-  function acikSayfadaGecenSureyiKaydet() {
+  function acikSayfaKontrolNoktasi(sayfaBittiMi = false) {
     if (!guncelZiyaretRef.current) return;
     const { id, girisZamani } = guncelZiyaretRef.current;
     kalmaSuresiKaydet(id, Math.round((Date.now() - girisZamani) / 1000));
-    guncelZiyaretRef.current = null;
+    if (sayfaBittiMi) guncelZiyaretRef.current = null;
   }
 
   useEffect(() => {
     if (konum.pathname.startsWith('/admin')) return;
-    acikSayfadaGecenSureyiKaydet();
+    acikSayfaKontrolNoktasi(true);
 
     let etkin = true;
     sayfaGoruntulemeKaydet(konum.pathname, oncekiYolRef.current).then((id) => {
@@ -118,17 +121,20 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [konum.pathname]);
 
-  // Sekme kapatılırken/arka plana alınırken normal bir istek yarıda kesilebilir; sendBeacon
-  // tabanlı kalmaSuresiKaydet bu durumlarda bile isteğin gönderilmesini garanti eder.
+  // Sekme başka bir sekmeye geçilse/arka plana alınsa bile kalma süresi işlemeye devam eder
+  // (yalnızca bir kontrol noktası atılır, sayaç durdurulmaz); admin panelinde sayının canlı
+  // büyüdüğünü görebilmek için ayrıca periyodik bir kontrol noktası da atılır. Sekme
+  // kapatılırken/gerçekten başka bir siteye geçilirken (pagehide) ise sayaç kesin olarak biter.
   useEffect(() => {
-    function sekmeGizlendi() {
-      if (document.visibilityState === 'hidden') acikSayfadaGecenSureyiKaydet();
-    }
-    document.addEventListener('visibilitychange', sekmeGizlendi);
-    window.addEventListener('pagehide', acikSayfadaGecenSureyiKaydet);
+    const kontrolNoktasi = () => acikSayfaKontrolNoktasi(false);
+    const sayfaBitti = () => acikSayfaKontrolNoktasi(true);
+    const zamanlayici = setInterval(kontrolNoktasi, 20000);
+    document.addEventListener('visibilitychange', kontrolNoktasi);
+    window.addEventListener('pagehide', sayfaBitti);
     return () => {
-      document.removeEventListener('visibilitychange', sekmeGizlendi);
-      window.removeEventListener('pagehide', acikSayfadaGecenSureyiKaydet);
+      clearInterval(zamanlayici);
+      document.removeEventListener('visibilitychange', kontrolNoktasi);
+      window.removeEventListener('pagehide', sayfaBitti);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

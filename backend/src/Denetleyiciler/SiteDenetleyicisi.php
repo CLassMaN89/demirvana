@@ -192,6 +192,11 @@ final class SiteDenetleyicisi
         $this->depo->kalmaSuresiGuncelle($id, $saniye);
     }
 
+    public function ipSayfalariniGetir(string $ipAdresi): array
+    {
+        return $this->depo->ipSayfalariniGetir($ipAdresi);
+    }
+
     public function ziyaretYonetimVerisi(int $sayfa): array
     {
         $sayfa = max(1, $sayfa);

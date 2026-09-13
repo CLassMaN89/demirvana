@@ -4,13 +4,70 @@
 .istatistik-kart__baslik h3 { margin: 0; color: var(--yonetim-metin); font-size: .92rem; }
 .istatistik-kart__not { flex-basis: 100%; margin: 4px 0 0; color: var(--yonetim-metin-ikincil); font-size: .72rem; line-height: 1.4; }
 
-.istatistik-tablo th, .istatistik-tablo td { text-align: left; white-space: nowrap; }
+.istatistik-tablo th, .istatistik-tablo td { text-align: left; white-space: nowrap; width: 1%; }
 .istatistik-tablo td[title] { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+
+/* En Çok Görüntülenen Sayfalar ve IP Bazında Toplam Kalma Süresi kartları alt alta değil yan
+   yana; dar ekranda (tablet/mobil) tek sütuna düşer. */
+.istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; }
+@media (max-width: 900px) {
+  .istatistik-yan-yana { grid-template-columns: 1fr; }
+}
+
+.sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; margin-top: auto; }
+.sayfalama button {
+  padding: 5px 12px;
+  border: 1px solid var(--yonetim-cizgi);
+  border-radius: 7px;
+  background: var(--yonetim-zemin);
+  color: var(--yonetim-mavi);
+  font-size: .76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sayfalama button:hover:not(:disabled) { background: var(--yonetim-mavi); border-color: var(--yonetim-mavi); color: #fff; }
+.sayfalama button:disabled { opacity: .4; cursor: not-allowed; }
+.sayfalama span { color: var(--yonetim-metin-ikincil); font-size: .76rem; font-weight: 600; }
+
+/* Kart başlığındaki arama kutusu; dar ekranda tam genişliğe düşer (istatistik-kart__not gibi). */
+.arama-kutusu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 5px 10px;
+  border: 1px solid var(--yonetim-cizgi);
+  border-radius: 8px;
+  background: var(--yonetim-zemin);
+  color: var(--yonetim-metin-ikincil);
+}
+.arama-kutusu input {
+  border: 0;
+  background: none;
+  outline: none;
+  color: var(--yonetim-metin);
+  font-size: .78rem;
+  width: 150px;
+}
+.arama-kutusu input::-webkit-search-cancel-button { cursor: pointer; }
+@media (max-width: 640px) {
+  .arama-kutusu { flex-basis: 100%; margin-left: 0; }
+  .arama-kutusu input { width: 100%; }
+}
 
 .log-eylem { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: .72rem; font-weight: 600; }
 .log-eylem--ekle { background: color-mix(in srgb, var(--yonetim-yesil) 12%, transparent); color: var(--yonetim-yesil); }
 .log-eylem--guncelle { background: color-mix(in srgb, var(--yonetim-turuncu) 12%, transparent); color: var(--yonetim-turuncu); }
 .log-eylem--sil { background: color-mix(in srgb, var(--yonetim-kirmizi) 12%, transparent); color: var(--yonetim-kirmizi); }
+
+/* IP adresi ve cihaz tipi tablo hücrelerinde okunabilir renkli rozetler olarak gösterilir:
+   IP her zaman yeşil, cihaz tipine göre masaüstü mavi / mobil turuncu / tablet mor. */
+.rozet { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+.rozet--ip { background: color-mix(in srgb, var(--yonetim-yesil) 12%, transparent); color: var(--yonetim-yesil); }
+.rozet--cihaz-masaustu { background: color-mix(in srgb, var(--yonetim-mavi) 12%, transparent); color: var(--yonetim-mavi); }
+.rozet--cihaz-mobil { background: color-mix(in srgb, var(--yonetim-turuncu) 12%, transparent); color: var(--yonetim-turuncu); }
+.rozet--cihaz-tablet { background: color-mix(in srgb, #7C3AED 12%, transparent); color: #7C3AED; }
 
 .geri-sayim { display: inline-flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
 .geri-sayim--doldu { color: var(--yonetim-metin-ikincil); font-weight: 600; }
