@@ -69,6 +69,23 @@ function CihazRozeti({ ajan }) {
   return <span className={`rozet ${CIHAZ_ROZET_SINIFI[cihaz] ?? ''}`}>{cihaz}</span>;
 }
 
+// Sayfa yolu web sitesindeki gerçek adresle aynı (SPA aynı origin'de çalışıyor); yeni
+// sekmede açılır ki admin panelinden ayrılmış olunmaz.
+function SayfaGoruntuleLinki({ yol }) {
+  return (
+    <a
+      className="sayfa-goruntule-linki"
+      href={yol}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${yol} sayfasını web sitesinde aç`}
+      title="Sayfayı web sitesinde aç"
+    >
+      <Eye aria-hidden="true" size={15} />
+    </a>
+  );
+}
+
 function kalmaSuresiniFormatla(saniye) {
   if (saniye === null || saniye === undefined) return '—';
   if (saniye < 60) return `${saniye} sn`;
@@ -245,13 +262,17 @@ export default function IstatistiklerSayfasi() {
           <div className="istatistik-kart__govde">
             <div className="yonetim-tablo-kaydir">
               <table className="yonetim-tablo">
-                <thead><tr><th>Sayfa</th><th>Görüntüleme</th></tr></thead>
+                <thead><tr><th></th><th>Sayfa</th><th>Görüntüleme</th></tr></thead>
                 <tbody>
                   {istatistikler.en_cok_goruntulenen_sayfalar.map((satir) => (
-                    <tr key={satir.yol}><td>{satir.yol}</td><td>{satir.adet}</td></tr>
+                    <tr key={satir.yol}>
+                      <td><SayfaGoruntuleLinki yol={satir.yol} /></td>
+                      <td>{satir.yol}</td>
+                      <td>{satir.adet}</td>
+                    </tr>
                   ))}
                   {istatistikler.en_cok_goruntulenen_sayfalar.length === 0 && (
-                    <tr><td colSpan={2} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
+                    <tr><td colSpan={3} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -309,21 +330,23 @@ export default function IstatistiklerSayfasi() {
                       <div className="yonetim-tablo-kaydir">
                         <table className="yonetim-tablo istatistik-tablo">
                           <colgroup>
-                            <col style={{ width: '55%' }} />
+                            <col style={{ width: '5%' }} />
+                            <col style={{ width: '50%' }} />
                             <col style={{ width: '15%' }} />
                             <col style={{ width: '15%' }} />
                             <col style={{ width: '15%' }} />
                           </colgroup>
-                          <thead><tr><th>Sayfa</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
+                          <thead><tr><th></th><th>Sayfa</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
                           <tbody>
                             {sayfaDurumu?.yukleniyor && (
-                              <tr><td colSpan={4} className="yonetim-tablo__bos">Yükleniyor…</td></tr>
+                              <tr><td colSpan={5} className="yonetim-tablo__bos">Yükleniyor…</td></tr>
                             )}
                             {sayfaDurumu?.hata && (
-                              <tr><td colSpan={4} className="yonetim-tablo__bos">{sayfaDurumu.hata}</td></tr>
+                              <tr><td colSpan={5} className="yonetim-tablo__bos">{sayfaDurumu.hata}</td></tr>
                             )}
                             {sayfalanmisSayfalar.map((sayfa) => (
                               <tr key={sayfa.yol}>
+                                <td><SayfaGoruntuleLinki yol={sayfa.yol} /></td>
                                 <td title={sayfa.yol}>{sayfa.yol}</td>
                                 <td>{sayfa.adet}</td>
                                 <td>{kalmaSuresiniFormatla(Number(sayfa.toplam_saniye))}</td>
@@ -336,7 +359,7 @@ export default function IstatistiklerSayfasi() {
                               { length: Math.max(0, SAYFA_DOKUM_BOYUTU - sayfalanmisSayfalar.length) }
                             ).map((_, i) => (
                               <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
-                                <td colSpan={4}>&nbsp;</td>
+                                <td colSpan={5}>&nbsp;</td>
                               </tr>
                             ))}
                           </tbody>
@@ -430,7 +453,7 @@ export default function IstatistiklerSayfasi() {
                       <table className="yonetim-tablo istatistik-tablo istatistik-tablo--sola-yasli">
                         <thead>
                           <tr>
-                            <th>Saat</th><th>IP Adresi</th><th>Geldiği Yer</th><th>Sayfa</th>
+                            <th>Saat</th><th>IP Adresi</th><th>Geldiği Yer</th><th></th><th>Sayfa</th>
                             <th>Tarayıcı</th><th>Cihaz</th><th>Dil</th><th>Ekran</th><th>Saat Dilimi</th>
                             <th>Kalma Süresi</th>
                           </tr>
@@ -441,6 +464,7 @@ export default function IstatistiklerSayfasi() {
                               <td>{tarihiFormatla(kayit.olusturulma_tarihi).split(' ').pop()}</td>
                               <td><IpRozeti ip={kayit.ip_adresi} /></td>
                               <td title={kayit.referans || ''}>{kayit.referans || '—'}</td>
+                              <td><SayfaGoruntuleLinki yol={kayit.yol} /></td>
                               <td title={kayit.yol}>{kayit.yol}</td>
                               <td>{tarayiciOzetle(kayit.kullanici_ajani)}</td>
                               <td><CihazRozeti ajan={kayit.kullanici_ajani} /></td>

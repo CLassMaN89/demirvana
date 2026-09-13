@@ -5,6 +5,20 @@
 .istatistik-kart__not { flex-basis: 100%; margin: 4px 0 0; color: var(--yonetim-metin-ikincil); font-size: .72rem; line-height: 1.4; }
 
 .istatistik-tablo th, .istatistik-tablo td { text-align: left; white-space: nowrap; width: 1%; }
+
+/* Sayfa sütunundan hemen önceki göz ikonu: tıklanınca ilgili sayfayı web sitesinde (yeni
+   sekmede) açar. */
+.sayfa-goruntule-linki {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: var(--yonetim-metin-ikincil);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.sayfa-goruntule-linki:hover { background: color-mix(in srgb, var(--yonetim-mavi) 12%, transparent); color: var(--yonetim-mavi); }
 .istatistik-tablo td[title] { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
 /* .yonetim-tablo td:first-child kuralı (yonetim-kategori.css) ilk sütunu white-space:normal'a
    çeviriyor; bu tablolarda satır satır metin uzunluğu farklı olduğu için o sarma, sayfa

@@ -62,7 +62,7 @@ const MENU_BOLUMLERI = [
         aciklama: 'Site ziyaretlerini, en çok görüntülenen sayfaları ve ziyaretçi bilgilerini görüntüleyin.'
       },
       {
-        ad: 'İşlem Logları',
+        ad: 'Admin İşlem Logları',
         ikon: ScrollText,
         yol: '/admin/loglar',
         aciklama: 'Admin panelinde yapılan ekleme, düzenleme ve silme işlemlerinin kaydı.'
