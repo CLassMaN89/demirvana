@@ -11,7 +11,6 @@ const urun = {
   kategori_adi: 'Su Grubu Vanaları',
   teknik_bilgiler: JSON.stringify({
     grup_adi: 'Sürgülü Vanalar',
-    urun_tanimi: { baslik: 'METAL SİTLİ SÜRGÜLÜ VANA', satirlar: ['O-RİNG SİSTEMİ', 'PN10 / PN6'] },
     teknik_cizim_yolu: '/assets/urunler/metal-sitli-surgulu-vana-f4-d-001/teknik-cizim.png',
     parcalar: [{ no: '1', ad: 'Gövde', malzeme: 'GG 25 / GGG-40' }],
     olcu_basliklari: ['40', '50'],
@@ -39,8 +38,6 @@ describe('UrunDetaySayfasi', () => {
     );
 
     expect(screen.getByRole('heading', { name: urun.ad })).toBeInTheDocument();
-    expect(screen.getByText('METAL SİTLİ SÜRGÜLÜ VANA')).toBeInTheDocument();
-    expect(screen.getByText(/O-RİNG SİSTEMİ/)).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /metal sitli sürgülü vana teknik çizimi/i })).toHaveAttribute('src', expect.stringContaining('teknik-cizim.png'));
     expect(screen.getByRole('heading', { name: 'Parça Listesi ve Malzeme Yapısı' })).toBeInTheDocument();
     expect(screen.getByText('GG 25 / GGG-40')).toBeInTheDocument();

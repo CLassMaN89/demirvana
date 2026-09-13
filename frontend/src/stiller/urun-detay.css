@@ -30,7 +30,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 30px;
-  padding: 26px 30px;
+  padding: 16px 26px;
   margin-bottom: 18px;
   background: linear-gradient(115deg, #fff 55%, color-mix(in srgb, var(--renk-ana) 8%, #fff));
 }
@@ -45,11 +45,8 @@
   text-transform: uppercase;
 }
 
-.urun-detay h1 { margin: 0; font-size: clamp(26px, 3vw, 44px); line-height: 1.05; }
-.urun-detay__hero p { margin: 10px 0 0; color: var(--renk-metin); }
-.urun-detay__teknik-tanim { display: grid; grid-template-columns: max-content 1fr; align-items: start; gap: 14px; width: fit-content; margin-top: 12px; padding: 8px 14px; border-left: 3px solid var(--renk-ana); border-radius: 0 8px 8px 0; color: var(--renk-koyu); background: color-mix(in srgb, var(--renk-ana) 7%, #fff); font-size: 1vw; }
-.urun-detay__teknik-tanim strong { max-width: 190px; font-weight: 600; line-height: 1.3; }
-.urun-detay__teknik-tanim span { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--renk-ana) 25%, transparent); white-space: pre-line; line-height: 1.45; }
+.urun-detay h1 { margin: 0; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.1; }
+.urun-detay__hero p { margin: 8px 0 0; color: var(--renk-metin); }
 
 .urun-detay__ust-grid { display: grid; grid-template-columns: minmax(420px, .9fr) minmax(520px, 1.1fr); gap: 18px; }
 .urun-detay__panel--tam { grid-column: 1 / -1; }
@@ -129,9 +126,7 @@ colgroup col:not(.urun-detay__olcu-grup):not(.urun-detay__olcu-kod) { width: 56p
 
 @media (max-width: 600px) {
   .urun-detay { width: min(100% - 24px, 1480px); padding-top: 18px; }
-  .urun-detay__hero { padding: 20px; }
-  .urun-detay__teknik-tanim { grid-template-columns: 1fr; width: 100%; }
-  .urun-detay__teknik-tanim span { padding: 8px 0 0; border-top: 1px solid color-mix(in srgb, var(--renk-ana) 25%, transparent); border-left: 0; }
+  .urun-detay__hero { padding: 16px 20px; }
   .urun-detay__cizim { min-height: 300px; }
   .urun-detay__cizim img { height: 280px; }
   .urun-detay__panel-baslik { align-items: flex-start; }

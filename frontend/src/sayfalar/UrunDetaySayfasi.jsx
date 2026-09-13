@@ -95,12 +95,6 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
           <h1>{urun.ad}</h1>
           <p>{urun.kisa_aciklama}</p>
         </div>
-        {teknik.urun_tanimi && (
-          <div className="urun-detay__teknik-tanim">
-            <strong>{teknik.urun_tanimi.baslik}</strong>
-            <span>{teknik.urun_tanimi.satirlar.join('\n')}</span>
-          </div>
-        )}
       </header>
 
       <div className="urun-detay__yol-bar">
