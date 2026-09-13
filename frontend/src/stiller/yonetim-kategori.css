@@ -107,6 +107,14 @@
 .yonetim-tablo tbody tr:last-child td { border-bottom: 0; }
 .yonetim-tablo tbody tr:hover { background: var(--yonetim-zemin); }
 
+/* Admin İşlem Logları'ndaki "Kategoriyi Görüntüle" göz ikonundan gelince ilgili satır kısa
+   süreliğine (2.5sn) yanıp söner, sonra normale döner. */
+.yonetim-tablo__satir--vurgulu td { animation: yonetim-satir-vurgu 2.5s ease; }
+@keyframes yonetim-satir-vurgu {
+  0%, 100% { background-color: transparent; }
+  15%, 60% { background-color: color-mix(in srgb, var(--yonetim-mavi) 18%, transparent); }
+}
+
 /* Kategori Adı hariç tüm sütunlar (Ürün, Güncelleme, Durum, İşlemler) ortalanır. */
 /* Bu ortalama yalnızca Kategori Yönetimi kartlarındaki mini tabloya özeldir (Ürün/Güncelleme/
    Durum/İşlemler); Log ve İstatistik sayfalarındaki tablolar aynı temel .yonetim-tablo sınıfını

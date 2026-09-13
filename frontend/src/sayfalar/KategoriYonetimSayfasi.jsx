@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   Boxes, ChevronRight, Eye, FolderTree, LayoutGrid, MoreVertical,
@@ -142,7 +142,7 @@ function DurumDugmesi({ pasif, gonderiliyorMu, onDegistir }) {
   );
 }
 
-function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzenle, onDurumDegistir }) {
+function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzenle, onDurumDegistir, vurgulananId }) {
   const [arama, setArama] = useState('');
   const meta = GRUP_META[grup.baslik] ?? { aciklama: '', arkaplan: '#f4f7fc', gorsel: null };
   const GrupIkonu = grupIkonuGetir(grup.baslik);
@@ -202,7 +202,16 @@ function GrupKarti({ grup, gonderiliyorMu, onDuzenle, onEkle, onSil, onGrupDuzen
                 const Ikon = altOgeIkonuGetir(kategori.baslik);
                 const pasif = kategori.aktif_mi === 0;
                 return (
-                  <motion.tr key={kategori.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: .25 }}>
+                  <motion.tr
+                    key={kategori.id}
+                    data-kategori-id={kategori.id}
+                    className={kategori.id === vurgulananId ? 'yonetim-tablo__satir--vurgulu' : undefined}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, x: -40 }}
+                    transition={{ duration: .25 }}
+                  >
                     <td>
                       <div className="yonetim-tablo__ad-hucre" title={kategori.baslik}>
                         <span className="yonetim-tablo__ikon"><Ikon aria-hidden="true" /></span>
@@ -263,6 +272,22 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
   const [gonderiliyorMu, setGonderiliyorMu] = useState(false);
   const [hata, setHata] = useState(null);
   const [bildirimler, setBildirimler] = useState([]);
+
+  // Admin İşlem Logları'ndaki "Kategoriyi Görüntüle" göz ikonundan ?vurgu=<id> ile gelinirse,
+  // veriler yüklenince o kategoriye scroll edilip kısa süreliğine vurgulanır.
+  const [aramaParams] = useSearchParams();
+  const vurguId = aramaParams.get('vurgu') ? Number(aramaParams.get('vurgu')) : null;
+  const [vurgulananId, setVurgulananId] = useState(vurguId);
+  const vurguYapildiRef = useRef(false);
+
+  useEffect(() => {
+    if (!vurguId || vurguYapildiRef.current || gruplar.length === 0) return;
+    vurguYapildiRef.current = true;
+    const eleman = document.querySelector(`[data-kategori-id="${vurguId}"]`);
+    eleman?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const zamanlayici = setTimeout(() => setVurgulananId(null), 2500);
+    return () => clearTimeout(zamanlayici);
+  }, [gruplar, vurguId]);
 
   function bildirimEkle(tur, baslik, mesaj) {
     const id = `${Date.now()}-${Math.random()}`;
@@ -421,6 +446,7 @@ export default function KategoriYonetimSayfasi({ veriYenile } = {}) {
             onSil={(kategori) => { setHata(null); setSilinecek(kategori); }}
             onGrupDuzenle={(grup) => { setHata(null); setForm({ mod: 'duzenle', kategori: grup }); }}
             onDurumDegistir={durumuDegistir}
+            vurgulananId={vurgulananId}
           />
         ))}
       </div>

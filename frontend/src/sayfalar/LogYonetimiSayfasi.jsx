@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, Eye, FilePlus2, Pencil, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
 import Bildirimler from '../bilesenler/Bildirimler';
@@ -42,20 +43,21 @@ function yoluUret(kategori) {
 
 // Kategori kalıcı olarak silinmişse (Çöp Kutusu'ndaki 7 günlük süre de dolmuşsa) backend bu
 // alanı NULL döndürür; o durumda gösterilecek gerçek bir sayfa olmadığı için ikon render edilmez.
-function KategoriGoruntuleLinki({ baglanti }) {
+// "Kategoriyi Görüntüle" ikonu, halka açık siteye DEĞİL, admin panelindeki Kategori Yönetimi
+// sayfasına götürüp o kategoriyi vurgular (aynı sekmede — zaten admin panelin içindeyiz).
+// `kategori_baglantisi` yalnızca "bu kategori hâlâ var mı" kontrolü için kullanılır (kalıcı
+// silinmişse backend NULL döner, o durumda gidilecek bir yer olmadığı için ikon gizlenir).
+function KategoriGoruntuleLinki({ baglanti, hedefId }) {
   if (!baglanti) return <span className="istatistik-tablo__bos-ikon" aria-hidden="true">—</span>;
-  const yol = `/urunler/${baglanti}`;
   return (
-    <a
+    <Link
       className="sayfa-goruntule-linki"
-      href={yol}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${yol} kategorisini web sitesinde aç`}
-      title="Kategoriyi web sitesinde aç"
+      to={`/admin/kategoriler?vurgu=${hedefId}`}
+      aria-label="Bu kategoriyi Kategori Yönetimi'nde göster"
+      title="Kategoriyi Kategori Yönetimi'nde göster"
     >
       <Eye aria-hidden="true" size={15} />
-    </a>
+    </Link>
   );
 }
 
@@ -283,7 +285,7 @@ export default function LogYonetimiSayfasi() {
                                   </span>
                                 </td>
                                 <td className="istatistik-tablo__sol-hucre" title={kayit.detay || ''}>{kayit.detay || '—'}</td>
-                                <td><KategoriGoruntuleLinki baglanti={kayit.kategori_baglantisi} /></td>
+                                <td><KategoriGoruntuleLinki baglanti={kayit.kategori_baglantisi} hedefId={kayit.hedef_id} /></td>
                               </tr>
                             );
                           })}
