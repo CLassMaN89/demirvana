@@ -79,12 +79,10 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
   // Bazı ürünlerde her basınç sınıfının (PN) DN aralığı farklıdır (ör. Glob Vana D-069'daki
   // FIG 1401/1430/1560/1570/1580 varyantları) — bu durumda tek ortak tablo yerine
   // olcu_tablolari dizisindeki her basınç sınıfı kendi ayrı tablosuyla gösterilir.
-  const olcuTablolari = teknik.olcu_tablolari || [{
-    baslik: null,
-    basincGruplari,
-    olcu_basliklari: teknik.olcu_basliklari || [],
-    olculer: teknik.olculer || []
-  }];
+  const olcuTablolari = teknik.olcu_tablolari
+    || ((teknik.olcu_basliklari?.length || teknik.olculer?.length)
+      ? [{ baslik: null, basincGruplari, olcu_basliklari: teknik.olcu_basliklari || [], olculer: teknik.olculer || [] }]
+      : []);
 
   const kategoriAdi = teknik.grup_adi || urun.kategori_adi;
   const kategoriBaglantisi = kategoriBaglantisiBul(menu, kategoriAdi);
@@ -123,7 +121,7 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
       </div>
 
       <div className="urun-detay__ust-grid">
-        <section className="urun-detay__panel urun-detay__cizim-paneli">
+        <section className={`urun-detay__panel urun-detay__cizim-paneli${teknik.parcalar?.length > 0 ? '' : ' urun-detay__panel--tam'}`}>
           <div className="urun-detay__panel-baslik">
             <h2><Layers3 aria-hidden="true" /> Teknik Çizim</h2>
             <Maximize2 aria-hidden="true" />
@@ -140,37 +138,40 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
           <p className="urun-detay__not">Teknik resim bilgilendirme amaçlıdır. Ölçüler üretim toleranslarına göre değişiklik gösterebilir.</p>
         </section>
 
-        <section className="urun-detay__panel">
-          <div className="urun-detay__panel-baslik">
-            <h2><Layers3 aria-hidden="true" /> Parça Listesi ve Malzeme Yapısı</h2>
-          </div>
-          <div className="urun-detay__tablo-kaydir">
-            <table className="urun-detay__tablo">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Parça Adı</th>
-                  {teknik.parca_kolonlari
-                    ? teknik.parca_kolonlari.map((kolon) => <th key={kolon} style={{ whiteSpace: 'pre-line' }}>{kolon}</th>)
-                    : <th>Malzeme</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {(teknik.parcalar || []).map((parca, indeks) => (
-                  <tr key={`${parca.no}-${indeks}`}>
-                    <td>{parca.no}</td>
-                    <td>{parca.ad}</td>
-                    {parca.malzemeler
-                      ? parca.malzemeler.map((malzeme, kolonIndeksi) => <td key={kolonIndeksi}>{malzeme}</td>)
-                      : <td>{parca.malzeme}</td>}
+        {teknik.parcalar?.length > 0 && (
+          <section className="urun-detay__panel">
+            <div className="urun-detay__panel-baslik">
+              <h2><Layers3 aria-hidden="true" /> Parça Listesi ve Malzeme Yapısı</h2>
+            </div>
+            <div className="urun-detay__tablo-kaydir">
+              <table className="urun-detay__tablo">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Parça Adı</th>
+                    {teknik.parca_kolonlari
+                      ? teknik.parca_kolonlari.map((kolon) => <th key={kolon} style={{ whiteSpace: 'pre-line' }}>{kolon}</th>)
+                      : <th>Malzeme</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+                </thead>
+                <tbody>
+                  {teknik.parcalar.map((parca, indeks) => (
+                    <tr key={`${parca.no}-${indeks}`}>
+                      <td>{parca.no}</td>
+                      <td>{parca.ad}</td>
+                      {parca.malzemeler
+                        ? parca.malzemeler.map((malzeme, kolonIndeksi) => <td key={kolonIndeksi}>{malzeme}</td>)
+                        : <td>{parca.malzeme}</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
       </div>
 
+      {olcuTablolari.length > 0 && (
       <section className="urun-detay__panel urun-detay__olculer">
         <div className="urun-detay__panel-baslik">
           <h2><BarChart3 aria-hidden="true" /> Teknik Ölçüler ve Boyutlar</h2>
@@ -228,32 +229,35 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
           );
         })}
       </section>
+      )}
 
-      <section className="urun-detay__panel urun-detay__dokumanlar">
-        <div className="urun-detay__panel-baslik">
-          <h2><FileText aria-hidden="true" /> Teknik Dokümanlar</h2>
-          <p>Ürünle ilgili teknik dokümanları buradan indirebilirsiniz.</p>
-        </div>
-        <div className="urun-detay__dokuman-grid">
-          {(teknik.dokumanlar || []).map((dokuman) => (
-            <a key={dokuman.baslik} href={dokuman.dosya_yolu} download className="urun-detay__dokuman">
-              <span className="urun-detay__dokuman-ikon">
-                <img
-                  src={dokuman.belge_turu === 'excel' ? '/assets/ikonlar/excel-ikonu-karti.png' : '/assets/ikonlar/pdf-ikonu-karti.png'}
-                  alt=""
-                  aria-hidden="true"
-                />
-                {/* Kaynak görseldeki rozet metni küçük boyutta okunmadığı için gerçek metin olarak eklendi; her boyutta net kalır. */}
-                <span className={`urun-detay__dokuman-rozet${dokuman.belge_turu === 'excel' ? ' urun-detay__dokuman-rozet--excel' : ''}`}>
-                  {dokuman.belge_turu === 'excel' ? 'XLS' : 'PDF'}
+      {teknik.dokumanlar?.length > 0 && (
+        <section className="urun-detay__panel urun-detay__dokumanlar">
+          <div className="urun-detay__panel-baslik">
+            <h2><FileText aria-hidden="true" /> Teknik Dokümanlar</h2>
+            <p>Ürünle ilgili teknik dokümanları buradan indirebilirsiniz.</p>
+          </div>
+          <div className="urun-detay__dokuman-grid">
+            {teknik.dokumanlar.map((dokuman) => (
+              <a key={dokuman.baslik} href={dokuman.dosya_yolu} download className="urun-detay__dokuman">
+                <span className="urun-detay__dokuman-ikon">
+                  <img
+                    src={dokuman.belge_turu === 'excel' ? '/assets/ikonlar/excel-ikonu-karti.png' : '/assets/ikonlar/pdf-ikonu-karti.png'}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  {/* Kaynak görseldeki rozet metni küçük boyutta okunmadığı için gerçek metin olarak eklendi; her boyutta net kalır. */}
+                  <span className={`urun-detay__dokuman-rozet${dokuman.belge_turu === 'excel' ? ' urun-detay__dokuman-rozet--excel' : ''}`}>
+                    {dokuman.belge_turu === 'excel' ? 'XLS' : 'PDF'}
+                  </span>
                 </span>
-              </span>
-              <span><strong>{dokuman.baslik}</strong><small>{dokuman.aciklama || 'Teknik ürün dokümanı'}</small><em>{dokuman.tur || 'PDF'}</em></span>
-              <span className="urun-detay__indir"><Download aria-hidden="true" /> İndir</span>
-            </a>
-          ))}
-        </div>
-      </section>
+                <span><strong>{dokuman.baslik}</strong><small>{dokuman.aciklama || 'Teknik ürün dokümanı'}</small><em>{dokuman.tur || 'PDF'}</em></span>
+                <span className="urun-detay__indir"><Download aria-hidden="true" /> İndir</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }
