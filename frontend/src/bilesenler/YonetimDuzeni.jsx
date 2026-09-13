@@ -101,6 +101,13 @@ export default function YonetimDuzeni({ children }) {
     setMenuAcikMi(false);
   }, [konum.pathname]);
 
+  // Halka açık sitedeki /urunler sol filtre menüsüyle (UrunlerSayfasi.jsx'teki YanMenuGrubu)
+  // AYNI teknik: her linkin kendi arka planını ayrı ayrı açıp kapatması yerine TEK bir vurgu
+  // şeridi, üzerine gelinen linkin konum/yüksekliğine göre kayarak (CSS transition ile) hareket
+  // eder. Sıradan bir :hover kuralı bunu veremez — o yalnızca renk geçişi (fade) yapar, konum
+  // değişikliği (kayma) yapamaz.
+  const [menuHoverKonumu, setMenuHoverKonumu] = useState(null);
+
   return (
     <div className="yonetim">
       <aside className={`yonetim__yan-menu${menuAcikMi ? ' yonetim__yan-menu--acik' : ''}`}>
@@ -119,8 +126,15 @@ export default function YonetimDuzeni({ children }) {
           </button>
         </div>
 
-        <nav className="yonetim__nav">
-          {MENU_BOLUMLERI.map((bolum, indeks) => (
+        <nav className="yonetim__nav" onMouseLeave={() => setMenuHoverKonumu(null)}>
+          <span
+            className="yonetim__nav-hover"
+            aria-hidden="true"
+            style={menuHoverKonumu ? { top: `${menuHoverKonumu.top}px`, height: `${menuHoverKonumu.height}px`, opacity: 1 } : { opacity: 0 }}
+          />
+          {MENU_BOLUMLERI.map((bolum, indeks) => {
+            const uzerineGelince = (olay) => setMenuHoverKonumu({ top: olay.currentTarget.offsetTop, height: olay.currentTarget.offsetHeight });
+            return (
             <div className="yonetim__nav-bolumu" key={bolum.baslik ?? `bolum-${indeks}`}>
               {bolum.baslik && <span className="yonetim__nav-baslik">{bolum.baslik}</span>}
               {bolum.ogeler.map((oge) => {
@@ -128,7 +142,7 @@ export default function YonetimDuzeni({ children }) {
 
                 if (oge.disLink) {
                   return (
-                    <a className="yonetim__nav-baglanti" href={oge.disLink} target="_blank" rel="noopener noreferrer" key={oge.ad}>
+                    <a className="yonetim__nav-baglanti" href={oge.disLink} target="_blank" rel="noopener noreferrer" key={oge.ad} onMouseEnter={uzerineGelince}>
                       <Ikon aria-hidden="true" /><span>{oge.ad}</span>
                     </a>
                   );
@@ -136,7 +150,7 @@ export default function YonetimDuzeni({ children }) {
 
                 if (!oge.yol) {
                   return (
-                    <span className="yonetim__nav-baglanti yonetim__nav-baglanti--yakinda" key={oge.ad}>
+                    <span className="yonetim__nav-baglanti yonetim__nav-baglanti--yakinda" key={oge.ad} onMouseEnter={uzerineGelince}>
                       <Ikon aria-hidden="true" /><span>{oge.ad}</span>
                       <span className="yonetim__nav-yakinda">Yakında</span>
                     </span>
@@ -148,13 +162,15 @@ export default function YonetimDuzeni({ children }) {
                     className={`yonetim__nav-baglanti${konum.pathname === oge.yol ? ' yonetim__nav-baglanti--aktif' : ''}`}
                     to={oge.yol}
                     key={oge.ad}
+                    onMouseEnter={uzerineGelince}
                   >
                     <Ikon aria-hidden="true" /><span>{oge.ad}</span>
                   </Link>
                 );
               })}
             </div>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="yonetim__tanitim">

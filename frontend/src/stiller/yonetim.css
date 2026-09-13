@@ -75,15 +75,32 @@
 .yonetim__menu-kapat svg, .yonetim__menu-ac svg { width: 20px; height: 20px; }
 .yonetim__menu-perde { display: none; }
 
-.yonetim__nav { display: flex; flex-direction: column; gap: 18px; flex: 1; }
+.yonetim__nav { position: relative; display: flex; flex-direction: column; gap: 18px; flex: 1; }
 .yonetim__nav-bolumu { display: grid; gap: 3px; }
 .yonetim__nav-baslik { padding: 8px 12px 4px; color: #5F7AB8; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-align: left; text-transform: uppercase; }
 
 /* Halka açık sitedeki /urunler sayfasının sol filtre menüsüyle (urun-katalog.css'teki
-   .urun-katalog__menu-gecis a) aynı düzen/davranış: sola yaslı ikon+metin, hover'da ikon
-   büyümesi, aktif öğede sol kenarlıklı vurgu — yalnızca renkler admin paletine (koyu lacivert
-   zemin, mavi vurgu) çevrildi. */
+   .urun-katalog__menu-gecis) BİREBİR AYNI teknik: her linkin kendi arka planını ayrı ayrı
+   açıp kapatması yerine TEK bir vurgu şeridi (.yonetim__nav-hover), üzerine gelinen linkin
+   konum/yüksekliğine kayarak (top/height transition) hareket eder — sıradan bir :hover
+   background geçişi bunu veremez, o yalnızca fade yapar, kayma yapamaz. Linklerin kendi
+   :hover kuralı bu yüzden yalnızca metin/ikon rengini değiştirir; görsel vurgu (arka plan +
+   sol kenarlık) tamamen bu kayan şeritten gelir. Renkler admin paletine (mavi) çevrildi. */
+.yonetim__nav-hover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--yonetim-mavi) 22%, transparent);
+  border-left: 3px solid var(--yonetim-mavi);
+  opacity: 0;
+  transition: top 240ms cubic-bezier(.22,1,.36,1), height 240ms cubic-bezier(.22,1,.36,1), opacity 160ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
 .yonetim__nav-baglanti {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -95,18 +112,18 @@
   font-size: .8rem;
   font-weight: 500;
   text-decoration: none;
-  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  transition: color 150ms ease;
 }
 .yonetim__nav-baglanti svg { width: 17px; height: 17px; flex: 0 0 17px; transition: transform 220ms cubic-bezier(.22,1,.36,1); }
-.yonetim__nav-baglanti:hover { background: rgba(255,255,255,.06); color: #fff; border-left-color: var(--yonetim-mavi); }
+.yonetim__nav-baglanti:hover { color: #fff; }
 .yonetim__nav-baglanti:hover svg { transform: scale(1.1); }
 .yonetim__nav-baglanti--aktif { background: color-mix(in srgb, var(--yonetim-mavi) 22%, transparent); border-left-color: var(--yonetim-mavi); color: #fff; }
 /* Yakında rozeti sağa yapışmasın diye space-between yerine flex-start; rozet ikon+metnin
    hemen yanında (gap kadar mesafede) durur, tüm satır sola toplanır. */
 .yonetim__nav-baglanti--yakinda { justify-content: flex-start; cursor: not-allowed; opacity: .6; }
-.yonetim__nav-baglanti--yakinda:hover { background: rgba(255,255,255,.06); color: #fff; border-left-color: var(--yonetim-mavi); }
+.yonetim__nav-baglanti--yakinda:hover { color: #fff; }
 .yonetim__nav-baglanti--yakinda:hover svg { transform: scale(1.1); }
-.yonetim__nav-yakinda { padding: 2px 7px; border-radius: 20px; background: rgba(255,255,255,.08); color: #7C96D6; font-size: .6rem; font-weight: 700; text-transform: uppercase; }
+.yonetim__nav-yakinda { position: relative; z-index: 1; padding: 2px 7px; border-radius: 20px; background: rgba(255,255,255,.08); color: #7C96D6; font-size: .6rem; font-weight: 700; text-transform: uppercase; }
 
 .yonetim__tanitim { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #072763, #001B44); font-size: .72rem; line-height: 1.4; }
 .yonetim__tanitim svg { width: 26px; height: 26px; flex: 0 0 26px; color: #4C86FF; }
