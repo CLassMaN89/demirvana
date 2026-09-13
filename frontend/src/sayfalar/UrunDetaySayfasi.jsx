@@ -178,6 +178,33 @@ export default function UrunDetaySayfasi({ menu = [], urunler = [] }) {
           {teknik.basinc && <strong>{teknik.basinc}</strong>}
         </div>
         {olcuTablolari.map((tablo, tabloIndeksi) => {
+          // Bazı ürünlerde kaynak tablo DİKEY dizilidir (DN sütun değil satır: her satır bir
+          // boy) — bunu yatay şemaya çevirmek yerine kaynaktaki yönünü aynen koruyarak,
+          // basit bir başlık satırı + veri satırları tablosu olarak gösteriyoruz.
+          if (tablo.yon === 'dikey') {
+            return (
+              <div className="urun-detay__tablo-kaydir" key={tablo.baslik ?? tabloIndeksi}>
+                {tablo.baslik && <p className="urun-detay__olcu-tablo-baslik">{tablo.baslik}</p>}
+                <table className="urun-detay__tablo urun-detay__tablo--olcu urun-detay__tablo--dikey">
+                  <thead>
+                    <tr>{tablo.kolonBasliklari.map((baslik, indeks) => <th key={indeks}>{baslik}</th>)}</tr>
+                  </thead>
+                  <tbody>
+                    {tablo.satirlar.map((satir, satirIndeksi) => (
+                      <tr key={satirIndeksi}>
+                        {satir.map((deger, hucreIndeksi) => (
+                          hucreIndeksi === 0
+                            ? <th key={hucreIndeksi} scope="row">{deger}</th>
+                            : <td key={hucreIndeksi}>{deger}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          }
+
           // Kaynak sayfada her ürünün tablosu aynı değil: bazılarında "Anma Basıncı" satırı
           // ve "Vana Boyutları" grup sütunu hiç yok (yalnızca "SIZE DN" başlığı var) — bu
           // satır/sütunlar veri gerçekten varsa gösterilir, yoksa şablon olarak eklenmez.
