@@ -1,5 +1,7 @@
-/* Admin paneli, halka açık sitenin tema değişkenlerinden bağımsız kendi sabit renk paletini kullanır. */
-.yonetim {
+/* Admin paneli, halka açık sitenin tema değişkenlerinden bağımsız kendi sabit renk paletini kullanır.
+   Değişkenler :root'ta tanımlanır (yalnız .yonetim'de değil) çünkü admin modalları (Modal.jsx) React portalıyla
+   document.body'ye taşınır; .yonetim'in DIŞINDA render olduklarından oradaki CSS custom property'lerini miras alamazlar. */
+:root {
   --yonetim-lacivert: #001B44;
   --yonetim-mavi: #0052FF;
   --yonetim-zemin: #F4F7FC;
@@ -9,6 +11,9 @@
   --yonetim-metin: #1D2939;
   --yonetim-metin-ikincil: #667085;
   --yonetim-cizgi: #E4E9F2;
+}
+
+.yonetim {
   display: flex;
   min-height: 100vh;
   background: var(--yonetim-zemin);
@@ -63,6 +68,9 @@
 .yonetim__nav-baglanti svg { width: 17px; height: 17px; flex: 0 0 17px; }
 .yonetim__nav-baglanti:hover { background: rgba(255,255,255,.06); color: #fff; }
 .yonetim__nav-baglanti--aktif { background: var(--yonetim-mavi); color: #fff; }
+.yonetim__nav-baglanti--yakinda { justify-content: space-between; cursor: not-allowed; opacity: .6; }
+.yonetim__nav-baglanti--yakinda:hover { background: none; color: #B7C4E4; }
+.yonetim__nav-yakinda { padding: 2px 7px; border-radius: 20px; background: rgba(255,255,255,.08); color: #7C96D6; font-size: .6rem; font-weight: 700; text-transform: uppercase; }
 
 .yonetim__tanitim { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #072763, #001B44); font-size: .72rem; line-height: 1.4; }
 .yonetim__tanitim svg { width: 26px; height: 26px; flex: 0 0 26px; color: #4C86FF; }
@@ -117,7 +125,8 @@
 .yonetim-panel__panel-baslik { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .yonetim-panel__panel-baslik h3 { flex: 1; }
 .yonetim-panel__panel-etiket { padding: 5px 10px; border-radius: 7px; background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); font-size: .66rem; font-weight: 600; white-space: nowrap; }
-.yonetim-panel__tumunu-gor { border: 1px solid var(--yonetim-cizgi); background: var(--yonetim-zemin); color: var(--yonetim-mavi); font-size: .72rem; font-weight: 500; padding: 5px 10px; border-radius: 7px; cursor: not-allowed; white-space: nowrap; }
+.yonetim-panel__tumunu-gor { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--yonetim-cizgi); background: var(--yonetim-zemin); color: var(--yonetim-mavi); font-size: .72rem; font-weight: 500; padding: 5px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+.yonetim-panel__tumunu-gor:disabled { cursor: not-allowed; opacity: .6; }
 
 .yonetim-panel__zaman-secici { padding: 6px 10px; border: 1px solid var(--yonetim-cizgi); border-radius: 7px; background: var(--yonetim-zemin); color: var(--yonetim-metin); font-size: .68rem; font-weight: 600; }
 .yonetim-panel__alan-grafik-kapsayici { width: 100%; margin: 0 -6px; }
@@ -143,8 +152,10 @@
 .yonetim-panel__radar-kapsayici { width: 100%; margin: 0 -6px; }
 
 .yonetim-panel__hizli-liste { display: grid; gap: 8px; }
-.yonetim-panel__hizli-liste button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin); font-size: .76rem; font-weight: 500; cursor: not-allowed; transition: background-color 180ms ease; }
+.yonetim-panel__hizli-liste button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin); font-size: .76rem; font-weight: 500; cursor: pointer; transition: background-color 180ms ease; }
 .yonetim-panel__hizli-liste button:hover { background: color-mix(in srgb, var(--yonetim-mavi) 8%, var(--yonetim-zemin)); }
+.yonetim-panel__hizli-liste button:disabled { cursor: not-allowed; opacity: .6; }
+.yonetim-panel__hizli-liste button:disabled:hover { background: var(--yonetim-zemin); }
 .yonetim-panel__hizli-etiket { flex: 1; text-align: left; }
 .yonetim-panel__hizli-liste > button > svg:last-child { width: 15px; height: 15px; flex: 0 0 15px; color: var(--yonetim-metin-ikincil); }
 
@@ -169,7 +180,8 @@
 .yonetim-panel__rozet svg { width: 13px; height: 13px; }
 .yonetim-panel__rozet-ad { overflow: hidden; flex: 1; min-width: 0; color: #1C3173; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .yonetim-panel__rozet-listesi strong { flex: 0 0 auto; padding: 2px 8px; border-radius: 999px; background: #fff; color: var(--yonetim-mavi); font-size: .72rem; }
-.yonetim-panel__toplam { display: flex; align-items: center; gap: 8px; margin: 6px 0 0; padding: 12px; border: 1px solid var(--yonetim-cizgi); border-top: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); font-size: .72rem; font-weight: 500; cursor: not-allowed; }
+.yonetim-panel__toplam { display: flex; width: 100%; align-items: center; gap: 8px; margin: 6px 0 0; padding: 12px; border: 1px solid var(--yonetim-cizgi); border-top: 1px solid var(--yonetim-cizgi); border-radius: 9px; background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); font-size: .72rem; font-weight: 500; cursor: pointer; text-align: left; }
+.yonetim-panel__toplam:disabled { cursor: not-allowed; opacity: .6; }
 .yonetim-panel__toplam svg:first-child { width: 15px; height: 15px; color: var(--yonetim-mavi); }
 .yonetim-panel__toplam svg:last-child { width: 15px; height: 15px; margin-left: auto; }
 

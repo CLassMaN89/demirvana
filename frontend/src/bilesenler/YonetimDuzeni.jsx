@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Monitor, ListTree, FolderTree, Package, Cog, Sliders,
   FileText, Handshake, Award, Building2, Mail, Image, Search as SearchIcon,
@@ -7,21 +7,21 @@ import {
 import { VanaGrubuIkonu } from './UrunMenuIkonlari';
 import '../stiller/yonetim.css';
 
-// Şu an yalnızca Dashboard gerçek bir sayfa; diğer bağlantılar tasarımı tamamlamak için görünür ama
-// henüz kendi sayfaları yapılmadığından tıklanınca panelin ana ekranına döner.
+// "yol" alanı olan öğeler gerçek bir sayfaya gider; olmayanlar dürüstçe "Yakında" rozetiyle işaretlenir
+// (önceden hepsi sessizce Dashboard'a dönüyordu, bu da çalışıyormuş izlenimi veren kırık bir davranıştı).
 const MENU_BOLUMLERI = [
   {
     baslik: null,
     ogeler: [
-      { ad: 'Dashboard', ikon: LayoutDashboard, aktif: true },
-      { ad: 'Web Sitesini Önizle', ikon: Monitor }
+      { ad: 'Dashboard', ikon: LayoutDashboard, yol: '/admin' },
+      { ad: 'Web Sitesini Önizle', ikon: Monitor, disLink: '/' }
     ]
   },
   {
     baslik: 'İçerik Yönetimi',
     ogeler: [
       { ad: 'Menü Yönetimi', ikon: ListTree },
-      { ad: 'Kategori Yönetimi', ikon: FolderTree },
+      { ad: 'Kategori Yönetimi', ikon: FolderTree, yol: '/admin/kategoriler' },
       { ad: 'Ürün Yönetimi', ikon: Package }
     ]
   },
@@ -55,6 +55,8 @@ const MENU_BOLUMLERI = [
 ];
 
 export default function YonetimDuzeni({ children }) {
+  const konum = useLocation();
+
   return (
     <div className="yonetim">
       <aside className="yonetim__yan-menu">
@@ -69,10 +71,28 @@ export default function YonetimDuzeni({ children }) {
               {bolum.baslik && <span className="yonetim__nav-baslik">{bolum.baslik}</span>}
               {bolum.ogeler.map((oge) => {
                 const Ikon = oge.ikon;
+
+                if (oge.disLink) {
+                  return (
+                    <a className="yonetim__nav-baglanti" href={oge.disLink} target="_blank" rel="noopener noreferrer" key={oge.ad}>
+                      <Ikon aria-hidden="true" /><span>{oge.ad}</span>
+                    </a>
+                  );
+                }
+
+                if (!oge.yol) {
+                  return (
+                    <span className="yonetim__nav-baglanti yonetim__nav-baglanti--yakinda" key={oge.ad}>
+                      <Ikon aria-hidden="true" /><span>{oge.ad}</span>
+                      <span className="yonetim__nav-yakinda">Yakında</span>
+                    </span>
+                  );
+                }
+
                 return (
                   <Link
-                    className={`yonetim__nav-baglanti${oge.aktif ? ' yonetim__nav-baglanti--aktif' : ''}`}
-                    to="/admin"
+                    className={`yonetim__nav-baglanti${konum.pathname === oge.yol ? ' yonetim__nav-baglanti--aktif' : ''}`}
+                    to={oge.yol}
                     key={oge.ad}
                   >
                     <Ikon aria-hidden="true" /><span>{oge.ad}</span>

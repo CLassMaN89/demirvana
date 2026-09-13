@@ -328,6 +328,111 @@ final class SiteDeposu
         return $sorgu->fetchAll();
     }
 
+    /** Admin panelindeki kategori kartlarının kaynağı; ürün filtrelemesinde kullanılan asıl menü yaprakları budur. */
+    public function kategoriBul(int $id): ?array
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT id, menu_ogesi_id, ust_alt_oge_id, baslik, baglanti, siralama, aktif_mi
+             FROM menu_alt_ogeleri WHERE id = :id LIMIT 1'
+        );
+        $sorgu->execute(['id' => $id]);
+        $satir = $sorgu->fetch();
+
+        return $satir ?: null;
+    }
+
+    public function kategoriEkle(int $ustAltOgeId, string $baslik, ?string $baglantiDegeri, int $siralama): array
+    {
+        $ustSorgusu = $this->baglanti->prepare(
+            'SELECT menu_ogesi_id FROM menu_alt_ogeleri WHERE id = :id AND aktif_mi = 1 LIMIT 1'
+        );
+        $ustSorgusu->execute(['id' => $ustAltOgeId]);
+        $ust = $ustSorgusu->fetch();
+        if (!$ust) {
+            throw new InvalidArgumentException('Üst kategori grubu bulunamadı.');
+        }
+
+        $baglantiDegeri = $this->benzersizBaglantiUret(
+            $baglantiDegeri !== null && trim($baglantiDegeri) !== '' ? trim($baglantiDegeri) : self::slugOlustur($baslik)
+        );
+
+        $sorgu = $this->baglanti->prepare(
+            'INSERT INTO menu_alt_ogeleri (menu_ogesi_id, ust_alt_oge_id, baslik, baglanti, siralama)
+             VALUES (:menu_ogesi_id, :ust_alt_oge_id, :baslik, :baglanti, :siralama)'
+        );
+        $sorgu->execute([
+            'menu_ogesi_id' => $ust['menu_ogesi_id'],
+            'ust_alt_oge_id' => $ustAltOgeId,
+            'baslik' => $baslik,
+            'baglanti' => $baglantiDegeri,
+            'siralama' => $siralama,
+        ]);
+
+        return $this->kategoriBul((int) $this->baglanti->lastInsertId());
+    }
+
+    public function kategoriGuncelle(int $id, array $alanlar): void
+    {
+        $izinliAlanlar = ['baslik', 'siralama', 'aktif_mi'];
+        $atamalar = [];
+        $parametreler = ['id' => $id];
+        foreach ($izinliAlanlar as $alan) {
+            if (array_key_exists($alan, $alanlar)) {
+                $atamalar[] = "{$alan} = :{$alan}";
+                $parametreler[$alan] = $alanlar[$alan];
+            }
+        }
+
+        if ($atamalar === []) {
+            return;
+        }
+
+        $sql = 'UPDATE menu_alt_ogeleri SET ' . implode(', ', $atamalar) . ' WHERE id = :id';
+        $this->baglanti->prepare($sql)->execute($parametreler);
+    }
+
+    /** Fiziksel silme yerine mevcut aktif_mi deseni izlenir; menü ve ürün eşleşmeleri geriye dönük bozulmaz. */
+    public function kategoriSil(int $id): void
+    {
+        $this->baglanti->prepare('UPDATE menu_alt_ogeleri SET aktif_mi = 0 WHERE id = :id')->execute(['id' => $id]);
+    }
+
+    public function kategoriyeBagliUrunSayisi(string $baslik): int
+    {
+        $sorgu = $this->baglanti->prepare(
+            'SELECT COUNT(*) AS adet FROM urunler WHERE aktif_mi = 1 AND menu_kategori_adi = :baslik'
+        );
+        $sorgu->execute(['baslik' => $baslik]);
+
+        return (int) $sorgu->fetch()['adet'];
+    }
+
+    private static function slugOlustur(string $metin): string
+    {
+        $degisim = ['ç' => 'c', 'Ç' => 'c', 'ğ' => 'g', 'Ğ' => 'g', 'ı' => 'i', 'İ' => 'i', 'ö' => 'o', 'Ö' => 'o', 'ş' => 's', 'Ş' => 's', 'ü' => 'u', 'Ü' => 'u'];
+        $metin = strtr($metin, $degisim);
+        $metin = function_exists('iconv') ? (iconv('UTF-8', 'ASCII//TRANSLIT', $metin) ?: $metin) : $metin;
+        $metin = strtolower((string) $metin);
+        $metin = (string) preg_replace('/[^a-z0-9]+/', '-', $metin);
+
+        return trim($metin, '-') ?: 'kategori';
+    }
+
+    private function benzersizBaglantiUret(string $baglanti): string
+    {
+        $aday = $baglanti;
+        $sayac = 2;
+        $kontrol = $this->baglanti->prepare('SELECT id FROM menu_alt_ogeleri WHERE baglanti = :baglanti LIMIT 1');
+        while (true) {
+            $kontrol->execute(['baglanti' => $aday]);
+            if (!$kontrol->fetch()) {
+                return $aday;
+            }
+            $aday = $baglanti . '-' . $sayac;
+            $sayac++;
+        }
+    }
+
     public function urun(string $slug): ?array
     {
         $sorgu = $this->baglanti->prepare(

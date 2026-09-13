@@ -321,7 +321,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
           <section className="yonetim-panel__panel">
             <div className="yonetim-panel__panel-baslik">
               <h3><AnimateIcon animateOnHover style={{ gap: 8 }}><LayersIkon size={18} /> Ürün Grupları</AnimateIcon></h3>
-              <button type="button" className="yonetim-panel__tumunu-gor" onClick={() => navigate('/urunler')}>
+              <button type="button" className="yonetim-panel__tumunu-gor" onClick={() => navigate('/admin/kategoriler')}>
                 Tüm Kategorileri Gör
               </button>
             </div>
@@ -343,7 +343,7 @@ export default function YonetimPaneliSayfasi({ veri }) {
                 Daha Fazla Göster ({kategoriDagilimi.length - GRUP_BASINA_GOSTERIM})
               </button>
             )}
-            <button type="button" className="yonetim-panel__toplam" onClick={() => navigate('/urunler')}>
+            <button type="button" className="yonetim-panel__toplam" onClick={() => navigate('/admin/kategoriler')}>
               <Layers aria-hidden="true" /> Toplam {urunler.length} ürün, {toplamKategori} kategori <ChevronRight aria-hidden="true" />
             </button>
           </section>

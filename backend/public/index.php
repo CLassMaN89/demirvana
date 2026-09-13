@@ -15,8 +15,11 @@ $yol = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $yol = '/' . trim($yol, '/');
 $yontem = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-// Genel API salt okunurdur; yalnız ziyaretçi iletişim formu kayıt oluşturabilir.
-if ($yontem !== 'GET' && !($yontem === 'POST' && $yol === '/api/iletisim-mesajlari')) {
+// Genel API salt okunurdur; ziyaretçi iletişim formu kaydı ve /api/admin/* altındaki admin panel uçları istisnadır.
+// NOT: Admin panelinde henüz bir giriş/oturum sistemi yok (bilinçli, geçici karar) — bu uçlar korumasızdır.
+if ($yontem !== 'GET'
+    && !($yontem === 'POST' && $yol === '/api/iletisim-mesajlari')
+    && !str_starts_with($yol, '/api/admin/')) {
     JsonYanit::gonder(JsonYanit::olustur(false, null, 'Bu yöntem desteklenmiyor.'), 405);
 }
 
@@ -34,6 +37,44 @@ try {
             JsonYanit::gonder(JsonYanit::olustur(true, ['id' => $id], 'Mesajınız başarıyla alındı.'), 201);
         } catch (InvalidArgumentException $hata) {
             JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+        }
+    }
+
+    // Kategori Yönetimi ekranı: menu_alt_ogeleri (ürünlerin gerçekten filtrelendiği menü yaprakları) üzerinde CRUD.
+    if (str_starts_with($yol, '/api/admin/kategoriler')) {
+        if ($yontem === 'POST' && $yol === '/api/admin/kategoriler') {
+            $girdi = json_decode((string) file_get_contents('php://input'), true);
+            try {
+                $kategori = $denetleyici->kategoriEkle(is_array($girdi) ? $girdi : []);
+                JsonYanit::gonder(JsonYanit::olustur(true, $kategori, 'Kategori eklendi.'), 201);
+            } catch (InvalidArgumentException $hata) {
+                JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+            }
+        }
+
+        if (preg_match('#^/api/admin/kategoriler/(\d+)$#', $yol, $eslesme) === 1) {
+            $id = (int) $eslesme[1];
+
+            if ($yontem === 'PUT') {
+                $girdi = json_decode((string) file_get_contents('php://input'), true);
+                try {
+                    $kategori = $denetleyici->kategoriGuncelle($id, is_array($girdi) ? $girdi : []);
+                    JsonYanit::gonder(JsonYanit::olustur(true, $kategori, 'Kategori güncellendi.'));
+                } catch (InvalidArgumentException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+                } catch (RuntimeException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+                }
+            }
+
+            if ($yontem === 'DELETE') {
+                try {
+                    $denetleyici->kategoriSil($id);
+                    JsonYanit::gonder(JsonYanit::olustur(true, null, 'Kategori silindi.'));
+                } catch (RuntimeException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+                }
+            }
         }
     }
 

@@ -56,3 +56,38 @@ export async function iletisimMesajiGonder(veriler, { fetchFn = globalThis.fetch
   if (!yanit.ok || govde?.basarili !== true) throw new Error(govde?.mesaj || 'Mesaj gönderilemedi.');
   return { ...govde.veri, mesaj: govde.mesaj };
 }
+
+// Admin yazma çağrıları aynı zarfı ({basarili, veri, mesaj}) paylaşır; farklı olan yalnızca HTTP metodu ve gövdedir.
+async function adminIstegiGonder(yol, { yontem, govde, fetchFn = globalThis.fetch } = {}) {
+  const secenekler = {
+    method: yontem,
+    headers: { Accept: 'application/json' }
+  };
+  if (govde !== undefined) {
+    secenekler.headers['Content-Type'] = 'application/json';
+    secenekler.body = JSON.stringify(govde);
+  }
+
+  const yanit = await fetchFn(`${API_TABANI}${yol}`, secenekler);
+  const govdeYaniti = await yanit.json();
+  if (!yanit.ok || govdeYaniti?.basarili !== true) {
+    throw new Error(govdeYaniti?.mesaj || 'İstek tamamlanamadı.');
+  }
+  return govdeYaniti.veri;
+}
+
+export async function kategoriEkle(ustAltOgeId, veriler, secenekler = {}) {
+  return adminIstegiGonder('/admin/kategoriler', {
+    ...secenekler,
+    yontem: 'POST',
+    govde: { ...veriler, ust_alt_oge_id: ustAltOgeId }
+  });
+}
+
+export async function kategoriGuncelle(id, veriler, secenekler = {}) {
+  return adminIstegiGonder(`/admin/kategoriler/${id}`, { ...secenekler, yontem: 'PUT', govde: veriler });
+}
+
+export async function kategoriSil(id, secenekler = {}) {
+  return adminIstegiGonder(`/admin/kategoriler/${id}`, { ...secenekler, yontem: 'DELETE' });
+}

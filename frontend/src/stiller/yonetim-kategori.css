@@ -1,0 +1,75 @@
+.yonetim-kategori__baslik { margin-bottom: 20px; }
+.yonetim-kategori__baslik h1 { margin: 0 0 6px; color: var(--yonetim-metin); font-size: 1.3rem; }
+.yonetim-kategori__baslik p { margin: 0; color: var(--yonetim-metin-ikincil); font-size: .85rem; }
+
+.yonetim-kategori__grup { margin-bottom: 20px; padding: 18px 20px; }
+
+.yonetim-tablo-kaydir { overflow-x: auto; }
+
+.yonetim-tablo { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.yonetim-tablo th {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--yonetim-cizgi);
+  color: var(--yonetim-metin-ikincil);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.yonetim-tablo td { padding: 11px 12px; border-bottom: 1px solid var(--yonetim-cizgi); color: var(--yonetim-metin); }
+.yonetim-tablo tbody tr:last-child td { border-bottom: 0; }
+.yonetim-tablo tbody tr:hover { background: var(--yonetim-zemin); }
+
+.yonetim-tablo__ad-hucre { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+.yonetim-tablo__ikon { display: grid; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 8px; background: color-mix(in srgb, var(--yonetim-mavi) 10%, transparent); color: var(--yonetim-mavi); place-items: center; }
+.yonetim-tablo__ikon svg { width: 15px; height: 15px; }
+
+.yonetim-tablo__bos { padding: 18px 12px; color: var(--yonetim-metin-ikincil); text-align: center; }
+
+.yonetim-tablo__eylemler { display: flex; gap: 6px; white-space: nowrap; }
+.yonetim-tablo__eylemler button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--yonetim-cizgi);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--yonetim-mavi);
+  cursor: pointer;
+  place-items: center;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.yonetim-tablo__eylemler button:hover { background: var(--yonetim-mavi); color: #fff; }
+.yonetim-tablo__sil-buton { color: var(--yonetim-kirmizi); }
+.yonetim-tablo__sil-buton:hover { background: var(--yonetim-kirmizi); color: #fff; }
+
+/* Kategori formu ve silme onayı modal içeriği; Modal.jsx bileşeni tarafından genel bir kapsayıcıya yerleştirilir. */
+.yonetim-form { display: grid; gap: 16px; }
+.yonetim-form p { margin: 0; color: var(--yonetim-metin); font-size: .88rem; line-height: 1.5; }
+.yonetim-form__alan { display: grid; gap: 6px; font-size: .82rem; font-weight: 600; color: var(--yonetim-metin); }
+.yonetim-form__alan input {
+  padding: 10px 12px;
+  border: 1px solid var(--yonetim-cizgi);
+  border-radius: 8px;
+  color: var(--yonetim-metin);
+  font-size: .9rem;
+  font-weight: 400;
+}
+.yonetim-form__alan input:focus { border-color: var(--yonetim-mavi); outline: none; }
+.yonetim-form__hata { padding: 10px 12px; border-radius: 8px; background: color-mix(in srgb, var(--yonetim-kirmizi) 10%, transparent); color: var(--yonetim-kirmizi); font-size: .82rem; }
+.yonetim-form__eylemler { display: flex; justify-content: flex-end; gap: 10px; }
+.yonetim-form__iptal, .yonetim-form__kaydet, .yonetim-form__sil {
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .84rem;
+  font-weight: 600;
+}
+.yonetim-form__iptal { background: var(--yonetim-zemin); color: var(--yonetim-metin-ikincil); }
+.yonetim-form__iptal:hover { background: var(--yonetim-cizgi); }
+.yonetim-form__kaydet { background: var(--yonetim-mavi); color: #fff; }
+.yonetim-form__kaydet:disabled { opacity: .6; cursor: not-allowed; }
+.yonetim-form__sil { background: var(--yonetim-kirmizi); color: #fff; }
+.yonetim-form__sil:disabled { opacity: .6; cursor: not-allowed; }

@@ -63,4 +63,75 @@ final class SiteDenetleyicisi
     public function urunler(?string $kategori, ?string $arama): array { return $this->depo->urunler($kategori, $arama); }
     public function urun(string $slug): ?array { return $this->depo->urun($slug); }
     public function iletisimMesajiKaydet(array $girdi): int { return $this->depo->iletisimMesajiKaydet(self::iletisimMesajiDogrula($girdi)); }
+
+    public function kategoriBul(int $id): ?array { return $this->depo->kategoriBul($id); }
+
+    private static function metinUzunlugu(string $deger): int
+    {
+        return function_exists('mb_strlen') ? mb_strlen($deger) : strlen($deger);
+    }
+
+    /** Admin panelinin "Kategori Yönetimi" ekranı ürünlerin filtrelendiği menü yapraklarını (menu_alt_ogeleri) düzenler. */
+    public function kategoriEkle(array $girdi): array
+    {
+        $baslik = trim((string) ($girdi['baslik'] ?? ''));
+        $ustAltOgeId = (int) ($girdi['ust_alt_oge_id'] ?? 0);
+
+        if (self::metinUzunlugu($baslik) < 2) {
+            throw new InvalidArgumentException('Kategori adı en az 2 karakter olmalı.');
+        }
+        if ($ustAltOgeId <= 0) {
+            throw new InvalidArgumentException('Üst kategori grubu seçilmelidir.');
+        }
+
+        $baglanti = isset($girdi['baglanti']) ? trim((string) $girdi['baglanti']) : null;
+        $siralama = isset($girdi['siralama']) ? (int) $girdi['siralama'] : 0;
+
+        return $this->depo->kategoriEkle($ustAltOgeId, $baslik, $baglanti !== '' ? $baglanti : null, $siralama);
+    }
+
+    public function kategoriGuncelle(int $id, array $girdi): array
+    {
+        $mevcut = $this->depo->kategoriBul($id);
+        if ($mevcut === null) {
+            throw new RuntimeException('Kategori bulunamadı.', 404);
+        }
+
+        $alanlar = [];
+        if (array_key_exists('baslik', $girdi)) {
+            $baslik = trim((string) $girdi['baslik']);
+            if (self::metinUzunlugu($baslik) < 2) {
+                throw new InvalidArgumentException('Kategori adı en az 2 karakter olmalı.');
+            }
+            $alanlar['baslik'] = $baslik;
+        }
+        if (array_key_exists('siralama', $girdi)) {
+            $alanlar['siralama'] = (int) $girdi['siralama'];
+        }
+        if (array_key_exists('aktif_mi', $girdi)) {
+            $alanlar['aktif_mi'] = ((int) $girdi['aktif_mi']) === 1 ? 1 : 0;
+        }
+
+        $this->depo->kategoriGuncelle($id, $alanlar);
+
+        return $this->depo->kategoriBul($id);
+    }
+
+    public function kategoriSil(int $id): void
+    {
+        $mevcut = $this->depo->kategoriBul($id);
+        if ($mevcut === null) {
+            throw new RuntimeException('Kategori bulunamadı.', 404);
+        }
+
+        $bagliUrunSayisi = $this->depo->kategoriyeBagliUrunSayisi((string) $mevcut['baslik']);
+        if ($bagliUrunSayisi > 0) {
+            throw new RuntimeException(
+                "Bu kategoriye bağlı {$bagliUrunSayisi} ürün var; önce onları başka bir kategoriye taşıyın.",
+                409
+            );
+        }
+
+        $this->depo->kategoriSil($id);
+    }
 }
