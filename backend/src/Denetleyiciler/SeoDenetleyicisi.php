@@ -13,6 +13,16 @@ final class SeoDenetleyicisi
         return $this->depo->seoVerileri();
     }
 
+    public function yonetimGenelBakis(): array
+    {
+        return $this->depo->yonetimGenelBakis();
+    }
+
+    public function siteDenetimiCalistir(): array
+    {
+        return $this->depo->siteDenetimiCalistir();
+    }
+
     public function robots(): string
     {
         $genel = $this->depo->seoVerileri()['genel'];

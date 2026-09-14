@@ -45,6 +45,14 @@ export async function siteVerileriniGetir(secenekler = {}) {
   });
 }
 
+export async function seoGenelBakisGetir(secenekler = {}) {
+  return adminIstegiGonder('/admin/seo/genel-bakis', { ...secenekler, yontem: 'GET' });
+}
+
+export async function seoSiteyiTara(secenekler = {}) {
+  return adminIstegiGonder('/admin/seo/siteyi-tara', { ...secenekler, yontem: 'POST' });
+}
+
 // İletişim formu üretimde örnek veriye düşmeden doğrudan PHP kayıt ucuna gönderilir.
 export async function iletisimMesajiGonder(veriler, { fetchFn = globalThis.fetch } = {}) {
   const yanit = await fetchFn(`${API_TABANI}/iletisim-mesajlari`, {

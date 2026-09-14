@@ -8,6 +8,93 @@ final class SeoDeposu
     {
     }
 
+    /** Sitemap'e girebilen gerçek rotaların üretilen SEO alanlarını denetler ve sonucu kalıcı saklar. */
+    public function siteDenetimiCalistir(): array
+    {
+        $this->baglanti->beginTransaction();
+        try {
+            $this->baglanti->exec("INSERT INTO seo_site_taramalari (durum) VALUES ('calisiyor')");
+            $taramaId = (int) $this->baglanti->lastInsertId();
+            $adresler = $this->siteHaritasiAdresleri();
+            $sorunlar = [];
+
+            foreach ($adresler as $adres) {
+                $yol = (string) $adres['yol'];
+                $meta = $this->sayfaMetaVerisi($yol);
+                // Sunucuda mbstring kapalı olsa da tarama yarıda kalmamalıdır.
+                $uzunluk = static fn(string $metin): int => function_exists('mb_strlen') ? mb_strlen($metin) : strlen($metin);
+                $baslikUzunlugu = $uzunluk(trim((string) ($meta['baslik'] ?? '')));
+                $aciklamaUzunlugu = $uzunluk(trim((string) ($meta['aciklama'] ?? '')));
+
+                if ($baslikUzunlugu === 0) {
+                    $sorunlar[] = [$yol, 'eksik_baslik', 'kritik', 'SEO başlığı bulunmuyor.', 'Sayfaya açıklayıcı ve benzersiz bir SEO başlığı ekleyin.'];
+                } elseif ($baslikUzunlugu > 60) {
+                    $sorunlar[] = [$yol, 'uzun_baslik', 'orta', "SEO başlığı {$baslikUzunlugu} karakter.", 'Başlığı anlamı koruyarak yaklaşık 50–60 karaktere indirin.'];
+                }
+                if ($aciklamaUzunlugu === 0) {
+                    $sorunlar[] = [$yol, 'eksik_meta_aciklama', 'yuksek', 'Meta açıklaması bulunmuyor.', 'Sayfanın içeriğini anlatan benzersiz bir meta açıklaması ekleyin.'];
+                } elseif ($aciklamaUzunlugu > 160) {
+                    $sorunlar[] = [$yol, 'uzun_meta_aciklama', 'dusuk', "Meta açıklaması {$aciklamaUzunlugu} karakter.", 'Açıklamayı yaklaşık 140–160 karaktere indirin.'];
+                }
+                if (empty($meta['canonical'])) {
+                    $sorunlar[] = [$yol, 'eksik_canonical', 'yuksek', 'Canonical adresi bulunmuyor.', 'Sayfanın tercih edilen mutlak canonical adresini tanımlayın.'];
+                }
+                if (str_contains(strtolower($yol), '/urunler/') && (($meta['yapilandirilmis_veri']['@type'] ?? '') !== 'Product')) {
+                    $sorunlar[] = [$yol, 'urun_schema', 'orta', 'Ürün sayfasında Product yapılandırılmış verisi bulunmuyor.', 'Görünür ürün bilgileriyle eşleşen Product schema ekleyin.'];
+                }
+            }
+
+            $ekle = $this->baglanti->prepare(
+                'INSERT INTO seo_site_sorunlari (tarama_id, url_yolu, sorun_turu, onem, aciklama, onerilen_duzeltme)
+                 VALUES (:tarama_id, :url_yolu, :sorun_turu, :onem, :aciklama, :onerilen_duzeltme)'
+            );
+            foreach ($sorunlar as [$yol, $tur, $onem, $aciklama, $onerilen]) {
+                $ekle->execute(['tarama_id' => $taramaId, 'url_yolu' => $yol, 'sorun_turu' => $tur, 'onem' => $onem, 'aciklama' => $aciklama, 'onerilen_duzeltme' => $onerilen]);
+            }
+
+            $agirliklar = ['kritik' => 12, 'yuksek' => 7, 'orta' => 4, 'dusuk' => 2, 'bilgi' => 0];
+            $kesinti = array_sum(array_map(fn(array $sorun): int => $agirliklar[$sorun[2]], $sorunlar));
+            // Sorun ağırlığını taranan URL sayısına oranlamak, büyük sitelerin sırf sayfa sayısı nedeniyle sıfır puana düşmesini önler.
+            $oranlanmisKesinti = (int) round(($kesinti / max(1, count($adresler))) * 10);
+            $puan = max(0, 100 - min(100, $oranlanmisKesinti));
+            $guncelle = $this->baglanti->prepare(
+                "UPDATE seo_site_taramalari SET durum = 'tamamlandi', toplam_url = :toplam_url,
+                 sorun_sayisi = :sorun_sayisi, saglik_puani = :puan, bitis_tarihi = NOW() WHERE id = :id"
+            );
+            $guncelle->execute(['toplam_url' => count($adresler), 'sorun_sayisi' => count($sorunlar), 'puan' => $puan, 'id' => $taramaId]);
+            $this->baglanti->commit();
+            return $this->yonetimGenelBakis();
+        } catch (Throwable $hata) {
+            if ($this->baglanti->inTransaction()) $this->baglanti->rollBack();
+            throw $hata;
+        }
+    }
+
+    public function yonetimGenelBakis(): array
+    {
+        $tarama = $this->baglanti->query(
+            "SELECT id, toplam_url, sorun_sayisi, saglik_puani, bitis_tarihi
+             FROM seo_site_taramalari WHERE durum = 'tamamlandi' ORDER BY id DESC LIMIT 1"
+        )->fetch() ?: null;
+        $sorunlar = [];
+        if ($tarama !== null) {
+            $sorgu = $this->baglanti->prepare(
+                'SELECT id, url_yolu, sorun_turu, onem, aciklama, onerilen_duzeltme, tespit_tarihi
+                 FROM seo_site_sorunlari WHERE tarama_id = :tarama_id
+                 ORDER BY FIELD(onem, "kritik", "yuksek", "orta", "dusuk", "bilgi"), id LIMIT 50'
+            );
+            $sorgu->execute(['tarama_id' => $tarama['id']]);
+            $sorunlar = $sorgu->fetchAll();
+        }
+        return [
+            'dis_kaynaklar' => ['search_console' => 'bagli_degil', 'siralama_saglayicisi' => 'bagli_degil', 'reklam_saglayicisi' => 'bagli_degil'],
+            'site_sagligi' => $tarama,
+            'sorunlar' => $sorunlar,
+            'rakip_hareketleri' => [],
+            'reklam_hareketleri' => [],
+        ];
+    }
+
     public function seoVerileri(): array
     {
         $genelSorgusu = $this->baglanti->query(

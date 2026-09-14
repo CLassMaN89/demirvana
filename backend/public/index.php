@@ -62,6 +62,14 @@ try {
         $denetleyici->supurSilinenleri();
     }
 
+    if ($yontem === 'GET' && $yol === '/api/admin/seo/genel-bakis') {
+        JsonYanit::gonder(JsonYanit::olustur(true, $seoDenetleyicisi->yonetimGenelBakis()));
+    }
+
+    if ($yontem === 'POST' && $yol === '/api/admin/seo/siteyi-tara') {
+        JsonYanit::gonder(JsonYanit::olustur(true, $seoDenetleyicisi->siteDenetimiCalistir(), 'Site SEO denetimi tamamlandı.'));
+    }
+
     // Kategori Yönetimi ekranı: menu_alt_ogeleri (ürünlerin gerçekten filtrelendiği menü yaprakları) üzerinde CRUD.
     if (str_starts_with($yol, '/api/admin/kategoriler')) {
         if ($yontem === 'GET' && $yol === '/api/admin/kategoriler/silinenler') {

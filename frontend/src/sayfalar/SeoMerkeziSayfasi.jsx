@@ -1,10 +1,11 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Activity, CalendarDays, Download, FileBarChart, HeartPulse, LayoutDashboard,
+  CalendarDays, Download, FileBarChart, HeartPulse, LayoutDashboard,
   Lightbulb, Megaphone, RefreshCw, Search, Users
 } from 'lucide-react';
 import '../stiller/seo-merkezi.css';
+import { seoGenelBakisGetir, seoSiteyiTara } from '../servisler/api';
 
 const SEKME_BILESENLERI = {
   'genel-bakis': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.GenelBakisSekmesi }))),
@@ -27,10 +28,32 @@ const SEKMELER = [
 ];
 
 export default function SeoMerkeziSayfasi() {
+  const [veri, setVeri] = useState(null);
+  const [yukleniyor, setYukleniyor] = useState(true);
+  const [taraniyor, setTaraniyor] = useState(false);
+  const [hata, setHata] = useState('');
   const [aramaParametreleri, setAramaParametreleri] = useSearchParams();
   const istenenSekme = aramaParametreleri.get('tab') ?? 'genel-bakis';
   const etkinSekme = SEKME_BILESENLERI[istenenSekme] ? istenenSekme : 'genel-bakis';
   const EtkinSekmeBileseni = useMemo(() => SEKME_BILESENLERI[etkinSekme], [etkinSekme]);
+
+  const genelBakisiYukle = useCallback(async () => {
+    setYukleniyor(true);
+    setHata('');
+    try { setVeri(await seoGenelBakisGetir()); }
+    catch (istekHatasi) { setHata(istekHatasi.message); }
+    finally { setYukleniyor(false); }
+  }, []);
+
+  useEffect(() => { genelBakisiYukle(); }, [genelBakisiYukle]);
+
+  async function siteyiTara() {
+    setTaraniyor(true);
+    setHata('');
+    try { setVeri(await seoSiteyiTara()); }
+    catch (istekHatasi) { setHata(istekHatasi.message); }
+    finally { setTaraniyor(false); }
+  }
 
   function sekmeDegistir(anahtar) {
     const yeniParametreler = new URLSearchParams(aramaParametreleri);
@@ -42,7 +65,7 @@ export default function SeoMerkeziSayfasi() {
     <section className="seo-merkezi">
       <header className="seo-merkezi__ust">
         <div className="seo-merkezi__kimlik">
-          <span className="seo-merkezi__ana-ikon"><Activity aria-hidden="true" /></span>
+          <span className="seo-merkezi__ana-ikon seo-gorsel-ikon seo-gorsel-ikon--merkez" aria-hidden="true" />
           <div>
             <h1>SEO Merkezi</h1>
             <p>Google ve rakiplerinizin tüm hareketlerini tek merkezden takip edin. Fırsatları yakalayın, bir adım önde olun.</p>
@@ -54,8 +77,8 @@ export default function SeoMerkeziSayfasi() {
             <span className="sr-only">Tarih aralığı</span>
             <select defaultValue="30"><option value="7">Son 7 Gün</option><option value="30">Son 30 Gün</option><option value="90">Son 3 Ay</option><option value="180">Son 6 Ay</option><option value="365">Son 12 Ay</option></select>
           </label>
-          <button className="seo-merkezi__ikon-buton" type="button" disabled title="Veri toplama servisi bağlandığında kullanılabilir">
-            <RefreshCw aria-hidden="true" size={16} /><span className="sr-only">Verileri yenile</span>
+          <button className="seo-merkezi__ikon-buton" type="button" onClick={siteyiTara} disabled={taraniyor} title="Siteyi yeniden tara" aria-label="Siteyi yeniden tara">
+            <RefreshCw aria-hidden="true" size={16} />
           </button>
           <button className="seo-merkezi__rapor-buton" type="button" disabled title="Rapor servisi henüz kurulmadı">
             <Download aria-hidden="true" size={16} />Rapor İndir
@@ -72,7 +95,7 @@ export default function SeoMerkeziSayfasi() {
       </nav>
 
       <Suspense fallback={<div className="seo-merkezi__yukleniyor" aria-label="SEO bölümü yükleniyor" />}>
-        <EtkinSekmeBileseni />
+        <EtkinSekmeBileseni veri={veri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
       </Suspense>
     </section>
   );
