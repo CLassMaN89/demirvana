@@ -86,10 +86,29 @@ final class SeoDeposu
             $sorgu->execute(['tarama_id' => $tarama['id']]);
             $sorunlar = $sorgu->fetchAll();
         }
+        $taramaGecmisi = $this->baglanti->query(
+            "SELECT id, toplam_url, sorun_sayisi, saglik_puani, bitis_tarihi
+             FROM seo_site_taramalari WHERE durum = 'tamamlandi'
+             ORDER BY id DESC LIMIT 30"
+        )->fetchAll();
+        $taramaGecmisi = array_reverse($taramaGecmisi);
+
+        $sorunOzeti = [];
+        if ($tarama !== null) {
+            $ozetSorgusu = $this->baglanti->prepare(
+                'SELECT sorun_turu, onem, COUNT(*) AS adet
+                 FROM seo_site_sorunlari WHERE tarama_id = :tarama_id
+                 GROUP BY sorun_turu, onem ORDER BY adet DESC'
+            );
+            $ozetSorgusu->execute(['tarama_id' => $tarama['id']]);
+            $sorunOzeti = $ozetSorgusu->fetchAll();
+        }
         return [
             'dis_kaynaklar' => ['search_console' => 'bagli_degil', 'siralama_saglayicisi' => 'bagli_degil', 'reklam_saglayicisi' => 'bagli_degil'],
             'site_sagligi' => $tarama,
             'sorunlar' => $sorunlar,
+            'tarama_gecmisi' => $taramaGecmisi,
+            'sorun_ozeti' => $sorunOzeti,
             'rakip_hareketleri' => [],
             'reklam_hareketleri' => [],
         ];

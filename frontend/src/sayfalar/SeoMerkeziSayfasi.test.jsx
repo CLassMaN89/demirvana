@@ -20,6 +20,6 @@ describe('SeoMerkeziSayfasi', () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=bilinmeyen']}><SeoMerkeziSayfasi /></MemoryRouter>);
     expect(await screen.findByText('Google Görünürlüğü')).toBeInTheDocument();
     expect(await screen.findByText('86/100')).toBeInTheDocument();
-    expect(screen.getByText('SEO başlığı uzun.')).toBeInTheDocument();
+    expect(screen.getAllByText('SEO başlığı uzun.')).toHaveLength(2);
   });
 });

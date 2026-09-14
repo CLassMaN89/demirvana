@@ -1,4 +1,5 @@
 import { BarChart3, CircleAlert, FileBarChart, HeartPulse, Lightbulb, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 function VeriBekleniyor({ ikon: Ikon, baslik, aciklama }) {
   return (
@@ -15,6 +16,17 @@ function BaglantiBekliyor({ metin }) { return <div className="seo-mini-bos">{met
 function SorunListesi({ sorunlar = [], sinir = 5 }) {
   if (!sorunlar.length) return <BaglantiBekliyor metin="Açık site sorunu bulunmuyor." />;
   return <div className="seo-sorun-listesi">{sorunlar.slice(0, sinir).map((sorun) => <div key={sorun.id}><span className={`seo-onem seo-onem--${sorun.onem}`}>{sorun.onem}</span><p><strong>{sorun.aciklama}</strong><small>{sorun.url_yolu}</small></p></div>)}</div>;
+}
+
+function tarihYaz(tarih) {
+  if (!tarih) return '';
+  return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(tarih.replace(' ', 'T')));
+}
+
+function SaglikGrafigi({ gecmis = [] }) {
+  if (!gecmis.length) return <BaglantiBekliyor metin="Grafik için ilk site taramasını çalıştırın." />;
+  const veriler = gecmis.map((kayit) => ({ tarih: tarihYaz(kayit.bitis_tarihi).split(' ').slice(0, 2).join(' '), puan: Number(kayit.saglik_puani), sorun: Number(kayit.sorun_sayisi) }));
+  return <div className="seo-grafik"><ResponsiveContainer width="100%" height="100%"><LineChart data={veriler} margin={{ top: 12, right: 18, bottom: 4, left: -18 }}><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="tarih" tick={{ fontSize: 10 }} /><YAxis domain={[0, 100]} tick={{ fontSize: 10 }} /><Tooltip /><Line type="monotone" dataKey="puan" name="Sağlık puanı" stroke="#1677ff" strokeWidth={2.5} dot={{ r: 3 }} /></LineChart></ResponsiveContainer></div>;
 }
 
 export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYenidenDene }) {
@@ -34,15 +46,15 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
         {kartlar.map(([etiket, Ikon, deger, bilgi, gorsel]) => <article className="seo-kpi" key={etiket}><span className={gorsel ? `seo-kpi__ikon seo-gorsel-ikon seo-gorsel-ikon--${gorsel}` : 'seo-kpi__ikon'}>{!gorsel && <Ikon aria-hidden="true" size={22} />}</span><div><span>{etiket}</span><strong>{deger}</strong><small>{bilgi}</small></div></article>)}
       </div>
       <div className="seo-ana-grid">
-        <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><h2>Sıralama Değişimi</h2></div><span>Son 30 gün</span></header><BaglantiBekliyor metin="Gerçek sıralama grafiği için veri sağlayıcısı bağlantısı gerekli." /></article>
-        <article className="seo-panel"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div></header><BaglantiBekliyor metin="Henüz takip edilen rakip bulunmuyor." /></article>
+        <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><h2>Site Sağlığı Değişimi</h2></div><span>Gerçek tarama geçmişi</span></header><SaglikGrafigi gecmis={veri?.tarama_gecmisi} /></article>
+        <article className="seo-panel"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div><button type="button" disabled>Detaylı Karşılaştırma</button></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Performans</span><span>SEO</span><span>İndekslenebilir URL</span></div><div><strong>Demir Vana</strong><b>—</b><b>{tarama?.saglik_puani ?? '—'}</b><b>{tarama?.toplam_url ?? '—'}</b></div><p>Rakip verisi için izleme sağlayıcısı bağlantısı gerekli.</p></div></article>
       </div>
       <div className="seo-hareket-grid">
-        <article className="seo-panel"><header><div><Users /><h2>Son Rakip Hareketleri</h2></div></header><BaglantiBekliyor metin="Rakip hareketi bulunmuyor." /></article>
-        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><BaglantiBekliyor metin="Reklam sağlayıcısı bağlı değil." /></article>
+        <article className="seo-panel"><header><div><Users /><h2>Son Site Hareketleri</h2></div><span>Gerçek denetimler</span></header><div className="seo-hareket-listesi">{(veri?.tarama_gecmisi ?? []).slice(-4).reverse().map((kayit) => <div key={kayit.id}><HeartPulse /><p><strong>{kayit.saglik_puani}/100 sağlık puanı</strong><small>{kayit.toplam_url} URL · {kayit.sorun_sayisi} sorun</small></p><time>{tarihYaz(kayit.bitis_tarihi)}</time></div>)}</div></article>
+        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><span className="seo-gorsel-ikon seo-gorsel-ikon--reklam" /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><h2>Önemli Fırsatlar</h2></div></header><SorunListesi sorunlar={veri?.sorunlar} sinir={4} /></article>
       </div>
-      <article className="seo-gorev-seridi"><div><ShieldCheck /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatarak teknik SEO sorunlarını belirleyin.'}</small></div></div><button type="button" onClick={onSiteyiTara}>{tarama ? 'Siteyi yeniden tara' : 'Siteyi tara'}</button></article>
+      <article className="seo-gorev-seridi"><div className="seo-gorev-seridi__baslik"><ShieldCheck /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatın.'}</small></div></div><div className="seo-gorevler">{(veri?.sorunlar ?? []).slice(0, 5).map((sorun, sira) => <div key={sorun.id}><b>{sira + 1}</b><span>{sorun.aciklama}<small>{sorun.url_yolu}</small></span></div>)}</div><button type="button" onClick={onSiteyiTara}>{tarama ? 'Yeniden tara' : 'Siteyi tara'}</button></article>
     </div>
   );
 }
