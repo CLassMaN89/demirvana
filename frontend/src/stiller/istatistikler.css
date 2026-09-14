@@ -44,8 +44,11 @@
 .istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
 .istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 730px; }
 .istatistik-kart__govde { flex: 1; min-height: 0; overflow-y: visible; padding-bottom: 8px; }
-.istatistik-yan-yana .ziyaret-satiri { flex-wrap: wrap; }
-.istatistik-yan-yana .ziyaret-satiri__aksiyon { flex-basis: 100%; }
+.istatistik-kart--sirali .istatistik-kart__govde { display: flex; flex-direction: column; }
+.istatistik-kart--sirali .istatistik-tablo tbody tr:first-child:not(.istatistik-tablo__dolgu-satir) { background: color-mix(in srgb, var(--yonetim-mavi) 7%, transparent); }
+.istatistik-kart__alt { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding: 10px 14px 6px; color: var(--yonetim-metin-ikincil); font-size: .72rem; }
+.istatistik-kart__alt .sayfalama { padding: 0; }
+.ip-dokum-alt { padding: 10px 12px; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
   .istatistik-yan-yana > .istatistik-kart { height: auto; min-height: 730px; }
@@ -125,6 +128,15 @@
 .ziyaret-grubu { border-bottom: 1px solid var(--yonetim-cizgi); }
 .ziyaret-grubu:last-child { border-bottom: 0; }
 .ziyaret-grubu--alt { margin-left: 18px; border-left: 2px solid color-mix(in srgb, var(--yonetim-mavi) 14%, transparent); }
+.istatistik-kart--ip .istatistik-kart__govde { padding: 4px 12px 10px; }
+.istatistik-kart--ip > .istatistik-kart__govde > .ziyaret-grubu { margin: 8px 0; overflow: hidden; border: 1px solid var(--yonetim-cizgi); border-radius: 9px; }
+.ip-gun-satiri { min-height: 58px; gap: 12px; }
+.ip-gun-satiri__tarih { display: grid; gap: 2px; margin-right: auto; color: var(--yonetim-metin); font-size: .8rem; }
+.ip-gun-satiri__tarih small { color: var(--yonetim-metin-ikincil); font-size: .66rem; font-weight: 500; }
+.ip-ozet { flex: 0 0 auto; padding: 7px 11px; border-radius: 8px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+.ip-ozet--mavi { background: color-mix(in srgb, var(--yonetim-mavi) 9%, transparent); color: var(--yonetim-mavi); }
+.ip-ozet--yesil { background: color-mix(in srgb, var(--yonetim-yesil) 10%, transparent); color: var(--yonetim-yesil); }
+.ip-ozet--mor { background: color-mix(in srgb, #7c3aed 9%, transparent); color: #7c3aed; }
 .ziyaret-satiri {
   display: flex;
   width: 100%;

@@ -14,6 +14,12 @@ function gunEtiketiUret(tarihMetni) {
   return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
+function tamGunEtiketiUret(tarihMetni) {
+  const tarih = new Date(`${tarihMetni.slice(0, 10)}T00:00:00`);
+  if (Number.isNaN(tarih.getTime())) return '';
+  return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
 function tarihiFormatla(deger) {
   if (!deger) return '—';
   const tarih = new Date(deger.replace(' ', 'T'));
@@ -285,25 +291,27 @@ export default function IstatistiklerSayfasi() {
       </div>
 
       <div className="istatistik-yan-yana">
-        <div className="yonetim-kategori__kart istatistik-kart">
+        <div className="yonetim-kategori__kart istatistik-kart istatistik-kart--sirali">
           <div className="istatistik-kart__baslik">
             <Globe aria-hidden="true" size={16} />
             <h3>En Çok Görüntülenen Sayfalar</h3>
+            <p className="istatistik-kart__not">Ziyaretçilerinizin en çok görüntülediği sayfalar</p>
           </div>
           <div className="istatistik-kart__govde">
             <div className="yonetim-tablo-kaydir">
               <table className="yonetim-tablo istatistik-tablo">
-                <thead><tr><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Görüntüleme</th></tr></thead>
+                <thead><tr><th>#</th><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Görüntüleme</th></tr></thead>
                 <tbody>
-                  {sayfalanmisEnCok.map((satir) => (
+                  {sayfalanmisEnCok.map((satir, sira) => (
                     <tr key={satir.yol}>
+                      <td>{(enCokGecerliSayfaNo - 1) * EN_COK_SAYFA_BOYUTU + sira + 1}</td>
                       <td className="istatistik-tablo__sol-hucre">{satir.yol}</td>
                       <td><SayfaGoruntuleLinki yol={satir.yol} /></td>
                       <td>{satir.adet}</td>
                     </tr>
                   ))}
                   {istatistikler.en_cok_goruntulenen_sayfalar.length === 0 && (
-                    <tr><td colSpan={3} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
+                    <tr><td colSpan={4} className="yonetim-tablo__bos">Henüz kayıt yok.</td></tr>
                   )}
                   {/* Sayfalar arası geçişte (özellikle son sayfada) alan kısalıp büyümesin diye
                       dolgu satırları eklenir. */}
@@ -311,14 +319,15 @@ export default function IstatistiklerSayfasi() {
                     { length: Math.max(0, EN_COK_SAYFA_BOYUTU - sayfalanmisEnCok.length) }
                   ).map((_, i) => (
                     <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
-                      <td colSpan={3}>&nbsp;</td>
+                      <td colSpan={4}>&nbsp;</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {enCokSayfaSayisi > 1 && (
-              <div className="sayfalama">
+            <div className="istatistik-kart__alt">
+              <span>Toplam {istatistikler.en_cok_goruntulenen_sayfalar.length} kayıt</span>
+              {enCokSayfaSayisi > 1 && <div className="sayfalama">
                 <button type="button" disabled={enCokGecerliSayfaNo <= 1} onClick={() => setEnCokSayfaNo((n) => n - 1)}>
                   Önceki
                 </button>
@@ -326,12 +335,12 @@ export default function IstatistiklerSayfasi() {
                 <button type="button" disabled={enCokGecerliSayfaNo >= enCokSayfaSayisi} onClick={() => setEnCokSayfaNo((n) => n + 1)}>
                   Sonraki
                 </button>
-              </div>
-            )}
+              </div>}
+            </div>
           </div>
         </div>
 
-        <div className="yonetim-kategori__kart istatistik-kart">
+        <div className="yonetim-kategori__kart istatistik-kart istatistik-kart--ip">
           <div className="istatistik-kart__baslik">
             <Fingerprint aria-hidden="true" size={16} />
             <h3>IP Bazında Toplam Kalma Süresi</h3>
@@ -352,16 +361,17 @@ export default function IstatistiklerSayfasi() {
               );
               return (
                 <div className="ziyaret-grubu" key={gun.tarih}>
-                  <button type="button" className="ziyaret-satiri" onClick={() => ipGunAcikKapatmayiDegistir(gun.tarih)} aria-expanded={gunAcik}>
+                  <button type="button" className="ziyaret-satiri ip-gun-satiri" onClick={() => ipGunAcikKapatmayiDegistir(gun.tarih)} aria-expanded={gunAcik}>
                     <motion.span className="ziyaret-satiri__ok" animate={{ rotate: gunAcik ? 90 : 0 }} transition={{ duration: .18 }}>
                       <ChevronRight aria-hidden="true" size={15} />
                     </motion.span>
-                    <span className="ziyaret-satiri__tarih">{gun.etiket}</span>
-                    <span className="ziyaret-satiri__etiket">IP</span>
-                    <span className="ziyaret-satiri__bilgi">{gun.ipler.length} IP</span>
-                    <span className="ziyaret-satiri__bilgi"><strong>Toplam süre:</strong> {kalmaSuresiniFormatla(gun.toplamSaniye)}</span>
-                    <span className="ziyaret-satiri__bilgi">{gun.goruntulemeSayisi} görüntüleme</span>
-                    <span className="ziyaret-satiri__aksiyon">{gunAcik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
+                    <span className="ip-gun-satiri__tarih">
+                      <strong>{gun.etiket}</strong>
+                      {gun.etiket === 'Bugün' && <small>{tamGunEtiketiUret(gun.tarih)}</small>}
+                    </span>
+                    <span className="ip-ozet ip-ozet--mavi">{gun.ipler.length} IP</span>
+                    <span className="ip-ozet ip-ozet--yesil">Toplam süre: {kalmaSuresiniFormatla(gun.toplamSaniye)}</span>
+                    <span className="ip-ozet ip-ozet--mor">{gun.goruntulemeSayisi} görüntüleme</span>
                   </button>
                   <AnimatePresence initial={false}>
                     {gunAcik && (
@@ -414,13 +424,14 @@ export default function IstatistiklerSayfasi() {
                                         </tbody>
                                       </table>
                                     </div>
-                                    {dokumSayfaSayisi > 1 && (
+                                    <div className="istatistik-kart__alt ip-dokum-alt">
+                                      <span>Toplam {tumSayfalar.length} kayıt</span>
                                       <div className="sayfalama">
                                         <button type="button" disabled={gecerliDokumSayfaNo <= 1} onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [ipAnahtari]: gecerliDokumSayfaNo - 1 }))}>Önceki</button>
                                         <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
                                         <button type="button" disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi} onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [ipAnahtari]: gecerliDokumSayfaNo + 1 }))}>Sonraki</button>
                                       </div>
-                                    )}
+                                    </div>
                                   </motion.div>
                                 )}
                               </AnimatePresence>
