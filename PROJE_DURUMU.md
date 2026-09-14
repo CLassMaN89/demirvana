@@ -353,7 +353,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 
 ## Bilinen durumlar
 
-- Ziyaretçi İstatistikleri ekranındaki iki üst kart referans tasarıma uygun biçimde eşit ve sabit yükseklikte düzenlendi. Sol tabloda sıra numarası, açıklama ve toplam kayıt altlığı; sağda çerçeveli gün grupları, tam tarih ve renk ayrımlı IP/süre/görüntüleme özetleri bulunur. Gün ve IP akordeonlarında aynı anda yalnızca bir bölüm açık kalır. Sayfalama düğmeleri eşit ölçüdedir ve son sayfadaki kayıt sayısı azalsa da konumu değişmez; iç kaydırma kullanılmaz.
+- Ziyaretçi İstatistikleri ekranındaki iki üst kart referans tasarıma uygun biçimde eşit ve sabit yükseklikte düzenlendi. Sol tabloda sıra numarası, açıklama ve toplam kayıt altlığı; sağda çerçeveli gün grupları, tam tarih ve simgeli IP/süre/görüntüleme özetleri bulunur. Gün ve IP akordeonlarında aynı anda yalnızca bir bölüm açık kalır. Her iki kartın toplam/sayfalama altlığı aynı taban çizgisine sabitlenir; son sayfadaki kayıt sayısı konumu değiştirmez ve iç kaydırma kullanılmaz.
 
 - 14 Eylül 2026 çalışma doğrulamasında MariaDB, PHP API (`127.0.0.1:8080`) ve Vite arayüzü (`127.0.0.1:5173`) birlikte çalıştırıldı; ana sayfa ile `/api/baslangic` 200 döndü. Frontend tarafında 30 dosyada 84 test ve üretim derlemesi, backend tarafında API doğrulaması ile tüm PHP sözdizimi kontrolleri başarılı oldu. Vite derlemesi ana JavaScript paketinin 500 kB eşiğini aşması nedeniyle performans uyarısı veriyor; hata oluşmadı. Çalışma alanında bu doğrulamadan önce var olan çok sayıda commitlenmemiş kullanıcı değişikliği korunmuştur.
 

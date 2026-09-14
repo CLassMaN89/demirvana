@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, Eye, Fingerprint, Globe, Search, TrendingUp } from 'lucide-react';
+import { CalendarDays, Clock3, Eye as GoruntulemeIkonu, UserRound } from 'lucide-react';
 import { ipSayfalariniGetir, ziyaretYonetimVerisiniGetir } from '../servisler/api';
 import '../stiller/yonetim-kategori.css';
 import '../stiller/istatistikler.css';
@@ -365,17 +366,18 @@ export default function IstatistiklerSayfasi() {
                     <motion.span className="ziyaret-satiri__ok" animate={{ rotate: gunAcik ? 90 : 0 }} transition={{ duration: .18 }}>
                       <ChevronRight aria-hidden="true" size={15} />
                     </motion.span>
+                    <CalendarDays className="ip-gun-satiri__takvim" aria-hidden="true" size={17} />
                     <span className="ip-gun-satiri__tarih">
                       <strong>{gun.etiket}</strong>
                       {gun.etiket === 'Bugün' && <small>{tamGunEtiketiUret(gun.tarih)}</small>}
                     </span>
-                    <span className="ip-ozet ip-ozet--mavi">{gun.ipler.length} IP</span>
-                    <span className="ip-ozet ip-ozet--yesil">Toplam süre: {kalmaSuresiniFormatla(gun.toplamSaniye)}</span>
-                    <span className="ip-ozet ip-ozet--mor">{gun.goruntulemeSayisi} görüntüleme</span>
+                    <span className="ip-ozet ip-ozet--mavi"><UserRound aria-hidden="true" size={14} />{gun.ipler.length} IP</span>
+                    <span className="ip-ozet ip-ozet--yesil"><Clock3 aria-hidden="true" size={14} />Toplam süre: {kalmaSuresiniFormatla(gun.toplamSaniye)}</span>
+                    <span className="ip-ozet ip-ozet--mor"><GoruntulemeIkonu aria-hidden="true" size={14} />{gun.goruntulemeSayisi} görüntüleme</span>
                   </button>
                   <AnimatePresence initial={false}>
                     {gunAcik && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .2, ease: 'easeInOut' }} style={{ overflow: 'hidden' }}>
+                      <motion.div className="ip-gun-icerik" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .2, ease: 'easeInOut' }} style={{ overflow: 'hidden' }}>
                         {gosterilenIpler.map((satir) => {
                           const ipAnahtari = `${gun.tarih}|${satir.ip_adresi}`;
                           const acik = acikIpler.has(ipAnahtari);
@@ -391,8 +393,8 @@ export default function IstatistiklerSayfasi() {
                                   <ChevronRight aria-hidden="true" size={15} />
                                 </motion.span>
                                 <IpRozeti ip={satir.ip_adresi} />
-                                <span className="ziyaret-satiri__bilgi"><strong>Toplam Süre:</strong> {kalmaSuresiniFormatla(Number(satir.toplam_saniye))}</span>
-                                <span className="ziyaret-satiri__bilgi">{satir.goruntuleme_sayisi} görüntüleme</span>
+                                <span className="ziyaret-satiri__bilgi ziyaret-satiri__bilgi--ikon"><Clock3 aria-hidden="true" size={13} /><strong>Toplam Süre:</strong> {kalmaSuresiniFormatla(Number(satir.toplam_saniye))}</span>
+                                <span className="ziyaret-satiri__bilgi ziyaret-satiri__bilgi--ikon"><GoruntulemeIkonu aria-hidden="true" size={13} />{satir.goruntuleme_sayisi} görüntüleme</span>
                                 <span className="ziyaret-satiri__aksiyon">{acik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
                               </button>
                               <AnimatePresence initial={false}>
