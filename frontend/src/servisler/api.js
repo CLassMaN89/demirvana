@@ -156,8 +156,9 @@ export async function ziyaretYonetimVerisiniGetir(sayfa = 1, secenekler = {}) {
 
 // Son Ziyaretler / IP Bazında Toplam Kalma Süresi kartlarında bir IP satırı genişletildiğinde,
 // o IP'nin hangi sayfalara kaç kez girdiğini ve toplam ne kadar kaldığını istek üzerine getirir.
-export async function ipSayfalariniGetir(ip, secenekler = {}) {
-  return adminIstegiGonder(`/admin/ziyaretler/ip/${encodeURIComponent(ip)}`, { ...secenekler, yontem: 'GET' });
+export async function ipSayfalariniGetir(ip, tarih, secenekler = {}) {
+  const tarihSorgusu = tarih ? `?tarih=${encodeURIComponent(tarih)}` : '';
+  return adminIstegiGonder(`/admin/ziyaretler/ip/${encodeURIComponent(ip)}${tarihSorgusu}`, { ...secenekler, yontem: 'GET' });
 }
 
 export async function islemYonetimVerisiniGetir(sayfa = 1, secenekler = {}) {

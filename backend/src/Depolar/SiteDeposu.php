@@ -639,15 +639,18 @@ final class SiteDeposu
         return $sorgu->fetchAll();
     }
 
-    /** Bir IP'nin hangi sayfalara girdiğini, kaç kez ve toplam ne kadar kaldığını gösterir. */
-    public function ipSayfalariniGetir(string $ipAdresi): array
+    /** Bir IP'nin seçilen günde hangi sayfalara girdiğini ve toplam ne kadar kaldığını gösterir. */
+    public function ipSayfalariniGetir(string $ipAdresi, ?string $tarih = null): array
     {
+        $tarihKosulu = $tarih !== null ? ' AND DATE(olusturulma_tarihi) = :tarih' : '';
         $sorgu = $this->baglanti->prepare(
             'SELECT yol, COUNT(*) AS adet, SUM(kalma_suresi_sn) AS toplam_saniye, MAX(olusturulma_tarihi) AS son_ziyaret
-             FROM ziyaret_kayitlari WHERE ip_adresi = :ip
+             FROM ziyaret_kayitlari WHERE ip_adresi = :ip' . $tarihKosulu . '
              GROUP BY yol ORDER BY son_ziyaret DESC'
         );
-        $sorgu->execute(['ip' => $ipAdresi]);
+        $parametreler = ['ip' => $ipAdresi];
+        if ($tarih !== null) $parametreler['tarih'] = $tarih;
+        $sorgu->execute($parametreler);
 
         return $sorgu->fetchAll();
     }
@@ -665,13 +668,14 @@ final class SiteDeposu
              GROUP BY yol ORDER BY adet DESC LIMIT 24'
         )->fetchAll();
 
-        // Bir IP'nin sitede toplam ne kadar kaldığı: o IP'ye ait tüm sayfa görüntülemelerinin
-        // kalma süresi toplanır (her satır ayrı bir sayfanın süresidir, IP'nin tüm gezinme
-        // geçmişi boyunca toplamı verir).
-        $ipToplamSureleri = $this->baglanti->query(
-            "SELECT ip_adresi, SUM(kalma_suresi_sn) AS toplam_saniye, COUNT(*) AS goruntuleme_sayisi
+        // IP toplamları günle birlikte gruplanır; arayüz böylece sınırlı son ziyaret listesinden
+        // tahmin yapmak yerine her günün eksiksiz veritabanı toplamını gösterir.
+        $ipGunlukSureleri = $this->baglanti->query(
+            "SELECT DATE(olusturulma_tarihi) AS tarih, ip_adresi,
+                    SUM(kalma_suresi_sn) AS toplam_saniye, COUNT(*) AS goruntuleme_sayisi
              FROM ziyaret_kayitlari WHERE kalma_suresi_sn IS NOT NULL
-             GROUP BY ip_adresi ORDER BY toplam_saniye DESC LIMIT 200"
+             GROUP BY DATE(olusturulma_tarihi), ip_adresi
+             ORDER BY tarih DESC, toplam_saniye DESC LIMIT 500"
         )->fetchAll();
 
         return [
@@ -679,7 +683,7 @@ final class SiteDeposu
             'benzersiz_ip_sayisi' => $benzersizIp,
             'bugunku_goruntuleme' => $bugun,
             'en_cok_goruntulenen_sayfalar' => $enCokGorulenler,
-            'ip_toplam_sureleri' => $ipToplamSureleri,
+            'ip_gunluk_sureleri' => $ipGunlukSureleri,
         ];
     }
 

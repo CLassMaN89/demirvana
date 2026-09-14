@@ -1,6 +1,6 @@
 # Demirvana Proje Durumu
 
-Son güncelleme: 10 Eylül 2026
+Son güncelleme: 14 Eylül 2026
 
 ## Projenin amacı
 
@@ -352,6 +352,10 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Kullanıcı isteğiyle `AGENTS.md`'ye üst kısma, mevcut "Değişiklik kapsamı" bölümünü pekiştiren "ZORUNLU KURAL" başlıklı yeni bir bölüm eklendi: yalnızca o anda açıkça istenen ekleme/güncelleme yapılacak, proje/ilgisiz dosyalar baştan taranmayacak, yalnızca ilgili alana dokunulacak.
 
 ## Bilinen durumlar
+
+- Ziyaretçi İstatistikleri ekranında "Son Ziyaretler" tablosunun gereksiz büyük boşluğu kaldırıldı. "IP Bazında Toplam Kalma Süresi" kayıtları tarih ve IP bazında günlük açılır yapıya geçirildi; bugün dışındaki günler `13 Eylül 2026` biçiminde gösterilir ve IP sayfa dökümü seçilen tarihle sınırlandırılır. Üstteki iki kart masaüstünde eşit ve sabit yüksekliktedir; önceki/sonraki düğmeleri eşit ölçüdedir ve son sayfadaki kayıt sayısı azalsa da sayfalama konumu değişmez. İç kaydırma kullanılmaz.
+
+- 14 Eylül 2026 çalışma doğrulamasında MariaDB, PHP API (`127.0.0.1:8080`) ve Vite arayüzü (`127.0.0.1:5173`) birlikte çalıştırıldı; ana sayfa ile `/api/baslangic` 200 döndü. Frontend tarafında 30 dosyada 84 test ve üretim derlemesi, backend tarafında API doğrulaması ile tüm PHP sözdizimi kontrolleri başarılı oldu. Vite derlemesi ana JavaScript paketinin 500 kB eşiğini aşması nedeniyle performans uyarısı veriyor; hata oluşmadı. Çalışma alanında bu doğrulamadan önce var olan çok sayıda commitlenmemiş kullanıcı değişikliği korunmuştur.
 
 - Yönetim paneli bu ilk teslimin kapsamında değildir; veri yapısı yönetim paneline hazır olacaktır.
 - Yerel Git deposu oluşturuldu ve tamamlanan frontend görevleri ayrı commitlerle kaydedildi.

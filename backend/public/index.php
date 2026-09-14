@@ -166,10 +166,10 @@ try {
         JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->ziyaretYonetimVerisi($sayfa)));
     }
 
-    // Bir IP'nin toplam kalma süresi kartındaki satır tıklanınca o IP'nin hangi sayfalara
-    // girdiğini göstermek için ayrıca (istek üzerine, sayfalanmadan) çekilir.
+    // Günlük IP toplamındaki satır açıldığında sayfa dökümü aynı tarihle sınırlandırılır.
     if ($yontem === 'GET' && preg_match('#^/api/admin/ziyaretler/ip/([^/]+)$#', $yol, $eslesme) === 1) {
-        JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->ipSayfalariniGetir(urldecode($eslesme[1]))));
+        $tarih = isset($_GET['tarih']) ? trim((string) $_GET['tarih']) : null;
+        JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->ipSayfalariniGetir(urldecode($eslesme[1]), $tarih)));
     }
 
     if ($yontem === 'GET' && $yol === '/api/admin/loglar') {

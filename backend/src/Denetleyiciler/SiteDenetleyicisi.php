@@ -192,9 +192,12 @@ final class SiteDenetleyicisi
         $this->depo->kalmaSuresiGuncelle($id, $saniye);
     }
 
-    public function ipSayfalariniGetir(string $ipAdresi): array
+    public function ipSayfalariniGetir(string $ipAdresi, ?string $tarih = null): array
     {
-        return $this->depo->ipSayfalariniGetir($ipAdresi);
+        if ($tarih !== null && preg_match('/^\d{4}-\d{2}-\d{2}$/', $tarih) !== 1) {
+            throw new InvalidArgumentException('Geçersiz ziyaret tarihi.');
+        }
+        return $this->depo->ipSayfalariniGetir($ipAdresi, $tarih);
     }
 
     public function ziyaretYonetimVerisi(int $sayfa): array

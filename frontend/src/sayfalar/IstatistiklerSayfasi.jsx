@@ -9,11 +9,8 @@ function gunEtiketiUret(tarihMetni) {
   const tarih = new Date(tarihMetni.replace(' ', 'T'));
   if (Number.isNaN(tarih.getTime())) return 'Bilinmeyen tarih';
   const bugun = new Date();
-  const dun = new Date(bugun);
-  dun.setDate(dun.getDate() - 1);
   const gunEsit = (a, b) => a.toDateString() === b.toDateString();
   if (gunEsit(tarih, bugun)) return 'Bugün';
-  if (gunEsit(tarih, dun)) return 'Dün';
   return tarih.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
@@ -129,6 +126,7 @@ export default function IstatistiklerSayfasi() {
   const [acikGunler, setAcikGunler] = useState(() => new Set());
   const [ziyaretArama, setZiyaretArama] = useState('');
   const [ipArama, setIpArama] = useState('');
+  const [acikIpGunleri, setAcikIpGunleri] = useState(() => new Set());
   const [acikIpler, setAcikIpler] = useState(() => new Set());
   const [ipSayfalari, setIpSayfalari] = useState({});
 
@@ -181,29 +179,56 @@ export default function IstatistiklerSayfasi() {
 
   // Bir IP satırı ilk açıldığında sayfa dökümü istek üzerine (lazy) çekilir ve tekrar
   // kapatılıp açılsa da yeniden istek atılmaz; sonuç ipSayfalari önbelleğinde tutulur.
-  function ipAcikKapatmayiDegistir(ip) {
+  function ipAcikKapatmayiDegistir(ip, tarih) {
+    const anahtar = `${tarih}|${ip}`;
     setAcikIpler((mevcut) => {
       const yeni = new Set(mevcut);
-      if (yeni.has(ip)) yeni.delete(ip); else yeni.add(ip);
+      if (yeni.has(anahtar)) yeni.delete(anahtar); else yeni.add(anahtar);
       return yeni;
     });
     setIpSayfalari((mevcut) => {
-      if (mevcut[ip]) return mevcut;
-      ipSayfalariniGetir(ip)
-        .then((sonuc) => setIpSayfalari((guncel) => ({ ...guncel, [ip]: { yukleniyor: false, veri: sonuc ?? [] } })))
+      if (mevcut[anahtar]) return mevcut;
+      ipSayfalariniGetir(ip, tarih)
+        .then((sonuc) => setIpSayfalari((guncel) => ({ ...guncel, [anahtar]: { yukleniyor: false, veri: sonuc ?? [] } })))
         .catch((istisna) => setIpSayfalari((guncel) => ({
-          ...guncel, [ip]: { yukleniyor: false, hata: istisna.message || 'Sayfalar yüklenemedi.' }
+          ...guncel, [anahtar]: { yukleniyor: false, hata: istisna.message || 'Sayfalar yüklenemedi.' }
         })));
-      return { ...mevcut, [ip]: { yukleniyor: true } };
+      return { ...mevcut, [anahtar]: { yukleniyor: true } };
     });
   }
 
-  const filtrelenmisIpToplamlari = useMemo(() => {
+  const ipGunleri = useMemo(() => {
     if (!veri) return [];
     const terim = ipArama.trim().toLowerCase();
-    if (!terim) return veri.istatistikler.ip_toplam_sureleri;
-    return veri.istatistikler.ip_toplam_sureleri.filter((satir) => satir.ip_adresi.toLowerCase().includes(terim));
+    const satirlar = (veri.istatistikler.ip_gunluk_sureleri ?? [])
+      .filter((satir) => !terim || satir.ip_adresi.toLowerCase().includes(terim));
+    const gruplar = new Map();
+    for (const satir of satirlar) {
+      if (!gruplar.has(satir.tarih)) gruplar.set(satir.tarih, []);
+      gruplar.get(satir.tarih).push(satir);
+    }
+    return [...gruplar.entries()].map(([tarih, gununIpleri]) => ({
+      tarih,
+      etiket: gunEtiketiUret(tarih),
+      ipler: gununIpleri,
+      toplamSaniye: gununIpleri.reduce((toplam, satir) => toplam + Number(satir.toplam_saniye), 0),
+      goruntulemeSayisi: gununIpleri.reduce((toplam, satir) => toplam + Number(satir.goruntuleme_sayisi), 0)
+    }));
   }, [veri, ipArama]);
+
+  useEffect(() => {
+    if (ipGunleri.length > 0) {
+      setAcikIpGunleri((mevcut) => (mevcut.size > 0 ? mevcut : new Set([ipGunleri[0].tarih])));
+    }
+  }, [ipGunleri]);
+
+  function ipGunAcikKapatmayiDegistir(tarih) {
+    setAcikIpGunleri((mevcut) => {
+      const yeni = new Set(mevcut);
+      if (yeni.has(tarih)) yeni.delete(tarih); else yeni.add(tarih);
+      return yeni;
+    });
+  }
 
   // Bir IP genişletildiğinde altında açılan "hangi sayfalara girmiş" dökümü de kalabalık
   // olabildiği için kendi içinde ayrıca sayfalanır; her IP'nin sayfa numarası ayrı tutulur.
@@ -211,13 +236,7 @@ export default function IstatistiklerSayfasi() {
   const [ipSayfaDokumSayfaNo, setIpSayfaDokumSayfaNo] = useState({});
 
   const IP_SAYFA_BOYUTU = 9;
-  const [ipSayfaNo, setIpSayfaNo] = useState(1);
-  const ipSayfaSayisi = Math.max(1, Math.ceil(filtrelenmisIpToplamlari.length / IP_SAYFA_BOYUTU));
-  const gecerliIpSayfaNo = Math.min(ipSayfaNo, ipSayfaSayisi);
-  const sayfalanmisIpToplamlari = filtrelenmisIpToplamlari.slice(
-    (gecerliIpSayfaNo - 1) * IP_SAYFA_BOYUTU,
-    gecerliIpSayfaNo * IP_SAYFA_BOYUTU
-  );
+  const [ipGunSayfaNo, setIpGunSayfaNo] = useState({});
 
   // Son Ziyaretler: bir günün içindeki kayıt listesi kalabalık olabildiği için kendi içinde
   // ayrıca sayfalanır; her günün sayfa numarası ayrı tutulur (IP dökümündeki desenin aynısı).
@@ -229,10 +248,6 @@ export default function IstatistiklerSayfasi() {
   // sayfalanıyor.
   const EN_COK_SAYFA_BOYUTU = 12;
   const [enCokSayfaNo, setEnCokSayfaNo] = useState(1);
-
-  useEffect(() => {
-    setIpSayfaNo(1);
-  }, [ipArama]);
 
   useEffect(() => {
     let etkin = true;
@@ -323,126 +338,110 @@ export default function IstatistiklerSayfasi() {
             <h3>IP Bazında Toplam Kalma Süresi</h3>
             <AramaKutusu deger={ipArama} onDegisim={setIpArama} yerTutucu="IP ara…" />
             <p className="istatistik-kart__not">
-              Bir IP'nin sitede toplam ne kadar kaldığı; o IP'ye ait tüm sayfa görüntülemelerinin kalma
-              sürelerinin toplamıdır (sekme başka bir sekmeye geçilse/arka plana alınsa da bu süre işlemeye devam
-              eder). Bir satıra tıklayınca o IP'nin hangi sayfalara girdiğini görebilirsiniz.
+              IP toplamları günlere göre ayrılır. Bir günü, ardından IP satırını açarak o tarihte ziyaret edilen
+              sayfaları ve kalma sürelerini görebilirsiniz.
             </p>
           </div>
           <div className="istatistik-kart__govde">
-          {sayfalanmisIpToplamlari.map((satir) => {
-            const acik = acikIpler.has(satir.ip_adresi);
-            const sayfaDurumu = ipSayfalari[satir.ip_adresi];
-            const tumSayfalar = sayfaDurumu?.veri ?? [];
-            const dokumSayfaSayisi = Math.max(1, Math.ceil(tumSayfalar.length / SAYFA_DOKUM_BOYUTU));
-            const gecerliDokumSayfaNo = Math.min(ipSayfaDokumSayfaNo[satir.ip_adresi] ?? 1, dokumSayfaSayisi);
-            const sayfalanmisSayfalar = tumSayfalar.slice(
-              (gecerliDokumSayfaNo - 1) * SAYFA_DOKUM_BOYUTU,
-              gecerliDokumSayfaNo * SAYFA_DOKUM_BOYUTU
-            );
-            return (
-              <div className="ziyaret-grubu" key={satir.ip_adresi}>
-                <button
-                  type="button"
-                  className="ziyaret-satiri"
-                  onClick={() => ipAcikKapatmayiDegistir(satir.ip_adresi)}
-                  aria-expanded={acik}
-                >
-                  <motion.span className="ziyaret-satiri__ok" animate={{ rotate: acik ? 90 : 0 }} transition={{ duration: .18 }}>
-                    <ChevronRight aria-hidden="true" size={15} />
-                  </motion.span>
-                  <IpRozeti ip={satir.ip_adresi} />
-                  <span className="ziyaret-satiri__bilgi"><strong>Toplam Süre:</strong> {kalmaSuresiniFormatla(Number(satir.toplam_saniye))}</span>
-                  <span className="ziyaret-satiri__bilgi">{satir.goruntuleme_sayisi} görüntüleme</span>
-                  <span className="ziyaret-satiri__aksiyon">{acik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {acik && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: .2, ease: 'easeInOut' }}
-                      style={{ overflow: 'hidden' }}
-                    >
-                      <div className="yonetim-tablo-kaydir">
-                        <table className="yonetim-tablo istatistik-tablo">
-                          <colgroup>
-                            <col style={{ width: '50%' }} />
-                            <col style={{ width: '5%' }} />
-                            <col style={{ width: '15%' }} />
-                            <col style={{ width: '15%' }} />
-                            <col style={{ width: '15%' }} />
-                          </colgroup>
-                          <thead><tr><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
-                          <tbody>
-                            {sayfaDurumu?.yukleniyor && (
-                              <tr><td colSpan={5} className="yonetim-tablo__bos">Yükleniyor…</td></tr>
-                            )}
-                            {sayfaDurumu?.hata && (
-                              <tr><td colSpan={5} className="yonetim-tablo__bos">{sayfaDurumu.hata}</td></tr>
-                            )}
-                            {sayfalanmisSayfalar.map((sayfa) => (
-                              <tr key={sayfa.yol}>
-                                <td className="istatistik-tablo__sol-hucre" title={sayfa.yol}>{sayfa.yol}</td>
-                                <td><SayfaGoruntuleLinki yol={sayfa.yol} /></td>
-                                <td>{sayfa.adet}</td>
-                                <td>{kalmaSuresiniFormatla(Number(sayfa.toplam_saniye))}</td>
-                                <td>{tarihiFormatla(sayfa.son_ziyaret)}</td>
-                              </tr>
-                            ))}
-                            {/* Son sayfada az kayıt kalınca alan küçülmesin diye boş satırlarla
-                                yükseklik sabit tutulur. */}
-                            {!sayfaDurumu?.yukleniyor && !sayfaDurumu?.hata && Array.from(
-                              { length: Math.max(0, SAYFA_DOKUM_BOYUTU - sayfalanmisSayfalar.length) }
-                            ).map((_, i) => (
-                              <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
-                                <td colSpan={5}>&nbsp;</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      {/* Bu alan tek sayfa olsa bile HER ZAMAN render edilir; aksi halde tek
-                          sayfalık IP'lerde alan aniden kısalırdı. Kart artık kendi içinde
-                          kaydırılan sabit yükseklikte olduğu için (bkz. .istatistik-kart__govde)
-                          buradaki büyüme/küçülme sayfanın geri kalanını hiçbir zaman etkilemez. */}
-                      <div className="sayfalama">
-                        <button
-                          type="button"
-                          disabled={gecerliDokumSayfaNo <= 1}
-                          onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo - 1 }))}
-                        >
-                          Önceki
-                        </button>
-                        <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
-                        <button
-                          type="button"
-                          disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi}
-                          onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [satir.ip_adresi]: gecerliDokumSayfaNo + 1 }))}
-                        >
-                          Sonraki
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-          {filtrelenmisIpToplamlari.length === 0 && (
-            <p className="yonetim-tablo__bos">Henüz kalma süresi ölçülmüş kayıt yok.</p>
-          )}
-          {ipSayfaSayisi > 1 && (
-            <div className="sayfalama">
-              <button type="button" disabled={gecerliIpSayfaNo <= 1} onClick={() => setIpSayfaNo((n) => n - 1)}>
-                Önceki
-              </button>
-              <span>{gecerliIpSayfaNo} / {ipSayfaSayisi}</span>
-              <button type="button" disabled={gecerliIpSayfaNo >= ipSayfaSayisi} onClick={() => setIpSayfaNo((n) => n + 1)}>
-                Sonraki
-              </button>
-            </div>
-          )}
+            {ipGunleri.map((gun) => {
+              const gunAcik = acikIpGunleri.has(gun.tarih);
+              const ipSayfaSayisi = Math.max(1, Math.ceil(gun.ipler.length / IP_SAYFA_BOYUTU));
+              const gecerliIpSayfaNo = Math.min(ipGunSayfaNo[gun.tarih] ?? 1, ipSayfaSayisi);
+              const gosterilenIpler = gun.ipler.slice(
+                (gecerliIpSayfaNo - 1) * IP_SAYFA_BOYUTU,
+                gecerliIpSayfaNo * IP_SAYFA_BOYUTU
+              );
+              return (
+                <div className="ziyaret-grubu" key={gun.tarih}>
+                  <button type="button" className="ziyaret-satiri" onClick={() => ipGunAcikKapatmayiDegistir(gun.tarih)} aria-expanded={gunAcik}>
+                    <motion.span className="ziyaret-satiri__ok" animate={{ rotate: gunAcik ? 90 : 0 }} transition={{ duration: .18 }}>
+                      <ChevronRight aria-hidden="true" size={15} />
+                    </motion.span>
+                    <span className="ziyaret-satiri__tarih">{gun.etiket}</span>
+                    <span className="ziyaret-satiri__etiket">IP</span>
+                    <span className="ziyaret-satiri__bilgi">{gun.ipler.length} IP</span>
+                    <span className="ziyaret-satiri__bilgi"><strong>Toplam süre:</strong> {kalmaSuresiniFormatla(gun.toplamSaniye)}</span>
+                    <span className="ziyaret-satiri__bilgi">{gun.goruntulemeSayisi} görüntüleme</span>
+                    <span className="ziyaret-satiri__aksiyon">{gunAcik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {gunAcik && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .2, ease: 'easeInOut' }} style={{ overflow: 'hidden' }}>
+                        {gosterilenIpler.map((satir) => {
+                          const ipAnahtari = `${gun.tarih}|${satir.ip_adresi}`;
+                          const acik = acikIpler.has(ipAnahtari);
+                          const sayfaDurumu = ipSayfalari[ipAnahtari];
+                          const tumSayfalar = sayfaDurumu?.veri ?? [];
+                          const dokumSayfaSayisi = Math.max(1, Math.ceil(tumSayfalar.length / SAYFA_DOKUM_BOYUTU));
+                          const gecerliDokumSayfaNo = Math.min(ipSayfaDokumSayfaNo[ipAnahtari] ?? 1, dokumSayfaSayisi);
+                          const sayfalanmisSayfalar = tumSayfalar.slice((gecerliDokumSayfaNo - 1) * SAYFA_DOKUM_BOYUTU, gecerliDokumSayfaNo * SAYFA_DOKUM_BOYUTU);
+                          return (
+                            <div className="ziyaret-grubu ziyaret-grubu--alt" key={ipAnahtari}>
+                              <button type="button" className="ziyaret-satiri" onClick={() => ipAcikKapatmayiDegistir(satir.ip_adresi, gun.tarih)} aria-expanded={acik}>
+                                <motion.span className="ziyaret-satiri__ok" animate={{ rotate: acik ? 90 : 0 }} transition={{ duration: .18 }}>
+                                  <ChevronRight aria-hidden="true" size={15} />
+                                </motion.span>
+                                <IpRozeti ip={satir.ip_adresi} />
+                                <span className="ziyaret-satiri__bilgi"><strong>Toplam Süre:</strong> {kalmaSuresiniFormatla(Number(satir.toplam_saniye))}</span>
+                                <span className="ziyaret-satiri__bilgi">{satir.goruntuleme_sayisi} görüntüleme</span>
+                                <span className="ziyaret-satiri__aksiyon">{acik ? 'Kapatmak için tıklayın' : 'Açmak için tıklayın'}</span>
+                              </button>
+                              <AnimatePresence initial={false}>
+                                {acik && (
+                                  <motion.div className="ip-sayfa-dokumu" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .2, ease: 'easeInOut' }} style={{ overflow: 'hidden' }}>
+                                    <div className="yonetim-tablo-kaydir">
+                                      <table className="yonetim-tablo istatistik-tablo">
+                                        <thead><tr><th>Sayfa</th><th>Sayfa Görüntüle</th><th>Ziyaret Sayısı</th><th>Toplam Süre</th><th>Son Ziyaret</th></tr></thead>
+                                        <tbody>
+                                          {sayfaDurumu?.yukleniyor && <tr><td colSpan={5} className="yonetim-tablo__bos">Yükleniyor…</td></tr>}
+                                          {sayfaDurumu?.hata && <tr><td colSpan={5} className="yonetim-tablo__bos">{sayfaDurumu.hata}</td></tr>}
+                                          {sayfalanmisSayfalar.map((sayfa) => (
+                                            <tr key={sayfa.yol}>
+                                              <td className="istatistik-tablo__sol-hucre" title={sayfa.yol}>{sayfa.yol}</td>
+                                              <td><SayfaGoruntuleLinki yol={sayfa.yol} /></td>
+                                              <td>{sayfa.adet}</td>
+                                              <td>{kalmaSuresiniFormatla(Number(sayfa.toplam_saniye))}</td>
+                                              <td>{tarihiFormatla(sayfa.son_ziyaret)}</td>
+                                            </tr>
+                                          ))}
+                                          {/* Son sayfada kayıt azalsa da sayfalama aynı yerde kalır. */}
+                                          {!sayfaDurumu?.yukleniyor && !sayfaDurumu?.hata && Array.from(
+                                            { length: Math.max(0, SAYFA_DOKUM_BOYUTU - sayfalanmisSayfalar.length) }
+                                          ).map((_, i) => (
+                                            <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
+                                              <td colSpan={5}>&nbsp;</td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    {dokumSayfaSayisi > 1 && (
+                                      <div className="sayfalama">
+                                        <button type="button" disabled={gecerliDokumSayfaNo <= 1} onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [ipAnahtari]: gecerliDokumSayfaNo - 1 }))}>Önceki</button>
+                                        <span>{gecerliDokumSayfaNo} / {dokumSayfaSayisi}</span>
+                                        <button type="button" disabled={gecerliDokumSayfaNo >= dokumSayfaSayisi} onClick={() => setIpSayfaDokumSayfaNo((mevcut) => ({ ...mevcut, [ipAnahtari]: gecerliDokumSayfaNo + 1 }))}>Sonraki</button>
+                                      </div>
+                                    )}
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          );
+                        })}
+                        {ipSayfaSayisi > 1 && (
+                          <div className="sayfalama">
+                            <button type="button" disabled={gecerliIpSayfaNo <= 1} onClick={() => setIpGunSayfaNo((mevcut) => ({ ...mevcut, [gun.tarih]: gecerliIpSayfaNo - 1 }))}>Önceki</button>
+                            <span>{gecerliIpSayfaNo} / {ipSayfaSayisi}</span>
+                            <button type="button" disabled={gecerliIpSayfaNo >= ipSayfaSayisi} onClick={() => setIpGunSayfaNo((mevcut) => ({ ...mevcut, [gun.tarih]: gecerliIpSayfaNo + 1 }))}>Sonraki</button>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+            {ipGunleri.length === 0 && <p className="yonetim-tablo__bos">Henüz kalma süresi ölçülmüş kayıt yok.</p>}
           </div>
         </div>
       </div>
@@ -528,15 +527,6 @@ export default function IstatistiklerSayfasi() {
                               <td>{kayit.ekran_cozunurlugu || '—'}</td>
                               <td>{kayit.saat_dilimi || '—'}</td>
                               <td>{kalmaSuresiniFormatla(kayit.kalma_suresi_sn)}</td>
-                            </tr>
-                          ))}
-                          {/* Sayfa değiştikçe (özellikle son sayfada) satır sayısı değişip
-                              altındaki sayfalama yukarı/aşağı kaymasın diye dolgu satırı eklenir. */}
-                          {Array.from(
-                            { length: Math.max(0, SON_ZIYARET_SAYFA_BOYUTU - gunGosterilenKayitlar.length) }
-                          ).map((_, i) => (
-                            <tr key={`bos-${i}`} className="istatistik-tablo__dolgu-satir" aria-hidden="true">
-                              <td colSpan={11}>&nbsp;</td>
                             </tr>
                           ))}
                         </tbody>
