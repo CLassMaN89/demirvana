@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import '../stiller/seo-merkezi.css';
 import { seoGenelBakisGetir, seoRakipleriTara, seoSiteyiTara } from '../servisler/api';
+import SeoGorselIkonu from './seo/SeoGorselIkonu';
 
 const SEKME_BILESENLERI = {
   'genel-bakis': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.GenelBakisSekmesi }))),
@@ -68,7 +69,7 @@ export default function SeoMerkeziSayfasi() {
     <section className="seo-merkezi">
       <header className="seo-merkezi__ust">
         <div className="seo-merkezi__kimlik">
-          <span className="seo-merkezi__ana-ikon seo-gorsel-ikon seo-gorsel-ikon--merkez" aria-hidden="true" />
+          <SeoGorselIkonu tur="merkez" boyut={42} className="seo-merkezi__ana-ikon" />
           <div>
             <h1>SEO Merkezi</h1>
             <p>Google ve rakiplerinizin tüm hareketlerini tek merkezden takip edin. Fırsatları yakalayın, bir adım önde olun.</p>
@@ -90,9 +91,9 @@ export default function SeoMerkeziSayfasi() {
       </header>
 
       <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri">
-        {SEKMELER.map(({ anahtar, etiket, ikon: Ikon }) => (
+        {SEKMELER.map(({ anahtar, etiket }) => (
           <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined}>
-            <Ikon aria-hidden="true" size={16} />{etiket}
+            <SeoGorselIkonu tur={anahtar} boyut={18} />{etiket}
           </button>
         ))}
       </nav>

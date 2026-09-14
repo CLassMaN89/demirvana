@@ -1,5 +1,6 @@
 import { BarChart3, CircleAlert, FileBarChart, HeartPulse, Lightbulb, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import SeoGorselIkonu from './SeoGorselIkonu';
 
 function VeriBekleniyor({ ikon: Ikon, baslik, aciklama }) {
   return (
@@ -35,16 +36,16 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
   const tarama = veri?.site_sagligi;
   const rakipler = veri?.rakip_analizleri ?? [];
   const kartlar = [
-    ['Google Görünürlüğü', Search, '—', 'Search Console bağlı değil', 'google'],
-    ['Top 3 Kelime', Target, '—', 'Sıralama sağlayıcısı bağlı değil'],
-    ['Top 10 Kelime', BarChart3, '—', 'Sıralama sağlayıcısı bağlı değil'],
-    ['Top 20 Kelime', TrendingUp, '—', 'Sıralama sağlayıcısı bağlı değil'],
-    ['Site Sağlığı', HeartPulse, tarama ? `${tarama.saglik_puani}/100` : '—', tarama ? `${tarama.toplam_url} URL tarandı` : 'Henüz tarama yapılmadı', 'saglik']
+    ['Google Görünürlüğü', 'google', '—', 'Search Console bağlı değil', 'mavi'],
+    ['Top 3 Kelime', 'siralama', '—', 'Sıralama sağlayıcısı bağlı değil', 'yesil'],
+    ['Top 10 Kelime', 'grafik', '—', 'Sıralama sağlayıcısı bağlı değil', 'mor'],
+    ['Top 20 Kelime', 'performans', '—', 'Sıralama sağlayıcısı bağlı değil', 'turuncu'],
+    ['Site Sağlığı', 'saglik', tarama ? `${tarama.saglik_puani}/100` : '—', tarama ? `${tarama.toplam_url} URL tarandı` : 'Henüz tarama yapılmadı', 'yesil']
   ];
   return (
     <div className="seo-genel-bakis">
       <div className="seo-kpi-grid">
-        {kartlar.map(([etiket, Ikon, deger, bilgi, gorsel]) => <article className="seo-kpi" key={etiket}><span className={gorsel ? `seo-kpi__ikon seo-gorsel-ikon seo-gorsel-ikon--${gorsel}` : 'seo-kpi__ikon'}>{!gorsel && <Ikon aria-hidden="true" size={22} />}</span><div><span>{etiket}</span><strong>{deger}</strong><small>{bilgi}</small></div></article>)}
+        {kartlar.map(([etiket, ikon, deger, bilgi, renk]) => <article className={`seo-kpi seo-kpi--${renk}`} key={etiket}><SeoGorselIkonu tur={ikon} boyut={34} className="seo-kpi__ikon" /><div><span>{etiket}</span><strong>{deger}</strong><small>{bilgi}</small></div><i aria-hidden="true" /></article>)}
       </div>
       <div className="seo-ana-grid">
         <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><h2>Site Sağlığı Değişimi</h2></div><span>Gerçek tarama geçmişi</span></header><SaglikGrafigi gecmis={veri?.tarama_gecmisi} /></article>
@@ -52,7 +53,7 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
       </div>
       <div className="seo-hareket-grid">
         <article className="seo-panel"><header><div><Users /><h2>Son Rakip Analizleri</h2></div><span>Canlı ölçümler</span></header><div className="seo-hareket-listesi">{rakipler.slice(0, 5).map((rakip) => <div key={rakip.id}><Search /><p><strong>{rakip.ad} · {rakip.seo_puani}/100</strong><small>{rakip.kelime_sayisi} kelime · {rakip.schema_sayisi} schema · {rakip.h1_sayisi} H1</small></p><time>{tarihYaz(rakip.tarama_tarihi)}</time></div>)}</div></article>
-        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><span className="seo-gorsel-ikon seo-gorsel-ikon--reklam" /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
+        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><SeoGorselIkonu tur="reklam" boyut={38} /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><h2>Önemli Fırsatlar</h2></div></header><SorunListesi sorunlar={veri?.sorunlar} sinir={4} /></article>
       </div>
       <article className="seo-gorev-seridi"><div className="seo-gorev-seridi__baslik"><ShieldCheck /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatın.'}</small></div></div><div className="seo-gorevler">{(veri?.sorunlar ?? []).slice(0, 5).map((sorun, sira) => <div key={sorun.id}><b>{sira + 1}</b><span>{sorun.aciklama}<small>{sorun.url_yolu}</small></span></div>)}</div><button type="button" onClick={onSiteyiTara}>{tarama ? 'Yeniden tara' : 'Siteyi tara'}</button></article>
