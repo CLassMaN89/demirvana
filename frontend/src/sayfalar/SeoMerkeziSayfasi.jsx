@@ -5,7 +5,7 @@ import {
   Lightbulb, Megaphone, RefreshCw, Search, Users
 } from 'lucide-react';
 import '../stiller/seo-merkezi.css';
-import { seoGenelBakisGetir, seoSiteyiTara } from '../servisler/api';
+import { seoGenelBakisGetir, seoRakipleriTara, seoSiteyiTara } from '../servisler/api';
 
 const SEKME_BILESENLERI = {
   'genel-bakis': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.GenelBakisSekmesi }))),
@@ -50,7 +50,10 @@ export default function SeoMerkeziSayfasi() {
   async function siteyiTara() {
     setTaraniyor(true);
     setHata('');
-    try { setVeri(await seoSiteyiTara()); }
+    try {
+      await seoSiteyiTara();
+      setVeri(await seoRakipleriTara());
+    }
     catch (istekHatasi) { setHata(istekHatasi.message); }
     finally { setTaraniyor(false); }
   }

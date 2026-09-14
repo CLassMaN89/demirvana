@@ -8,6 +8,96 @@ final class SeoDeposu
     {
     }
 
+    /** Tanımlı rakiplerin herkese açık ana sayfa ve sitemap verilerini ölçer; sıralama değeri uydurmaz. */
+    public function rakipAnalizleriniCalistir(): array
+    {
+        $rakipler = $this->baglanti->query('SELECT id, ad, ana_adres FROM seo_rakipleri WHERE aktif_mi = 1 ORDER BY id')->fetchAll();
+        $ekle = $this->baglanti->prepare(
+            'INSERT INTO seo_rakip_taramalari
+             (rakip_id, http_durumu, yanit_suresi_ms, seo_puani, baslik_uzunlugu, meta_uzunlugu,
+              h1_sayisi, kelime_sayisi, baglanti_sayisi, schema_sayisi, sitemap_url_sayisi, hata_mesaji)
+             VALUES (:rakip_id, :http_durumu, :yanit_suresi_ms, :seo_puani, :baslik_uzunlugu, :meta_uzunlugu,
+                     :h1_sayisi, :kelime_sayisi, :baglanti_sayisi, :schema_sayisi, :sitemap_url_sayisi, :hata_mesaji)'
+        );
+
+        foreach ($rakipler as $rakip) {
+            $olcum = $this->siteAnaSayfasiniOlc((string) $rakip['ana_adres']);
+            $ekle->execute(['rakip_id' => $rakip['id'], ...$olcum]);
+        }
+        return $this->yonetimGenelBakis();
+    }
+
+    private function siteAnaSayfasiniOlc(string $adres): array
+    {
+        $baslangic = microtime(true);
+        [$icerik, $httpDurumu, $hata] = $this->uzakIcerikGetir($adres);
+        $yanitSuresi = (int) round((microtime(true) - $baslangic) * 1000);
+        $bos = ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => 0, 'baslik_uzunlugu' => 0, 'meta_uzunlugu' => 0, 'h1_sayisi' => 0, 'kelime_sayisi' => 0, 'baglanti_sayisi' => 0, 'schema_sayisi' => 0, 'sitemap_url_sayisi' => 0, 'hata_mesaji' => $hata];
+        if ($icerik === '') return $bos;
+
+        $belge = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $belge->loadHTML($icerik, LIBXML_NOERROR | LIBXML_NOWARNING);
+        libxml_clear_errors();
+        $xpath = new DOMXPath($belge);
+        $baslik = trim((string) ($belge->getElementsByTagName('title')->item(0)?->textContent ?? ''));
+        $meta = trim((string) ($xpath->query('//meta[translate(@name,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")="description"]/@content')->item(0)?->nodeValue ?? ''));
+        $h1Sayisi = $belge->getElementsByTagName('h1')->length;
+        $baglantiSayisi = $belge->getElementsByTagName('a')->length;
+        $schemaSayisi = $xpath->query('//script[@type="application/ld+json"]')->length;
+        $metin = preg_replace('/\s+/u', ' ', strip_tags($icerik)) ?? '';
+        $kelimeSayisi = count(preg_split('/\s+/u', trim($metin), -1, PREG_SPLIT_NO_EMPTY));
+        [$siteHaritasi] = $this->uzakIcerikGetir(rtrim($adres, '/') . '/sitemap.xml', 8);
+        $sitemapSayisi = $siteHaritasi !== '' ? preg_match_all('/<loc[ >]/i', $siteHaritasi) : 0;
+
+        $puan = 100;
+        if ($httpDurumu < 200 || $httpDurumu >= 400) $puan -= 35;
+        if (strlen($baslik) < 15 || strlen($baslik) > 65) $puan -= 12;
+        if (strlen($meta) < 70 || strlen($meta) > 170) $puan -= 12;
+        if ($h1Sayisi !== 1) $puan -= 10;
+        if ($schemaSayisi === 0) $puan -= 8;
+        if ($sitemapSayisi === 0) $puan -= 8;
+        if ($yanitSuresi > 2500) $puan -= 10;
+        if ($kelimeSayisi < 200) $puan -= 5;
+
+        return ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => max(0, $puan), 'baslik_uzunlugu' => strlen($baslik), 'meta_uzunlugu' => strlen($meta), 'h1_sayisi' => $h1Sayisi, 'kelime_sayisi' => $kelimeSayisi, 'baglanti_sayisi' => $baglantiSayisi, 'schema_sayisi' => $schemaSayisi, 'sitemap_url_sayisi' => (int) $sitemapSayisi, 'hata_mesaji' => null];
+    }
+
+    private function uzakIcerikGetir(string $adres, int $zamanAsimi = 15): array
+    {
+        if (function_exists('curl_init')) {
+            $istek = curl_init($adres);
+            $ayarlar = [CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_TIMEOUT => $zamanAsimi, CURLOPT_CONNECTTIMEOUT => 6, CURLOPT_USERAGENT => 'Demirvana SEO Monitor/1.0', CURLOPT_SSL_VERIFYPEER => true];
+            // Windows geliştirme ortamında ayrıca CA dosyası taşımadan işletim sisteminin güvenilir sertifika deposunu kullanır.
+            if (defined('CURLOPT_SSL_OPTIONS') && defined('CURLSSLOPT_NATIVE_CA')) $ayarlar[CURLOPT_SSL_OPTIONS] = CURLSSLOPT_NATIVE_CA;
+            curl_setopt_array($istek, $ayarlar);
+            $icerik = curl_exec($istek);
+            $durum = (int) curl_getinfo($istek, CURLINFO_HTTP_CODE);
+            $hata = $icerik === false ? curl_error($istek) : null;
+            curl_close($istek);
+            return [(string) ($icerik ?: ''), $durum, $hata];
+        }
+        if (PHP_OS_FAMILY === 'Windows' && function_exists('proc_open')) {
+            $borular = [];
+            $islem = @proc_open(['curl.exe', '-L', '-sS', '--max-time', (string) $zamanAsimi, '-A', 'Demirvana SEO Monitor/1.0', '-w', "\n%{http_code}", $adres], [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $borular);
+            if (is_resource($islem)) {
+                $cikti = stream_get_contents($borular[1]);
+                $hata = trim(stream_get_contents($borular[2]));
+                fclose($borular[1]); fclose($borular[2]);
+                $islemKodu = proc_close($islem);
+                if (preg_match('/\n(\d{3})$/', $cikti, $eslesme)) {
+                    $cikti = substr($cikti, 0, -4);
+                    return [$cikti, (int) $eslesme[1], $islemKodu === 0 ? null : $hata];
+                }
+            }
+        }
+        $baglam = stream_context_create(['http' => ['timeout' => $zamanAsimi, 'follow_location' => 1, 'user_agent' => 'Demirvana SEO Monitor/1.0'], 'ssl' => ['verify_peer' => true, 'verify_peer_name' => true]]);
+        $icerik = @file_get_contents($adres, false, $baglam);
+        $durum = 0;
+        foreach ($http_response_header ?? [] as $baslik) if (preg_match('/HTTP\/\S+\s+(\d{3})/', $baslik, $eslesme)) $durum = (int) $eslesme[1];
+        return [(string) ($icerik ?: ''), $durum, $icerik === false ? 'Uzak siteye bağlanılamadı.' : null];
+    }
+
     /** Sitemap'e girebilen gerçek rotaların üretilen SEO alanlarını denetler ve sonucu kalıcı saklar. */
     public function siteDenetimiCalistir(): array
     {
@@ -103,12 +193,21 @@ final class SeoDeposu
             $ozetSorgusu->execute(['tarama_id' => $tarama['id']]);
             $sorunOzeti = $ozetSorgusu->fetchAll();
         }
+        $rakipAnalizleri = $this->baglanti->query(
+            'SELECT r.id, r.ad, r.ana_adres, r.bizim_sitemiz_mi, t.http_durumu, t.yanit_suresi_ms,
+                    t.seo_puani, t.baslik_uzunlugu, t.meta_uzunlugu, t.h1_sayisi, t.kelime_sayisi,
+                    t.baglanti_sayisi, t.schema_sayisi, t.sitemap_url_sayisi, t.hata_mesaji, t.tarama_tarihi
+             FROM seo_rakipleri r
+             LEFT JOIN seo_rakip_taramalari t ON t.id = (SELECT MAX(t2.id) FROM seo_rakip_taramalari t2 WHERE t2.rakip_id = r.id)
+             WHERE r.aktif_mi = 1 ORDER BY r.bizim_sitemiz_mi DESC, r.id'
+        )->fetchAll();
         return [
             'dis_kaynaklar' => ['search_console' => 'bagli_degil', 'siralama_saglayicisi' => 'bagli_degil', 'reklam_saglayicisi' => 'bagli_degil'],
             'site_sagligi' => $tarama,
             'sorunlar' => $sorunlar,
             'tarama_gecmisi' => $taramaGecmisi,
             'sorun_ozeti' => $sorunOzeti,
+            'rakip_analizleri' => $rakipAnalizleri,
             'rakip_hareketleri' => [],
             'reklam_hareketleri' => [],
         ];

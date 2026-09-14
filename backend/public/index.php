@@ -70,6 +70,10 @@ try {
         JsonYanit::gonder(JsonYanit::olustur(true, $seoDenetleyicisi->siteDenetimiCalistir(), 'Site SEO denetimi tamamlandı.'));
     }
 
+    if ($yontem === 'POST' && $yol === '/api/admin/seo/rakipleri-tara') {
+        JsonYanit::gonder(JsonYanit::olustur(true, $seoDenetleyicisi->rakipAnalizleriniCalistir(), 'Rakip SEO analizleri tamamlandı.'));
+    }
+
     // Kategori Yönetimi ekranı: menu_alt_ogeleri (ürünlerin gerçekten filtrelendiği menü yaprakları) üzerinde CRUD.
     if (str_starts_with($yol, '/api/admin/kategoriler')) {
         if ($yontem === 'GET' && $yol === '/api/admin/kategoriler/silinenler') {

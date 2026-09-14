@@ -33,6 +33,7 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
   if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
   if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="SEO verileri alınamadı" aciklama={hata}><button onClick={onYenidenDene}>Tekrar dene</button></VeriBekleniyor>;
   const tarama = veri?.site_sagligi;
+  const rakipler = veri?.rakip_analizleri ?? [];
   const kartlar = [
     ['Google Görünürlüğü', Search, '—', 'Search Console bağlı değil', 'google'],
     ['Top 3 Kelime', Target, '—', 'Sıralama sağlayıcısı bağlı değil'],
@@ -47,10 +48,10 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
       </div>
       <div className="seo-ana-grid">
         <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><h2>Site Sağlığı Değişimi</h2></div><span>Gerçek tarama geçmişi</span></header><SaglikGrafigi gecmis={veri?.tarama_gecmisi} /></article>
-        <article className="seo-panel"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div><button type="button" disabled>Detaylı Karşılaştırma</button></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Performans</span><span>SEO</span><span>İndekslenebilir URL</span></div><div><strong>Demir Vana</strong><b>—</b><b>{tarama?.saglik_puani ?? '—'}</b><b>{tarama?.toplam_url ?? '—'}</b></div><p>Rakip verisi için izleme sağlayıcısı bağlantısı gerekli.</p></div></article>
+        <article className="seo-panel"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div><span>Canlı site ölçümü</span></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Yanıt</span><span>SEO</span><span>Sitemap URL</span></div>{rakipler.map((rakip) => <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 ? ' ★' : ''}</strong><b>{rakip.http_durumu === 200 ? `${rakip.yanit_suresi_ms} ms` : 'Hata'}</b><b>{rakip.seo_puani}</b><b>{rakip.sitemap_url_sayisi}</b></div>)}</div></article>
       </div>
       <div className="seo-hareket-grid">
-        <article className="seo-panel"><header><div><Users /><h2>Son Site Hareketleri</h2></div><span>Gerçek denetimler</span></header><div className="seo-hareket-listesi">{(veri?.tarama_gecmisi ?? []).slice(-4).reverse().map((kayit) => <div key={kayit.id}><HeartPulse /><p><strong>{kayit.saglik_puani}/100 sağlık puanı</strong><small>{kayit.toplam_url} URL · {kayit.sorun_sayisi} sorun</small></p><time>{tarihYaz(kayit.bitis_tarihi)}</time></div>)}</div></article>
+        <article className="seo-panel"><header><div><Users /><h2>Son Rakip Analizleri</h2></div><span>Canlı ölçümler</span></header><div className="seo-hareket-listesi">{rakipler.slice(0, 5).map((rakip) => <div key={rakip.id}><Search /><p><strong>{rakip.ad} · {rakip.seo_puani}/100</strong><small>{rakip.kelime_sayisi} kelime · {rakip.schema_sayisi} schema · {rakip.h1_sayisi} H1</small></p><time>{tarihYaz(rakip.tarama_tarihi)}</time></div>)}</div></article>
         <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><span className="seo-gorsel-ikon seo-gorsel-ikon--reklam" /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><h2>Önemli Fırsatlar</h2></div></header><SorunListesi sorunlar={veri?.sorunlar} sinir={4} /></article>
       </div>

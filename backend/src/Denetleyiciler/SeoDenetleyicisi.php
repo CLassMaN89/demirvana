@@ -23,6 +23,11 @@ final class SeoDenetleyicisi
         return $this->depo->siteDenetimiCalistir();
     }
 
+    public function rakipAnalizleriniCalistir(): array
+    {
+        return $this->depo->rakipAnalizleriniCalistir();
+    }
+
     public function robots(): string
     {
         $genel = $this->depo->seoVerileri()['genel'];
