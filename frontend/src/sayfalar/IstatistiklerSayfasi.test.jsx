@@ -69,8 +69,14 @@ describe('IstatistiklerSayfasi', () => {
     const baslik = await screen.findByRole('heading', { name: 'IP Bazında Toplam Kalma Süresi' });
     const kart = baslik.closest('.istatistik-kart');
 
-    expect(within(kart).getByRole('button', { name: /Bugün.*1 IP.*2 görüntüleme/ })).toBeInTheDocument();
-    expect(within(kart).getByRole('button', { name: /02 Ocak 2020.*1 IP.*1 görüntüleme/ })).toBeInTheDocument();
+    const bugun = within(kart).getByRole('button', { name: /Bugün.*1 IP.*2 görüntüleme/ });
+    const eskiGun = within(kart).getByRole('button', { name: /02 Ocak 2020.*1 IP.*1 görüntüleme/ });
+    await waitFor(() => expect(bugun).toHaveAttribute('aria-expanded', 'true'));
+
+    fireEvent.click(eskiGun);
+
+    expect(bugun).toHaveAttribute('aria-expanded', 'false');
+    expect(eskiGun).toHaveAttribute('aria-expanded', 'true');
   });
 
   test('IP sayfa dökümünü seçilen günle sınırlar', async () => {

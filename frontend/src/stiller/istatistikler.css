@@ -40,15 +40,15 @@
 .istatistik-tablo__dolgu-satir td { border-bottom-color: transparent; }
 .yonetim-tablo tbody tr.istatistik-tablo__dolgu-satir:hover { background: none; }
 
-/* İki kart aynı satırda eşit yüksekliğe uzar; açık içerik kartın dışına taşmaz. */
+/* Tek-açık akordeon sayesinde iki kart masaüstünde aynı sabit ölçüde kalır. */
 .istatistik-yan-yana { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; margin-bottom: 16px; }
-.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; min-height: 730px; }
+.istatistik-yan-yana > .istatistik-kart { margin-bottom: 0; display: flex; flex-direction: column; height: 730px; }
 .istatistik-kart__govde { flex: 1; min-height: 0; overflow-y: visible; padding-bottom: 8px; }
 .istatistik-yan-yana .ziyaret-satiri { flex-wrap: wrap; }
 .istatistik-yan-yana .ziyaret-satiri__aksiyon { flex-basis: 100%; }
 @media (max-width: 900px) {
   .istatistik-yan-yana { grid-template-columns: 1fr; }
-  .istatistik-yan-yana > .istatistik-kart { min-height: 730px; }
+  .istatistik-yan-yana > .istatistik-kart { height: auto; min-height: 730px; }
 }
 
 .sayfalama { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 18px; }

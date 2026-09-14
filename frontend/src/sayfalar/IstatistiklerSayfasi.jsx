@@ -182,9 +182,8 @@ export default function IstatistiklerSayfasi() {
   function ipAcikKapatmayiDegistir(ip, tarih) {
     const anahtar = `${tarih}|${ip}`;
     setAcikIpler((mevcut) => {
-      const yeni = new Set(mevcut);
-      if (yeni.has(anahtar)) yeni.delete(anahtar); else yeni.add(anahtar);
-      return yeni;
+      // Kartın sabit yüksekliğini korumak için aynı anda yalnızca bir IP dökümü açık kalır.
+      return mevcut.has(anahtar) ? new Set() : new Set([anahtar]);
     });
     setIpSayfalari((mevcut) => {
       if (mevcut[anahtar]) return mevcut;
@@ -224,10 +223,10 @@ export default function IstatistiklerSayfasi() {
 
   function ipGunAcikKapatmayiDegistir(tarih) {
     setAcikIpGunleri((mevcut) => {
-      const yeni = new Set(mevcut);
-      if (yeni.has(tarih)) yeni.delete(tarih); else yeni.add(tarih);
-      return yeni;
+      // Yeni gün açıldığında önceki günü kapat; iki günlük tablo üst üste birikmesin.
+      return mevcut.has(tarih) ? new Set() : new Set([tarih]);
     });
+    setAcikIpler(new Set());
   }
 
   // Bir IP genişletildiğinde altında açılan "hangi sayfalara girmiş" dökümü de kalabalık
