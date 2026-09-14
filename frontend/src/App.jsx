@@ -20,6 +20,7 @@ import YonetimPaneliSayfasi from './sayfalar/YonetimPaneliSayfasi';
 import KategoriYonetimSayfasi from './sayfalar/KategoriYonetimSayfasi';
 import IstatistiklerSayfasi from './sayfalar/IstatistiklerSayfasi';
 import LogYonetimiSayfasi from './sayfalar/LogYonetimiSayfasi';
+import SeoMerkeziSayfasi from './sayfalar/SeoMerkeziSayfasi';
 import { kalmaSuresiKaydet, sayfaGoruntulemeKaydet, siteVerileriniGetir } from './servisler/api';
 import { temaUygula } from './tema/temaUygula';
 import { metinler } from './metinler/tr';
@@ -177,6 +178,7 @@ export default function App({ veriKaynagi = siteVerileriniGetir }) {
           <Route path="/admin/kategoriler" element={<KategoriYonetimSayfasi veriYenile={veriYenile} />} />
           <Route path="/admin/istatistikler" element={<IstatistiklerSayfasi />} />
           <Route path="/admin/loglar" element={<LogYonetimiSayfasi />} />
+          <Route path="/admin/seo" element={<SeoMerkeziSayfasi />} />
           <Route path="/admin/*" element={<YonetimPaneliSayfasi veri={veri} />} />
         </Routes>
       </YonetimDuzeni>

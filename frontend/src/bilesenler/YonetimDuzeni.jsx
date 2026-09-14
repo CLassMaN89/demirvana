@@ -49,7 +49,12 @@ const MENU_BOLUMLERI = [
       { ad: 'Temsilcilikler', ikon: Building2 },
       { ad: 'İletişim Formları', ikon: Mail },
       { ad: 'Medya Kütüphanesi', ikon: Image },
-      { ad: 'SEO Ayarları', ikon: SearchIcon }
+      {
+        ad: 'SEO Merkezi',
+        ikon: SearchIcon,
+        yol: '/admin/seo',
+        aciklama: 'Arama görünürlüğünü, rakipleri, site sağlığını ve SEO fırsatlarını yönetin.'
+      }
     ]
   },
   {

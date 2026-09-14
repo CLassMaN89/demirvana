@@ -1,0 +1,79 @@
+import { lazy, Suspense, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import {
+  Activity, CalendarDays, Download, FileBarChart, HeartPulse, LayoutDashboard,
+  Lightbulb, Megaphone, RefreshCw, Search, Users
+} from 'lucide-react';
+import '../stiller/seo-merkezi.css';
+
+const SEKME_BILESENLERI = {
+  'genel-bakis': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.GenelBakisSekmesi }))),
+  'anahtar-kelimeler': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.AnahtarKelimelerSekmesi }))),
+  rakipler: lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.RakiplerSekmesi }))),
+  reklamlar: lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.ReklamlarSekmesi }))),
+  firsatlar: lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.FirsatlarSekmesi }))),
+  'site-sagligi': lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.SiteSagligiSekmesi }))),
+  raporlar: lazy(() => import('./seo/SeoSekmeleri').then((modul) => ({ default: modul.RaporlarSekmesi })))
+};
+
+const SEKMELER = [
+  { anahtar: 'genel-bakis', etiket: 'Genel Bakış', ikon: LayoutDashboard },
+  { anahtar: 'anahtar-kelimeler', etiket: 'Anahtar Kelimeler', ikon: Search },
+  { anahtar: 'rakipler', etiket: 'Rakip Intelligence', ikon: Users },
+  { anahtar: 'reklamlar', etiket: 'Reklam Takibi', ikon: Megaphone },
+  { anahtar: 'firsatlar', etiket: 'İçerik Fırsatları', ikon: Lightbulb },
+  { anahtar: 'site-sagligi', etiket: 'Site Sağlığı', ikon: HeartPulse },
+  { anahtar: 'raporlar', etiket: 'Raporlar', ikon: FileBarChart }
+];
+
+export default function SeoMerkeziSayfasi() {
+  const [aramaParametreleri, setAramaParametreleri] = useSearchParams();
+  const istenenSekme = aramaParametreleri.get('tab') ?? 'genel-bakis';
+  const etkinSekme = SEKME_BILESENLERI[istenenSekme] ? istenenSekme : 'genel-bakis';
+  const EtkinSekmeBileseni = useMemo(() => SEKME_BILESENLERI[etkinSekme], [etkinSekme]);
+
+  function sekmeDegistir(anahtar) {
+    const yeniParametreler = new URLSearchParams(aramaParametreleri);
+    yeniParametreler.set('tab', anahtar);
+    setAramaParametreleri(yeniParametreler);
+  }
+
+  return (
+    <section className="seo-merkezi">
+      <header className="seo-merkezi__ust">
+        <div className="seo-merkezi__kimlik">
+          <span className="seo-merkezi__ana-ikon"><Activity aria-hidden="true" /></span>
+          <div>
+            <h1>SEO Merkezi</h1>
+            <p>Google ve rakiplerinizin tüm hareketlerini tek merkezden takip edin. Fırsatları yakalayın, bir adım önde olun.</p>
+          </div>
+        </div>
+        <div className="seo-merkezi__ust-islemler">
+          <label className="seo-merkezi__tarih-secici">
+            <CalendarDays aria-hidden="true" size={16} />
+            <span className="sr-only">Tarih aralığı</span>
+            <select defaultValue="30"><option value="7">Son 7 Gün</option><option value="30">Son 30 Gün</option><option value="90">Son 3 Ay</option><option value="180">Son 6 Ay</option><option value="365">Son 12 Ay</option></select>
+          </label>
+          <button className="seo-merkezi__ikon-buton" type="button" disabled title="Veri toplama servisi bağlandığında kullanılabilir">
+            <RefreshCw aria-hidden="true" size={16} /><span className="sr-only">Verileri yenile</span>
+          </button>
+          <button className="seo-merkezi__rapor-buton" type="button" disabled title="Rapor servisi henüz kurulmadı">
+            <Download aria-hidden="true" size={16} />Rapor İndir
+          </button>
+        </div>
+      </header>
+
+      <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri">
+        {SEKMELER.map(({ anahtar, etiket, ikon: Ikon }) => (
+          <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined}>
+            <Ikon aria-hidden="true" size={16} />{etiket}
+          </button>
+        ))}
+      </nav>
+
+      <Suspense fallback={<div className="seo-merkezi__yukleniyor" aria-label="SEO bölümü yükleniyor" />}>
+        <EtkinSekmeBileseni />
+      </Suspense>
+    </section>
+  );
+}
