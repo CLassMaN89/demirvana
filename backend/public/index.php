@@ -75,10 +75,16 @@ try {
     }
 
     if ($yontem === 'GET' && $yol === '/api/admin/google-ads/oauth/callback') {
-        if (isset($_GET['error'])) throw new RuntimeException('Google Ads izni verilmedi: ' . (string) $_GET['error']);
-        GoogleAdsOAuth::koduIsle((string) ($_GET['code'] ?? ''), (string) ($_GET['state'] ?? ''));
-        header('Location: http://127.0.0.1:5173/admin/seo?google_ads=baglandi', true, 302);
-        exit;
+        try {
+            if (isset($_GET['error'])) throw new RuntimeException('Google Ads izni verilmedi: ' . (string) $_GET['error']);
+            GoogleAdsOAuth::koduIsle((string) ($_GET['code'] ?? ''), (string) ($_GET['state'] ?? ''));
+            header('Location: http://127.0.0.1:5173/admin/seo?google_ads=baglandi', true, 302);
+            exit;
+        } catch (RuntimeException $hata) {
+            // OAuth sağlayıcısının güvenli hata açıklaması bağlantı kurulumunda kullanıcıya yol gösterir;
+            // istemci sırrı ve token değerleri bu mesajlara hiçbir zaman eklenmez.
+            JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 400);
+        }
     }
 
     if ($yontem === 'POST' && $yol === '/api/admin/seo/siteyi-tara') {
