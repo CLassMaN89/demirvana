@@ -1,5 +1,5 @@
 import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import SeoGorselIkonu from './SeoGorselIkonu';
 
 function VeriBekleniyor({ ikon: Ikon, baslik, aciklama }) {
@@ -45,7 +45,7 @@ function SiralamaTooltip({ active, payload, label }) {
       <strong>{label}</strong>
       {payload.filter((kayit) => kayit.value != null).map((kayit) => (
         <span key={kayit.dataKey}>
-          <i style={{ borderColor: kayit.color }} />
+          <i style={{ backgroundColor: kayit.color }} />
           <em>{kayit.name}</em>
           <b>{kayit.value}/100</b>
         </span>
@@ -62,7 +62,7 @@ function SiralamaGrafigi({ rakipler = [], gecmis = [] }) {
   const veriler = [...zamanlar.values()].map((nokta) => ({ ...nokta, etiket: tarihEtiketi(nokta.zaman) }));
   if (!veriler.length) veriler.push({ etiket: 'Son ölçüm', ...Object.fromEntries(rakipler.map((rakip) => [`site_${rakip.id}`, Number(rakip.seo_puani)])) });
   const renkler = ['#0052ff', '#ef4444', '#f59e0b', '#12b76a', '#8b5cf6'];
-  return <div className="seo-grafik seo-grafik--ziyaretci"><ResponsiveContainer width="100%" height="100%"><LineChart data={veriler} margin={{ top: 10, right: 18, bottom: 2, left: -12 }}><CartesianGrid vertical={false} stroke="#dfe5ee" strokeDasharray="4 8" /><XAxis dataKey="etiket" tickLine={false} axisLine={false} tickMargin={10} minTickGap={32} tick={{ fontSize: 10, fill: '#667085' }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(deger) => `${deger}%`} tick={{ fontSize: 10, fill: '#667085' }} /><Tooltip content={<SiralamaTooltip />} cursor={{ stroke: '#c8d1df', strokeDasharray: '3 3' }} />{rakipler.map((rakip, sira) => <Line key={rakip.id} type="monotone" dataKey={`site_${rakip.id}`} name={rakip.ad} connectNulls dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: '#ffffff' }} stroke={renkler[sira % renkler.length]} strokeWidth={2} />)}</LineChart></ResponsiveContainer><div className="seo-grafik__lejant">{rakipler.map((rakip, sira) => <span key={rakip.id}><i style={{ borderColor: renkler[sira % renkler.length] }} />{rakip.ad}</span>)}</div></div>;
+  return <div className="seo-grafik"><ResponsiveContainer width="100%" height="100%"><AreaChart accessibilityLayer data={veriler} margin={{ top: 8, right: 12, bottom: 2, left: 12 }}><CartesianGrid vertical={false} stroke="#dfe5ee" strokeDasharray="3 3" /><XAxis dataKey="etiket" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} tick={{ fontSize: 10, fill: '#667085' }} /><Tooltip content={<SiralamaTooltip />} cursor={false} /><defs>{rakipler.map((rakip, sira) => <linearGradient key={rakip.id} id={`seo-gradient-${rakip.id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={renkler[sira % renkler.length]} stopOpacity={0.5} /><stop offset="95%" stopColor={renkler[sira % renkler.length]} stopOpacity={0.1} /></linearGradient>)}</defs>{rakipler.map((rakip, sira) => <Area key={rakip.id} type="natural" dataKey={`site_${rakip.id}`} name={rakip.ad} connectNulls fill={`url(#seo-gradient-${rakip.id})`} fillOpacity={0.4} stroke={renkler[sira % renkler.length]} stackId="a" strokeWidth={0.8} strokeDasharray="3 3" />)}</AreaChart></ResponsiveContainer></div>;
 }
 
 function performansPuani(rakip) { return Math.max(45, Math.min(100, Math.round(100 - Number(rakip.yanit_suresi_ms || 5000) / 55))); }
