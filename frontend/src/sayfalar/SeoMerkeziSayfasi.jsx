@@ -37,6 +37,7 @@ export default function SeoMerkeziSayfasi() {
   const istenenSekme = aramaParametreleri.get('tab') ?? 'genel-bakis';
   const etkinSekme = SEKME_BILESENLERI[istenenSekme] ? istenenSekme : 'genel-bakis';
   const EtkinSekmeBileseni = useMemo(() => SEKME_BILESENLERI[etkinSekme], [etkinSekme]);
+  const etkinSekmeSirasi = SEKMELER.findIndex(({ anahtar }) => anahtar === etkinSekme);
 
   const genelBakisiYukle = useCallback(async () => {
     setYukleniyor(true);
@@ -90,7 +91,7 @@ export default function SeoMerkeziSayfasi() {
         </div>
       </header>
 
-      <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri">
+      <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri" style={{ '--etkin-sekme': etkinSekmeSirasi }}>
         {SEKMELER.map(({ anahtar, etiket, aciklama, ikon: Ikon }) => (
           <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined} title={aciklama}>
             <Ikon aria-hidden="true" />{etiket}
@@ -99,7 +100,9 @@ export default function SeoMerkeziSayfasi() {
       </nav>
 
       <Suspense fallback={<div className="seo-merkezi__yukleniyor" aria-label="SEO bölümü yükleniyor" />}>
-        <EtkinSekmeBileseni veri={veri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
+        <div className="seo-merkezi__sekme-icerigi" key={etkinSekme}>
+          <EtkinSekmeBileseni veri={veri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
+        </div>
       </Suspense>
     </section>
   );
