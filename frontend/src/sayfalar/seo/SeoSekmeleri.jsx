@@ -1,4 +1,4 @@
-import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, Target, TrendingUp, Users } from 'lucide-react';
+import { BarChart3, CircleAlert, CircleHelp, Clock3, Crown, Download, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, Target, TrendingUp, Users } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import SeoGorselIkonu from './SeoGorselIkonu';
 
@@ -113,13 +113,47 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
   );
 }
 
-export const AnahtarKelimelerSekmesi = () => <VeriBekleniyor ikon={Search} baslik="Anahtar Kelimeler" aciklama="Takip edilen anahtar kelime bulunmuyor." />;
-export const RakiplerSekmesi = () => <VeriBekleniyor ikon={Users} baslik="Rakip Intelligence" aciklama="Henüz takip edilen rakip bulunmuyor." />;
-export const ReklamlarSekmesi = () => <VeriBekleniyor ikon={Megaphone} baslik="Reklam Takibi" aciklama="Reklam veri sağlayıcısı henüz bağlı değil." />;
-export const FirsatlarSekmesi = () => <VeriBekleniyor ikon={Lightbulb} baslik="İçerik Fırsatları" aciklama="Fırsat analizi için önce gerçek SEO verileri toplanmalıdır." />;
+export function AnahtarKelimelerSekmesi({ veri, yukleniyor, hata }) {
+  if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
+  if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Anahtar kelime verileri alınamadı" aciklama={hata} />;
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Search /><AciklamaliBaslik aciklama="Google aramalarındaki sorgu, gösterim, tıklama ve sıralama verilerini Search Console veya bir sıralama sağlayıcısından getirir.">Anahtar Kelimeler</AciklamaliBaslik></div></header><div className="seo-entegrasyon-durumu"><span><Search aria-hidden="true" /></span><div><strong>Sıralama sağlayıcısı bağlı değil</strong><p>Gerçek konum, gösterim ve tıklama değerleri için Search Console veya bir sıralama sağlayıcısı bağlanmalıdır. Bağlantı kurulmadan anahtar kelime değeri üretilmez.</p></div><em>Bağlantı gerekli</em></div></article></div>;
+}
+
+export function RakiplerSekmesi({ veri, yukleniyor, hata, onSiteyiTara, taraniyor }) {
+  if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
+  if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Rakip verileri alınamadı" aciklama={hata} />;
+  const rakipler = veri?.rakip_analizleri ?? [];
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Users /><AciklamaliBaslik aciklama="Demir Vana ve takip edilen rakiplerin son canlı teknik SEO ölçümlerini karşılaştırır.">Rakip Intelligence</AciklamaliBaslik></div><button type="button" onClick={onSiteyiTara} disabled={taraniyor}>{taraniyor ? 'Taranıyor…' : 'Rakipleri yeniden tara'}</button></header>{rakipler.length ? <div className="seo-alt-tablo"><div className="seo-alt-tablo__baslik"><span>Site</span><span>SEO puanı</span><span>Yanıt süresi</span><span>Kelime</span><span>Schema</span><span>Son ölçüm</span></div>{rakipler.map((rakip) => <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 && <Crown aria-label="Demir Vana" />}</strong><b className={`seo-puan seo-puan--${puanSinifi(Number(rakip.seo_puani))}`}>{rakip.seo_puani}</b><span>{Number(rakip.yanit_suresi_ms).toLocaleString('tr-TR')} ms</span><span>{Number(rakip.kelime_sayisi).toLocaleString('tr-TR')}</span><span>{rakip.schema_sayisi}</span><time>{tarihYaz(rakip.tarama_tarihi)}</time></div>)}</div> : <BaglantiBekliyor metin="Henüz takip edilen rakip ölçümü bulunmuyor." />}</article></div>;
+}
+
+export function ReklamlarSekmesi({ veri, yukleniyor, hata }) {
+  if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
+  if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Reklam bağlantısı kontrol edilemedi" aciklama={hata} />;
+  const bagli = veri?.dis_kaynaklar?.reklam_saglayicisi === 'bagli';
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Megaphone /><AciklamaliBaslik aciklama="Yetki verilen Google Ads hesabının reklam hareketlerini gösterir; başka firmaların özel hesap verilerine erişmez.">Reklam Takibi</AciklamaliBaslik></div></header><div className="seo-entegrasyon-durumu"><span><SeoGorselIkonu tur="reklam" boyut={30} /></span><div><strong>{bagli ? 'Google Ads bağlı' : 'Google Ads bağlı değil'}</strong><p>{bagli ? 'Hesap yetkisi hazır. Henüz alınmış reklam hareketi bulunmadığında bu alan boş kalır.' : 'Kendi Google Ads hesabınızdaki gerçek reklam hareketlerini görmek için bağlantı kurun.'}</p></div><em className={bagli ? 'bagli' : ''}>{bagli ? 'Bağlı' : 'Bağlantı gerekli'}</em></div></article></div>;
+}
+
+export function FirsatlarSekmesi({ veri, yukleniyor, hata }) {
+  if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
+  if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Fırsatlar alınamadı" aciklama={hata} />;
+  const sorunlar = veri?.sorunlar ?? [];
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Lightbulb /><AciklamaliBaslik aciklama="Gerçek site taramasındaki sorunları, uygulanabilir düzeltme önerileri olarak öncelik sırasıyla gösterir.">İçerik Fırsatları</AciklamaliBaslik></div><span>{sorunlar.length} fırsat</span></header>{sorunlar.length ? <div className="seo-firsat-detaylari">{sorunlar.map((sorun) => <div key={sorun.id}><span className={`seo-firsat-listesi__ikon seo-firsat-listesi__ikon--${sorun.onem}`}><Search aria-hidden="true" /></span><div><strong>{gorevAdiYaz(sorun.url_yolu)}</strong><small>{sorun.url_yolu}</small><p>{sorun.onerilen_duzeltme ?? sorun.aciklama}</p></div><em className={`seo-onem seo-onem--${sorun.onem}`}>{sorun.onem}</em></div>)}</div> : <BaglantiBekliyor metin="Açık içerik fırsatı bulunmuyor." />}</article></div>;
+}
 export function SiteSagligiSekmesi({ veri, yukleniyor, hata, onSiteyiTara, taraniyor }) {
   if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
   const tarama = veri?.site_sagligi;
   return <div className="seo-site-sagligi"><article className="seo-panel"><header><div><HeartPulse /><AciklamaliBaslik aciklama="Taranan sayfalardaki teknik SEO sorunlarını ve genel site sağlık puanını gösterir.">Site Sağlığı</AciklamaliBaslik></div><button type="button" onClick={onSiteyiTara} disabled={taraniyor}>{taraniyor ? 'Taranıyor…' : 'Siteyi tara'}</button></header>{hata && <p className="seo-hata">{hata}</p>}<div className="seo-saglik-ozeti"><strong>{tarama ? `${tarama.saglik_puani}/100` : '—'}</strong><span>{tarama ? `${tarama.toplam_url} URL tarandı · ${tarama.sorun_sayisi} sorun` : 'Henüz site taraması yapılmadı.'}</span></div><SorunListesi sorunlar={veri?.sorunlar} sinir={50} /></article></div>;
 }
-export const RaporlarSekmesi = () => <VeriBekleniyor ikon={FileBarChart} baslik="Raporlar" aciklama="Rapor oluşturmak için tarihsel veri bulunmuyor." />;
+export function RaporlarSekmesi({ veri, yukleniyor, hata }) {
+  if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
+  if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Rapor verileri alınamadı" aciklama={hata} />;
+  const tarama = veri?.site_sagligi;
+  const rakipler = veri?.rakip_analizleri ?? [];
+  const raporIndir = () => {
+    const satirlar = [['Tür', 'Ad', 'Değer', 'Tarih'], ['Site sağlığı', 'Sağlık puanı', tarama?.saglik_puani ?? '—', tarama?.tarama_tarihi ?? ''], ['Site sağlığı', 'Taranan URL', tarama?.toplam_url ?? 0, tarama?.tarama_tarihi ?? ''], ...rakipler.map((rakip) => ['Rakip', rakip.ad, `${rakip.seo_puani}/100`, rakip.tarama_tarihi ?? ''])];
+    const csv = `\uFEFF${satirlar.map((satir) => satir.map((deger) => `"${String(deger).replaceAll('"', '""')}"`).join(';')).join('\n')}`;
+    const adres = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const baglanti = document.createElement('a'); baglanti.href = adres; baglanti.download = `seo-raporu-${new Date().toISOString().slice(0, 10)}.csv`; baglanti.click(); URL.revokeObjectURL(adres);
+  };
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><FileBarChart /><AciklamaliBaslik aciklama="Mevcut site sağlığı ve son rakip ölçümlerini indirilebilir bir raporda birleştirir.">Raporlar</AciklamaliBaslik></div><button type="button" onClick={raporIndir} disabled={!tarama}>CSV raporunu indir <Download aria-hidden="true" /></button></header><div className="seo-rapor-ozeti"><div><HeartPulse /><span>Site Sağlığı<strong>{tarama ? `${tarama.saglik_puani}/100` : '—'}</strong></span></div><div><Globe2 /><span>Taranan Sayfa<strong>{tarama ? `${tarama.toplam_url} URL` : '—'}</strong></span></div><div><Users /><span>Ölçülen Site<strong>{rakipler.length}</strong></span></div><div><Clock3 /><span>Son Ölçüm<strong>{tarihYaz(tarama?.tarama_tarihi ?? rakipler[0]?.tarama_tarihi) || '—'}</strong></span></div></div></article></div>;
+}
