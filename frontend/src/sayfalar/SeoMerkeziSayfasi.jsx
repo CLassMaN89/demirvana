@@ -33,11 +33,11 @@ export default function SeoMerkeziSayfasi() {
   const [yukleniyor, setYukleniyor] = useState(true);
   const [taraniyor, setTaraniyor] = useState(false);
   const [hata, setHata] = useState('');
+  const [sekmeHoverKonumu, setSekmeHoverKonumu] = useState(null);
   const [aramaParametreleri, setAramaParametreleri] = useSearchParams();
   const istenenSekme = aramaParametreleri.get('tab') ?? 'genel-bakis';
   const etkinSekme = SEKME_BILESENLERI[istenenSekme] ? istenenSekme : 'genel-bakis';
   const EtkinSekmeBileseni = useMemo(() => SEKME_BILESENLERI[etkinSekme], [etkinSekme]);
-  const etkinSekmeSirasi = SEKMELER.findIndex(({ anahtar }) => anahtar === etkinSekme);
 
   const genelBakisiYukle = useCallback(async () => {
     setYukleniyor(true);
@@ -91,9 +91,15 @@ export default function SeoMerkeziSayfasi() {
         </div>
       </header>
 
-      <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri" style={{ '--etkin-sekme': etkinSekmeSirasi }}>
+      <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri" onMouseLeave={() => setSekmeHoverKonumu(null)}>
+        <span
+          className="seo-merkezi__sekme-hover"
+          data-testid="seo-sekme-hover"
+          aria-hidden="true"
+          style={sekmeHoverKonumu ? { left: `${sekmeHoverKonumu.sol}px`, top: `${sekmeHoverKonumu.ust}px`, width: `${sekmeHoverKonumu.genislik}px`, height: `${sekmeHoverKonumu.yukseklik}px`, opacity: 1 } : { opacity: 0 }}
+        />
         {SEKMELER.map(({ anahtar, etiket, aciklama, ikon: Ikon }) => (
-          <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined} title={aciklama}>
+          <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onMouseEnter={(olay) => setSekmeHoverKonumu({ sol: olay.currentTarget.offsetLeft, ust: olay.currentTarget.offsetTop, genislik: olay.currentTarget.offsetWidth, yukseklik: olay.currentTarget.offsetHeight })} onFocus={(olay) => setSekmeHoverKonumu({ sol: olay.currentTarget.offsetLeft, ust: olay.currentTarget.offsetTop, genislik: olay.currentTarget.offsetWidth, yukseklik: olay.currentTarget.offsetHeight })} onBlur={() => setSekmeHoverKonumu(null)} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined} title={aciklama}>
             <Ikon aria-hidden="true" />{etiket}
           </button>
         ))}

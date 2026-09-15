@@ -12,8 +12,14 @@ describe('SeoMerkeziSayfasi', () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=genel-bakis']}><SeoMerkeziSayfasi /></MemoryRouter>);
     const sekmeler = screen.getByRole('navigation', { name: 'SEO Merkezi bölümleri' });
     expect(sekmeler.querySelectorAll('button')).toHaveLength(7);
+    const siteSagligiSekmesi = screen.getByRole('button', { name: 'Site Sağlığı' });
+    Object.defineProperties(siteSagligiSekmesi, { offsetLeft: { value: 420 }, offsetWidth: { value: 120 } });
+    fireEvent.mouseEnter(siteSagligiSekmesi);
+    expect(screen.getByTestId('seo-sekme-hover')).toHaveStyle({ left: '420px', width: '120px', opacity: '1' });
+    fireEvent.mouseLeave(sekmeler);
+    expect(screen.getByTestId('seo-sekme-hover')).toHaveStyle({ opacity: '0' });
     expect(screen.getByRole('button', { name: 'İçerik Fırsatları' })).toHaveAttribute('title', expect.stringContaining('SEO geliştirmelerini'));
-    fireEvent.click(screen.getByRole('button', { name: 'Site Sağlığı' }));
+    fireEvent.click(siteSagligiSekmesi);
     expect(await screen.findByRole('heading', { name: 'Site Sağlığı' })).toBeInTheDocument();
   });
 
