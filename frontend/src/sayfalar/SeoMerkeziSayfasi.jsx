@@ -30,7 +30,7 @@ const SEKMELER = [
 
 export default function SeoMerkeziSayfasi() {
   const [veri, setVeri] = useState(null);
-  const [ziyaretIstatistikleri, setZiyaretIstatistikleri] = useState(null);
+  const [ziyaretVerisi, setZiyaretVerisi] = useState(null);
   const [yukleniyor, setYukleniyor] = useState(true);
   const [taraniyor, setTaraniyor] = useState(false);
   const [hata, setHata] = useState('');
@@ -42,7 +42,7 @@ export default function SeoMerkeziSayfasi() {
   const genelBakisiYukle = useCallback(async () => {
     setYukleniyor(true);
     setHata('');
-    try { const [seoVerisi, ziyaretVerisi] = await Promise.all([seoGenelBakisGetir(), ziyaretYonetimVerisiniGetir(1)]); setVeri(seoVerisi); setZiyaretIstatistikleri(ziyaretVerisi?.istatistikler ?? null); }
+    try { const [seoVerisi, ziyaretSonucu] = await Promise.all([seoGenelBakisGetir(), ziyaretYonetimVerisiniGetir(1)]); setVeri(seoVerisi); setZiyaretVerisi(ziyaretSonucu); }
     catch (istekHatasi) { setHata(istekHatasi.message); }
     finally { setYukleniyor(false); }
   }, []);
@@ -100,7 +100,7 @@ export default function SeoMerkeziSayfasi() {
       </nav>
 
       <Suspense fallback={<div className="seo-merkezi__yukleniyor" aria-label="SEO bölümü yükleniyor" />}>
-        <EtkinSekmeBileseni veri={veri} ziyaretIstatistikleri={ziyaretIstatistikleri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
+        <EtkinSekmeBileseni veri={veri} ziyaretVerisi={ziyaretVerisi} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
       </Suspense>
     </section>
   );
