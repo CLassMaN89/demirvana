@@ -69,16 +69,23 @@ final class GoogleAdsOAuth
 
     private static function formGonder(string $adres, array $veri): array
     {
-        $baglam = stream_context_create(['http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/x-www-form-urlencoded\r\nAccept: application/json\r\n",
-            'content' => http_build_query($veri, '', '&', PHP_QUERY_RFC3986),
-            'ignore_errors' => true,
-            'timeout' => 20,
-        ]]);
-        $govde = file_get_contents($adres, false, $baglam);
+        if (!function_exists('curl_init')) throw new RuntimeException('PHP cURL eklentisi etkin değil; yerel PHP sunucusunu yeniden başlatın.');
+        $istek = curl_init($adres);
+        if ($istek === false) throw new RuntimeException('Google OAuth isteği başlatılamadı.');
+        curl_setopt_array($istek, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($veri, '', '&', PHP_QUERY_RFC3986),
+            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded', 'Accept: application/json'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 20,
+        ]);
+        $govde = curl_exec($istek);
+        $curlHatasi = curl_error($istek);
+        $httpDurumu = (int) curl_getinfo($istek, CURLINFO_RESPONSE_CODE);
+        curl_close($istek);
+        if ($govde === false) throw new RuntimeException('Google OAuth bağlantısı kurulamadı: ' . $curlHatasi);
         $sonuc = json_decode((string) $govde, true);
-        if (!is_array($sonuc) || isset($sonuc['error'])) {
+        if ($httpDurumu >= 400 || !is_array($sonuc) || isset($sonuc['error'])) {
             throw new RuntimeException('Google OAuth kodu doğrulanamadı: ' . (string) ($sonuc['error_description'] ?? $sonuc['error'] ?? 'bilinmeyen hata'));
         }
         return $sonuc;
