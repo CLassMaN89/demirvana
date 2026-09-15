@@ -22,13 +22,15 @@ describe('SeoMerkeziSayfasi', () => {
     expect(await screen.findByText('Google Görünürlüğü')).toBeInTheDocument();
     expect(await screen.findAllByText('86/100')).toHaveLength(2);
     expect(screen.getByText('SEO başlığı uzun.')).toBeInTheDocument();
-    expect(screen.getByText('Vana')).toBeInTheDocument();
+    expect(screen.getAllByText('Vana').length).toBeGreaterThan(0);
     expect(screen.getByText('Önemli Fırsatlar (AI Önerileri)')).toHaveAttribute('data-tooltip', expect.stringContaining('öncelikli SEO'));
     expect(screen.getByText('Son Rakip Hareketleri')).toBeInTheDocument();
     expect(screen.getByText('Sıralama Değişimi')).toBeInTheDocument();
     expect(screen.getAllByText('Demir Vana').length).toBeGreaterThan(0);
     expect(screen.queryByText('Masaüstü')).not.toBeInTheDocument();
     expect(screen.queryByText('Mobil')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Detaylı Görev Listesi/ })).toHaveAttribute('href', '?tab=firsatlar');
+    expect(screen.getByText('orta')).toBeInTheDocument();
     expect(screen.getAllByText('SEO analizi güncellendi')).toHaveLength(1);
     expect(screen.getByText('92')).toBeInTheDocument();
   });

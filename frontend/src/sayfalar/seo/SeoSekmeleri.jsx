@@ -1,4 +1,4 @@
-import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
+import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, Target, TrendingUp, Users } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import SeoGorselIkonu from './SeoGorselIkonu';
 
@@ -37,6 +37,8 @@ function tarihYaz(tarih) {
 
 function gecenSureYaz(tarih) { if (!tarih) return '—'; const dakika = Math.floor(Math.max(0, Date.now() - new Date(tarih.replace(' ', 'T')).getTime()) / 60000); if (dakika < 1) return 'Şimdi'; if (dakika < 60) return `${dakika} dk önce`; const saat = Math.floor(dakika / 60); return saat < 24 ? `${saat} saat önce` : `${Math.floor(saat / 24)} gün önce`; }
 function alanAdiYaz(adres = '') { try { return new URL(adres).hostname.replace(/^www\./, ''); } catch { return adres || '—'; } }
+function gorevAdiYaz(yol = '') { return decodeURIComponent(yol.split('/').filter(Boolean).pop() ?? 'SEO görevi').replace(/-d-?\d+$/i, '').replaceAll('-', ' ').replace(/^./, (harf) => harf.toLocaleUpperCase('tr-TR')); }
+function gorevRozetiYaz(sorun) { const sayi = sorun.aciklama?.match(/\d+/)?.[0]; return sayi ? `${sayi} karakter` : sorun.onem; }
 
 function SiralamaTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -105,7 +107,7 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
         <article className="seo-panel"><header><div><Megaphone /><AciklamaliBaslik aciklama="Google Ads bağlantısı kurulduğunda rakiplerin ve hesabın son reklam hareketlerini gösterir.">Son Reklam Hareketleri</AciklamaliBaslik></div></header><div className="seo-baglanti-karti"><SeoGorselIkonu tur="reklam" boyut={34} /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><AciklamaliBaslik aciklama="Site taramasında bulunan ve görünürlüğü artırmak için uygulanabilecek öncelikli SEO geliştirmelerini gösterir.">Önemli Fırsatlar (AI Önerileri)</AciklamaliBaslik></div><a href="?tab=firsatlar">Tümünü Gör <span>→</span></a></header><FirsatListesi sorunlar={veri?.sorunlar} sinir={5} /></article>
       </div>
-      <article className="seo-gorev-seridi"><div className="seo-gorev-seridi__baslik"><ShieldCheck /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatın.'}</small></div></div><div className="seo-gorevler">{(veri?.sorunlar ?? []).slice(0, 5).map((sorun, sira) => <div key={sorun.id}><b>{sira + 1}</b><span>{sorun.aciklama}<small>{sorun.url_yolu}</small></span></div>)}</div><button type="button" onClick={onSiteyiTara}>{tarama ? 'Yeniden tara' : 'Siteyi tara'}</button></article>
+      <article className="seo-gorev-seridi"><div className="seo-gorev-seridi__baslik"><Target aria-hidden="true" /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatın.'}</small></div></div><div className="seo-gorevler">{(veri?.sorunlar ?? []).slice(0, 5).map((sorun, sira) => <div key={sorun.id}><b>{sira + 1}</b><span><strong>{gorevAdiYaz(sorun.url_yolu)}</strong><small>{sorun.onerilen_duzeltme ?? sorun.aciklama}</small><em className={`seo-gorev-rozeti seo-gorev-rozeti--${sorun.onem}`}>{gorevRozetiYaz(sorun)}</em></span></div>)}</div><a className="seo-gorev-seridi__buton" href="?tab=firsatlar">Detaylı Görev Listesi <span>→</span></a></article>
     </div>
   );
 }
