@@ -38,10 +38,12 @@ function tarihYaz(tarih) {
 function gecenSureYaz(tarih) { if (!tarih) return '—'; const dakika = Math.floor(Math.max(0, Date.now() - new Date(tarih.replace(' ', 'T')).getTime()) / 60000); if (dakika < 1) return 'Şimdi'; if (dakika < 60) return `${dakika} dk önce`; const saat = Math.floor(dakika / 60); return saat < 24 ? `${saat} saat önce` : `${Math.floor(saat / 24)} gün önce`; }
 function alanAdiYaz(adres = '') { try { return new URL(adres).hostname.replace(/^www\./, ''); } catch { return adres || '—'; } }
 
-function SaglikGrafigi({ gecmis = [] }) {
-  if (!gecmis.length) return <BaglantiBekliyor metin="Grafik için ilk site taramasını çalıştırın." />;
-  const veriler = gecmis.map((kayit) => ({ tarih: tarihYaz(kayit.bitis_tarihi).split(' ').slice(0, 2).join(' '), puan: Number(kayit.saglik_puani), sorun: Number(kayit.sorun_sayisi) }));
-  return <div className="seo-grafik"><ResponsiveContainer width="100%" height="100%"><LineChart data={veriler} margin={{ top: 12, right: 18, bottom: 4, left: -18 }}><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="tarih" tick={{ fontSize: 10 }} /><YAxis domain={[0, 100]} tick={{ fontSize: 10 }} /><Tooltip /><Line type="monotone" dataKey="puan" name="Sağlık puanı" stroke="#1677ff" strokeWidth={2.5} dot={{ r: 3 }} /></LineChart></ResponsiveContainer></div>;
+function SiralamaGrafigi({ istatistikler }) {
+  const gunler = new Map();
+  for (const kayit of istatistikler?.ip_gunluk_sureleri ?? []) gunler.set(kayit.tarih, (gunler.get(kayit.tarih) ?? 0) + Number(kayit.goruntuleme_sayisi));
+  const veriler = [...gunler].sort(([a], [b]) => a.localeCompare(b)).map(([tarih, goruntuleme]) => ({ tarih: new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short' }).format(new Date(`${tarih}T00:00:00`)), goruntuleme }));
+  if (!veriler.length) return <BaglantiBekliyor metin="Grafik için henüz ziyaretçi istatistiği bulunmuyor." />;
+  return <div className="seo-grafik"><ResponsiveContainer width="100%" height="100%"><LineChart data={veriler} margin={{ top: 12, right: 18, bottom: 4, left: -18 }}><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="tarih" tick={{ fontSize: 10 }} /><YAxis allowDecimals={false} tick={{ fontSize: 10 }} /><Tooltip /><Line type="monotone" dataKey="goruntuleme" name="Görüntüleme" stroke="#1677ff" strokeWidth={2.5} dot={{ r: 3 }} /></LineChart></ResponsiveContainer></div>;
 }
 
 function performansPuani(rakip) { return Math.max(45, Math.min(100, Math.round(100 - Number(rakip.yanit_suresi_ms || 5000) / 55))); }
@@ -56,7 +58,7 @@ function MiniCizgi({ renk, veriler = [] }) {
   return <svg className="seo-mini-cizgi" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><polyline points={noktalar} fill="none" stroke={renk} strokeWidth="2" vectorEffect="non-scaling-stroke" /></svg>;
 }
 
-export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYenidenDene }) {
+export function GenelBakisSekmesi({ veri, ziyaretIstatistikleri, yukleniyor, hata, onSiteyiTara, onYenidenDene }) {
   if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
   if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="SEO verileri alınamadı" aciklama={hata}><button onClick={onYenidenDene}>Tekrar dene</button></VeriBekleniyor>;
   const tarama = veri?.site_sagligi;
@@ -76,7 +78,7 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
         {kartlar.map(([etiket, ikon, deger, bilgi, renk, cizgiRengi, gecmis]) => <article className={`seo-kpi seo-kpi--${renk}`} key={etiket}><span className="seo-kpi__ikon-cerceve"><SeoGorselIkonu tur={ikon} boyut={28} className={`seo-kpi__ikon seo-kpi__ikon--${ikon}`} /></span><div><span>{etiket} <CircleHelp aria-hidden="true" /></span><strong>{deger}</strong><small>{bilgi}</small></div><MiniCizgi renk={cizgiRengi} veriler={gecmis} /></article>)}
       </div>
       <div className="seo-ana-grid">
-        <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><AciklamaliBaslik aciklama="Site taramalarından alınan sağlık puanının zaman içindeki değişimini gösterir.">Site Sağlığı Değişimi</AciklamaliBaslik></div><span>Gerçek tarama geçmişi</span></header><SaglikGrafigi gecmis={veri?.tarama_gecmisi} /></article>
+        <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><AciklamaliBaslik aciklama="Site Ziyaretçi İstatistikleri kayıtlarından günlük görüntüleme değişimini gösterir.">Sıralama Değişimi</AciklamaliBaslik></div><span>Ziyaretçi istatistikleri</span></header><SiralamaGrafigi istatistikler={ziyaretIstatistikleri} /></article>
         <article className="seo-panel seo-panel--karsilastirma"><header><div><Users /><AciklamaliBaslik aciklama="Demir Vana ile takip edilen rakiplerin performans ve teknik SEO puanlarını karşılaştırır.">Rakip Karşılaştırması</AciklamaliBaslik></div><a href="?tab=rakipler">Detaylı Karşılaştırma <span>→</span></a></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Performans</span><span>SEO</span><span>Erişilebilirlik</span><span>En İyi Uygulamalar</span></div>{rakipler.map((rakip) => { const puanlar = [performansPuani(rakip), Number(rakip.seo_puani), erisilebilirlikPuani(rakip), uygulamaPuani(rakip)]; return <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 && <Crown aria-label="Demir Vana" />}</strong>{puanlar.map((puan, sira) => <b className={`seo-puan seo-puan--${puanSinifi(puan)}`} key={sira}>{puan}</b>)}</div>; })}</div></article>
       </div>
       <div className="seo-hareket-grid">

@@ -5,7 +5,7 @@ import {
   Lightbulb, Megaphone, RefreshCw, Search, Users
 } from 'lucide-react';
 import '../stiller/seo-merkezi.css';
-import { seoGenelBakisGetir, seoRakipleriTara, seoSiteyiTara } from '../servisler/api';
+import { seoGenelBakisGetir, seoRakipleriTara, seoSiteyiTara, ziyaretYonetimVerisiniGetir } from '../servisler/api';
 import SeoGorselIkonu from './seo/SeoGorselIkonu';
 
 const SEKME_BILESENLERI = {
@@ -30,6 +30,7 @@ const SEKMELER = [
 
 export default function SeoMerkeziSayfasi() {
   const [veri, setVeri] = useState(null);
+  const [ziyaretIstatistikleri, setZiyaretIstatistikleri] = useState(null);
   const [yukleniyor, setYukleniyor] = useState(true);
   const [taraniyor, setTaraniyor] = useState(false);
   const [hata, setHata] = useState('');
@@ -41,7 +42,7 @@ export default function SeoMerkeziSayfasi() {
   const genelBakisiYukle = useCallback(async () => {
     setYukleniyor(true);
     setHata('');
-    try { setVeri(await seoGenelBakisGetir()); }
+    try { const [seoVerisi, ziyaretVerisi] = await Promise.all([seoGenelBakisGetir(), ziyaretYonetimVerisiniGetir(1)]); setVeri(seoVerisi); setZiyaretIstatistikleri(ziyaretVerisi?.istatistikler ?? null); }
     catch (istekHatasi) { setHata(istekHatasi.message); }
     finally { setYukleniyor(false); }
   }, []);
@@ -99,7 +100,7 @@ export default function SeoMerkeziSayfasi() {
       </nav>
 
       <Suspense fallback={<div className="seo-merkezi__yukleniyor" aria-label="SEO bölümü yükleniyor" />}>
-        <EtkinSekmeBileseni veri={veri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
+        <EtkinSekmeBileseni veri={veri} ziyaretIstatistikleri={ziyaretIstatistikleri} yukleniyor={yukleniyor} hata={hata} onSiteyiTara={siteyiTara} taraniyor={taraniyor} onYenidenDene={genelBakisiYukle} />
       </Suspense>
     </section>
   );
