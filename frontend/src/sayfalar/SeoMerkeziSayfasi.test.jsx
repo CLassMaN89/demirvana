@@ -21,7 +21,8 @@ describe('SeoMerkeziSayfasi', () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=bilinmeyen']}><SeoMerkeziSayfasi /></MemoryRouter>);
     expect(await screen.findByText('Google Görünürlüğü')).toBeInTheDocument();
     expect(await screen.findAllByText('86/100')).toHaveLength(2);
-    expect(screen.getAllByText('SEO başlığı uzun.')).toHaveLength(2);
+    expect(screen.getByText('SEO başlığı uzun.')).toBeInTheDocument();
+    expect(screen.getByText('Vana')).toBeInTheDocument();
     expect(screen.getByText('Önemli Fırsatlar (AI Önerileri)')).toHaveAttribute('data-tooltip', expect.stringContaining('öncelikli SEO'));
     expect(screen.getByText('92')).toBeInTheDocument();
   });

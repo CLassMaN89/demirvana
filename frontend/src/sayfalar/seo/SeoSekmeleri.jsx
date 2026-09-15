@@ -22,7 +22,8 @@ function SorunListesi({ sorunlar = [], sinir = 5 }) {
 function FirsatListesi({ sorunlar = [], sinir = 5 }) {
   if (!sorunlar.length) return <BaglantiBekliyor metin="Açık SEO fırsatı bulunmuyor." />;
   const etiketler = { kritik: 'Acil Düzeltme', yuksek: 'Yüksek Potansiyel', orta: 'İçerik Fırsatı', dusuk: 'Hızlı Kazanım' };
-  return <div className="seo-firsat-listesi">{sorunlar.slice(0, sinir).map((sorun) => <div key={sorun.id}><span className={`seo-firsat-listesi__ikon seo-firsat-listesi__ikon--${sorun.onem}`}><Search aria-hidden="true" /></span><p><strong>{sorun.aciklama}</strong><small>{sorun.url_yolu}</small></p><span className={`seo-firsat-etiketi seo-firsat-etiketi--${sorun.onem}`}>{etiketler[sorun.onem] ?? 'İncele'}</span></div>)}</div>;
+  const okunabilirBaslik = (yol = '') => decodeURIComponent(yol.split('/').filter(Boolean).pop() ?? 'SEO fırsatı').replace(/-d-?\d+$/i, '').replaceAll('-', ' ').replace(/^./, (harf) => harf.toLocaleUpperCase('tr-TR'));
+  return <div className="seo-firsat-listesi">{sorunlar.slice(0, sinir).map((sorun) => <div key={sorun.id}><span className={`seo-firsat-listesi__ikon seo-firsat-listesi__ikon--${sorun.onem}`}><Search aria-hidden="true" /></span><p><strong>{okunabilirBaslik(sorun.url_yolu)}</strong><small>{sorun.url_yolu}</small></p><span className={`seo-firsat-etiketi seo-firsat-etiketi--${sorun.onem}`}>{etiketler[sorun.onem] ?? 'İncele'}</span></div>)}</div>;
 }
 
 function AciklamaliBaslik({ children, aciklama }) {
