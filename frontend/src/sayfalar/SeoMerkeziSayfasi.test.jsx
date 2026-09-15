@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import SeoMerkeziSayfasi from './SeoMerkeziSayfasi';
 
 const seoVerisi = { site_sagligi: { saglik_puani: 86, toplam_url: 24, sorun_sayisi: 2 }, sorunlar: [{ id: 1, onem: 'orta', aciklama: 'SEO başlığı uzun.', url_yolu: '/urunler/vana' }], rakip_analizleri: [{ id: 1, ad: 'Demir Vana', bizim_sitemiz_mi: 1, http_durumu: 200, yanit_suresi_ms: 420, seo_puani: 86, sitemap_url_sayisi: 24, kelime_sayisi: 900, schema_sayisi: 2, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:00:00' }] };
-vi.mock('../servisler/api', () => ({ seoGenelBakisGetir: vi.fn(() => Promise.resolve(seoVerisi)), seoSiteyiTara: vi.fn(() => Promise.resolve(seoVerisi)), seoRakipleriTara: vi.fn(() => Promise.resolve(seoVerisi)), ziyaretYonetimVerisiniGetir: vi.fn(() => Promise.resolve({ kayitlar: [{ olusturulma_tarihi: '2026-09-14 12:00:00', kullanici_ajani: 'Chrome Windows' }] })) }));
+vi.mock('../servisler/api', () => ({ seoGenelBakisGetir: vi.fn(() => Promise.resolve(seoVerisi)), seoSiteyiTara: vi.fn(() => Promise.resolve(seoVerisi)), seoRakipleriTara: vi.fn(() => Promise.resolve(seoVerisi)) }));
 
 describe('SeoMerkeziSayfasi', () => {
   beforeEach(() => vi.clearAllMocks());
