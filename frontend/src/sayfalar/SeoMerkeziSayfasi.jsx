@@ -91,9 +91,9 @@ export default function SeoMerkeziSayfasi() {
       </header>
 
       <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri">
-        {SEKMELER.map(({ anahtar, etiket, aciklama }) => (
+        {SEKMELER.map(({ anahtar, etiket, aciklama, ikon: Ikon }) => (
           <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined} title={aciklama}>
-            <SeoGorselIkonu tur={anahtar} boyut={16} />{etiket}
+            <Ikon aria-hidden="true" />{etiket}
           </button>
         ))}
       </nav>
