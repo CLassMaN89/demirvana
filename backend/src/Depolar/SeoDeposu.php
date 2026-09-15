@@ -201,6 +201,15 @@ final class SeoDeposu
              LEFT JOIN seo_rakip_taramalari t ON t.id = (SELECT MAX(t2.id) FROM seo_rakip_taramalari t2 WHERE t2.rakip_id = r.id)
              WHERE r.aktif_mi = 1 ORDER BY r.bizim_sitemiz_mi DESC, r.id'
         )->fetchAll();
+        // Grafik, son durum tablosundan değil gerçek tarama geçmişinden beslenir.
+        $rakipGecmisi = $this->baglanti->query(
+            "SELECT r.id AS rakip_id, r.ad, t.seo_puani, t.tarama_tarihi
+             FROM seo_rakip_taramalari t
+             INNER JOIN seo_rakipleri r ON r.id = t.rakip_id
+             WHERE r.aktif_mi = 1
+             ORDER BY t.tarama_tarihi DESC, t.id DESC LIMIT 150"
+        )->fetchAll();
+        $rakipGecmisi = array_reverse($rakipGecmisi);
         return [
             'dis_kaynaklar' => ['search_console' => 'bagli_degil', 'siralama_saglayicisi' => 'bagli_degil', 'reklam_saglayicisi' => 'bagli_degil'],
             'site_sagligi' => $tarama,
@@ -208,6 +217,7 @@ final class SeoDeposu
             'tarama_gecmisi' => $taramaGecmisi,
             'sorun_ozeti' => $sorunOzeti,
             'rakip_analizleri' => $rakipAnalizleri,
+            'rakip_gecmisi' => $rakipGecmisi,
             'rakip_hareketleri' => [],
             'reklam_hareketleri' => [],
         ];
