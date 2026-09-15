@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import SeoMerkeziSayfasi from './SeoMerkeziSayfasi';
 
-const seoVerisi = { site_sagligi: { saglik_puani: 86, toplam_url: 24, sorun_sayisi: 2 }, sorunlar: [{ id: 1, onem: 'orta', aciklama: 'SEO başlığı uzun.', url_yolu: '/urunler/vana' }], rakip_analizleri: [{ id: 1, ad: 'Demir Vana', bizim_sitemiz_mi: 1, http_durumu: 200, yanit_suresi_ms: 420, seo_puani: 86, sitemap_url_sayisi: 24, kelime_sayisi: 900, schema_sayisi: 2, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:00:00' }] };
+const seoVerisi = { site_sagligi: { saglik_puani: 86, toplam_url: 24, sorun_sayisi: 2 }, sorunlar: [{ id: 1, onem: 'orta', aciklama: 'SEO başlığı uzun.', url_yolu: '/urunler/vana' }], rakip_analizleri: [{ id: 1, ad: 'Demir Vana', bizim_sitemiz_mi: 1, http_durumu: 200, yanit_suresi_ms: 420, seo_puani: 86, sitemap_url_sayisi: 24, kelime_sayisi: 900, schema_sayisi: 2, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:00:00' }], rakip_gecmisi: [{ rakip_id: 1, ad: 'Demir Vana', seo_puani: 84, tarama_tarihi: '2026-09-13 12:00:00' }, { rakip_id: 1, ad: 'Demir Vana', seo_puani: 86, tarama_tarihi: '2026-09-14 12:00:00' }] };
 vi.mock('../servisler/api', () => ({ seoGenelBakisGetir: vi.fn(() => Promise.resolve(seoVerisi)), seoSiteyiTara: vi.fn(() => Promise.resolve(seoVerisi)), seoRakipleriTara: vi.fn(() => Promise.resolve(seoVerisi)) }));
 
 describe('SeoMerkeziSayfasi', () => {
@@ -26,6 +26,9 @@ describe('SeoMerkeziSayfasi', () => {
     expect(screen.getByText('Önemli Fırsatlar (AI Önerileri)')).toHaveAttribute('data-tooltip', expect.stringContaining('öncelikli SEO'));
     expect(screen.getByText('Son Rakip Hareketleri')).toBeInTheDocument();
     expect(screen.getByText('Sıralama Değişimi')).toBeInTheDocument();
+    expect(screen.getAllByText('Demir Vana').length).toBeGreaterThan(0);
+    expect(screen.queryByText('Masaüstü')).not.toBeInTheDocument();
+    expect(screen.queryByText('Mobil')).not.toBeInTheDocument();
     expect(screen.getAllByText('SEO analizi güncellendi')).toHaveLength(1);
     expect(screen.getByText('92')).toBeInTheDocument();
   });

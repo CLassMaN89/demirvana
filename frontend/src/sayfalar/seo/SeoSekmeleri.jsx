@@ -38,6 +38,22 @@ function tarihYaz(tarih) {
 function gecenSureYaz(tarih) { if (!tarih) return '—'; const dakika = Math.floor(Math.max(0, Date.now() - new Date(tarih.replace(' ', 'T')).getTime()) / 60000); if (dakika < 1) return 'Şimdi'; if (dakika < 60) return `${dakika} dk önce`; const saat = Math.floor(dakika / 60); return saat < 24 ? `${saat} saat önce` : `${Math.floor(saat / 24)} gün önce`; }
 function alanAdiYaz(adres = '') { try { return new URL(adres).hostname.replace(/^www\./, ''); } catch { return adres || '—'; } }
 
+function SiralamaTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="seo-siralama-tooltip">
+      <strong>{label}</strong>
+      {payload.filter((kayit) => kayit.value != null).map((kayit) => (
+        <span key={kayit.dataKey}>
+          <i style={{ borderColor: kayit.color }} />
+          <em>{kayit.name}</em>
+          <b>{kayit.value}/100</b>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function SiralamaGrafigi({ rakipler = [], gecmis = [] }) {
   if (!rakipler.length) return <BaglantiBekliyor metin="Grafik için henüz rakip analizi bulunmuyor." />;
   const zamanlar = new Map();
@@ -46,7 +62,7 @@ function SiralamaGrafigi({ rakipler = [], gecmis = [] }) {
   const veriler = [...zamanlar.values()].map((nokta) => ({ ...nokta, etiket: tarihEtiketi(nokta.zaman) }));
   if (!veriler.length) veriler.push({ etiket: 'Son ölçüm', ...Object.fromEntries(rakipler.map((rakip) => [`site_${rakip.id}`, Number(rakip.seo_puani)])) });
   const renkler = ['#0052ff', '#ef4444', '#f59e0b', '#12b76a', '#8b5cf6'];
-  return <div className="seo-grafik seo-grafik--ziyaretci"><ResponsiveContainer width="100%" height="100%"><AreaChart data={veriler} margin={{ top: 10, right: 18, bottom: 2, left: -18 }}><CartesianGrid vertical={false} stroke="#e4e9f2" /><XAxis dataKey="etiket" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} tick={{ fontSize: 10, fill: '#667085' }} /><YAxis domain={[0, 100]} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: '#667085' }} /><Tooltip />{rakipler.map((rakip, sira) => <Area key={rakip.id} type="natural" dataKey={`site_${rakip.id}`} name={rakip.ad} connectNulls stroke={renkler[sira % renkler.length]} strokeWidth={2} fill={renkler[sira % renkler.length]} fillOpacity={sira === 0 ? 0.12 : 0.025} />)}</AreaChart></ResponsiveContainer><div className="seo-grafik__lejant">{rakipler.map((rakip, sira) => <span key={rakip.id}><i style={{ background: renkler[sira % renkler.length] }} />{rakip.ad}</span>)}</div></div>;
+  return <div className="seo-grafik seo-grafik--ziyaretci"><ResponsiveContainer width="100%" height="100%"><AreaChart data={veriler} margin={{ top: 10, right: 18, bottom: 2, left: -18 }}><CartesianGrid vertical={false} stroke="#e4e9f2" /><XAxis dataKey="etiket" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} tick={{ fontSize: 10, fill: '#667085' }} /><YAxis domain={[0, 100]} tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: '#667085' }} /><Tooltip content={<SiralamaTooltip />} cursor={{ stroke: '#c8d1df', strokeDasharray: '3 3' }} />{rakipler.map((rakip, sira) => <Area key={rakip.id} type="natural" dataKey={`site_${rakip.id}`} name={rakip.ad} connectNulls dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: '#ffffff' }} stroke={renkler[sira % renkler.length]} strokeWidth={2} fill={renkler[sira % renkler.length]} fillOpacity={sira === 0 ? 0.12 : 0.025} />)}</AreaChart></ResponsiveContainer><div className="seo-grafik__lejant">{rakipler.map((rakip, sira) => <span key={rakip.id}><i style={{ borderColor: renkler[sira % renkler.length] }} />{rakip.ad}</span>)}</div></div>;
 }
 
 function performansPuani(rakip) { return Math.max(45, Math.min(100, Math.round(100 - Number(rakip.yanit_suresi_ms || 5000) / 55))); }
