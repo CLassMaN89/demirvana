@@ -6,6 +6,7 @@ require_once __DIR__ . '/../src/Cekirdek/JsonYanit.php';
 require_once __DIR__ . '/../src/Cekirdek/Veritabani.php';
 require_once __DIR__ . '/../src/Cekirdek/SeoHtmlOlusturucu.php';
 require_once __DIR__ . '/../src/Cekirdek/PdfDosyaSunucusu.php';
+require_once __DIR__ . '/../src/Cekirdek/GoogleAdsOAuth.php';
 require_once __DIR__ . '/../src/Depolar/SiteDeposu.php';
 require_once __DIR__ . '/../src/Depolar/SeoDeposu.php';
 require_once __DIR__ . '/../src/Denetleyiciler/SiteDenetleyicisi.php';
@@ -63,7 +64,21 @@ try {
     }
 
     if ($yontem === 'GET' && $yol === '/api/admin/seo/genel-bakis') {
-        JsonYanit::gonder(JsonYanit::olustur(true, $seoDenetleyicisi->yonetimGenelBakis()));
+        $seoGenelBakisi = $seoDenetleyicisi->yonetimGenelBakis();
+        $seoGenelBakisi['dis_kaynaklar']['reklam_saglayicisi'] = GoogleAdsOAuth::bagliMi() ? 'bagli' : 'bagli_degil';
+        JsonYanit::gonder(JsonYanit::olustur(true, $seoGenelBakisi));
+    }
+
+    if ($yontem === 'GET' && $yol === '/api/admin/google-ads/oauth/baslat') {
+        header('Location: ' . GoogleAdsOAuth::yetkilendirmeAdresiniOlustur(), true, 302);
+        exit;
+    }
+
+    if ($yontem === 'GET' && $yol === '/api/admin/google-ads/oauth/callback') {
+        if (isset($_GET['error'])) throw new RuntimeException('Google Ads izni verilmedi: ' . (string) $_GET['error']);
+        GoogleAdsOAuth::koduIsle((string) ($_GET['code'] ?? ''), (string) ($_GET['state'] ?? ''));
+        header('Location: http://127.0.0.1:5173/admin/seo?google_ads=baglandi', true, 302);
+        exit;
     }
 
     if ($yontem === 'POST' && $yol === '/api/admin/seo/siteyi-tara') {
@@ -90,10 +105,6 @@ try {
             }
         }
 
-        if ($yontem === 'GET' && $yol === '/api/admin/kategoriler') {
-            JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->kategoriYonetimVerisi()));
-        }
-
         if ($yontem === 'POST' && $yol === '/api/admin/kategoriler') {
             $girdi = json_decode((string) file_get_contents('php://input'), true);
             try {
@@ -107,6 +118,14 @@ try {
 
         if (preg_match('#^/api/admin/kategoriler/(\d+)$#', $yol, $eslesme) === 1) {
             $id = (int) $eslesme[1];
+
+            if ($yontem === 'GET') {
+                $kategori = $denetleyici->kategoriBul($id);
+                if ($kategori === null) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, 'Kategori bulunamadı.'), 404);
+                }
+                JsonYanit::gonder(JsonYanit::olustur(true, $kategori));
+            }
 
             if ($yontem === 'PUT') {
                 $girdi = json_decode((string) file_get_contents('php://input'), true);
@@ -127,6 +146,92 @@ try {
                     $denetleyici->kategoriSil($id);
                     $denetleyici->islemKaydet(istekIp(), 'kategori_sil', 'kategori', $id, $mevcut !== null ? $denetleyici->islemDetayiUret($mevcut) : null);
                     JsonYanit::gonder(JsonYanit::olustur(true, null, 'Kategori silindi.'));
+                } catch (RuntimeException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+                }
+            }
+        }
+    }
+
+    // Menü Yönetimi ekranı: menu_ogeleri (sitenin üst navigasyonu) üzerinde CRUD.
+    if (str_starts_with($yol, '/api/admin/menu-ogeleri')) {
+        if ($yontem === 'GET' && $yol === '/api/admin/menu-ogeleri') {
+            JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->menuYonetimVerisi()));
+        }
+
+        if ($yontem === 'POST' && $yol === '/api/admin/menu-ogeleri') {
+            $girdi = json_decode((string) file_get_contents('php://input'), true);
+            try {
+                $oge = $denetleyici->menuOgesiEkle(is_array($girdi) ? $girdi : []);
+                $denetleyici->islemKaydet(istekIp(), 'menu_ogesi_ekle', 'menu_ogesi', (int) $oge['id'], "Menü Yönetimi > {$oge['baslik']}");
+                JsonYanit::gonder(JsonYanit::olustur(true, $oge, 'Menü öğesi eklendi.'), 201);
+            } catch (InvalidArgumentException $hata) {
+                JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+            }
+        }
+
+        // Birleşik Menü Yönetimi ekranı: bir üst menünün TÜM alt yapısını (grup+kategori dahil,
+        // sonsuz derinlik) tek ağaç olarak döner.
+        if ($yontem === 'GET' && preg_match('#^/api/admin/menu-ogeleri/(\d+)/agac$#', $yol, $eslesme) === 1) {
+            try {
+                JsonYanit::gonder(JsonYanit::olustur(true, $denetleyici->menuOgesiAgaciGetir((int) $eslesme[1])));
+            } catch (RuntimeException $hata) {
+                JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+            }
+        }
+
+        // Bir üst menünün (Kurumsal, Teknik, vb.) doğrudan alt menüleri (dropdown öğeleri) — Kategori
+        // Yönetimi'nin "Ürünler" için yaptığının genellenmiş hali. Düzenleme/silme mevcut
+        // /api/admin/kategoriler/{id} uçlarını kullanır (menu_alt_ogeleri üzerinde genel amaçlı çalışırlar).
+        if (preg_match('#^/api/admin/menu-ogeleri/(\d+)/alt-ogeler$#', $yol, $eslesme) === 1) {
+            $menuOgesiId = (int) $eslesme[1];
+
+            if ($yontem === 'POST') {
+                $girdi = json_decode((string) file_get_contents('php://input'), true);
+                try {
+                    $altOge = $denetleyici->altMenuOgesiEkle($menuOgesiId, is_array($girdi) ? $girdi : []);
+                    $denetleyici->islemKaydet(istekIp(), 'alt_menu_ogesi_ekle', 'menu_alt_ogesi', (int) $altOge['id'], "Menü Yönetimi > {$altOge['baslik']}");
+                    JsonYanit::gonder(JsonYanit::olustur(true, $altOge, 'Alt menü öğesi eklendi.'), 201);
+                } catch (InvalidArgumentException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+                } catch (RuntimeException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+                }
+            }
+        }
+
+        if ($yontem === 'POST' && preg_match('#^/api/admin/menu-ogeleri/(\d+)/geri-al$#', $yol, $eslesme) === 1) {
+            try {
+                $oge = $denetleyici->menuOgesiGeriAl((int) $eslesme[1]);
+                $denetleyici->islemKaydet(istekIp(), 'menu_ogesi_geri_al', 'menu_ogesi', (int) $eslesme[1], "Menü Yönetimi > {$oge['baslik']}");
+                JsonYanit::gonder(JsonYanit::olustur(true, $oge, 'Menü öğesi geri alındı.'));
+            } catch (RuntimeException $hata) {
+                JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+            }
+        }
+
+        if (preg_match('#^/api/admin/menu-ogeleri/(\d+)$#', $yol, $eslesme) === 1) {
+            $id = (int) $eslesme[1];
+
+            if ($yontem === 'PUT') {
+                $girdi = json_decode((string) file_get_contents('php://input'), true);
+                try {
+                    $oge = $denetleyici->menuOgesiGuncelle($id, is_array($girdi) ? $girdi : []);
+                    $denetleyici->islemKaydet(istekIp(), 'menu_ogesi_guncelle', 'menu_ogesi', $id, "Menü Yönetimi > {$oge['baslik']}");
+                    JsonYanit::gonder(JsonYanit::olustur(true, $oge, 'Menü öğesi güncellendi.'));
+                } catch (InvalidArgumentException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), 422);
+                } catch (RuntimeException $hata) {
+                    JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
+                }
+            }
+
+            if ($yontem === 'DELETE') {
+                try {
+                    $mevcut = $denetleyici->menuOgesiBul($id);
+                    $denetleyici->menuOgesiSil($id);
+                    $denetleyici->islemKaydet(istekIp(), 'menu_ogesi_sil', 'menu_ogesi', $id, $mevcut !== null ? "Menü Yönetimi > {$mevcut['baslik']}" : null);
+                    JsonYanit::gonder(JsonYanit::olustur(true, null, 'Menü öğesi silindi.'));
                 } catch (RuntimeException $hata) {
                     JsonYanit::gonder(JsonYanit::olustur(false, null, $hata->getMessage()), $hata->getCode() ?: 400);
                 }
