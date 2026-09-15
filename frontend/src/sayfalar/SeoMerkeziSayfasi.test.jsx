@@ -24,6 +24,8 @@ describe('SeoMerkeziSayfasi', () => {
     expect(screen.getByText('SEO başlığı uzun.')).toBeInTheDocument();
     expect(screen.getByText('Vana')).toBeInTheDocument();
     expect(screen.getByText('Önemli Fırsatlar (AI Önerileri)')).toHaveAttribute('data-tooltip', expect.stringContaining('öncelikli SEO'));
+    expect(screen.getByText('Son Rakip Hareketleri')).toBeInTheDocument();
+    expect(screen.getAllByText('SEO analizi güncellendi')).toHaveLength(1);
     expect(screen.getByText('92')).toBeInTheDocument();
   });
 });

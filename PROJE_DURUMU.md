@@ -362,6 +362,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Rakip karşılaştırma tablosundaki sütun başlıkları, site adları ve puan değerleri `11px` yazı boyutuna sabitlendi.
 - `Önemli Fırsatlar (AI Önerileri)` kartı referanstaki ikonlu satır, gerçek tarama bulgusu, URL ve renkli fırsat etiketi düzenine geçirildi; `Tümünü Gör` bağlantısı İçerik Fırsatları sekmesine yönlendirildi. SEO panel başlıklarına özel hover/klavye tooltipleri, yedi ana sekmeye de kısa kullanım açıklamaları eklendi.
 - Önemli Fırsatlar kartındaki teknik denetim metinleri (`SEO başlığı 61 karakter` gibi) ana fırsat adı olmaktan çıkarıldı; kalın başlık artık etkilenen URL'den üretilen okunabilir ürün/arama ifadesini gösterir.
+- `Son Rakip Analizleri` kartı referansa uygun olarak `Son Rakip Hareketleri` başlığına geçirildi. Satırlarda hareket türüne göre ikon, site adı, gerçek hareket adı (`SEO analizi güncellendi`), alan adı, göreli saat ve `Yeni` rozeti gösterilir; `Tümünü Gör` bağlantısı rakip sekmesine gider.
 
 - Kaynak `frontend/public/assets/seo.png` içindeki ikonlar ayrı şeffaf PNG dosyalarına çıkarıldı; arayüz artık bütün ikon paftasını kullanmıyor. Üst KPI kartlarında Google, yeşil kupa, mavi grafik, turuncu grafik ve yeşil kalkan doğru kaynak bölgelerinden oranları korunarak yerleştirildi. Canlı ekran kontrolünde yanlış madalya, renk filtresi, kaynak yazısı ve kesilmiş ikon kalmadığı doğrulandı.
 

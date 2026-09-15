@@ -1,4 +1,4 @@
-import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, HeartPulse, Lightbulb, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
+import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, FileText, Globe2, HeartPulse, Image, Lightbulb, Link2, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import SeoGorselIkonu from './SeoGorselIkonu';
 
@@ -34,6 +34,9 @@ function tarihYaz(tarih) {
   if (!tarih) return '';
   return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(tarih.replace(' ', 'T')));
 }
+
+function gecenSureYaz(tarih) { if (!tarih) return '—'; const dakika = Math.floor(Math.max(0, Date.now() - new Date(tarih.replace(' ', 'T')).getTime()) / 60000); if (dakika < 1) return 'Şimdi'; if (dakika < 60) return `${dakika} dk önce`; const saat = Math.floor(dakika / 60); return saat < 24 ? `${saat} saat önce` : `${Math.floor(saat / 24)} gün önce`; }
+function alanAdiYaz(adres = '') { try { return new URL(adres).hostname.replace(/^www\./, ''); } catch { return adres || '—'; } }
 
 function SaglikGrafigi({ gecmis = [] }) {
   if (!gecmis.length) return <BaglantiBekliyor metin="Grafik için ilk site taramasını çalıştırın." />;
@@ -77,7 +80,7 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
         <article className="seo-panel seo-panel--karsilastirma"><header><div><Users /><AciklamaliBaslik aciklama="Demir Vana ile takip edilen rakiplerin performans ve teknik SEO puanlarını karşılaştırır.">Rakip Karşılaştırması</AciklamaliBaslik></div><a href="?tab=rakipler">Detaylı Karşılaştırma <span>→</span></a></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Performans</span><span>SEO</span><span>Erişilebilirlik</span><span>En İyi Uygulamalar</span></div>{rakipler.map((rakip) => { const puanlar = [performansPuani(rakip), Number(rakip.seo_puani), erisilebilirlikPuani(rakip), uygulamaPuani(rakip)]; return <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 && <Crown aria-label="Demir Vana" />}</strong>{puanlar.map((puan, sira) => <b className={`seo-puan seo-puan--${puanSinifi(puan)}`} key={sira}>{puan}</b>)}</div>; })}</div></article>
       </div>
       <div className="seo-hareket-grid">
-        <article className="seo-panel"><header><div><Users /><AciklamaliBaslik aciklama="Rakip sitelerde yapılan son canlı ölçümlerin özetini gösterir.">Son Rakip Analizleri</AciklamaliBaslik></div><span>Canlı ölçümler</span></header><div className="seo-hareket-listesi">{rakipler.slice(0, 5).map((rakip) => <div key={rakip.id}><Search /><p><strong>{rakip.ad} · {rakip.seo_puani}/100</strong><small>{rakip.kelime_sayisi} kelime · {rakip.schema_sayisi} schema · {rakip.h1_sayisi} H1</small></p><time>{tarihYaz(rakip.tarama_tarihi)}</time></div>)}</div></article>
+        <article className="seo-panel"><header><div><Users /><AciklamaliBaslik aciklama="Rakip sitelerde tespit edilen son içerik ve SEO hareketlerini gösterir; veri yoksa son canlı analiz güncellemesini listeler.">Son Rakip Hareketleri</AciklamaliBaslik></div><a href="?tab=rakipler">Tümünü Gör <span>→</span></a></header><div className="seo-rakip-hareketleri">{rakipler.slice(0, 5).map((rakip, sira) => { const Ikon = [Globe2, FileText, Image, Globe2, Link2][sira]; return <div key={rakip.id}><Ikon aria-hidden="true" /><strong>{rakip.ad}</strong><p><b>SEO analizi güncellendi</b><small>{alanAdiYaz(rakip.ana_adres)}</small></p><span><time>{gecenSureYaz(rakip.tarama_tarihi)}</time><em>Yeni</em></span></div>; })}</div></article>
         <article className="seo-panel"><header><div><Megaphone /><AciklamaliBaslik aciklama="Google Ads bağlantısı kurulduğunda rakiplerin ve hesabın son reklam hareketlerini gösterir.">Son Reklam Hareketleri</AciklamaliBaslik></div></header><div className="seo-baglanti-karti"><SeoGorselIkonu tur="reklam" boyut={34} /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><AciklamaliBaslik aciklama="Site taramasında bulunan ve görünürlüğü artırmak için uygulanabilecek öncelikli SEO geliştirmelerini gösterir.">Önemli Fırsatlar (AI Önerileri)</AciklamaliBaslik></div><a href="?tab=firsatlar">Tümünü Gör <span>→</span></a></header><FirsatListesi sorunlar={veri?.sorunlar} sinir={5} /></article>
       </div>
