@@ -19,13 +19,13 @@ const SEKME_BILESENLERI = {
 };
 
 const SEKMELER = [
-  { anahtar: 'genel-bakis', etiket: 'Genel Bakış', ikon: LayoutDashboard },
-  { anahtar: 'anahtar-kelimeler', etiket: 'Anahtar Kelimeler', ikon: Search },
-  { anahtar: 'rakipler', etiket: 'Rakip Intelligence', ikon: Users },
-  { anahtar: 'reklamlar', etiket: 'Reklam Takibi', ikon: Megaphone },
-  { anahtar: 'firsatlar', etiket: 'İçerik Fırsatları', ikon: Lightbulb },
-  { anahtar: 'site-sagligi', etiket: 'Site Sağlığı', ikon: HeartPulse },
-  { anahtar: 'raporlar', etiket: 'Raporlar', ikon: FileBarChart }
+  { anahtar: 'genel-bakis', etiket: 'Genel Bakış', aciklama: 'SEO performansının, rakiplerin ve öncelikli fırsatların genel özetini gösterir.', ikon: LayoutDashboard },
+  { anahtar: 'anahtar-kelimeler', etiket: 'Anahtar Kelimeler', aciklama: 'Arama sonuçlarında takip edilen kelimeleri ve sıralama değişimlerini gösterir.', ikon: Search },
+  { anahtar: 'rakipler', etiket: 'Rakip Intelligence', aciklama: 'Rakip sitelerin teknik SEO ve içerik performansını karşılaştırır.', ikon: Users },
+  { anahtar: 'reklamlar', etiket: 'Reklam Takibi', aciklama: 'Google Ads bağlantısından gelen reklam hareketlerini takip eder.', ikon: Megaphone },
+  { anahtar: 'firsatlar', etiket: 'İçerik Fırsatları', aciklama: 'Site taramasından çıkan uygulanabilir SEO geliştirmelerini listeler.', ikon: Lightbulb },
+  { anahtar: 'site-sagligi', etiket: 'Site Sağlığı', aciklama: 'Teknik SEO sorunlarını ve tarama sağlık puanını gösterir.', ikon: HeartPulse },
+  { anahtar: 'raporlar', etiket: 'Raporlar', aciklama: 'SEO verilerini tarih aralığına göre raporlamaya hazırlar.', ikon: FileBarChart }
 ];
 
 export default function SeoMerkeziSayfasi() {
@@ -69,7 +69,7 @@ export default function SeoMerkeziSayfasi() {
     <section className="seo-merkezi">
       <header className="seo-merkezi__ust">
         <div className="seo-merkezi__kimlik">
-          <SeoGorselIkonu tur="merkez" boyut={42} className="seo-merkezi__ana-ikon" />
+          <SeoGorselIkonu tur="merkez" boyut={38} className="seo-merkezi__ana-ikon" />
           <div>
             <h1>SEO Merkezi</h1>
             <p>Google ve rakiplerinizin tüm hareketlerini tek merkezden takip edin. Fırsatları yakalayın, bir adım önde olun.</p>
@@ -91,9 +91,9 @@ export default function SeoMerkeziSayfasi() {
       </header>
 
       <nav className="seo-merkezi__sekmeler" aria-label="SEO Merkezi bölümleri">
-        {SEKMELER.map(({ anahtar, etiket }) => (
-          <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined}>
-            <SeoGorselIkonu tur={anahtar} boyut={18} />{etiket}
+        {SEKMELER.map(({ anahtar, etiket, aciklama }) => (
+          <button key={anahtar} type="button" className={etkinSekme === anahtar ? 'aktif' : ''} onClick={() => sekmeDegistir(anahtar)} aria-current={etkinSekme === anahtar ? 'page' : undefined} title={aciklama}>
+            <SeoGorselIkonu tur={anahtar} boyut={16} />{etiket}
           </button>
         ))}
       </nav>

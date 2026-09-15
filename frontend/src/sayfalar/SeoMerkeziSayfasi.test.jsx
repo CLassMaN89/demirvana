@@ -12,6 +12,7 @@ describe('SeoMerkeziSayfasi', () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=genel-bakis']}><SeoMerkeziSayfasi /></MemoryRouter>);
     const sekmeler = screen.getByRole('navigation', { name: 'SEO Merkezi bölümleri' });
     expect(sekmeler.querySelectorAll('button')).toHaveLength(7);
+    expect(screen.getByRole('button', { name: 'İçerik Fırsatları' })).toHaveAttribute('title', expect.stringContaining('SEO geliştirmelerini'));
     fireEvent.click(screen.getByRole('button', { name: 'Site Sağlığı' }));
     expect(await screen.findByRole('heading', { name: 'Site Sağlığı' })).toBeInTheDocument();
   });
@@ -21,6 +22,7 @@ describe('SeoMerkeziSayfasi', () => {
     expect(await screen.findByText('Google Görünürlüğü')).toBeInTheDocument();
     expect(await screen.findAllByText('86/100')).toHaveLength(2);
     expect(screen.getAllByText('SEO başlığı uzun.')).toHaveLength(2);
+    expect(screen.getByText('Önemli Fırsatlar (AI Önerileri)')).toHaveAttribute('data-tooltip', expect.stringContaining('öncelikli SEO'));
     expect(screen.getByText('92')).toBeInTheDocument();
   });
 });

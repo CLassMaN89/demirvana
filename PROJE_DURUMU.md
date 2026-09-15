@@ -360,6 +360,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - SEO Merkezi içerik alanlarının arka plan hiyerarşisi referansa göre sabitlendi: kategori/panel başlıkları, site veri satırları, KPI kartları ve diğer içerik yüzeyleri `#ffffff`; `Site`, `Performans`, `SEO`, `Erişilebilirlik` ve `En İyi Uygulamalar` sütun başlığı şeridi `#f7f9fc` kullanır. Canlı tarayıcıda renk ayrımı doğrulandı.
 - Rakip karşılaştırma tablosunda `Performans`, `SEO`, `Erişilebilirlik` ve `En İyi Uygulamalar` başlıkları ile bunların altındaki puan rozetleri kendi sütunlarında yatay ortalandı; site adları solda bırakıldı.
 - Rakip karşılaştırma tablosundaki sütun başlıkları, site adları ve puan değerleri `11px` yazı boyutuna sabitlendi.
+- `Önemli Fırsatlar (AI Önerileri)` kartı referanstaki ikonlu satır, gerçek tarama bulgusu, URL ve renkli fırsat etiketi düzenine geçirildi; `Tümünü Gör` bağlantısı İçerik Fırsatları sekmesine yönlendirildi. SEO panel başlıklarına özel hover/klavye tooltipleri, yedi ana sekmeye de kısa kullanım açıklamaları eklendi.
 
 - Kaynak `frontend/public/assets/seo.png` içindeki ikonlar ayrı şeffaf PNG dosyalarına çıkarıldı; arayüz artık bütün ikon paftasını kullanmıyor. Üst KPI kartlarında Google, yeşil kupa, mavi grafik, turuncu grafik ve yeşil kalkan doğru kaynak bölgelerinden oranları korunarak yerleştirildi. Canlı ekran kontrolünde yanlış madalya, renk filtresi, kaynak yazısı ve kesilmiş ikon kalmadığı doğrulandı.
 
