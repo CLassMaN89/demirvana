@@ -371,6 +371,7 @@ Ana site iskeleti, dinamik Kurumsal sayfa, sektörlü Referanslar sayfası, ger�
 - Google Ads için mevcut PHP yapısına OAuth başlatma ve callback uçları eklendi. İstemci bilgileri `backend/.env` dosyasından okunur, imzalı ve 10 dakika geçerli OAuth state kullanılır; Google'ın verdiği refresh token yalnız git dışındaki `.env` dosyasına kaydedilir. Son Reklam Hareketleri kartı bağlantı durumunu ve bağlantı butonunu gösterir.
 - OAuth token değişiminde PHP HTTPS stream wrapper bağımlılığı kaldırıldı; istek mevcut cURL eklentisiyle gönderilir ve bağlantı/HTTP hataları kontrollü biçimde raporlanır.
 - Google Ads OAuth callback'i, genel 500 yanıtı yerine token veya izin değerlerini açmadan Google'ın güvenli hata açıklamasını 400 yanıtında döndürür; bağlantı kurulumundaki yapılandırma sorunu doğrudan teşhis edilebilir.
+- Yerel Windows PHP cURL kurulumu için CA sertifika yolu `GOOGLE_ADS_CA_BUNDLE` üzerinden yapılandırıldı; SSL doğrulaması kapatılmadan Google OAuth sertifika zinciri doğrulanır.
 
 - Kaynak `frontend/public/assets/seo.png` içindeki ikonlar ayrı şeffaf PNG dosyalarına çıkarıldı; arayüz artık bütün ikon paftasını kullanmıyor. Üst KPI kartlarında Google, yeşil kupa, mavi grafik, turuncu grafik ve yeşil kalkan doğru kaynak bölgelerinden oranları korunarak yerleştirildi. Canlı ekran kontrolünde yanlış madalya, renk filtresi, kaynak yazısı ve kesilmiş ikon kalmadığı doğrulandı.
 

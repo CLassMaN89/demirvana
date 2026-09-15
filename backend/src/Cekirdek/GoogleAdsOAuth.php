@@ -79,6 +79,11 @@ final class GoogleAdsOAuth
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 20,
         ]);
+        $sertifikaDosyasi = self::ayar('GOOGLE_ADS_CA_BUNDLE');
+        if ($sertifikaDosyasi !== '') {
+            if (!is_file($sertifikaDosyasi)) throw new RuntimeException('Google Ads CA sertifika dosyası bulunamadı.');
+            curl_setopt($istek, CURLOPT_CAINFO, $sertifikaDosyasi);
+        }
         $govde = curl_exec($istek);
         $curlHatasi = curl_error($istek);
         $httpDurumu = (int) curl_getinfo($istek, CURLINFO_RESPONSE_CODE);
