@@ -1,4 +1,4 @@
-import { BarChart3, CircleAlert, FileBarChart, HeartPulse, Lightbulb, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
+import { BarChart3, CircleAlert, CircleHelp, Crown, FileBarChart, HeartPulse, Lightbulb, Megaphone, Search, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import SeoGorselIkonu from './SeoGorselIkonu';
 
@@ -30,30 +30,44 @@ function SaglikGrafigi({ gecmis = [] }) {
   return <div className="seo-grafik"><ResponsiveContainer width="100%" height="100%"><LineChart data={veriler} margin={{ top: 12, right: 18, bottom: 4, left: -18 }}><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="tarih" tick={{ fontSize: 10 }} /><YAxis domain={[0, 100]} tick={{ fontSize: 10 }} /><Tooltip /><Line type="monotone" dataKey="puan" name="Sağlık puanı" stroke="#1677ff" strokeWidth={2.5} dot={{ r: 3 }} /></LineChart></ResponsiveContainer></div>;
 }
 
+function performansPuani(rakip) { return Math.max(45, Math.min(100, Math.round(100 - Number(rakip.yanit_suresi_ms || 5000) / 55))); }
+function erisilebilirlikPuani(rakip) { return Number(rakip.h1_sayisi) === 1 ? 95 : Math.max(50, 90 - Math.abs(Number(rakip.h1_sayisi) - 1) * 5); }
+function uygulamaPuani(rakip) { return Math.max(55, Math.min(100, 65 + (Number(rakip.http_durumu) === 200 ? 15 : 0) + (Number(rakip.schema_sayisi) > 0 ? 10 : 0) + (Number(rakip.sitemap_url_sayisi) > 0 ? 10 : 0))); }
+function puanSinifi(puan) { return puan >= 87 ? 'iyi' : puan >= 70 ? 'orta' : 'zayif'; }
+
+function MiniCizgi({ renk, veriler = [] }) {
+  const sayilar = veriler.length ? veriler.map(Number) : [50, 50];
+  const enAz = Math.min(...sayilar); const enCok = Math.max(...sayilar); const aralik = Math.max(1, enCok - enAz);
+  const noktalar = sayilar.map((deger, sira) => `${(sira / Math.max(1, sayilar.length - 1)) * 100},${26 - ((deger - enAz) / aralik) * 20}`).join(' ');
+  return <svg className="seo-mini-cizgi" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><polyline points={noktalar} fill="none" stroke={renk} strokeWidth="2" vectorEffect="non-scaling-stroke" /></svg>;
+}
+
 export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYenidenDene }) {
   if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
   if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="SEO verileri alınamadı" aciklama={hata}><button onClick={onYenidenDene}>Tekrar dene</button></VeriBekleniyor>;
   const tarama = veri?.site_sagligi;
   const rakipler = veri?.rakip_analizleri ?? [];
+  const bizimSite = rakipler.find((rakip) => Number(rakip.bizim_sitemiz_mi) === 1);
+  const saglikGecmisi = (veri?.tarama_gecmisi ?? []).map((kayit) => kayit.saglik_puani);
   const kartlar = [
-    ['Google Görünürlüğü', 'google', '—', 'Search Console bağlı değil', 'mavi'],
-    ['Top 3 Kelime', 'siralama', '—', 'Sıralama sağlayıcısı bağlı değil', 'yesil'],
-    ['Top 10 Kelime', 'grafik', '—', 'Sıralama sağlayıcısı bağlı değil', 'mor'],
-    ['Top 20 Kelime', 'performans', '—', 'Sıralama sağlayıcısı bağlı değil', 'turuncu'],
-    ['Site Sağlığı', 'saglik', tarama ? `${tarama.saglik_puani}/100` : '—', tarama ? `${tarama.toplam_url} URL tarandı` : 'Henüz tarama yapılmadı', 'yesil']
+    ['Google Görünürlüğü', 'google', bizimSite ? `${bizimSite.seo_puani}/100` : '—', 'Canlı teknik ölçüm', 'mavi', '#1677ff', saglikGecmisi],
+    ['Top 3 Kelime', 'siralama', '—', 'Sıralama kaynağı gerekli', 'yesil', '#13ad68', []],
+    ['Top 10 Kelime', 'top10', '—', 'Sıralama kaynağı gerekli', 'mor', '#9747ff', []],
+    ['Top 20 Kelime', 'top20', '—', 'Sıralama kaynağı gerekli', 'turuncu', '#ff9200', []],
+    ['Site Sağlığı', 'saglik', tarama ? `${tarama.saglik_puani}/100` : '—', tarama ? 'Sağlıklı' : 'Henüz taranmadı', 'yesil', '#13ad68', saglikGecmisi]
   ];
   return (
     <div className="seo-genel-bakis">
       <div className="seo-kpi-grid">
-        {kartlar.map(([etiket, ikon, deger, bilgi, renk]) => <article className={`seo-kpi seo-kpi--${renk}`} key={etiket}><SeoGorselIkonu tur={ikon} boyut={34} className="seo-kpi__ikon" /><div><span>{etiket}</span><strong>{deger}</strong><small>{bilgi}</small></div><i aria-hidden="true" /></article>)}
+        {kartlar.map(([etiket, ikon, deger, bilgi, renk, cizgiRengi, gecmis]) => <article className={`seo-kpi seo-kpi--${renk}`} key={etiket}><span className="seo-kpi__ikon-cerceve"><SeoGorselIkonu tur={ikon} boyut={28} className={`seo-kpi__ikon seo-kpi__ikon--${ikon}`} /></span><div><span>{etiket} <CircleHelp aria-hidden="true" /></span><strong>{deger}</strong><small>{bilgi}</small></div><MiniCizgi renk={cizgiRengi} veriler={gecmis} /></article>)}
       </div>
       <div className="seo-ana-grid">
         <article className="seo-panel seo-panel--genis"><header><div><TrendingUp /><h2>Site Sağlığı Değişimi</h2></div><span>Gerçek tarama geçmişi</span></header><SaglikGrafigi gecmis={veri?.tarama_gecmisi} /></article>
-        <article className="seo-panel"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div><span>Canlı site ölçümü</span></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Yanıt</span><span>SEO</span><span>Sitemap URL</span></div>{rakipler.map((rakip) => <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 ? ' ★' : ''}</strong><b>{rakip.http_durumu === 200 ? `${rakip.yanit_suresi_ms} ms` : 'Hata'}</b><b>{rakip.seo_puani}</b><b>{rakip.sitemap_url_sayisi}</b></div>)}</div></article>
+        <article className="seo-panel seo-panel--karsilastirma"><header><div><Users /><h2>Rakip Karşılaştırması</h2></div><a href="?tab=rakipler">Detaylı Karşılaştırma <span>→</span></a></header><div className="seo-karsilastirma"><div className="seo-karsilastirma__baslik"><span>Site</span><span>Performans</span><span>SEO</span><span>Erişilebilirlik</span><span>En İyi Uygulamalar</span></div>{rakipler.map((rakip) => { const puanlar = [performansPuani(rakip), Number(rakip.seo_puani), erisilebilirlikPuani(rakip), uygulamaPuani(rakip)]; return <div key={rakip.id}><strong>{rakip.ad}{Number(rakip.bizim_sitemiz_mi) === 1 && <Crown aria-label="Demir Vana" />}</strong>{puanlar.map((puan, sira) => <b className={`seo-puan seo-puan--${puanSinifi(puan)}`} key={sira}>{puan}</b>)}</div>; })}</div></article>
       </div>
       <div className="seo-hareket-grid">
         <article className="seo-panel"><header><div><Users /><h2>Son Rakip Analizleri</h2></div><span>Canlı ölçümler</span></header><div className="seo-hareket-listesi">{rakipler.slice(0, 5).map((rakip) => <div key={rakip.id}><Search /><p><strong>{rakip.ad} · {rakip.seo_puani}/100</strong><small>{rakip.kelime_sayisi} kelime · {rakip.schema_sayisi} schema · {rakip.h1_sayisi} H1</small></p><time>{tarihYaz(rakip.tarama_tarihi)}</time></div>)}</div></article>
-        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><SeoGorselIkonu tur="reklam" boyut={38} /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
+        <article className="seo-panel"><header><div><Megaphone /><h2>Son Reklam Hareketleri</h2></div></header><div className="seo-baglanti-karti"><SeoGorselIkonu tur="reklam" boyut={34} /><div><strong>Google Ads bağlı değil</strong><small>Bağlantı kurulduğunda gerçek reklam hareketleri burada görünür.</small></div></div></article>
         <article className="seo-panel"><header><div><Lightbulb /><h2>Önemli Fırsatlar</h2></div></header><SorunListesi sorunlar={veri?.sorunlar} sinir={4} /></article>
       </div>
       <article className="seo-gorev-seridi"><div className="seo-gorev-seridi__baslik"><ShieldCheck /><div><strong>Bugün Ne Yapmalıyım?</strong><small>{tarama ? `${tarama.sorun_sayisi} gerçek site sorunu tespit edildi.` : 'İlk denetimi başlatın.'}</small></div></div><div className="seo-gorevler">{(veri?.sorunlar ?? []).slice(0, 5).map((sorun, sira) => <div key={sorun.id}><b>{sira + 1}</b><span>{sorun.aciklama}<small>{sorun.url_yolu}</small></span></div>)}</div><button type="button" onClick={onSiteyiTara}>{tarama ? 'Yeniden tara' : 'Siteyi tara'}</button></article>

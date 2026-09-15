@@ -19,8 +19,8 @@ describe('SeoMerkeziSayfasi', () => {
   test('genel bakışta gerçek site denetimi sonucunu gösterir', async () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=bilinmeyen']}><SeoMerkeziSayfasi /></MemoryRouter>);
     expect(await screen.findByText('Google Görünürlüğü')).toBeInTheDocument();
-    expect(await screen.findByText('86/100')).toBeInTheDocument();
+    expect(await screen.findAllByText('86/100')).toHaveLength(2);
     expect(screen.getAllByText('SEO başlığı uzun.')).toHaveLength(2);
-    expect(screen.getByText('420 ms')).toBeInTheDocument();
+    expect(screen.getByText('92')).toBeInTheDocument();
   });
 });
