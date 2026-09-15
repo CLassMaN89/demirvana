@@ -28,6 +28,10 @@ CREATE TABLE IF NOT EXISTS `seo_rakip_taramalari` (
     CONSTRAINT `fk_seo_rakip_tarama` FOREIGN KEY (`rakip_id`) REFERENCES `seo_rakipleri` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
+-- 2026-09-15: Her canlı taramada herkese açık içerikten çıkarılan terimler saklanır.
+ALTER TABLE `seo_rakip_taramalari`
+    ADD COLUMN IF NOT EXISTS `anahtar_kelimeler_json` LONGTEXT NULL AFTER `sitemap_url_sayisi`;
+
 INSERT INTO `seo_rakipleri` (`ad`, `ana_adres`, `bizim_sitemiz_mi`) VALUES
     ('Demir Vana', 'https://www.demirvana.com/', 1),
     ('Duyar', 'https://www.duyar.com/', 0),

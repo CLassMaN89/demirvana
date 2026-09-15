@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import SeoMerkeziSayfasi from './SeoMerkeziSayfasi';
 
-const seoVerisi = { site_sagligi: { saglik_puani: 86, toplam_url: 24, sorun_sayisi: 2 }, sorunlar: [{ id: 1, onem: 'orta', aciklama: 'SEO başlığı uzun.', url_yolu: '/urunler/vana', onerilen_duzeltme: 'Başlığı 60 karakterin altına indirin.' }], rakip_analizleri: [{ id: 1, ad: 'Demir Vana', bizim_sitemiz_mi: 1, http_durumu: 200, yanit_suresi_ms: 420, seo_puani: 86, sitemap_url_sayisi: 24, kelime_sayisi: 900, schema_sayisi: 2, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:00:00' }, { id: 2, ad: 'Duyar', bizim_sitemiz_mi: 0, http_durumu: 200, yanit_suresi_ms: 610, seo_puani: 82, sitemap_url_sayisi: 18, kelime_sayisi: 750, schema_sayisi: 1, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:05:00' }], rakip_gecmisi: [{ rakip_id: 1, ad: 'Demir Vana', seo_puani: 84, tarama_tarihi: '2026-09-13 12:00:00' }, { rakip_id: 1, ad: 'Demir Vana', seo_puani: 86, tarama_tarihi: '2026-09-14 12:00:00' }], dis_kaynaklar: { reklam_saglayicisi: 'bagli', siralama_saglayicisi: 'bagli_degil' } };
+const seoVerisi = { site_sagligi: { saglik_puani: 86, toplam_url: 24, sorun_sayisi: 2 }, sorunlar: [{ id: 1, onem: 'orta', aciklama: 'SEO başlığı uzun.', url_yolu: '/urunler/vana', onerilen_duzeltme: 'Başlığı 60 karakterin altına indirin.' }], rakip_analizleri: [{ id: 1, ad: 'Demir Vana', bizim_sitemiz_mi: 1, http_durumu: 200, yanit_suresi_ms: 420, seo_puani: 86, sitemap_url_sayisi: 24, kelime_sayisi: 900, schema_sayisi: 2, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:00:00', anahtar_kelimeler: [{ kelime: 'vana', adet: 8, baslikta_mi: true, h1de_mi: true }] }, { id: 2, ad: 'Duyar', bizim_sitemiz_mi: 0, http_durumu: 200, yanit_suresi_ms: 610, seo_puani: 82, sitemap_url_sayisi: 18, kelime_sayisi: 750, schema_sayisi: 1, h1_sayisi: 1, tarama_tarihi: '2026-09-14 12:05:00', anahtar_kelimeler: [{ kelime: 'vana', adet: 12, baslikta_mi: true, h1de_mi: false }, { kelime: 'yangın', adet: 6, baslikta_mi: false, h1de_mi: true }] }], rakip_gecmisi: [{ rakip_id: 1, ad: 'Demir Vana', seo_puani: 84, tarama_tarihi: '2026-09-13 12:00:00' }, { rakip_id: 1, ad: 'Demir Vana', seo_puani: 86, tarama_tarihi: '2026-09-14 12:00:00' }], dis_kaynaklar: { reklam_saglayicisi: 'bagli', siralama_saglayicisi: 'bagli_degil' } };
 vi.mock('../servisler/api', () => ({ seoGenelBakisGetir: vi.fn(() => Promise.resolve(seoVerisi)), seoSiteyiTara: vi.fn(() => Promise.resolve(seoVerisi)), seoRakipleriTara: vi.fn(() => Promise.resolve(seoVerisi)) }));
 
 describe('SeoMerkeziSayfasi', () => {
@@ -43,7 +43,10 @@ describe('SeoMerkeziSayfasi', () => {
 
   test('alt SEO sekmelerini mevcut gerçek verilerle doldurur', async () => {
     render(<MemoryRouter initialEntries={['/admin/seo?tab=anahtar-kelimeler']}><SeoMerkeziSayfasi /></MemoryRouter>);
-    expect(await screen.findByText('Sıralama sağlayıcısı bağlı değil')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Rakip Anahtar Kelimeleri' })).toBeInTheDocument();
+    expect(screen.getByText('yangın')).toBeInTheDocument();
+    expect(screen.getByText('İçerik açığı')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Kelimeleri güncelle' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Rakip Intelligence' }));
     expect(await screen.findByRole('heading', { name: 'Rakip Intelligence' })).toBeInTheDocument();

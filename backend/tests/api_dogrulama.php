@@ -94,6 +94,19 @@ if (($seoSayfalari['tr']['/']['seo_basligi'] ?? null) !== 'Demirvana') {
     throw new RuntimeException('SEO kayıtları dil ve rota anahtarlarıyla dönüştürülemedi.');
 }
 
+$rakipKelimeleri = SeoDeposu::anahtarKelimeleriCikar('<html><head><title>İstanbul Endüstriyel Vana Üreticisi</title></head><body><h1>Kontrol Vanaları</h1><p>İstanbul kontrol vanaları ve endüstriyel vana çözümleri. Kontrol vanaları.</p></body></html>');
+$vanaKelimesi = current(array_filter($rakipKelimeleri, static fn(array $kayit): bool => $kayit['kelime'] === 'vanaları'));
+if (($vanaKelimesi['adet'] ?? 0) < 2) {
+    throw new RuntimeException('Rakip içeriğinden tekrarlanan anahtar kelime çıkarılamadı.');
+}
+if (!($vanaKelimesi['h1de_mi'] ?? false)) {
+    throw new RuntimeException('Anahtar kelimenin H1 sinyali korunmadı.');
+}
+$istanbulKelimesi = current(array_filter($rakipKelimeleri, static fn(array $kayit): bool => $kayit['kelime'] === 'istanbul'));
+if (($istanbulKelimesi['adet'] ?? 0) < 2) {
+    throw new RuntimeException('Büyük Türkçe İ harfi anahtar kelimede bozuldu.');
+}
+
 $robots = SeoDenetleyicisi::robotsMetniOlustur('https://www.demirvana.com');
 if (!str_contains($robots, 'Sitemap: https://www.demirvana.com/sitemap.xml')) {
     throw new RuntimeException('Robots çıktısı sitemap adresini içermiyor.');

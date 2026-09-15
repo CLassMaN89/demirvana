@@ -11,17 +11,23 @@ final class SeoDeposu
     /** Tanımlı rakiplerin herkese açık ana sayfa ve sitemap verilerini ölçer; sıralama değeri uydurmaz. */
     public function rakipAnalizleriniCalistir(): array
     {
-        $rakipler = $this->baglanti->query('SELECT id, ad, ana_adres FROM seo_rakipleri WHERE aktif_mi = 1 ORDER BY id')->fetchAll();
+        $rakipler = $this->baglanti->query('SELECT id, ad, ana_adres, bizim_sitemiz_mi FROM seo_rakipleri WHERE aktif_mi = 1 ORDER BY id')->fetchAll();
         $ekle = $this->baglanti->prepare(
             'INSERT INTO seo_rakip_taramalari
              (rakip_id, http_durumu, yanit_suresi_ms, seo_puani, baslik_uzunlugu, meta_uzunlugu,
-              h1_sayisi, kelime_sayisi, baglanti_sayisi, schema_sayisi, sitemap_url_sayisi, hata_mesaji)
+              h1_sayisi, kelime_sayisi, baglanti_sayisi, schema_sayisi, sitemap_url_sayisi, anahtar_kelimeler_json, hata_mesaji)
              VALUES (:rakip_id, :http_durumu, :yanit_suresi_ms, :seo_puani, :baslik_uzunlugu, :meta_uzunlugu,
-                     :h1_sayisi, :kelime_sayisi, :baglanti_sayisi, :schema_sayisi, :sitemap_url_sayisi, :hata_mesaji)'
+                     :h1_sayisi, :kelime_sayisi, :baglanti_sayisi, :schema_sayisi, :sitemap_url_sayisi, :anahtar_kelimeler_json, :hata_mesaji)'
         );
 
         foreach ($rakipler as $rakip) {
             $olcum = $this->siteAnaSayfasiniOlc((string) $rakip['ana_adres']);
+            if ((int) $rakip['bizim_sitemiz_mi'] === 1 && $olcum['anahtar_kelimeler_json'] === '[]') {
+                // Üretim alan adı yerelde erişilemezse karşılaştırmayı gerçek katalog içeriğiyle sürdürüyoruz.
+                $icerikSatirlari = $this->baglanti->query("SELECT ad, kisa_aciklama AS aciklama FROM urunler WHERE aktif_mi = 1 UNION ALL SELECT ad, aciklama FROM kategoriler WHERE aktif_mi = 1")->fetchAll();
+                $yerelIcerik = implode(' ', array_map(static fn(array $satir): string => ($satir['ad'] ?? '') . ' ' . ($satir['aciklama'] ?? ''), $icerikSatirlari));
+                $olcum['anahtar_kelimeler_json'] = json_encode(self::anahtarKelimeleriCikar('<html><body>' . htmlspecialchars($yerelIcerik, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</body></html>'), JSON_UNESCAPED_UNICODE);
+            }
             $ekle->execute(['rakip_id' => $rakip['id'], ...$olcum]);
         }
         return $this->yonetimGenelBakis();
@@ -32,7 +38,7 @@ final class SeoDeposu
         $baslangic = microtime(true);
         [$icerik, $httpDurumu, $hata] = $this->uzakIcerikGetir($adres);
         $yanitSuresi = (int) round((microtime(true) - $baslangic) * 1000);
-        $bos = ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => 0, 'baslik_uzunlugu' => 0, 'meta_uzunlugu' => 0, 'h1_sayisi' => 0, 'kelime_sayisi' => 0, 'baglanti_sayisi' => 0, 'schema_sayisi' => 0, 'sitemap_url_sayisi' => 0, 'hata_mesaji' => $hata];
+        $bos = ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => 0, 'baslik_uzunlugu' => 0, 'meta_uzunlugu' => 0, 'h1_sayisi' => 0, 'kelime_sayisi' => 0, 'baglanti_sayisi' => 0, 'schema_sayisi' => 0, 'sitemap_url_sayisi' => 0, 'anahtar_kelimeler_json' => '[]', 'hata_mesaji' => $hata];
         if ($icerik === '') return $bos;
 
         $belge = new DOMDocument();
@@ -60,7 +66,37 @@ final class SeoDeposu
         if ($yanitSuresi > 2500) $puan -= 10;
         if ($kelimeSayisi < 200) $puan -= 5;
 
-        return ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => max(0, $puan), 'baslik_uzunlugu' => strlen($baslik), 'meta_uzunlugu' => strlen($meta), 'h1_sayisi' => $h1Sayisi, 'kelime_sayisi' => $kelimeSayisi, 'baglanti_sayisi' => $baglantiSayisi, 'schema_sayisi' => $schemaSayisi, 'sitemap_url_sayisi' => (int) $sitemapSayisi, 'hata_mesaji' => null];
+        return ['http_durumu' => $httpDurumu, 'yanit_suresi_ms' => $yanitSuresi, 'seo_puani' => max(0, $puan), 'baslik_uzunlugu' => strlen($baslik), 'meta_uzunlugu' => strlen($meta), 'h1_sayisi' => $h1Sayisi, 'kelime_sayisi' => $kelimeSayisi, 'baglanti_sayisi' => $baglantiSayisi, 'schema_sayisi' => $schemaSayisi, 'sitemap_url_sayisi' => (int) $sitemapSayisi, 'anahtar_kelimeler_json' => json_encode(self::anahtarKelimeleriCikar($icerik), JSON_UNESCAPED_UNICODE), 'hata_mesaji' => null];
+    }
+
+    /** Rakibin herkese açık metninden tekrar eden, SEO açısından anlamlı tekil terimleri çıkarır. */
+    public static function anahtarKelimeleriCikar(string $html): array
+    {
+        $belge = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $belge->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOERROR | LIBXML_NOWARNING);
+        libxml_clear_errors();
+        $kucult = static fn(string $metin): string => mb_strtolower(str_replace(['İ', 'I'], ['i', 'ı'], $metin), 'UTF-8');
+        $baslik = $kucult((string) ($belge->getElementsByTagName('title')->item(0)?->textContent ?? ''));
+        $h1 = $kucult(implode(' ', array_map(static fn(DOMNode $dugum): string => $dugum->textContent, iterator_to_array($belge->getElementsByTagName('h1')))));
+        foreach (iterator_to_array($belge->getElementsByTagName('script')) as $dugum) $dugum->parentNode?->removeChild($dugum);
+        foreach (iterator_to_array($belge->getElementsByTagName('style')) as $dugum) $dugum->parentNode?->removeChild($dugum);
+        $temizHtml = preg_replace('#<(script|style)\b[^>]*>.*?</\1>#isu', ' ', $html) ?? $html;
+        $duzMetin = html_entity_decode(preg_replace('#<[^>]+>#u', ' ', $temizHtml) ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $kelimeler = preg_split('/[^\p{L}\p{N}]+/u', $kucult($duzMetin), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $etkisiz = array_flip(['acaba','ancak','aslında','bazen','bazı','belki','bile','bir','biz','bu','bunu','çok','daha','değil','diğer','diye','fakat','gibi','hem','her','için','ile','ise','kadar','karşı','mi','mı','mu','mü','nasıl','neden','olan','olarak','oldu','sonra','şekilde','tüm','ve','veya','yani','yeni']);
+        $sayac = [];
+        foreach ($kelimeler as $kelime) {
+            if (mb_strlen($kelime, 'UTF-8') < 4 || isset($etkisiz[$kelime]) || preg_match('/^\d+$/', $kelime)) continue;
+            $sayac[$kelime] = ($sayac[$kelime] ?? 0) + 1;
+        }
+        arsort($sayac);
+        $sonuc = [];
+        foreach (array_slice($sayac, 0, 30, true) as $kelime => $adet) {
+            if ($adet < 2) continue;
+            $sonuc[] = ['kelime' => $kelime, 'adet' => $adet, 'baslikta_mi' => str_contains($baslik, $kelime), 'h1de_mi' => str_contains($h1, $kelime)];
+        }
+        return $sonuc;
     }
 
     private function uzakIcerikGetir(string $adres, int $zamanAsimi = 15): array
@@ -196,11 +232,16 @@ final class SeoDeposu
         $rakipAnalizleri = $this->baglanti->query(
             'SELECT r.id, r.ad, r.ana_adres, r.bizim_sitemiz_mi, t.http_durumu, t.yanit_suresi_ms,
                     t.seo_puani, t.baslik_uzunlugu, t.meta_uzunlugu, t.h1_sayisi, t.kelime_sayisi,
-                    t.baglanti_sayisi, t.schema_sayisi, t.sitemap_url_sayisi, t.hata_mesaji, t.tarama_tarihi
+                    t.baglanti_sayisi, t.schema_sayisi, t.sitemap_url_sayisi, t.anahtar_kelimeler_json, t.hata_mesaji, t.tarama_tarihi
              FROM seo_rakipleri r
              LEFT JOIN seo_rakip_taramalari t ON t.id = (SELECT MAX(t2.id) FROM seo_rakip_taramalari t2 WHERE t2.rakip_id = r.id)
              WHERE r.aktif_mi = 1 ORDER BY r.bizim_sitemiz_mi DESC, r.id'
         )->fetchAll();
+        foreach ($rakipAnalizleri as &$rakipAnalizi) {
+            $rakipAnalizi['anahtar_kelimeler'] = json_decode((string) ($rakipAnalizi['anahtar_kelimeler_json'] ?? '[]'), true) ?: [];
+            unset($rakipAnalizi['anahtar_kelimeler_json']);
+        }
+        unset($rakipAnalizi);
         // Grafik, son durum tablosundan değil gerçek tarama geçmişinden beslenir.
         $rakipGecmisi = $this->baglanti->query(
             "SELECT r.id AS rakip_id, r.ad, t.seo_puani, t.tarama_tarihi

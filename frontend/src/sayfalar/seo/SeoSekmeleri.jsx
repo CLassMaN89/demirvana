@@ -113,10 +113,25 @@ export function GenelBakisSekmesi({ veri, yukleniyor, hata, onSiteyiTara, onYeni
   );
 }
 
-export function AnahtarKelimelerSekmesi({ veri, yukleniyor, hata }) {
+export function AnahtarKelimelerSekmesi({ veri, yukleniyor, hata, onSiteyiTara, taraniyor }) {
   if (yukleniyor) return <div className="seo-merkezi__yukleniyor" />;
   if (hata) return <VeriBekleniyor ikon={CircleAlert} baslik="Anahtar kelime verileri alınamadı" aciklama={hata} />;
-  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Search /><AciklamaliBaslik aciklama="Google aramalarındaki sorgu, gösterim, tıklama ve sıralama verilerini Search Console veya bir sıralama sağlayıcısından getirir.">Anahtar Kelimeler</AciklamaliBaslik></div></header><div className="seo-entegrasyon-durumu"><span><Search aria-hidden="true" /></span><div><strong>Sıralama sağlayıcısı bağlı değil</strong><p>Gerçek konum, gösterim ve tıklama değerleri için Search Console veya bir sıralama sağlayıcısı bağlanmalıdır. Bağlantı kurulmadan anahtar kelime değeri üretilmez.</p></div><em>Bağlantı gerekli</em></div></article></div>;
+  const rakipler = veri?.rakip_analizleri ?? [];
+  const bizimSite = rakipler.find((rakip) => Number(rakip.bizim_sitemiz_mi) === 1);
+  const kelimeHaritasi = new Map();
+  for (const rakip of rakipler) {
+    for (const kayit of rakip.anahtar_kelimeler ?? []) {
+      const satir = kelimeHaritasi.get(kayit.kelime) ?? { kelime: kayit.kelime, toplam: 0, siteler: [], baslikta_mi: false, h1de_mi: false, bizim_adet: 0 };
+      satir.toplam += Number(kayit.adet);
+      satir.siteler.push({ ad: rakip.ad, adet: Number(kayit.adet) });
+      satir.baslikta_mi ||= Boolean(kayit.baslikta_mi);
+      satir.h1de_mi ||= Boolean(kayit.h1de_mi);
+      if (Number(rakip.bizim_sitemiz_mi) === 1) satir.bizim_adet = Number(kayit.adet);
+      kelimeHaritasi.set(kayit.kelime, satir);
+    }
+  }
+  const kelimeler = [...kelimeHaritasi.values()].sort((a, b) => Number(b.bizim_adet === 0) - Number(a.bizim_adet === 0) || b.siteler.length - a.siteler.length || b.toplam - a.toplam);
+  return <div className="seo-alt-sekme"><article className="seo-panel"><header><div><Search /><AciklamaliBaslik aciklama="Rakiplerin herkese açık ana sayfa metinlerinde tekrar eden terimleri gösterir; Google sıralaması veya gizli hesap verisi değildir.">Rakip Anahtar Kelimeleri</AciklamaliBaslik></div><button type="button" onClick={onSiteyiTara} disabled={taraniyor}>{taraniyor ? 'Güncelleniyor…' : 'Kelimeleri güncelle'}</button></header><p className="seo-alt-sekme__aciklama">Son canlı rakip taramasından çıkarılır. Güncelleme, tüm sitelerin herkese açık içeriğini yeniden analiz eder.</p>{kelimeler.length ? <div className="seo-anahtar-tablo"><div className="seo-anahtar-tablo__baslik"><span>Anahtar kelime</span><span>Rakip kullanımı</span><span>Toplam tekrar</span><span>SEO sinyali</span><span>Demir Vana</span></div>{kelimeler.map((kayit) => <div key={kayit.kelime}><strong>{kayit.kelime}</strong><span className="seo-anahtar-siteler">{kayit.siteler.filter(({ ad }) => ad !== bizimSite?.ad).map(({ ad, adet }) => <em key={ad}>{ad} · {adet}</em>)}</span><b>{kayit.toplam}</b><span>{[kayit.baslikta_mi && 'Başlık', kayit.h1de_mi && 'H1'].filter(Boolean).join(' + ') || 'Metin'}</span><span className={kayit.bizim_adet === 0 ? 'seo-icerik-acigi' : 'seo-icerik-var'}>{kayit.bizim_adet === 0 ? 'İçerik açığı' : `${kayit.bizim_adet} tekrar`}</span></div>)}</div> : <BaglantiBekliyor metin="Henüz anahtar kelime analizi yok. Kelimeleri güncelle düğmesiyle ilk rakip taramasını başlatın." />}</article></div>;
 }
 
 export function RakiplerSekmesi({ veri, yukleniyor, hata, onSiteyiTara, taraniyor }) {
